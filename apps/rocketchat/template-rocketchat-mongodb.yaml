@@ -1,3 +1,6 @@
+#https://github.com/RocketChat/Rocket.Chat/blob/develop/.openshift/rocket-chat-persistent.json
+#https://github.com/redhat-cop/pbl-rocketchat/blob/master/mongodb-statefulset-replication.yaml
+
 kind: Template
 apiVersion: v1
 metadata:
@@ -8,94 +11,107 @@ metadata:
     tags: "nodejs,mongodb,replication,instant-app"
 
 parameters:
-  - description: The name assigned to the application
+  - name: APPLICATION_NAME
+    description: The name assigned to the application
     displayName: Application Name
-    name: APPLICATION_NAME
     required: true
     value: rocketchat
   
-  - description: Hostname serving the application
+  - name: HOSTNAME_HTTP
+    description: Hostname serving the application
     displayName: Route Name
-    name: HOSTNAME_HTTP
+    value: http://rocketchat.lab.pathfinder.gov.bc.ca
     required: true
-  
-  - description: Location of the RocketChat Image
+
+  - name: ROCKETCHAT_IMAGE_REGISTRY
+    description: Location of the RocketChat Image
     displayName: RocketChat Image
-    name: ROCKETCHAT_IMAGE_REGISTRY
     value: rocket.chat
     required: true
   
-  - description: Name of the RocketChat tag that should be used
+  - name: ROCKETCHAT_IMAGE_TAG
+    description: Name of the RocketChat tag that should be used
     displayName: RocketChat Tag
-    name: ROCKETCHAT_IMAGE_TAG
-    value: "latest"
+    value: "0.61.0"
+    required: true
+
+  - name: ROCKETCHAT_REPLICAS
+    description: Number of RocketChat replica pods
+    displayName: RocketChat Replicas
+    value: "2"
+    required: true
+
+  - name: MONGODB_REPLICAS
+    description: Number of MongoDB replica pods
+    displayName: MongoDB Replicas
+    value: "2"
     required: true
   
-  - description: Name of the MongoDB Service
+  - name: MONGODB_SERVICE_NAME
+    description: Name of the MongoDB Service
     displayName: MongoDB Service Name
-    name: MONGODB_SERVICE_NAME
     value: "mongodb"
     required: true
-  
-  - description: Amount of Memory to Request.
+
+  - name: MEMORY_REQUEST
+    description: Amount of Memory to Request.
     displayName: Memory Request
-    name: MEMORY_REQUEST
     value: "3Gi"
     required: true
-  
-  - description: Amount of Memory to Limit.
+
+  - name: MEMORY_LIMIT
+    description: Amount of Memory to Limit.
     displayName: Memory Limit
-    name: MEMORY_LIMIT
     value: "4Gi"
     required: true
-  
-  - displayName: MongoDB Secret.
+
+  - name: MONGODB_SECRET_NAME
+    displayName: MongoDB Secret.
     description: Name of the Secret containing MongoDB Assets
-    name: MONGODB_SECRET_NAME
     value: "mongodb"
     required: true
   
-  - displayName: MongoDB Username secret key.
-    description: Name of the secret key containing the MongoDB username
-    name: MONGODB_USERNAME_SECRET_KEY
-    value: "username"
-    required: true
+  # - name: MONGODB_USERNAME_SECRET_KEY
+  #   displayName: MongoDB Username secret key.
+  #   description: Name of the secret key containing the MongoDB username
+  #   value: "username"
+  #   required: true
   
-  - displayName: MongoDB Password secret key.
-    description: Name of the secret key containing the MongoDB password
-    name: MONGODB_PASSWORD_SECRET_KEY
-    value: "password"
-    required: true
+  # - name: MONGODB_PASSWORD_SECRET_KEY
+  #   displayName: MongoDB Password secret key.
+  #   description: Name of the secret key containing the MongoDB password
+  #   value: "password"
+  #   required: true
   
-  - displayName: MongoDB Admin Username secret key.
-    description: Name of the secret key containing the MongoDB admin username
-    name: MONGODB_ADMIN_USERNAME_SECRET_KEY
-    value: "admin-username"
-    required: true
+  # - name: MONGODB_ADMIN_USERNAME_SECRET_KEY
+  #   displayName: MongoDB Admin Username secret key.
+  #   description: Name of the secret key containing the MongoDB admin username
+  #   value: "admin-username"
+  #   required: true
   
-  - displayName: MongoDB Admin Password secret key.
-    description: Name of the secret key containing the MongoDB admin password
-    name: MONGODB_ADMIN_PASSWORD_SECRET_KEY
-    value: "admin-password"
-    required: true
+  # - name: MONGODB_ADMIN_PASSWORD_SECRET_KEY
+  #   displayName: MongoDB Admin Password secret key.
+  #   description: Name of the secret key containing the MongoDB admin password
+  #   value: "admin-password"
+  #   required: true
   
-  - displayName: MongoDB Database secret key.
-    description: Name of the secret key containing the MongoDB database
-    name: MONGODB_DATABASE_SECRET_KEY
-    value: "database"
-    required: true
+  # - name: MONGODB_DATABASE_SECRET_KEY
+  #   displayName: MongoDB Database secret key.
+  #   description: Name of the secret key containing the MongoDB database
+  #   value: "database"
+  #   required: true
   
-  - displayName: MongoDB Replica Name secret key.
-    description: Name of the secret key containing the MongoDB replica name
-    name: MONGODB_REPLICA_NAME_SECRET_KEY
-    value: "replica-name"
-    required: true
+  # - name: MONGODB_REPLICA_NAME_SECRET_KEY
+  #   displayName: MongoDB Replica Name secret key.
+  #   description: Name of the secret key containing the MongoDB replica name
+  #   value: "replica-name"
+  #   required: true
 
   - name: MONGODB_USER
     displayName: "MongoDB Connection Username"
     description: "Username for MongoDB user that will be used for accessing the database."
     generate: expression
-    from: "[a-zA-Z0-9]{3}"
+    from: "[a-zA-Z0-9]{5}"
     required: true
 
   - name: MONGODB_PASSWORD
@@ -171,8 +187,8 @@ objects:
         protocol: TCP
         targetPort: 3000
       selector:
-        application: ${APPLICATION_NAME}
-        deploymentconfig: ${APPLICATION_NAME}
+        app: ${APPLICATION_NAME}
+        deploymentConfig: ${APPLICATION_NAME}
       type: ClusterIP
       SessionAffinity: None
 
@@ -216,7 +232,6 @@ objects:
       labels:
         name: "${MONGODB_SERVICE_NAME}"
     spec:
-      # the list of ports that are exposed by this service
       ports:
         - name: mongodb
           port: 27017
@@ -231,10 +246,10 @@ objects:
       name: "${MONGODB_SERVICE_NAME}-internal"
       labels:
         name: "${MONGODB_SERVICE_NAME}"
-    spec:
-      publishNotReadyAddresses: true
+      annotations:
+        service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+    spec:    
       clusterIP: None
-      # the list of ports that are exposed by this service
       ports:
         - name: mongodb
           port: 27017
@@ -247,9 +262,8 @@ objects:
     metadata:
       name: "${MONGODB_SERVICE_NAME}"
     spec:
-      # pets get DNS/hostnames that follow the pattern: ${metadata.name}-NUM.${spec.serviceName}.default.svc.cluster.local
       serviceName: "${MONGODB_SERVICE_NAME}-internal"
-      replicas: 2
+      replicas: "${MONGODB_REPLICAS}"
       # describes the pod that will be created if insufficient replicas are detected
       template:
         metadata:
@@ -346,15 +360,15 @@ objects:
           from:
             kind: ImageStreamTag
             name: 'rocketchat:latest'
-      replicas: 2
+      replicas: "${ROCKETCHAT_REPLICAS}"
       selector:
-        application: ${APPLICATION_NAME}
-        deployment: ${APPLICATION_NAME}
+        app: "${APPLICATION_NAME}"
+        deploymentConfig: "${APPLICATION_NAME}"
       template:
         metadata:
           labels:
-            app: ${APPLICATION_NAME}
-            deployment: ${APPLICATION_NAME}
+            app: "${APPLICATION_NAME}"
+            deploymentConfig: "${APPLICATION_NAME}"
         spec:
           volumes:
             - name: rocketchat-volume-1
@@ -364,45 +378,45 @@ objects:
             - name: MONGODB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  key: ${MONGODB_USERNAME_SECRET_KEY}
+                  key: username
                   name: "${MONGODB_SECRET_NAME}"
             - name: MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: ${MONGODB_PASSWORD_SECRET_KEY}
+                  key: password
                   name: "${MONGODB_SECRET_NAME}"
             - name: MONGODB_ADMIN_USERNAME
               valueFrom:
                 secretKeyRef:
-                  key: ${MONGODB_ADMIN_USERNAME_SECRET_KEY}
+                  key: admin-username
                   name: "${MONGODB_SECRET_NAME}"
             - name: MONGODB_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: ${MONGODB_ADMIN_PASSWORD_SECRET_KEY}
+                  key: admin-password
                   name: "${MONGODB_SECRET_NAME}"
             - name: MONGODB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  key: ${MONGODB_DATABASE_SECRET_KEY}
+                  key: database
                   name: "${MONGODB_SECRET_NAME}"
             - name: MONGODB_REPLICA_NAME
               valueFrom:
                 secretKeyRef:
-                  key: ${MONGODB_REPLICA_NAME_SECRET_KEY}
+                  key: replica-name
                   name: "${MONGODB_SECRET_NAME}"
             image: "${ROCKETCHAT_IMAGE_REGISTRY}:${ROCKETCHAT_IMAGE_TAG}"
             imagePullPolicy: Always
             volumeMounts:
               - name: rocketchat-volume-1
                 mountPath: /app/uploads
-            name: ${APPLICATION_NAME}
+            name: "${APPLICATION_NAME}"
             command: 
               - "/bin/bash"
               - "-c"
               - |
-                export MONGO_URL="mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_SERVICE}:27017/${MONGODB_DATABASE}?replicaSet=${MONGODB_REPLICA_NAME}"
-                export MONGO_OPLOG_URL="mongodb://${MONGODB_ADMIN_USERNAME}:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE}:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
+                export MONGO_URL="mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/${MONGODB_DATABASE}?replicaSet=${MONGODB_REPLICA_NAME}"
+                export MONGO_OPLOG_URL="mongodb://admin:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
                 node main.js
             ports:
             - containerPort: 3000
@@ -430,9 +444,9 @@ objects:
               failureThreshold: 3
             resources:
               limits:
-                memory: ${MEMORY_LIMIT}
+                memory: "${MEMORY_LIMIT}"
               requests:
-                memory: ${MEMORY_REQUEST}
+                memory: "${MEMORY_REQUEST}"
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
     status: {}
