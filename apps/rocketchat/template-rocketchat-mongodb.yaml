@@ -70,43 +70,7 @@ parameters:
     description: Name of the Secret containing MongoDB Assets
     value: "mongodb"
     required: true
-  
-  # - name: MONGODB_USERNAME_SECRET_KEY
-  #   displayName: MongoDB Username secret key.
-  #   description: Name of the secret key containing the MongoDB username
-  #   value: "username"
-  #   required: true
-  
-  # - name: MONGODB_PASSWORD_SECRET_KEY
-  #   displayName: MongoDB Password secret key.
-  #   description: Name of the secret key containing the MongoDB password
-  #   value: "password"
-  #   required: true
-  
-  # - name: MONGODB_ADMIN_USERNAME_SECRET_KEY
-  #   displayName: MongoDB Admin Username secret key.
-  #   description: Name of the secret key containing the MongoDB admin username
-  #   value: "admin-username"
-  #   required: true
-  
-  # - name: MONGODB_ADMIN_PASSWORD_SECRET_KEY
-  #   displayName: MongoDB Admin Password secret key.
-  #   description: Name of the secret key containing the MongoDB admin password
-  #   value: "admin-password"
-  #   required: true
-  
-  # - name: MONGODB_DATABASE_SECRET_KEY
-  #   displayName: MongoDB Database secret key.
-  #   description: Name of the secret key containing the MongoDB database
-  #   value: "database"
-  #   required: true
-  
-  # - name: MONGODB_REPLICA_NAME_SECRET_KEY
-  #   displayName: MongoDB Replica Name secret key.
-  #   description: Name of the secret key containing the MongoDB replica name
-  #   value: "replica-name"
-  #   required: true
-
+    
   - name: MONGODB_USER
     displayName: "MongoDB Connection Username"
     description: "Username for MongoDB user that will be used for accessing the database."
@@ -427,7 +391,7 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 60
+              initialDelaySeconds: 180
               timeoutSeconds: 1
               periodSeconds: 10
               successThreshold: 1
@@ -437,7 +401,7 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 60
+              initialDelaySeconds: 180
               timeoutSeconds: 1
               periodSeconds: 10
               successThreshold: 1
