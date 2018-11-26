@@ -2,11 +2,17 @@
 
 All code related to the deployment and maintenance of a HA rocketchat instance for the BcDevExchange.
 
+![diagram](RocketChat-MongoDB-HA-Design.png)
+
 ## Deployment
 
-Templ
+All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy that way `oc create -f template-rocketchat-mongodb.yaml`.
+
+You can also edit the tempalte parameters and deploy all the objects: `oc process -f template-rocketchat-mongodb.yaml | oc create -f -`
 
 ## Design
+
+### HA 
 
 ### Secrets
 
@@ -20,12 +26,9 @@ A secret is created to store credentials for mongoDB with the following informat
 * replica name
 
 
-### HA Design
-
 ### Image Stream
 
 An image stream is created for the Rocket Chat docker image.
-
 
 ### RocketChat Deployment
 
