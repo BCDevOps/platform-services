@@ -13,6 +13,7 @@ You can also edit the tempalte parameters and deploy all the objects: `oc proces
 
 ## Design
 --- 
+
 ### HA 
 
 High-availability is achieved through 1) the MongoDB replica set up through the OpenShift statefulset and 2) the multiple replicas of the Rocket Chat NodeJS application. The default replicas for these is set to three. This configuration will allow for up to two Rocket Chat and MongoDB pods to fail and the application will still remain up. For increased redundancy the replica count can be set higher. This should only be done if you have more than three app nodes in your OpenShift cluster.
@@ -43,7 +44,16 @@ An ImageStream is created for the Rocket Chat docker image. The Rocket Chat depl
 
 A standard DeploymentConfig is created for the Rocket Chat NodeJS application. Environment variables are loaded in from the mongodb secret. Liveness and readiness health checks on HTTP port 3000 are set. The DeploymnetConfig is set up for a rolling deployment with 3 replicas
 
+#### Storage
 !!vol mounts empty dir for uploads?
+* need to put in file size limit
+* need file clean up (delete file after 4 months)
+
+#### Add Channels
+https://rocket.chat/docs/developer-guides/rest-api/channels/
+backup current channel list to re-add channels
+
+#### Authentication 
 
 ### MongoDB StatefulSet
 ---
@@ -54,6 +64,9 @@ MongoDB is set up in a StatefulSet which takes care of deploying the pods and pr
 
 PVCs are requested for each MongoDB pod to storage database files. The PVCs are set to use the default StorageClass and request RWO access.
 
+- what capacity calculations have been performed, how much storage is required??
+
+
 ### Services 
 ---
 
@@ -62,3 +75,19 @@ Three services are utilized for the Rocket Chat application
 * The Rocket Chat service on `port 3000` handles traffic to the Rocket Chat NodeJS pods
 * The mongoDB service on `port 27017` handles traffic to the monogoDB pods
 * The mongoDB-internal service on `port 27017` handles traffic between the mongoDB pods for cluster communication. This service is headless, no clusterIP.
+
+
+### Load Testing
+
+- how many resources are required by the project
+- how should data be protected
+- whats the expected behavior when nodes are patched, has this been tested (ie. rolling availability)
+
+### Scaling 
+
+A Horizontal Pod Autoscaler is configured in the template. The Autoscaler is configured to create more pods when the existing pods CPU goes over 80%, to a mx of 10 pods. This can be changed in the template before deployment or after the DeploymentConfig is created.
+
+## Refrences
+
+* https://github.com/RocketChat/Rocket.Chat/blob/develop/.openshift/rocket-chat-persistent.json
+* https://github.com/redhat-cop/pbl-rocketchat/blob/master/mongodb-statefulset-replication.yaml
