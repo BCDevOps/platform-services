@@ -1,6 +1,3 @@
-#https://github.com/RocketChat/Rocket.Chat/blob/develop/.openshift/rocket-chat-persistent.json
-#https://github.com/redhat-cop/pbl-rocketchat/blob/master/mongodb-statefulset-replication.yaml
-
 kind: Template
 apiVersion: v1
 metadata:
@@ -17,11 +14,11 @@ parameters:
     required: true
     value: rocketchat
   
-  - name: HOSTNAME_HTTP
-    description: Hostname serving the application
-    displayName: Route Name
-    value: http://rocketchat.lab.pathfinder.gov.bc.ca
-    required: true
+#  - name: HOSTNAME_HTTP
+#    description: Hostname serving the application
+#    displayName: Route Name
+#    value: http://rocketchat.lab.pathfinder.gov.bc.ca
+#    required: true
 
   - name: ROCKETCHAT_IMAGE_REGISTRY
     description: Location of the RocketChat Image
@@ -137,7 +134,10 @@ objects:
       admin-password: "${MONGODB_ADMIN_PASSWORD}"
       database: "${MONGODB_DATABASE}"
       replica-name: "${MONGODB_REPLICA_NAME}"
+      mongo-url: "mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/${MONGODB_DATABASE}?replicaSet=${MONGODB_REPLICA_NAME}"
+      mongo-oplog-url: "mongodb://admin:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
 
+  # Service for the Rocketchat NodeJS service
   - apiVersion: v1
     kind: Service
     metadata:
@@ -339,49 +339,32 @@ objects:
               emptyDir: {}
           containers:
           - env:
-            - name: MONGODB_USERNAME
+            - name: MONGO_URL
               valueFrom:
                 secretKeyRef:
-                  key: username
+                  key: mongo-url
                   name: "${MONGODB_SECRET_NAME}"
-            - name: MONGODB_PASSWORD
+            - name: MONGO_OPLOG_URL
               valueFrom:
                 secretKeyRef:
-                  key: password
-                  name: "${MONGODB_SECRET_NAME}"
-            - name: MONGODB_ADMIN_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: admin-username
-                  name: "${MONGODB_SECRET_NAME}"
-            - name: MONGODB_ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: admin-password
-                  name: "${MONGODB_SECRET_NAME}"
-            - name: MONGODB_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  key: database
-                  name: "${MONGODB_SECRET_NAME}"
-            - name: MONGODB_REPLICA_NAME
-              valueFrom:
-                secretKeyRef:
-                  key: replica-name
-                  name: "${MONGODB_SECRET_NAME}"
+                  key: mongo-oplog-url
+                  name: "${MONGODB_SECRET_NAME}"     
             image: "${ROCKETCHAT_IMAGE_REGISTRY}:${ROCKETCHAT_IMAGE_TAG}"
             imagePullPolicy: Always
+            affinity:
+              podAntiAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                    - Key: "app"
+                      operator: In
+                      values:
+                      - "${APPLICATION_NAME}"
+                  topologyKey: "kubernetes.io/hostname"
             volumeMounts:
               - name: rocketchat-volume-1
                 mountPath: /app/uploads
             name: "${APPLICATION_NAME}"
-            command: 
-              - "/bin/bash"
-              - "-c"
-              - |
-                export MONGO_URL="mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/${MONGODB_DATABASE}?replicaSet=${MONGODB_REPLICA_NAME}"
-                export MONGO_OPLOG_URL="mongodb://admin:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
-                node main.js
             ports:
             - containerPort: 3000
               protocol: TCP
@@ -391,7 +374,7 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 180
+              initialDelaySeconds: 150
               timeoutSeconds: 1
               periodSeconds: 10
               successThreshold: 1
@@ -401,7 +384,7 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 180
+              initialDelaySeconds: 150
               timeoutSeconds: 1
               periodSeconds: 10
               successThreshold: 1
@@ -414,3 +397,18 @@ objects:
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
     status: {}
+
+  - apiVersion: autoscaling/v1
+    kind: HorizontalPodAutoscaler
+    metadata:
+      name: rocketchat-hpa
+    spec:
+      scaleTargetRef:
+        kind: DeploymentConfig 
+        name: ${APPLICATION_NAME}
+        apiVersion: apps.openshift.io/v1
+        subresource: scale
+      minReplicas: 2
+      maxReplicas: 10
+      cpuUtilization:
+        targetCPUUtilizationPercentage: 80
