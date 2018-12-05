@@ -23,25 +23,26 @@ parameters:
   - name: ROCKETCHAT_IMAGE_REGISTRY
     description: Location of the RocketChat Image
     displayName: RocketChat Image
-    value: rocket.chat
+    value: registry.connect.redhat.com/rocketchat/rocketchat
+    #value: rocket.chat
     required: true
   
   - name: ROCKETCHAT_IMAGE_TAG
     description: Name of the RocketChat tag that should be used
     displayName: RocketChat Tag
-    value: "0.61.0"
+    value: "latest"
     required: true
 
   - name: ROCKETCHAT_REPLICAS
     description: Number of RocketChat replica pods
     displayName: RocketChat Replicas
-    value: "2"
+    value: "3"
     required: true
 
   - name: MONGODB_REPLICAS
     description: Number of MongoDB replica pods
     displayName: MongoDB Replicas
-    value: "2"
+    value: "3"
     required: true
   
   - name: MONGODB_SERVICE_NAME
@@ -117,7 +118,7 @@ parameters:
   - name: VOLUME_CAPACITY
     displayName: "Volume Capacity"
     description: "Volume space available for data, e.g. 512Mi, 2Gi."
-    value: "1Gi"
+    value: "5Gi"
     required: true
 
 objects:
@@ -235,6 +236,16 @@ objects:
           labels:
             name: "${MONGODB_SERVICE_NAME}"
         spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: name
+                    operator: In
+                    values: 
+                    - ${MONGODB_SERVICE_NAME}
+                topologyKey: "kubernetes.io/hostname"
           containers:
             - name: mongo-container
               image: "${MONGODB_IMAGE}"
@@ -334,6 +345,16 @@ objects:
             app: "${APPLICATION_NAME}"
             deploymentConfig: "${APPLICATION_NAME}"
         spec:
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values: 
+                    - ${APPLICATION_NAME}
+                topologyKey: "kubernetes.io/hostname"
           volumes:
             - name: rocketchat-volume-1
               emptyDir: {}
@@ -351,16 +372,6 @@ objects:
                   name: "${MONGODB_SECRET_NAME}"     
             image: "${ROCKETCHAT_IMAGE_REGISTRY}:${ROCKETCHAT_IMAGE_TAG}"
             imagePullPolicy: Always
-            affinity:
-              podAntiAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                - labelSelector:
-                    matchExpressions:
-                    - Key: "app"
-                      operator: In
-                      values:
-                      - "${APPLICATION_NAME}"
-                  topologyKey: "kubernetes.io/hostname"
             volumeMounts:
               - name: rocketchat-volume-1
                 mountPath: /app/uploads
