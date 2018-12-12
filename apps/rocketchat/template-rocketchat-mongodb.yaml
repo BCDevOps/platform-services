@@ -236,16 +236,16 @@ objects:
           labels:
             name: "${MONGODB_SERVICE_NAME}"
         spec:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                  - key: name
-                    operator: In
-                    values: 
-                    - ${MONGODB_SERVICE_NAME}
-                topologyKey: "kubernetes.io/hostname"
+#          affinity:
+#            podAntiAffinity:
+#              requiredDuringSchedulingIgnoredDuringExecution:
+#              - labelSelector:
+#                  matchExpressions:
+#                  - key: name
+#                    operator: In
+#                    values: 
+#                    - ${MONGODB_SERVICE_NAME}
+#                topologyKey: "kubernetes.io/hostname"
           containers:
             - name: mongo-container
               image: "${MONGODB_IMAGE}"
@@ -345,16 +345,16 @@ objects:
             app: "${APPLICATION_NAME}"
             deploymentConfig: "${APPLICATION_NAME}"
         spec:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                  - key: app
-                    operator: In
-                    values: 
-                    - ${APPLICATION_NAME}
-                topologyKey: "kubernetes.io/hostname"
+          # affinity:
+          #   podAntiAffinity:
+          #     requiredDuringSchedulingIgnoredDuringExecution:
+          #     - labelSelector:
+          #         matchExpressions:
+          #         - key: app
+          #           operator: In
+          #           values: 
+          #           - ${APPLICATION_NAME}
+          #       topologyKey: "kubernetes.io/hostname"
           volumes:
             - name: rocketchat-volume-1
               emptyDir: {}

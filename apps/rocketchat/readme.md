@@ -42,6 +42,12 @@ An ImageStream is created for the Rocket Chat docker image. The Rocket Chat depl
 
 A standard DeploymentConfig is created for the Rocket Chat NodeJS application. Environment variables are loaded in from the mongodb secret. Liveness and readiness health checks on HTTP port 3000 are set. The DeploymentConfig is set up for a rolling deployment with 3 replicas
 
+#### Upgrades
+
+Upgrades to Rocket Chat will be handled by deployment of a new image version.
+
+!! testing image change trigger with image stream
+
 #### Storage
 !!vol mounts empty dir for uploads?
 * need to put in file size limit
@@ -55,7 +61,10 @@ https://rocket.chat/docs/administrator-guides/retention-policies/
 https://rocket.chat/docs/developer-guides/rest-api/channels/
 backup current channel list to re-add channels
 
-#### Authentication 
+#### Authentication
+https://sso-dev.pathfinder.gov.bc.ca/auth/realms/devhub/.well-known/openid-configuration 
+
+
 
 ### MongoDB StatefulSet
 ---
@@ -69,6 +78,10 @@ PVCs are requested for each MongoDB pod to storage database files. The PVCs are 
 https://docs.mongodb.com/manual/core/replica-set-oplog/
 - what capacity calculations have been performed, how much storage is required??
 
+
+mongorestore -d rocketdb --drop --username admin --password 646556 --authenticationDatabase admin rocketdb/
+
+mongodump --username admin --password X6kIaKYiIWaftD6h
 
 ### Services 
 ---
@@ -106,3 +119,4 @@ A Horizontal Pod Autoscaler is configured in the template. The Autoscaler is con
 * https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 * https://rocket.chat/docs/installation/manual-installation/redhat/Rocket.Chat%20Technical%20Implementation%20Guide%20v.20180316.pdf
 * https://rocket.chat/docs/installation/minimum-requirements/
+* https://docs.openshift.com/container-platform/3.10/using_images/db_images/mongodb.html#using-mongodb-replication

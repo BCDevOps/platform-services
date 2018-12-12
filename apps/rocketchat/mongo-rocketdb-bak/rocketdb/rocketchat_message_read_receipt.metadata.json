@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"rocketdb.rocketchat_message_read_receipt"},{"v":1,"key":{"_updatedAt":1},"name":"_updatedAt_1","ns":"rocketdb.rocketchat_message_read_receipt"},{"v":1,"unique":true,"key":{"roomId":1,"userId":1,"messageId":1},"name":"roomId_1_userId_1_messageId_1","ns":"rocketdb.rocketchat_message_read_receipt"}]}
