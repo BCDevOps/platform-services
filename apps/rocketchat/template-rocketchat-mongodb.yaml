@@ -13,18 +13,29 @@ parameters:
     displayName: Application Name
     required: true
     value: rocketchat
-  
-#  - name: HOSTNAME_HTTP
-#    description: Hostname serving the application
-#    displayName: Route Name
-#    value: http://rocketchat.lab.pathfinder.gov.bc.ca
-#    required: true
+
+  - name: FILE_UPLOAD_STORAGE_SIZE
+    description: The size of storage to allocate for file uploads to RocketChat
+    displayName: File Upload Storage Size
+    required: true
+    value: "20Gi"
+
+  - name: SC_FILE_UPLOAD
+    description: The Storage Class for the RocketChat uploads volume
+    displayName: File Uploads Storage Class 
+    required: true
+    value: "gluster-file"
+
+  - name: HOSTNAME_HTTPS
+    description: Hostname serving the application
+    displayName: Route Name
+    value: chat.pathfinder.gov.bc.ca
+    required: true
 
   - name: ROCKETCHAT_IMAGE_REGISTRY
     description: Location of the RocketChat Image
     displayName: RocketChat Image
     value: registry.connect.redhat.com/rocketchat/rocketchat
-    #value: rocket.chat
     required: true
   
   - name: ROCKETCHAT_IMAGE_TAG
@@ -37,6 +48,18 @@ parameters:
     description: Number of RocketChat replica pods
     displayName: RocketChat Replicas
     value: "3"
+    required: true
+
+  - name: ROCKETCHAT_MIN_HPA
+    description: Min Number of RocketChat pods for HPA
+    displayName: RocketChat Min HPA
+    value: "3"
+    required: true
+
+  - name: ROCKETCHAT_MAX_HPA
+    description: Max Number of RocketChat pods for HPA
+    displayName: RocketChat Max HPA
+    value: "4"
     required: true
 
   - name: MONGODB_REPLICAS
@@ -54,13 +77,13 @@ parameters:
   - name: MEMORY_REQUEST
     description: Amount of Memory to Request.
     displayName: Memory Request
-    value: "3Gi"
+    value: "1Gi"
     required: true
 
   - name: MEMORY_LIMIT
     description: Amount of Memory to Limit.
     displayName: Memory Limit
-    value: "4Gi"
+    value: "2Gi"
     required: true
 
   - name: MONGODB_SECRET_NAME
@@ -112,16 +135,72 @@ parameters:
   - name: MONGODB_IMAGE
     displayName: "MongoDB Docker Image"
     description: "A reference to a supported MongoDB Docker image."
-    value: "docker-registry.default.svc:5000/openshift/mongodb:3.2"
+    value: "docker-registry.default.svc:5000/openshift/mongodb:latest"
     required: true
 
   - name: VOLUME_CAPACITY
-    displayName: "Volume Capacity"
+    displayName: "Volume Capacity for MongoDB"
     description: "Volume space available for data, e.g. 512Mi, 2Gi."
-    value: "5Gi"
+    value: "10Gi"
     required: true
 
+  - name: SC_MONGO
+    description: The Storage Class for the MongoDB
+    displayName: Storage Class for MongoDB
+    required: true
+    value: "gluster-file"
+
 objects:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: rocketchat-config
+    data:
+      #File Upload Settings
+      OVERWRITE_SETTING_FileUpload_Enabled: "True"
+      OVERWRITE_SETTING_FileUpload_Storage_Type: "FileSystem"
+      OVERWRITE_SETTING_FileUpload_ProtectFiles: "False"
+      OVERWRITE_SETTING_FileUpload_FileSystemPath: "/app/uploads"
+      OVERWRITE_SETTING_FileUpload_MaxFileSize: "2000000"
+      #General Settings
+      OVERWRITE_SETTING_Site_Url: "https://chat-pilot.pathfinder.gov.bc.ca"
+      OVERWRITE_SETTING_Site_Name: "chat-pilot.pathfinder.gov.bc.ca"
+      #Retention Settings
+      OVERWRITE_SETTING_RetentionPolicy_Enabled: "True"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: "True"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAgeChannels: "365"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToGroups: "True"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "365"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToDMs: "True"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "365"
+      OVERWRITE_SETTING_RetentionPolicy_FilesOnly: "True"
+      #Account Settings
+      OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: "False"
+      OVERWRITE_SETTING_Accounts_RegistrationForm: "Disabled"
+      OVERWRITE_SETTING_Accounts_AllowRealNameChange: "False"
+      OVERWRITE_SETTING_Accounts_AllowPasswordChange: "False"
+      OVERWRITE_SETTING_Accounts_ShowFormLogin: "False"
+      #Custom OAuth
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "True"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "https://sso-dev.pathfinder.gov.bc.ca/auth"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token-path: "/realms/devhub/protocol/openid-connect/token"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "Header"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "/realms/devhub/protocol/openid-connect/userinfo"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "/realms/devhub/protocol/openid-connect/auth"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "rocket-chat-test"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "63cb2a21-f115-4750-be21-aaa26bb95726"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "Login"
+      ## Rooms
+      # DevOps Alerts
+      # Random - Default
+      # DevOps Questions Community
+      # CSI Lab
+      # DevOps Platform Team
+      # Kudos - Default
+      # DevOps Request
+      ## Permissions 
+      # Users- Manage Own Integrations: Enabled
+
   - apiVersion: v1
     kind: Secret
     metadata:
@@ -176,18 +255,20 @@ objects:
   - apiVersion: v1
     kind: Route
     metadata:
+      name: ${APPLICATION_NAME}
       annotations:
         description: Route for application's http service.
       labels:
         app: ${APPLICATION_NAME}
-      name: ${APPLICATION_NAME}
     spec:
-  #    host: "${HOSTNAME_HTTP}"
-       port:
-         targetPort: 3000-tcp
-       to:
+      host: "${HOSTNAME_HTTPS}"
+      port:
+        targetPort: 3000-tcp
+      to:
         kind: Service 
         name: ${APPLICATION_NAME}
+      tls:
+        termination: edge
 
   # A non-headless service which takes pod readiness into consideration
   - kind: Service
@@ -218,7 +299,6 @@ objects:
       ports:
         - name: mongodb
           port: 27017
-      # will route traffic to pods having labels matching this selector
       selector:
         name: "${MONGODB_SERVICE_NAME}"
 
@@ -229,23 +309,21 @@ objects:
     spec:
       serviceName: "${MONGODB_SERVICE_NAME}-internal"
       replicas: "${MONGODB_REPLICAS}"
-      # describes the pod that will be created if insufficient replicas are detected
       template:
         metadata:
-          # this label will be used for count running pods
           labels:
             name: "${MONGODB_SERVICE_NAME}"
         spec:
-#          affinity:
-#            podAntiAffinity:
-#              requiredDuringSchedulingIgnoredDuringExecution:
-#              - labelSelector:
-#                  matchExpressions:
-#                  - key: name
-#                    operator: In
-#                    values: 
-#                    - ${MONGODB_SERVICE_NAME}
-#                topologyKey: "kubernetes.io/hostname"
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: name
+                    operator: In
+                    values: 
+                    - ${MONGODB_SERVICE_NAME}
+                topologyKey: "kubernetes.io/hostname"
           containers:
             - name: mongo-container
               image: "${MONGODB_IMAGE}"
@@ -299,17 +377,26 @@ objects:
             name: mongo-data
             labels:
               name: "${MONGODB_SERVICE_NAME}"
-            annotations:
-              # Uncomment this if using dynamic volume provisioning.
-              # https://docs.openshift.org/latest/install_config/persistent_storage/dynamically_provisioning_pvs.html
-              # volume.alpha.kubernetes.io/storage-class: anything
           spec:
-            # the volume can be mounted as read-write by a single node
             accessModes: [ ReadWriteOnce ]
+            storageClassName: "${SC_MONGO}"
             resources:
               requests:
                 storage: "${VOLUME_CAPACITY}"
-                
+
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: rocketchat-uploads
+    spec:
+      storageClassName: ${SC_FILE_UPLOAD}
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: ${FILE_UPLOAD_STORAGE_SIZE}
+      volumename: rocketchat-uploads
+
   - apiVersion: v1
     kind: DeploymentConfig
     metadata:
@@ -345,19 +432,20 @@ objects:
             app: "${APPLICATION_NAME}"
             deploymentConfig: "${APPLICATION_NAME}"
         spec:
-          # affinity:
-          #   podAntiAffinity:
-          #     requiredDuringSchedulingIgnoredDuringExecution:
-          #     - labelSelector:
-          #         matchExpressions:
-          #         - key: app
-          #           operator: In
-          #           values: 
-          #           - ${APPLICATION_NAME}
-          #       topologyKey: "kubernetes.io/hostname"
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values: 
+                    - ${APPLICATION_NAME}
+                topologyKey: "kubernetes.io/hostname"
           volumes:
-            - name: rocketchat-volume-1
-              emptyDir: {}
+            - name: rocketchat-uploads
+              persistentVolumeClaim:
+                claimName: "rocketchat-uploads"
           containers:
           - env:
             - name: MONGO_URL
@@ -369,11 +457,14 @@ objects:
               valueFrom:
                 secretKeyRef:
                   key: mongo-oplog-url
-                  name: "${MONGODB_SECRET_NAME}"     
+                  name: "${MONGODB_SECRET_NAME}"
+            envFrom: 
+              - configMapRef:
+                  name: rocketchat-config
             image: "${ROCKETCHAT_IMAGE_REGISTRY}:${ROCKETCHAT_IMAGE_TAG}"
             imagePullPolicy: Always
             volumeMounts:
-              - name: rocketchat-volume-1
+              - name: rocketchat-uploads
                 mountPath: /app/uploads
             name: "${APPLICATION_NAME}"
             ports:
@@ -403,8 +494,8 @@ objects:
             resources:
               limits:
                 memory: "${MEMORY_LIMIT}"
-              requests:
-                memory: "${MEMORY_REQUEST}"
+#              requests:
+#                memory: "${MEMORY_REQUEST}"
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
     status: {}
@@ -419,7 +510,7 @@ objects:
         name: ${APPLICATION_NAME}
         apiVersion: apps.openshift.io/v1
         subresource: scale
-      minReplicas: 2
-      maxReplicas: 10
+      minReplicas: ${ROCKETCHAT_MIN_HPA}
+      maxReplicas: ${ROCKETCHAT_MAX_HPA}
       cpuUtilization:
         targetCPUUtilizationPercentage: 80
