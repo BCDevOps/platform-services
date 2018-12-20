@@ -6,7 +6,7 @@ All code related to the deployment and maintenance of a HA rocketchat instance f
 
 ## Deployment
 
-All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy that way `oc create -f template-rocketchat-mongodb.yaml`.
+All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy the template throught the web console `oc create -f template-rocketchat-mongodb.yaml`.
 
 You can also edit the template parameters and deploy all the objects: `oc process -f template-rocketchat-mongodb.yaml | oc create -f -`
 
@@ -18,7 +18,7 @@ High-availability is achieved through 1) the MongoDB replica set up through the 
 
 #### Pod Anti-Affinity
 
-Both the MongoDB and the Rocket Chat application pods have anti-affinity require rules set. This will make sure pods get scheduled onto nodes where an existing pod of that application does not exist.
+Both the MongoDB and the Rocket Chat application pods have anti-affinity require rules set. This will make sure pods get scheduled onto nodes where an existing pod of that application does not exist. Deployment of multiple pods will fail if this requirement is not met.
 
 ### Secrets
 ---
@@ -49,21 +49,17 @@ Upgrades to Rocket Chat will be handled by deployment of a new image version.
 !! testing image change trigger with image stream
 
 #### Storage
-!!vol mounts empty dir for uploads?
-* need to put in file size limit
-  --easy to set in admin settings 
 
-* need file clean up (delete file after 4 months)
- - can set in rentention settings to just only delete files
-https://rocket.chat/docs/administrator-guides/retention-policies/
+A PVC is defined in the template to store file uploads to Rocket Chat. This is a RWX PV so all Rocket Chat pods have read/write access. File retention and upload settings are set to define a max upload size and how long to keep the files around.
+
+Rocket Chat configuration is stored in the Mongo DB so configuration will stay with database backup/restores. 
 
 #### Add Channels
-https://rocket.chat/docs/developer-guides/rest-api/channels/
-backup current channel list to re-add channels
+
 
 #### Authentication
-https://sso-dev.pathfinder.gov.bc.ca/auth/realms/devhub/.well-known/openid-configuration 
 
+Local authentication is disabled on Rocket Chat and a custom OAuth configuration is defined that uses the DevHub Keycloak. The only local account created is the admin account. The local admin account is available as a backup in case of OAuth issues. The password is stored as a secret in the Rocket Chat OCP project.
 
 
 ### MongoDB StatefulSet
@@ -73,7 +69,12 @@ MongoDB is set up in a StatefulSet which takes care of deploying the pods and pr
 
 #### Storage
 
-PVCs are requested for each MongoDB pod to storage database files. The PVCs are set to use the default StorageClass and request RWO access.
+PVCs are requested for each MongoDB pod to storage database files. The PVCs are set to use the StorageClass defined in with the parameter in the template and request RWO access.
+
+  oplogSizeMB: 64
+storage.wiredTiger.engineConfig.cacheSizeGB: 1
+
+
 
 https://docs.mongodb.com/manual/core/replica-set-oplog/
 - what capacity calculations have been performed, how much storage is required??
@@ -82,6 +83,11 @@ https://docs.mongodb.com/manual/core/replica-set-oplog/
 mongorestore -d rocketdb --drop --username admin --password 646556 --authenticationDatabase admin rocketdb/
 
 mongodump --username admin --password X6kIaKYiIWaftD6h
+
+db.runCommand({ dbStats: 1, scale: 1048576 })
+
+#### Backups
+https://github.com/BCDevOps/backup-container
 
 ### Services 
 ---
@@ -103,12 +109,28 @@ Three services are utilized for the Rocket Chat application
 
 A Horizontal Pod Autoscaler is configured in the template. The Autoscaler is configured to create more pods when the existing pods CPU goes over 80%, to a mx of 10 pods. This can be changed in the template before deployment or after the DeploymentConfig is created.
 
+
+## Operations
+oc rsh mongo-pod
+mongo mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongodb:27017/rocketdb?replicaSet=rs0
+
+show collection (tables)
+show collections 
+
+query the collection
+db.rocketchat_uploads.find( {} )
+
+## TODO
+
+https://rocket.chat/docs/developer-guides/rest-api/channels/create/
+https://rocket.chat/docs/developer-guides/rest-api/channels/setdefault/
+backup current channel list to re-add channels
+
 ## FOR REVIEW
 
 * Max autoscale pods?
 * Memory request & limit?
 * CPU request & limit?
-* route, just used default naming?
 * mongo image to use? Using internal image
 * docker image to use? dockerhub or RH?
 
