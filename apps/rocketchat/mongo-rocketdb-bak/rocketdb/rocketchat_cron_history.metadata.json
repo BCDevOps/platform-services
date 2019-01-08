@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"rocketdb.rocketchat_cron_history"},{"v":1,"unique":true,"key":{"intendedAt":1,"name":1},"name":"intendedAt_1_name_1","ns":"rocketdb.rocketchat_cron_history"},{"v":1,"key":{"startedAt":1},"name":"startedAt_1","ns":"rocketdb.rocketchat_cron_history","expireAfterSeconds":172800}]}

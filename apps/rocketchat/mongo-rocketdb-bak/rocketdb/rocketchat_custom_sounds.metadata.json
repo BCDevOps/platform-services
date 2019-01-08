@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"rocketdb.rocketchat_custom_sounds"},{"v":1,"key":{"_updatedAt":1},"name":"_updatedAt_1","ns":"rocketdb.rocketchat_custom_sounds"},{"v":1,"key":{"name":1},"name":"name_1","ns":"rocketdb.rocketchat_custom_sounds"}]}
