@@ -15,3 +15,11 @@ When scaling the cluster back up, due to the persistent storage, all existing da
 functional. No additional changes should be required. 
 
 Total # of times tested: 3
+
+
+## Persistent - What happens when I reinitialize the cluster with existing data
+In this scanario: 
+- Scale the `StatefulSet` to 0 pods
+- Delete the `configmaps` associated with the persistent cluster
+- Keep any and all data on the persistent volumes
+
