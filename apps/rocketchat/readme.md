@@ -71,23 +71,29 @@ MongoDB is set up in a StatefulSet which takes care of deploying the pods and pr
 
 PVCs are requested for each MongoDB pod to storage database files. The PVCs are set to use the StorageClass defined in with the parameter in the template and request RWO access.
 
-  oplogSizeMB: 64
-storage.wiredTiger.engineConfig.cacheSizeGB: 1
+#### Backup & restore
 
+Once the MongoDB and Rocket Chat pods are up and running we probably want to backup the rocketdb. Rocket Chat stores all configuration and chat history in the database which makes restoring after a disaster easy.
 
+##### Backup Volume
 
-https://docs.mongodb.com/manual/core/replica-set-oplog/
-- what capacity calculations have been performed, how much storage is required??
+We'll need some storage that we can dump the database backup to. Using the NFS APB gives us a easy option to get a PVC mapped to our project. This storage lives outside the cluster which is ideal for back up, details: https://github.com/BCDevOps/provision-nfs-apb 
 
+##### Backup CronJob
 
-mongorestore -d rocketdb --drop --username admin --password 646556 --authenticationDatabase admin rocketdb/
+Once we have a PVC in our project we can deploy the CronJob template that will schedule a job to run at a defined interval that will start a MongoDB pod and run `monogdump` against the MongoDB service and dump the backup files to the PVC.
 
-mongodump --username admin --password X6kIaKYiIWaftD6h
+```
+oc process -f mongodb-backup-template.yaml MONGODB_ADMIN_PASSWORD=adminpass MONGODB_BACKUP_VOLUME_CLAIM=nfs-pvc MONGODB_BACKUP_KEEP=7 MONGODB_BACKUP_SCHEDULE='1 0 * * *' | oc create -f -
+```
 
-db.runCommand({ dbStats: 1, scale: 1048576 })
+##### Restore Backup
 
-#### Backups
-https://github.com/BCDevOps/backup-container
+To restore the database you will have to start another mongodb instance, then copy or mount the backup files to this instance and issue this restore command.
+
+```
+mongorestore -u admin -p \$MONGODB_ADMIN_PASSWORD --authenticationDatabase admin --gzip $DIR/DB_TO_RESTORE -d DB_TO_RESTORE_INTO"
+```
 
 ### Services 
 ---
@@ -107,18 +113,28 @@ Three services are utilized for the Rocket Chat application
 
 ### Scaling 
 
-A Horizontal Pod Autoscaler is configured in the template. The Autoscaler is configured to create more pods when the existing pods CPU goes over 80%, to a mx of 10 pods. This can be changed in the template before deployment or after the DeploymentConfig is created.
+A Horizontal Pod Autoscaler is configured in the template. The Autoscaler is configured to create more pods when the existing pods CPU goes over 80%, to a max of 10 pods. This can be changed in the template before deployment or after the DeploymentConfig is created.
 
 
 ## Operations
-oc rsh mongo-pod
-mongo mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongodb:27017/rocketdb?replicaSet=rs0
+---
+Some handy commands for managing & inspecting Rocket Chat & MongoDB.
 
-show collection (tables)
-show collections 
+Connect to the mongodb:
 
-query the collection
-db.rocketchat_uploads.find( {} )
+`mongo mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongodb:27017/rocketdb?replicaSet=rs0`
+
+show collections:
+
+`show collection (tables)`
+
+Query the collection:
+
+`db.rocketchat_uploads.find( {} )`
+
+Get DB stats:
+
+`db.runCommand({ dbStats: 1, scale: 1048576 })`
 
 ## TODO
 
@@ -142,3 +158,5 @@ backup current channel list to re-add channels
 * https://rocket.chat/docs/installation/manual-installation/redhat/Rocket.Chat%20Technical%20Implementation%20Guide%20v.20180316.pdf
 * https://rocket.chat/docs/installation/minimum-requirements/
 * https://docs.openshift.com/container-platform/3.10/using_images/db_images/mongodb.html#using-mongodb-replication
+* https://docs.mongodb.com/manual/core/read-preference/
+* https://github.com/appuio/mongodb-backup
