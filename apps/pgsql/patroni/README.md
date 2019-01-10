@@ -50,3 +50,6 @@ NAME                DATA      AGE
 patroniocp-config   0         1m
 patroniocp-leader   0         1m
 ```
+
+## TODO
+- Need to add anti-affinity rules
