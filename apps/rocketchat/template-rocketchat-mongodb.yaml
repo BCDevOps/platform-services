@@ -29,7 +29,7 @@ parameters:
   - name: HOSTNAME_HTTPS
     description: Hostname serving the application
     displayName: Route Name
-    value: chat.pathfinder.gov.bc.ca
+    value: lab-chat.lab.pathfinder.gov.bc.ca
     required: true
 
   - name: ROCKETCHAT_IMAGE_REGISTRY
@@ -156,6 +156,9 @@ objects:
     metadata:
       name: rocketchat-config
     data:
+      #Admin user
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASS: "supersecret"
       #File Upload Settings
       OVERWRITE_SETTING_FileUpload_Enabled: "True"
       OVERWRITE_SETTING_FileUpload_Storage_Type: "FileSystem"
@@ -163,8 +166,9 @@ objects:
       OVERWRITE_SETTING_FileUpload_FileSystemPath: "/app/uploads"
       OVERWRITE_SETTING_FileUpload_MaxFileSize: "2000000"
       #General Settings
-      OVERWRITE_SETTING_Site_Url: "https://chat-pilot.pathfinder.gov.bc.ca"
-      OVERWRITE_SETTING_Site_Name: "chat-pilot.pathfinder.gov.bc.ca"
+      OVERWRITE_SETTING_Site_Url: "https://lab-chat.lab.pathfinder.gov.bc.ca"
+      OVERWRITE_SETTING_Site_Name: "lab-chat.lab.pathfinder.gov.bc.ca"
+      OVERWRITE_SETTING_Show_Setup_Wizard: "Completed"
       #Retention Settings
       OVERWRITE_SETTING_RetentionPolicy_Enabled: "True"
       OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: "True"
@@ -179,7 +183,7 @@ objects:
       OVERWRITE_SETTING_Accounts_RegistrationForm: "Disabled"
       OVERWRITE_SETTING_Accounts_AllowRealNameChange: "False"
       OVERWRITE_SETTING_Accounts_AllowPasswordChange: "False"
-      OVERWRITE_SETTING_Accounts_ShowFormLogin: "False"
+      OVERWRITE_SETTING_Accounts_ShowFormLogin: "True"
       #Custom OAuth
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "True"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "https://sso-dev.pathfinder.gov.bc.ca/auth"
@@ -190,6 +194,8 @@ objects:
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "rocket-chat-test"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "63cb2a21-f115-4750-be21-aaa26bb95726"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "Login"
+      # Messaging Settings
+      OVERWRITE_SETTING_Message_AllowSnippeting: "True"
       ## Rooms
       # DevOps Alerts
       # Random - Default
@@ -314,16 +320,16 @@ objects:
           labels:
             name: "${MONGODB_SERVICE_NAME}"
         spec:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                  - key: name
-                    operator: In
-                    values: 
-                    - ${MONGODB_SERVICE_NAME}
-                topologyKey: "kubernetes.io/hostname"
+#          affinity:
+#            podAntiAffinity:
+#              requiredDuringSchedulingIgnoredDuringExecution:
+#              - labelSelector:
+#                  matchExpressions:
+#                  - key: name
+#                    operator: In
+#                    values: 
+#                    - ${MONGODB_SERVICE_NAME}
+#                topologyKey: "kubernetes.io/hostname"
           containers:
             - name: mongo-container
               image: "${MONGODB_IMAGE}"
@@ -432,16 +438,16 @@ objects:
             app: "${APPLICATION_NAME}"
             deploymentConfig: "${APPLICATION_NAME}"
         spec:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                  - key: app
-                    operator: In
-                    values: 
-                    - ${APPLICATION_NAME}
-                topologyKey: "kubernetes.io/hostname"
+          # affinity:
+          #   podAntiAffinity:
+          #     requiredDuringSchedulingIgnoredDuringExecution:
+          #     - labelSelector:
+          #         matchExpressions:
+          #         - key: app
+          #           operator: In
+          #           values: 
+          #           - ${APPLICATION_NAME}
+          #       topologyKey: "kubernetes.io/hostname"
           volumes:
             - name: rocketchat-uploads
               persistentVolumeClaim:
