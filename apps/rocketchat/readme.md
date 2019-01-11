@@ -1,11 +1,10 @@
-## RocketChat
+# RocketChat
 
 All code related to the deployment and maintenance of a HA rocketchat instance for the BcDevExchange.
 
 ![diagram](RocketChat-MongoDB-HA-Design.png)
 
 ## Design
----
  
 ### HA
 
@@ -56,8 +55,7 @@ Three services are utilized for the Rocket Chat application
 * The mongoDB service on `port 27017` handles traffic to the monogoDB pods
 * The mongoDB-internal service on `port 27017` handles traffic between the mongoDB pods for cluster communication. This service is headless, no clusterIP.
 
-### RocketChat Deployment
----
+## RocketChat Deployment
 
 All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy the template through the web console `oc create -f template-rocketchat-mongodb.yaml`.
 
@@ -83,7 +81,6 @@ Update `./channel-creator.sh` with the route to rocket chat. Run `./channel-crea
 If you want to make any of these channels default (all users auto added) you can do so from the administration -> rooms page.
 
 ## Operations
----
 
 ### Upgrades
 
@@ -145,7 +142,6 @@ Get DB stats:
 `db.runCommand({ dbStats: 1, scale: 1048576 })`
 
 ## Refrences
----
 
 * https://github.com/RocketChat/Rocket.Chat/blob/develop/.openshift/rocket-chat-persistent.json
 * https://github.com/redhat-cop/pbl-rocketchat/blob/master/mongodb-statefulset-replication.yaml
@@ -164,4 +160,3 @@ Get DB stats:
 * CPU request & limit?
 * mongo image to use? Using internal image
 * docker image to use? dockerhub or RH?
-
