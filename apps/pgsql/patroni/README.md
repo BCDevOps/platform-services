@@ -35,6 +35,8 @@ Install the template into the `openshift` namespace if this should be shared acr
 
 ```
 oc create -f templates/template_patroni_ephemeral.yml -n openshift
+oc create -f templates/template_patroni_persistent.yml -n openshift
+
 ```
 
 Then, from your own project: 
