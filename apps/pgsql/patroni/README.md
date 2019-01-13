@@ -20,7 +20,7 @@ Note: If deploying as a template for multiple users, the following commands shou
 ```
 oc import-image postgres:10 --confirm -n openshift
 oc new-build https://github.com/BCDevOps/platform-services/ --context-dir=apps/pgsql/patroni -n openshift 
- oc tag image openshift/patroni:latest openshift/patroni:10
+oc tag openshift/patroni:10 openshift/patroni:latest
 ```
 
 ## Deploy the Image 
