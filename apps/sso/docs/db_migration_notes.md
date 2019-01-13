@@ -38,14 +38,10 @@ keycloak_test_01132017.tar
 ```
 [sheastewart@sheasus ~]$ oc rsh patroni-persistent-0
 $ bash
-postgres@patroni-persistent-0:/home/postgres$ createuser sso 
+postgres@patroni-persistent-0:/home/postgres$ createuser sso -W
 postgres@patroni-persistent-0:/home/postgres$ createdb keycloak
 postgres@patroni-persistent-0:/home/postgres$ pg_restore -v -C -c -e -d postgres -F t  keycloak_test_01132017.tar
 ```
-
-## DB Migration Failures
-
-- data doesn't appear after restore, need to run through this process again
 
 ## Cleanup Scripts
 To clean out a persistent cluster: 
@@ -68,7 +64,18 @@ oc patch statefulset patroni-persistent -p '{"spec": {"replicas": 3 }}'
 - Back up DB
 - Scale down DB
 - Deploy HA DB
-    - Repoint existing service to ha master
+```
+oc new-app patroni-pgsql-persistent
+```
+    - Repoint existing service to ha master (relevant detail below)
+    ```
+      selector:
+        application: patroni-persistent
+        cluster-name: patroni-persistent
+        role: master
+    sessionAffinity: None
+    type: ClusterIP
+    ```
 - Restore DB
 - Scale up SSO
 
