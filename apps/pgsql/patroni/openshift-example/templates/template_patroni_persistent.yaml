@@ -149,7 +149,7 @@ objects:
             value: 0.0.0.0:5432
           - name: PATRONI_RESTAPI_LISTEN
             value: 0.0.0.0:8008
-          image: docker-registry.default.svc:5000/${NAMESPACE}/patroni:latest
+          image: docker-registry.default.svc:5000/${NAMESPACE}/patroni:10
           imagePullPolicy: IfNotPresent
           name: ${APPLICATION_NAME}
           ports:
