@@ -45,7 +45,16 @@ oc new-app patroni-pgsql-persistent -p APPLICATION_NAME=test -p PVC_SIZE=1Gi
 ```
 
 
-### From the Web UI
+### From the Web Console
+From the OpenShift Web Console, each template can be found with the `Search` utility or `Database` category of the Service Catalog. 
+
+![](assets/db_pgsql_patroni_service_catalog.png)
+
+- Select the desired template and customize the parameters
+![](assets/db_pgsql_patroni_service_catalog_deploy1.png)
+![](assets/db_pgsql_patroni_service_catalog_deploy2.png)
+![](assets/db_pgsql_patroni_service_catalog_deploy3.png)
+
 
 ## Validating the cluster
 The `patronictl` utility, in each image, can be used to validate the cluster status: 
