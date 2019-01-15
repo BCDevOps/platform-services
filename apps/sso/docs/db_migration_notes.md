@@ -82,3 +82,4 @@ oc new-app patroni-pgsql-persistent
 ### Safety
 - Keep original db deployment and pvc
 - Clean up eventually
+- Note: sso-dev has a rhsso database
