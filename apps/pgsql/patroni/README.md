@@ -19,7 +19,8 @@ Note: If deploying as a template for multiple users, the following commands shou
 
 ```
 oc import-image postgres:10 --confirm -n openshift
-oc new-build https://github.com/zalando/patroni --context-dir=kubernetes -n openshift
+oc new-build https://github.com/BCDevOps/platform-services/ --context-dir=apps/pgsql/patroni -n openshift 
+oc tag openshift/patroni:10 openshift/patroni:latest
 ```
 
 ## Deploy the Image 
@@ -34,6 +35,8 @@ Install the template into the `openshift` namespace if this should be shared acr
 
 ```
 oc create -f templates/template_patroni_ephemeral.yml -n openshift
+oc create -f templates/template_patroni_persistent.yml -n openshift
+
 ```
 
 Then, from your own project: 

@@ -12,6 +12,8 @@ bootstrap:
   dcs:
     postgresql:
       use_pg_rewind: true
+      max_connections: 500
+      max_prepared_transactions: 500
   initdb:
   - auth-host: md5
   - auth-local: trust
