@@ -36,4 +36,4 @@ EXPOSE 5432 8008
 ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 USER postgres
 WORKDIR /home/postgres
-CMD ["/bin/bash", "/entrypoint.sh"]
+CMD ["/bin/bash", "/usr/bin/entrypoint.sh"]
