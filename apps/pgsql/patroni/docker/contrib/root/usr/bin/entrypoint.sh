@@ -9,6 +9,7 @@ fi
 
 cat > /home/postgres/patroni.yml <<__EOF__
 bootstrap:
+  post_bootstrap: /usr/share/scripts/patroni/post_bootstrap
   dcs:
     postgresql:
       use_pg_rewind: true
