@@ -3,6 +3,11 @@ kind: Template
 metadata:
   creationTimestamp: null
   name: patroni
+labels:
+  app.kubernetes.io/component: database
+  app.kubernetes.io/name: patroni
+  app.kubernetes.io/managed-by: template
+  app.kubernetes.io/version: "10"
 parameters:
   - name: NAME
     value: patroni
@@ -50,7 +55,7 @@ objects:
   kind: BuildConfig
   metadata:
     creationTimestamp: null
-    name: ${NAME}
+    name: ${NAME}${SUFFIX}
   spec:
     nodeSelector: null
     output:

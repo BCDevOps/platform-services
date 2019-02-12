@@ -1,6 +1,8 @@
 FROM postgres:10
 MAINTAINER Alexander Kukushkin <alexander.kukushkin@zalando.de>
 
+ARG PGHOME=/home/postgres
+
 RUN export DEBIAN_FRONTEND=noninteractive \
     && echo 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01norecommend \
     && apt-get update -y \
@@ -15,15 +17,16 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && pip3 install setuptools \
     && pip3 install 'git+https://github.com/zalando/patroni.git#egg=patroni[kubernetes]' \
 
-    && PGHOME=/home/postgres \
     && mkdir -p $PGHOME \
-    && chown postgres $PGHOME \
     && sed -i "s|/var/lib/postgresql.*|$PGHOME:/bin/bash|" /etc/passwd \
 
     # Set permissions for OpenShift
     && chmod 775 $PGHOME \
     && chmod 664 /etc/passwd \
-
+    && mkdir -p $PGHOME/pgdata/pgroot \
+    && chgrp -R 0 $PGHOME \
+    && chown -R postgres $PGHOME \
+    && chmod -R 775 $PGHOME \
     # Clean up
     && apt-get remove -y git python3-pip python3-wheel \
     && apt-get autoremove -y \
@@ -32,6 +35,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 COPY contrib/root /
 
+VOLUME /home/postgres/pgdata
 EXPOSE 5432 8008
 ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 USER postgres
