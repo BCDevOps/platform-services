@@ -42,8 +42,14 @@ See [BCDevOps Code Of Conduct](https://github.com/BCDevOps/developer-platform/bl
 * Add line comments whenever clarification is needed. The line comment is regarding the immediate line following it.
 * `.metadata.name` should follow the following format: `${NAME}[-subcomponent]${SUFFIX}` where `[-subcomponent]` is optional
 * Labels:
-    * See [Kubernetes Common lbales](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
-    * `app`: This label is used by OpenShift Web Console to group objects together as one stack
+    * From [Kubernetes Common labes](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
+       * `app.kubernetes.io/name`: The name of the application
+       * `app.kubernetes.io/instance`: A unique name identifying the instance of an application
+       * `app.kubernetes.io/version`: The current version of the application (e.g., a semantic version, revision hash, etc.)
+       * `app.kubernetes.io/component`: The component within the architecture
+       * `app.kubernetes.io/part-of`: The name of a higher level application this one is part of
+       * `app.kubernetes.io/managed-by`: The tool being used to manage the operation of an application
+    * `app`: This label is used by OpenShift Web Console to group objects together as one stack. Same as `app.kubernetes.io/instance`
 * Standard parameters:
     * `NAME`: The name (.metadata.name) used for all produced artifacts. See above for `.metadata.name`
     * `SUFFIX`: A suffix appended to all artifact's name (NAME). Aka instance's name. See above for `.metadata.name`
