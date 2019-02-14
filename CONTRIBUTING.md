@@ -41,6 +41,9 @@ See [BCDevOps Code Of Conduct](https://github.com/BCDevOps/developer-platform/bl
 * Use Yaml file and `.yaml` file extension
 * Add line comments whenever clarification is needed. The line comment is regarding the immediate line following it.
 * `.metadata.name` should follow the following format: `${NAME}[-subcomponent]${SUFFIX}` where `[-subcomponent]` is optional
+* Labels:
+    * See [Kubernetes Common lbales](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
+    * `app`: This label is used by OpenShift Web Console to group objects together as one stack
 * Standard parameters:
     * `NAME`: The name (.metadata.name) used for all produced artifacts. See above for `.metadata.name`
     * `SUFFIX`: A suffix appended to all artifact's name (NAME). Aka instance's name. See above for `.metadata.name`
