@@ -15,7 +15,7 @@ minishift addons disable anyuid
 minishift ssh -- "sudo chmod -R a+rwx /var/lib/minishift/base/openshift.local.pv*"
 
 # Create supported StorageClass
-oc create -f storageClass.yaml
+oc create -f minishift-storage-class.yaml
 
 # Minishift will automatically create 100 PVs
 # allocate PVs to storageClassName as needed
