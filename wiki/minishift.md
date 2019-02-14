@@ -1,6 +1,7 @@
 
 # Setup Red Hat Container Development Kit (for MacOS)
 
+Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/)
 ```
 minishift setup-cdk --force
 # Calculate the number of CPUS as the Minimun(# of logical CPUs - 2, 2)
