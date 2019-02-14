@@ -6,8 +6,8 @@ metadata:
       Patroni Postgresql database cluster, with persistent storage.
     iconClass: icon-postgresql
     openshift.io/display-name: Patroni Postgresql (Persistent)
-    openshift.io/long-description: This template deploys a a patroni postgresql HA
-      cluster without persistent storage.
+    openshift.io/long-description: This template deploys a patroni postgresql HA
+      cluster with persistent storage.
     tags: postgresql
   name: patroni-pgsql-persistent
   namespace: default
