@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: "rocketchat-pipeline"
+spec:
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfile: |-
+        pipeline {
+            agent any
+        
+            stages {
+                stage('Delete') {
+                    steps {
+                        git 'https://github.com/BCDevOps/platform-services'
+                        openshift.selector("all", [ template : templateName ]).delete()
+                        sh 'oc project pthomson-test'
+                        sh 'oc delete all --all -n '
+                        #https://kubernetes.io/docs/tasks/run-application/delete-stateful-set/
+                    }
+                }
+                stage('Checout') {
+                    steps {
+                        git url: https://github.com/BCDevOps/platform-services
+                    }
+                }
+                stage('Deploy') {
+                    steps {
+                        echo 'Deploy'ing!'
+                        oc process -f template-rocketchat-mongodb.yaml | oc create -f -
+                    }
+                }
+                stage('Config') {
+                    steps {
+                        echo 'Config'ing!'
+                        ./channel-creator.sh admin-user-name admin-password
+                    }
+                }
+            }
+        }

@@ -18,7 +18,7 @@ parameters:
     description: The size of storage to allocate for file uploads to RocketChat
     displayName: File Upload Storage Size
     required: true
-    value: "20Gi"
+    value: "5Gi"
 
   - name: SC_FILE_UPLOAD
     description: The Storage Class for the RocketChat uploads volume
@@ -29,37 +29,44 @@ parameters:
   - name: HOSTNAME_HTTPS
     description: Hostname serving the application
     displayName: Route Name
-    value: lab-chat.lab.pathfinder.gov.bc.ca
+    value: chat-dev.pathfinder.gov.bc.ca 
+    required: true
+
+  - name: ROCKETCHAT_ADMIN_PASSWORD
+    displayName: "RocketChat Admin Password"
+    description: "Password for the RocketChat admin user."
+    generate: expression
+    from: "[a-zA-Z0-9]{16}"
     required: true
 
   - name: ROCKETCHAT_IMAGE_REGISTRY
     description: Location of the RocketChat Image
     displayName: RocketChat Image
-    value: registry.connect.redhat.com/rocketchat/rocketchat
+    value: docker.io/library/rocket.chat
     required: true
   
   - name: ROCKETCHAT_IMAGE_TAG
     description: Name of the RocketChat tag that should be used
     displayName: RocketChat Tag
-    value: "latest"
+    value: "0.71.1"
     required: true
 
   - name: ROCKETCHAT_REPLICAS
     description: Number of RocketChat replica pods
     displayName: RocketChat Replicas
-    value: "3"
+    value: "2"
     required: true
 
   - name: ROCKETCHAT_MIN_HPA
     description: Min Number of RocketChat pods for HPA
     displayName: RocketChat Min HPA
-    value: "3"
+    value: "2"
     required: true
 
   - name: ROCKETCHAT_MAX_HPA
     description: Max Number of RocketChat pods for HPA
     displayName: RocketChat Max HPA
-    value: "4"
+    value: "3"
     required: true
 
   - name: MONGODB_REPLICAS
@@ -158,7 +165,7 @@ objects:
     data:
       #Admin user
       ADMIN_USERNAME: "admin"
-      ADMIN_PASS: "supersecret"
+      ADMIN_PASS: "${ROCKETCHAT_ADMIN_PASSWORD}"
       #File Upload Settings
       OVERWRITE_SETTING_FileUpload_Enabled: "True"
       OVERWRITE_SETTING_FileUpload_Storage_Type: "FileSystem"
@@ -166,8 +173,8 @@ objects:
       OVERWRITE_SETTING_FileUpload_FileSystemPath: "/app/uploads"
       OVERWRITE_SETTING_FileUpload_MaxFileSize: "2000000"
       #General Settings
-      OVERWRITE_SETTING_Site_Url: "https://lab-chat.lab.pathfinder.gov.bc.ca"
-      OVERWRITE_SETTING_Site_Name: "lab-chat.lab.pathfinder.gov.bc.ca"
+      OVERWRITE_SETTING_Site_Url: "https://${HOSTNAME_HTTPS}"
+      OVERWRITE_SETTING_Site_Name: "${HOSTNAME_HTTPS}"
       OVERWRITE_SETTING_Show_Setup_Wizard: "Completed"
       #Retention Settings
       OVERWRITE_SETTING_RetentionPolicy_Enabled: "True"
@@ -187,11 +194,12 @@ objects:
       #Custom OAuth
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "True"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "https://sso-dev.pathfinder.gov.bc.ca/auth"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token-path: "/realms/devhub/protocol/openid-connect/token"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "/realms/devhub/protocol/openid-connect/token"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "Header"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: "Header"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "/realms/devhub/protocol/openid-connect/userinfo"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "/realms/devhub/protocol/openid-connect/auth"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "rocket-chat-test"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "rocketchat"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "63cb2a21-f115-4750-be21-aaa26bb95726"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "Login"
       # Messaging Settings
@@ -242,21 +250,21 @@ objects:
       type: ClusterIP
       SessionAffinity: None
 
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: rocketchat
-    spec:
-      dockerImageRepository: rocketchat/rocket.chat 
-      tags:
-        - name: latest
-          annotations:
-            description: Provides a Rocket.Chat application
-            iconClass: icon-nodejs
-            tags: rocketchat
-          from:
-            kind: ImageStreamTag
-            name: 'latest'
+  # - apiVersion: v1
+  #   kind: ImageStream
+  #   metadata:
+  #     name: rocketchat
+  #   spec:
+  #     dockerImageRepository: rocketchat/rocket.chat 
+  #     tags:
+  #       - name: latest
+  #         annotations:
+  #           description: Provides a Rocket.Chat application
+  #           iconClass: icon-nodejs
+  #           tags: rocketchat
+  #         from:
+  #           kind: ImageStreamTag
+  #           name: 'latest'
 
   - apiVersion: v1
     kind: Route
@@ -420,14 +428,6 @@ objects:
           maxUnavailable: "25%"
       triggers:
       - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - rocketchat
-          from:
-            kind: ImageStreamTag
-            name: 'rocketchat:latest'
       replicas: "${ROCKETCHAT_REPLICAS}"
       selector:
         app: "${APPLICATION_NAME}"

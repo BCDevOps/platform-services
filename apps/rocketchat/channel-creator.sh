@@ -1,6 +1,6 @@
 #!/bin/bash
 filename=channels
-rocketurl="https://lab-chat.lab.pathfinder.gov.bc.ca/"
+rocketurl="https://chat.pathfinder.gov.bc.ca"
 user=$1
 pass=$2
 

@@ -56,8 +56,21 @@ Three services are utilized for the Rocket Chat application
 * The mongoDB service on `port 27017` handles traffic to the monogoDB pods
 * The mongoDB-internal service on `port 27017` handles traffic between the mongoDB pods for cluster communication. This service is headless, no clusterIP.
 
-### RocketChat Deployment
+### Deployment
 ---
+
+#### RH-SSO Setup
+
+We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to authenticate to it.
+
+* create a new client in the RH-SSO admin console, call it rocketchat, leave defaults
+* fill in the `Valid Redirect URIs` with the redirt URI valid for current deployment e.g.; `https://chat-test.pathfinder.gov.bc.ca/_oauth/keycloak`
+* fill in the `Web Origins` with the redirt URI valid for current deployment e.g.; `https://chat-test.pathfinder.gov.bc.ca/_oauth/keycloak`
+* add a role to the client called `rocketchat-users` 
+* turn off full scope allowed under `scope`
+* group role & flow auth in here...
+
+#### RocketChat Deployment
 
 All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy the template through the web console `oc create -f template-rocketchat-mongodb.yaml`.
 
