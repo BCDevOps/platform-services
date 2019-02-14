@@ -74,5 +74,14 @@ patroniocp-config   0         1m
 patroniocp-leader   0         1m
 ```
 
+## Development
+Install minishift and use the scripts in `test/*` to build/deploy/test
+
+- `test/e2e.sh`: runs all tests
+- `test/build.sh`: Test Build
+- `test/deploy.sh`: Test Deployment
+   - `test/patroni.sh`: Test Patroni
+   - `test/psql.sh`: Test PostgreSQL
 ## TODO
 - Need to add anti-affinity rules
+- Investigate using redhat postgres image as base image
