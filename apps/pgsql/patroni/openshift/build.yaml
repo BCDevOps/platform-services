@@ -4,6 +4,8 @@ metadata:
   creationTimestamp: null
   name: patroni
 labels:
+  app: ${NAME}${SUFFIX}
+  phase: build
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni
   app.kubernetes.io/managed-by: template

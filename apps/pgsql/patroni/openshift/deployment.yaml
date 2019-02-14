@@ -13,6 +13,7 @@ metadata:
   namespace: default
 labels:
   app: ${NAME}${SUFFIX}
+  phase: deploy
   app.kubernetes.io/instance: ${NAME}${SUFFIX}
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni
@@ -206,10 +207,13 @@ objects:
       type: OnDelete
     volumeClaimTemplates:
     - metadata:
+        annotations:
+          volume.beta.kubernetes.io/storage-class: ${STORAGE_CLASS}
         labels:
           app: ${NAME}${SUFFIX}
         name: ${NAME}${SUFFIX}
       spec:
+        storageClassName: ${STORAGE_CLASS}
         accessModes:
         - ReadWriteOnce
         resources:
@@ -310,6 +314,8 @@ parameters:
   displayName: Persistent Volume Size
   name: PVC_SIZE
   value: 1Gi
+- name: STORAGE_CLASS
+  value: gluster-block
 - name: OPENSHIFT_IMAGE_REGISTRY
   #docker-registry.default.svc:5000
   value: 172.30.1.1:5000
