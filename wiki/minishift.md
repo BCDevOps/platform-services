@@ -38,6 +38,7 @@ docker login -u `oc whoami` -p `oc whoami -t` docker-registry.pathfinder.gov.bc.
 
 # pull images
 docker pull docker-registry.pathfinder.gov.bc.ca/bcgov/postgis-96:v1-latest
+docker pull docker-registry.pathfinder.gov.bc.ca/bcgov/postgis-96:v1-latest
 
 # `oc login` to minishift
 # oc login ...
