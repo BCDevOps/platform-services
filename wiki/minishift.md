@@ -59,6 +59,8 @@ oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-r
 minishift openshift config view
 minishift openshift config set --patch '{"imageConfig": {"internalRegistryHostname": "docker-registry.default.svc:5000"}}' --target master
 
+#curl `https://docker-registry.default.svc:5000/v1/_ping`
+
 minishift openshift restart
 ```
 
