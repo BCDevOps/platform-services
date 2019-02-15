@@ -4,10 +4,13 @@
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/)
 ```
 minishift setup-cdk --force
-# Calculate the number of CPUS as the Minimun(# of logical CPUs - 2, 2)
-minishift start --openshift-version=3.10.72 --memory=8GB --cpus=$(sysctl -n hw.ncpu | awk '{print  $1 - 2}' | awk '{if ($1 < 2 ) { print 2 }  else  { print $1 }}')
 minishift addons enable registry-route
 minishift addons disable anyuid
+
+# Calculate the number of CPUS as the Minimun(# of logical CPUs - 2, 2)
+minishift start --openshift-version=3.11.59 --memory=8GB --cpus=$(sysctl -n hw.ncpu | awk '{print  $1 - 2}' | awk '{if ($1 < 2 ) { print 2 }  else  { print $1 }}')
+
+# note: you will be prompt for Redhat Developer Login/password
 
 ```
 # Setting up shared namespaces/resources
@@ -51,6 +54,12 @@ docker tag docker-registry.pathfinder.gov.bc.ca:443/bcgov/postgis-96:v1-latest "
 docker push "172.30.1.1:5000/bcgov/postgis-96:v1-latest"
 
 
+oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
+
+minishift openshift config view
+minishift openshift config set --patch '{"imageConfig": {"internalRegistryHostname": "docker-registry.default.svc:5000"}}' --target master
+
+minishift openshift restart
 ```
 
 # Setting up PV
@@ -86,5 +95,11 @@ oc run rhel7-tools --image=registry.access.redhat.com/rhel7/rhel-tools:latest -i
 
 oc run rhel7 --image=registry.access.redhat.com/rhel7:latest -it --rm=true --restart=Never --command=true -- bash
 
+```
 
+Uninstall
+```
+minishift delete
+rm -rf ~/.minishift
+rm -rf ~/.kube
 ```
