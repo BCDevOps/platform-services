@@ -10,7 +10,6 @@ metadata:
       cluster with persistent storage.
     tags: postgresql
   name: patroni-pgsql-persistent
-  namespace: default
 labels:
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni
@@ -21,8 +20,9 @@ objects:
   kind: Secret
   metadata:
     labels:
-      application: ${NAME}${SUFFIX}
+      app: ${NAME}${SUFFIX}
       cluster-name: ${NAME}${SUFFIX}
+      as-copy-of: "template.${NAME}-patroni"
     name: ${NAME}${SUFFIX}
   stringData:
     replication-username: ${PATRONI_REPLICATION_USERNAME}
@@ -61,9 +61,9 @@ parameters:
   generate: expression
   from: '[a-zA-Z0-9]{32}'
 - name: APP_DB_USERNAME
-  value: rhsso
+  value: app
 - name: APP_DB_NAME
-  value: rhsso
+  value: app
 - name: APP_DB_PASSWORD
   generate: expression
   from: '[a-zA-Z0-9]{32}'
