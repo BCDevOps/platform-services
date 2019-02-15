@@ -10,7 +10,6 @@ metadata:
       cluster with persistent storage.
     tags: postgresql
   name: patroni-pgsql-persistent
-  namespace: default
 labels:
   app: ${NAME}${SUFFIX}
   phase: deploy
@@ -306,10 +305,10 @@ parameters:
     resides.
   displayName: ImageStream Namespace
   name: IMAGE_STREAM_NAMESPACE
-  value: ""
+  value: "openshift"
 - name: IMAGE_STREAM_TAG
   description: Patroni ImageTag
-  value: patroni:10
+  value: patroni:v10.0-stable
 - description: The size of the persistent volume to create.
   displayName: Persistent Volume Size
   name: PVC_SIZE
