@@ -10,6 +10,48 @@ minishift addons enable registry-route
 minishift addons disable anyuid
 
 ```
+# Setting up shared namespaces/resources
+```
+oc new-project bcgov
+oc new-project bcgov-tools
+```
+
+# Import shared images from Pathfinder Openshift
+```
+# Open Minishift Web Console
+minishift console
+
+# `oc login` to minishift: openshift minishift web console, and copy+paste login command
+# oc login ...
+
+#Create target ImageStreams which we will use to push images to:
+oc -n bcgov create imagestream postgis-96
+
+# connects to minishift docker registry:
+eval $(minishift docker-env)
+
+# login to pathfinder cluster: Go to pathfinder openshift web console, and copy+paste login command
+# oc login ...
+
+# `docker login` to pahtfinder cluster
+docker login -u `oc whoami` -p `oc whoami -t` docker-registry.pathfinder.gov.bc.ca
+
+# pull images
+docker pull docker-registry.pathfinder.gov.bc.ca/bcgov/postgis-96:v1-latest
+
+# `oc login` to minishift
+# oc login ...
+
+# `docker login` to minishift
+docker login -u `oc whoami` -p `oc whoami -t` 172.30.1.1:5000
+
+# push images to minishift
+docker tag docker-registry.pathfinder.gov.bc.ca:443/bcgov/postgis-96:v1-latest "172.30.1.1:5000/bcgov/postgis-96:v1-latest"
+docker push "172.30.1.1:5000/bcgov/postgis-96:v1-latest"
+
+
+```
+
 # Setting up PV
 ```
 # Fix/Patch PV directory
