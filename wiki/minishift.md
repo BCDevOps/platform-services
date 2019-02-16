@@ -17,6 +17,11 @@ minishift start --openshift-version=3.11.59 --memory=8GB --cpus=$(sysctl -n hw.n
 ```
 oc new-project bcgov
 oc new-project bcgov-tools
+
+oc policy add-role-to-group system:image-puller 'system:serviceaccounts:bcgov' -n bcgov-tools --rolebinding-name='cross-project-image-pull'
+
+oc policy add-role-to-group system:image-puller 'system:serviceaccounts' -n bcgov --rolebinding-name='any-project-image-pull'
+
 ```
 
 # Import shared images from Pathfinder Openshift
@@ -84,6 +89,10 @@ seq 20 29 | xargs -I {} oc patch 'pv/pv00{}' -p '{"spec":{"storageClassName": "g
 # Reserve 10 (pv0030 to pv0039) to gluster-file
 seq 30 39 | xargs -I {} oc patch 'pv/pv00{}' -p '{"spec":{"storageClassName": "gluster-file"}}'
 
+
+#scrub (from within minishift ssh)
+seq 20 29 | xargs -t -I {} bash -c 'sudo rm -rf /var/lib/minishift/base/openshift.local.pv/pv00{}/*'
+
 ```
 
 # Testing
@@ -96,6 +105,7 @@ oc expose svc/helloworld-http
 oc run rhel7-tools --image=registry.access.redhat.com/rhel7/rhel-tools:latest -it --rm=true --restart=Never --command=true -- bash
 
 oc run rhel7 --image=registry.access.redhat.com/rhel7:latest -it --rm=true --restart=Never --command=true -- bash
+oc -n devops-sso-dev run psql --image=registry.access.redhat.com/rhscl/postgresql-96-rhel7:latest -it --rm=true --restart=Never --command=true -- bash
 
 ```
 
@@ -105,3 +115,7 @@ minishift delete
 rm -rf ~/.minishift
 rm -rf ~/.kube
 ```
+
+# References
+- https://github.com/minishift/minishift/issues/3144
+
