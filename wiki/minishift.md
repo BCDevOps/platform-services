@@ -57,7 +57,7 @@ docker pull docker-registry.pathfinder.gov.bc.ca/bcgov/postgis-96:v1-latest
 # oc login ...
 
 # `docker login` to minishift
-docker login -u `oc whoami` -p `oc whoami -t` 172.30.1.1:5000
+docker login -u `oc whoami` -p `oc whoami -t` `oc -n default get route/docker-registry -o custom-columns=host:.spec.host --no-headers`:443
 
 # push images to minishift
 docker tag docker-registry.pathfinder.gov.bc.ca:443/bcgov/postgis-96:v1-latest "172.30.1.1:5000/bcgov/postgis-96:v1-latest"
@@ -115,9 +115,18 @@ oc run rhel7-tools --image=registry.access.redhat.com/rhel7/rhel-tools:latest -i
 oc run rhel7 --image=registry.access.redhat.com/rhel7:latest -it --rm=true --restart=Never --command=true -- bash
 oc -n devops-sso-dev run psql --image=registry.access.redhat.com/rhscl/postgresql-96-rhel7:latest -it --rm=true --restart=Never --command=true -- bash
 
+
+oc run oc --image=registry.access.redhat.com/openshift3/ose-cli:v3.11 -it --rm=true --restart=Never --command=true -- bash 
+
 ```
 
-Uninstall
+# Troubleshooting
+```
+# WHo can PULL images
+oc policy who-can get imagestreams/layers
+```
+
+# Uninstall
 ```
 minishift delete
 rm -rf ~/.minishift
