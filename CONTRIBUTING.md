@@ -63,3 +63,6 @@ See [BCDevOps Code Of Conduct](https://github.com/BCDevOps/developer-platform/bl
   * Deployment Prerequisites (`deploy-prereq`): A template for creating/generating `Secret`, `ConfigMap`
   * Deployment (`deploy`): A template responsible for creating the necessary objects (e.g.: `ImageStream`, `ImageStreamTag`, `DeploymentConfig`, `Statefulset`, `Service`, `Endpoints`, `Route`) for deploying an application
 
+### Recommended Tagging Conventions
+Please refer to https://docs.openshift.com/container-platform/3.11/dev_guide/managing_images.html#tag-naming
+
