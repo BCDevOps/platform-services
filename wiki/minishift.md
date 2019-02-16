@@ -12,6 +12,9 @@ minishift start --openshift-version=3.11.59 --memory=8GB --cpus=$(sysctl -n hw.n
 
 # note: you will be prompt for Redhat Developer Login/password
 
+oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts
+
+
 ```
 # Setting up shared namespaces/resources
 ```
