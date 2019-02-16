@@ -126,4 +126,5 @@ rm -rf ~/.kube
 
 # References
 - https://github.com/minishift/minishift/issues/3144
+- https://github.com/minishift/minishift-centos-iso/issues/222
 
