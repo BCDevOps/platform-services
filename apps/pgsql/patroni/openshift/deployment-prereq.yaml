@@ -22,6 +22,7 @@ objects:
     labels:
       app: ${NAME}${SUFFIX}
       cluster-name: ${NAME}${SUFFIX}
+    annotations:
       as-copy-of: "template.${NAME}-patroni"
     name: ${NAME}${SUFFIX}
   stringData:

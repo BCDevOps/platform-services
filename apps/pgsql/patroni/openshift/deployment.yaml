@@ -11,9 +11,9 @@ metadata:
     tags: postgresql
   name: patroni-pgsql-persistent
 labels:
-  app: ${NAME}${SUFFIX}
+  app: ${INSTANCE}
   phase: deploy
-  app.kubernetes.io/instance: ${NAME}${SUFFIX}
+  app.kubernetes.io/instance: ${INSTANCE}
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni
   app.kubernetes.io/managed-by: template
@@ -25,12 +25,12 @@ objects:
 #  metadata:
 #    creationTimestamp: null
 #    labels:
-#      app: ${NAME}${SUFFIX}
-#      cluster-name: ${NAME}${SUFFIX}
+#      cluster-name: ${INSTANCE}
 #    name: ${NAME}${SUFFIX}
 #  spec:
 #    ports:
-#    - port: 5432
+#    - name: 'postgresql'
+#      port: 5432
 #      protocol: TCP
 #      targetPort: 5432
 #    sessionAffinity: None
@@ -42,49 +42,58 @@ objects:
   metadata:
     creationTimestamp: null
     labels:
-      app: ${NAME}${SUFFIX}
       cluster-name: ${NAME}${SUFFIX}
     name: ${NAME}-master${SUFFIX}
   spec:
     ports:
     - port: 5432
+#      name: 'postgresql'
       protocol: TCP
       targetPort: 5432
     selector:
-      app: ${NAME}${SUFFIX}
-      cluster-name: ${NAME}${SUFFIX}
+      cluster-name: ${INSTANCE}
       role: master
+      app.kubernetes.io/name: patroni
     sessionAffinity: None
     type: ClusterIP
   status:
     loadBalancer: {}
-- apiVersion: v1
-  kind: Service
-  metadata:
-    creationTimestamp: null
-    labels:
-      cluster-name: ${NAME}${SUFFIX}
-    name: ${NAME}-replica${SUFFIX}
-  spec:
-    ports:
-    - port: 5432
-      protocol: TCP
-      targetPort: 5432
-    selector:
-      app: ${NAME}${SUFFIX}
-      cluster-name: ${NAME}${SUFFIX}
-      role: replica
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
+#- apiVersion: v1
+#  kind: Service
+#  metadata:
+#    creationTimestamp: null
+#    labels:
+#      cluster-name: ${NAME}${SUFFIX}
+#    name: ${NAME}-replica${SUFFIX}
+#  spec:
+#    ports:
+#    - port: 5432
+##      name: 'postgresql'
+#      protocol: TCP
+#      targetPort: 5432
+#    selector:
+#      cluster-name: ${INSTANCE}
+#      app.kubernetes.io/name: patroni
+#      role: replica
+#    sessionAffinity: None
+#    type: ClusterIP
+#  status:
+#    loadBalancer: {}
+#- apiVersion: v1
+#  kind: ConfigMap
+#  metadata:
+#    name: ${NAME}${SUFFIX}-config
+#- apiVersion: v1
+#  kind: ConfigMap
+#  metadata:
+#    name: ${NAME}${SUFFIX}-leader
 - apiVersion: apps/v1
   kind: StatefulSet
   metadata:
     creationTimestamp: null
     generation: 3
     labels:
-      cluster-name: ${NAME}${SUFFIX}
+      cluster-name: ${INSTANCE}
     name: ${NAME}${SUFFIX}
   spec:
     podManagementPolicy: OrderedReady
@@ -92,30 +101,40 @@ objects:
     revisionHistoryLimit: 10
     selector:
       matchLabels:
-        app: ${NAME}${SUFFIX}
-        cluster-name: ${NAME}${SUFFIX}
+        statefulset: ${NAME}${SUFFIX}
     serviceName: ${NAME}${SUFFIX}
     template:
       metadata:
         creationTimestamp: null
         labels:
-          app: ${NAME}${SUFFIX}
-          cluster-name: ${NAME}${SUFFIX}
+          statefulset: ${NAME}${SUFFIX}
+          cluster-name: ${INSTANCE}
+          app.kubernetes.io/name: patroni
       spec:
         containers:
         - env:
+          #TODO: Remove POD_IP in favor of PATRONI_KUBERNETES_POD_IP
           - name: POD_IP
             valueFrom:
               fieldRef:
                 apiVersion: v1
                 fieldPath: status.podIP
+          - name: PATRONI_KUBERNETES_USE_ENDPOINTS
+            value: 'true'
+          - name: PATRONI_KUBERNETES_POD_IP
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+#          - name: PATRONI_KUBERNETES_PORTS
+#            value: '{[{"name": "postgresql", "port": 5432}]}'
           - name: PATRONI_KUBERNETES_NAMESPACE
             valueFrom:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.namespace
           - name: PATRONI_KUBERNETES_LABELS
-            value: '{app: ${NAME}${SUFFIX}, cluster-name: ${NAME}${SUFFIX}}'
+            value: '{"cluster-name": "${INSTANCE}", "app.kubernetes.io/name": "patroni"}'
           - name: PATRONI_SUPERUSER_USERNAME
             valueFrom:
               secretKeyRef:
@@ -152,14 +171,15 @@ objects:
                 key: app-db-name
                 name: ${NAME}${SUFFIX}
           - name: PATRONI_SCOPE
-            value: ${NAME}${SUFFIX}
+            value: ${INSTANCE}
           - name: PATRONI_NAME
             valueFrom:
               fieldRef:
                 apiVersion: v1
                 fieldPath: metadata.name
           - name: PATRONI_LOG_LEVEL
-            value: WARNING
+            value: DEBUG
+            #value: WARNING
           - name: PATRONI_POSTGRESQL_DATA_DIR
             value: /home/postgres/pgdata/pgroot/data
           - name: PATRONI_POSTGRESQL_PGPASS
@@ -168,7 +188,7 @@ objects:
             value: 0.0.0.0:5432
           - name: PATRONI_RESTAPI_LISTEN
             value: 0.0.0.0:8008
-          image: ${OPENSHIFT_IMAGE_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/${IMAGE_STREAM_TAG}
+          image: ${IMAGE_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/${IMAGE_STREAM_TAG}
           # Because we are using image reference to a tag, we need to always pull the image otherwise
           #   we end up with outdated/out-of-sync image depending on the node where it is running
           imagePullPolicy: Always
@@ -203,7 +223,7 @@ objects:
           persistentVolumeClaim:
             claimName: ${NAME}${SUFFIX}
     updateStrategy:
-      type: OnDelete
+      type: RollingUpdate
     volumeClaimTemplates:
     - metadata:
         annotations:
@@ -223,25 +243,35 @@ objects:
 #  kind: Endpoints
 #  metadata:
 #    labels:
-#      app: ${NAME}${SUFFIX}
-#      cluster-name: ${NAME}${SUFFIX}
+#      app: ${INSTANCE}
+#      cluster-name: ${INSTANCE}
 #    name: ${NAME}${SUFFIX}
 #  subsets: []
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
     labels:
-      app: ${NAME}${SUFFIX}
-      cluster-name: ${NAME}${SUFFIX}
+      cluster-name: ${INSTANCE}
     name: ${NAME}${SUFFIX}
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     labels:
-      app: ${NAME}${SUFFIX}
-      cluster-name: ${NAME}${SUFFIX}
+      cluster-name: ${INSTANCE}
     name: ${NAME}${SUFFIX}
   rules:
+  - apiGroups:
+    - ""
+    resources:
+    - services
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - update
+    - watch
+    - delete
   - apiGroups:
     - ""
     resources:
@@ -280,8 +310,7 @@ objects:
   kind: RoleBinding
   metadata:
     labels:
-      app: ${NAME}${SUFFIX}
-      cluster-name: ${NAME}${SUFFIX}
+      cluster-name: ${INSTANCE}
     name: ${NAME}${SUFFIX}
   roleRef:
     apiGroup: rbac.authorization.k8s.io
@@ -297,6 +326,8 @@ parameters:
   value: patroni
 - name: SUFFIX
   description: A suffix appended to all artifact's name (NAME)
+- name: INSTANCE
+  value: patroni
 - description: Maximum amount of memory the container can use.
   displayName: Memory Limit
   name: MEMORY_LIMIT
@@ -315,6 +346,6 @@ parameters:
   value: 1Gi
 - name: STORAGE_CLASS
   value: gluster-block
-- name: OPENSHIFT_IMAGE_REGISTRY
+- name: IMAGE_REGISTRY
   #docker-registry.default.svc:5000
   value: docker-registry.default.svc:5000
