@@ -96,10 +96,7 @@ seq 30 39 | xargs -I {} oc patch 'pv/pv00{}' -p '{"spec":{"storageClassName": "g
 
 
 #scrub (from within minishift ssh)
-seq 20 29 | xargs -t -I {} bash -c 'sudo rm -rf /var/lib/minishift/base/openshift.local.pv/pv00{}/*'
-
-#Remove PV claims and set as available
-seq 20 29 | xargs -t -I {} oc get 'pv/pv00{}' -o json | jq 'del(.spec.claimRef)' | oc replace -f -
+minishift ssh -- bash <<< 'seq 20 29 | xargs -t -I {} bash -c "sudo rm -rf /var/lib/minishift/base/openshift.local.pv/pv00{}/*"' && seq 20 29 | xargs -t -I {} oc get 'pv/pv00{}' -o json | jq 'del(.spec.claimRef)' | oc replace -f -
 
 ```
 
