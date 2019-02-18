@@ -7,14 +7,22 @@ minishift setup-cdk --force
 minishift addons enable registry-route
 minishift addons disable anyuid
 
-# Calculate the number of CPUS as the Minimun(# of logical CPUs - 2, 2)
-minishift start --openshift-version=3.11.59 --memory=8GB --cpus=$(sysctl -n hw.ncpu | awk '{print  $1 - 2}' | awk '{if ($1 < 2 ) { print 2 }  else  { print $1 }}')
+# Check number of logical CPUs in the machine
+sysctl -n hw.ncpu
+
+minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8
 
 # note: you will be prompt for Redhat Developer Login/password
 
 oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts
 # TODO: try changing workaround for allow default namespace:
 # oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts:default
+
+minishift timezone --set America/Vancouver
+
+# Fixing problems with pulling images from "docker-registry.default.svc"
+# This does NOT persist on mnishift stop/start
+minishift ssh -- sudo bash -c 'echo "172.30.1.1 docker-registry.default.svc" >> /etc/hosts'
 
 
 ```
@@ -133,4 +141,5 @@ rm -rf ~/.kube
 # References
 - https://github.com/minishift/minishift/issues/3144
 - https://github.com/minishift/minishift-centos-iso/issues/222
+- https://torstenwalter.de/minishift/openshift/homebrew/2017/07/18/install-minishift-on-osx.html
 
