@@ -119,13 +119,13 @@ objects:
               fieldRef:
                 apiVersion: v1
                 fieldPath: status.podIP
-          - name: PATRONI_KUBERNETES_USE_ENDPOINTS
-            value: 'true'
-          - name: PATRONI_KUBERNETES_POD_IP
-            valueFrom:
-              fieldRef:
-                apiVersion: v1
-                fieldPath: status.podIP
+#          - name: PATRONI_KUBERNETES_USE_ENDPOINTS
+#            value: 'true'
+#          - name: PATRONI_KUBERNETES_POD_IP
+#            valueFrom:
+#              fieldRef:
+#                apiVersion: v1
+#                fieldPath: status.podIP
 #          - name: PATRONI_KUBERNETES_PORTS
 #            value: '{[{"name": "postgresql", "port": 5432}]}'
           - name: PATRONI_KUBERNETES_NAMESPACE
@@ -339,7 +339,7 @@ parameters:
   value: "openshift"
 - name: IMAGE_STREAM_TAG
   description: Patroni ImageTag
-  value: patroni:v10.0-stable
+  value: patroni:v10-stable
 - description: The size of the persistent volume to create.
   displayName: Persistent Volume Size
   name: PVC_SIZE
