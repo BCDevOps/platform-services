@@ -7,6 +7,10 @@ if [[ $UID -ge 10000 ]]; then
     rm /tmp/passwd
 fi
 
+# FIX -> FATAL:  data directory "..." has group or world access
+mkdir -p "$PATRONI_POSTGRESQL_DATA_DIR"
+chmod 700 "$PATRONI_POSTGRESQL_DATA_DIR"
+
 cat > /home/postgres/patroni.yml <<__EOF__
 bootstrap:
   post_bootstrap: /usr/share/scripts/patroni/post_init.sh
