@@ -24,6 +24,7 @@ minishift timezone --set America/Vancouver
 # This does NOT persist on mnishift stop/start
 minishift ssh -- sudo bash -c 'echo "172.30.1.1 docker-registry.default.svc" >> /etc/hosts'
 
+oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
 
 ```
 # Setting up shared namespaces/resources
@@ -39,47 +40,26 @@ oc policy add-role-to-group system:image-puller 'system:serviceaccounts' -n bcgo
 
 # Import shared images from Pathfinder Openshift
 ```
-# Open Minishift Web Console
-minishift console
+# Create a secret using the username/token from https://console.pathfinder.gov.bc.ca:8443/console/command-line
+oc -n bcgov create secret docker-registry pathfinder \
+    '--docker-server=docker-registry.pathfinder.gov.bc.ca' \
+    "--docker-username=<username" \
+    "--docker-password=<token>"
 
-# `oc login` to minishift: openshift minishift web console, and copy+paste login command
-# oc login ...
+# Use secret for pulling images for pods
+oc secrets link default pathfinder --for=pull
 
-#Create target ImageStreams which we will use to push images to:
-oc -n bcgov create imagestream postgis-96
+# use a secret for pushing and pulling build images
+oc secrets link builder pathfinder
 
-# connects to minishift docker registry:
-eval $(minishift docker-env)
+# Import/Pull images
+oc -n bcgov import-image jenkins-basic:v2-stable --from=docker-registry.pathfinder.gov.bc.ca:443/bcgov/jenkins-basic:v2-stable --confirm --insecure --reference-policy=local
 
-# login to pathfinder cluster: Go to pathfinder openshift web console, and copy+paste login command
-# oc login ...
+oc -n bcgov import-image postgis-96:v1-latest --from=docker-registry.pathfinder.gov.bc.ca:443/bcgov/postgis-96:v1-latest --confirm --insecure --reference-policy=local
 
-# `docker login` to pahtfinder cluster
-docker login -u `oc whoami` -p `oc whoami -t` docker-registry.pathfinder.gov.bc.ca
+# Untested: Fix registry reference
+# minishift openshift config set --patch '{"imageConfig": {"internalRegistryHostname": "docker-registry.default.svc:5000"}}' --target master
 
-# pull images
-docker pull docker-registry.pathfinder.gov.bc.ca/bcgov/postgis-96:v1-latest
-docker pull docker-registry.pathfinder.gov.bc.ca/bcgov/postgis-96:v1-latest
-
-# `oc login` to minishift
-# oc login ...
-
-# `docker login` to minishift
-docker login -u `oc whoami` -p `oc whoami -t` `oc -n default get route/docker-registry -o custom-columns=host:.spec.host --no-headers`:443
-
-# push images to minishift
-docker tag docker-registry.pathfinder.gov.bc.ca:443/bcgov/postgis-96:v1-latest "172.30.1.1:5000/bcgov/postgis-96:v1-latest"
-docker push "172.30.1.1:5000/bcgov/postgis-96:v1-latest"
-
-
-oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
-
-minishift openshift config view
-minishift openshift config set --patch '{"imageConfig": {"internalRegistryHostname": "docker-registry.default.svc:5000"}}' --target master
-
-#curl `https://docker-registry.default.svc:5000/v1/_ping`
-
-minishift openshift restart
 ```
 
 # Setting up PV
@@ -142,4 +122,6 @@ rm -rf ~/.kube
 - https://github.com/minishift/minishift/issues/3144
 - https://github.com/minishift/minishift-centos-iso/issues/222
 - https://torstenwalter.de/minishift/openshift/homebrew/2017/07/18/install-minishift-on-osx.html
+- https://docs.openshift.com/container-platform/3.11/dev_guide/managing_images.html#allowing-pods-to-reference-images-from-other-secured-registries
+
 
