@@ -85,3 +85,7 @@ Install minishift and use the scripts in `test/*` to build/deploy/test
 ## TODO
 - Need to add anti-affinity rules
 - Investigate using redhat postgres image as base image
+
+## References
+- https://github.com/sclorg/postgresql-container/blob/generated/10/root/usr/bin/run-postgresql
+- https://github.com/sclorg/postgresql-container/blob/generated/10/root/usr/share/container-scripts/postgresql/common.sh
