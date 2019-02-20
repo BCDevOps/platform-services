@@ -1,11 +1,10 @@
-## RocketChat
+# RocketChat
 
 All code related to the deployment and maintenance of a HA rocketchat instance for the BcDevExchange.
 
 ![diagram](RocketChat-MongoDB-HA-Design.png)
 
 ## Design
----
  
 ### HA
 
@@ -96,7 +95,6 @@ Update `./channel-creator.sh` with the route to rocket chat. Run `./channel-crea
 If you want to make any of these channels default (all users auto added) you can do so from the administration -> rooms page.
 
 ## Operations
----
 
 ### Upgrades
 
@@ -158,7 +156,6 @@ Get DB stats:
 `db.runCommand({ dbStats: 1, scale: 1048576 })`
 
 ## Refrences
----
 
 * https://github.com/RocketChat/Rocket.Chat/blob/develop/.openshift/rocket-chat-persistent.json
 * https://github.com/redhat-cop/pbl-rocketchat/blob/master/mongodb-statefulset-replication.yaml
@@ -177,4 +174,3 @@ Get DB stats:
 * CPU request & limit?
 * mongo image to use? Using internal image
 * docker image to use? dockerhub or RH?
-
