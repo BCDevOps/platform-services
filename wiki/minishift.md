@@ -22,7 +22,7 @@ minishift timezone --set America/Vancouver
 
 # Fixing problems with pulling images from "docker-registry.default.svc"
 # This does NOT persist on mnishift stop/start
-minishift ssh -- sudo bash -c 'echo "172.30.1.1 docker-registry.default.svc" >> /etc/hosts'
+minishift ssh -- 'sudo bash -c "echo 172.30.1.1 docker-registry.default.svc >> /etc/hosts"'
 
 oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
 
