@@ -178,8 +178,7 @@ objects:
                 apiVersion: v1
                 fieldPath: metadata.name
           - name: PATRONI_LOG_LEVEL
-            value: DEBUG
-            #value: WARNING
+            value: WARNING
           - name: PATRONI_POSTGRESQL_DATA_DIR
             value: /home/postgres/pgdata/pgroot/data
           - name: PATRONI_POSTGRESQL_PGPASS
