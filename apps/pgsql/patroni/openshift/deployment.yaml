@@ -221,7 +221,7 @@ objects:
         - name: ${NAME}${SUFFIX}
 #          emptyDir: {}
           persistentVolumeClaim:
-            claimName: ${NAME}${SUFFIX}
+            claimName: postgresql
     updateStrategy:
       type: RollingUpdate
     volumeClaimTemplates:
