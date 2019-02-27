@@ -12,28 +12,31 @@ spec:
             stages {
                 stage('Delete') {
                     steps {
-                        git 'https://github.com/BCDevOps/platform-services'
+                        script {
+                            openshift.withProject(dev)
                         openshift.selector("all", [ template : templateName ]).delete()
-                        sh 'oc project pthomson-test'
-                        sh 'oc delete all --all -n '
                         #https://kubernetes.io/docs/tasks/run-application/delete-stateful-set/
+                        }
                     }
                 }
-                stage('Checout') {
+                stage('Checkout') {
                     steps {
                         git url: https://github.com/BCDevOps/platform-services
                     }
                 }
                 stage('Deploy') {
                     steps {
-                        echo 'Deploy'ing!'
-                        oc process -f template-rocketchat-mongodb.yaml | oc create -f -
+                        script {
+                            openshift.withProject(dev) {
+                                openshift.process("template-rocketchat-mongodb.yaml | oc create -f -")
+                            }
+                        }
                     }
                 }
                 stage('Config') {
                     steps {
-                        echo 'Config'ing!'
-                        ./channel-creator.sh admin-user-name admin-password
+                        script {
+                            sh channel-creator.sh admin-user-name admin-password
                     }
                 }
             }
