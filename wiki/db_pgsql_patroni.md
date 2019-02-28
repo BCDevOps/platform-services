@@ -38,11 +38,14 @@ SERVICE_ACCOUNT                Service account name used for pods and rolebindin
 PVC_SIZE                       The size of the persistent volume to create.                                                                   5Gi
 
 ```
+
 - Deploy the template with the desired parameters
 
 ```
 oc new-app patroni-pgsql-persistent -p APPLICATION_NAME=test -p PVC_SIZE=1Gi
 ```
+
+
 
 
 ### From the Web Console
