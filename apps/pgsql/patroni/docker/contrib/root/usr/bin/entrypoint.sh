@@ -7,13 +7,20 @@ if [[ $UID -ge 10000 ]]; then
     rm /tmp/passwd
 fi
 
+# FIX -> FATAL:  data directory "..." has group or world access
+mkdir -p "$PATRONI_POSTGRESQL_DATA_DIR"
+chmod 700 "$PATRONI_POSTGRESQL_DATA_DIR"
+
 cat > /home/postgres/patroni.yml <<__EOF__
 bootstrap:
+  post_bootstrap: /usr/share/scripts/patroni/post_init.sh
   dcs:
     postgresql:
       use_pg_rewind: true
-      max_connections: 500
-      max_prepared_transactions: 500
+      parameters:
+        max_connections: ${POSTGRESQL_MAX_CONNECTIONS:-100}
+        max_prepared_transactions: ${POSTGRESQL_MAX_PREPARED_TRANSACTIONS:-0}
+        max_locks_per_transaction: ${POSTGRESQL_MAX_LOCKS_PER_TRANSACTION:-64}
   initdb:
   - auth-host: md5
   - auth-local: trust
