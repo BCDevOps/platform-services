@@ -15,7 +15,7 @@ labels:
   phase: deploy
   app.kubernetes.io/instance: ${NAME}${SUFFIX}
   app.kubernetes.io/component: database
-  app.kubernetes.io/name: ${NAME}${SUFFIX}  
+  app.kubernetes.io/name: patroni  
   app.kubernetes.io/managed-by: template
   app.kubernetes.io/version: "10"
 objects:
@@ -53,7 +53,7 @@ objects:
     selector:
       cluster-name: ${NAME}${SUFFIX}
       role: master
-      app.kubernetes.io/name: ${NAME}${SUFFIX}
+      app.kubernetes.io/name: patroni
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -109,7 +109,7 @@ objects:
         labels:
           statefulset: ${NAME}${SUFFIX}
           cluster-name: ${NAME}${SUFFIX}
-          app.kubernetes.io/name: ${NAME}${SUFFIX}
+          app.kubernetes.io/name: patroni
       spec:
         affinity:
           podAntiAffinity:
