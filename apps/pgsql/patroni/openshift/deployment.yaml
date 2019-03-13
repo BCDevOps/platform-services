@@ -11,11 +11,11 @@ metadata:
     tags: postgresql
   name: patroni-pgsql-persistent
 labels:
-  app: ${INSTANCE}
+  app: ${NAME}${SUFFIX}
   phase: deploy
-  app.kubernetes.io/instance: ${INSTANCE}
+  app.kubernetes.io/instance: ${NAME}${SUFFIX}
   app.kubernetes.io/component: database
-  app.kubernetes.io/name: patroni
+  app.kubernetes.io/name: patroni  
   app.kubernetes.io/managed-by: template
   app.kubernetes.io/version: "10"
 objects:
@@ -25,7 +25,7 @@ objects:
 #  metadata:
 #    creationTimestamp: null
 #    labels:
-#      cluster-name: ${INSTANCE}
+#      cluster-name: ${NAME}${SUFFIX}
 #    name: ${NAME}${SUFFIX}
 #  spec:
 #    ports:
@@ -51,7 +51,7 @@ objects:
       protocol: TCP
       targetPort: 5432
     selector:
-      cluster-name: ${INSTANCE}
+      cluster-name: ${NAME}${SUFFIX}
       role: master
       app.kubernetes.io/name: patroni
     sessionAffinity: None
@@ -72,28 +72,28 @@ objects:
 #      protocol: TCP
 #      targetPort: 5432
 #    selector:
-#      cluster-name: ${INSTANCE}
+#      cluster-name: ${NAME}${SUFFIX}
 #      app.kubernetes.io/name: patroni
 #      role: replica
 #    sessionAffinity: None
 #    type: ClusterIP
 #  status:
 #    loadBalancer: {}
-#- apiVersion: v1
-#  kind: ConfigMap
-#  metadata:
-#    name: ${NAME}${SUFFIX}-config
-#- apiVersion: v1
-#  kind: ConfigMap
-#  metadata:
-#    name: ${NAME}${SUFFIX}-leader
+# - apiVersion: v1
+#   kind: ConfigMap
+#   metadata:
+#     name: ${NAME}${SUFFIX}-config
+# - apiVersion: v1
+#   kind: ConfigMap
+#   metadata:
+#     name: ${NAME}${SUFFIX}-leader
 - apiVersion: apps/v1
   kind: StatefulSet
   metadata:
     creationTimestamp: null
     generation: 3
     labels:
-      cluster-name: ${INSTANCE}
+      cluster-name: ${NAME}${SUFFIX}
     name: ${NAME}${SUFFIX}
   spec:
     podManagementPolicy: OrderedReady
@@ -108,9 +108,19 @@ objects:
         creationTimestamp: null
         labels:
           statefulset: ${NAME}${SUFFIX}
-          cluster-name: ${INSTANCE}
+          cluster-name: ${NAME}${SUFFIX}
           app.kubernetes.io/name: patroni
       spec:
+        affinity:
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: statefulset
+                  operator: In
+                  values: 
+                  - ${NAME}${SUFFIX}
+              topologyKey: "kubernetes.io/hostname"
         containers:
         - env:
           #TODO: Remove POD_IP in favor of PATRONI_KUBERNETES_POD_IP
@@ -134,7 +144,7 @@ objects:
                 apiVersion: v1
                 fieldPath: metadata.namespace
           - name: PATRONI_KUBERNETES_LABELS
-            value: '{"cluster-name": "${INSTANCE}", "app.kubernetes.io/name": "patroni"}'
+            value: '{"cluster-name": "${NAME}${SUFFIX}", "app.kubernetes.io/name": "${NAME}${SUFFIX}"}'
           - name: PATRONI_SUPERUSER_USERNAME
             valueFrom:
               secretKeyRef:
@@ -171,7 +181,7 @@ objects:
                 key: app-db-name
                 name: ${NAME}${SUFFIX}
           - name: PATRONI_SCOPE
-            value: ${INSTANCE}
+            value: ${NAME}${SUFFIX}
           - name: PATRONI_NAME
             valueFrom:
               fieldRef:
@@ -220,7 +230,7 @@ objects:
         - name: ${NAME}${SUFFIX}
 #          emptyDir: {}
           persistentVolumeClaim:
-            claimName: postgresql
+            claimName: ${NAME}${SUFFIX}
     updateStrategy:
       type: RollingUpdate
     volumeClaimTemplates:
@@ -242,21 +252,21 @@ objects:
 #  kind: Endpoints
 #  metadata:
 #    labels:
-#      app: ${INSTANCE}
-#      cluster-name: ${INSTANCE}
+#      app: ${NAME}${SUFFIX}
+#      cluster-name: ${NAME}${SUFFIX}
 #    name: ${NAME}${SUFFIX}
 #  subsets: []
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
     labels:
-      cluster-name: ${INSTANCE}
+      cluster-name: ${NAME}${SUFFIX}
     name: ${NAME}${SUFFIX}
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: Role
   metadata:
     labels:
-      cluster-name: ${INSTANCE}
+      cluster-name: ${NAME}${SUFFIX}
     name: ${NAME}${SUFFIX}
   rules:
   - apiGroups:
@@ -309,7 +319,7 @@ objects:
   kind: RoleBinding
   metadata:
     labels:
-      cluster-name: ${INSTANCE}
+      cluster-name: ${NAME}${SUFFIX}
     name: ${NAME}${SUFFIX}
   roleRef:
     apiGroup: rbac.authorization.k8s.io
@@ -325,8 +335,6 @@ parameters:
   value: patroni
 - name: SUFFIX
   description: A suffix appended to all artifact's name (NAME)
-- name: INSTANCE
-  value: patroni
 - description: Maximum amount of memory the container can use.
   displayName: Memory Limit
   name: MEMORY_LIMIT

@@ -28,9 +28,9 @@ oc start-build patroni-001
 
 #oc tag patroni-001:v10-latest patroni-001:v10-stable
 
-oc process -f openshift/deployment-prereq.yaml -p SUFFIX=-001 -l app=patroni-001 | oc apply -f -
+oc process -f openshift/deployment-prereq.yaml -p SUFFIX=-001 -p NAME=patroni | oc apply -f -
 
-oc process -f openshift/deployment.yaml -p "IMAGE_STREAM_NAMESPACE=$(oc project -q)" -p "IMAGE_STREAM_TAG=patroni:v10-latest" -p SUFFIX=-001  -l app=patroni-001 | oc apply -f -
+oc process -f openshift/deployment.yaml -p "IMAGE_STREAM_NAMESPACE=$(oc project -q)" -p "IMAGE_STREAM_TAG=patroni:v10-latest" -p SUFFIX=-001  -p NAME=patroni | oc apply -f -
 
 oc delete configmap,statefulset,service,endpoints -l cluster-name=patroni-001
 
