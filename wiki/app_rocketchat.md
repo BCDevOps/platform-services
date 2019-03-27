@@ -23,3 +23,7 @@ Rocket Chat will query gravatar with your email and pull in a profile picture. Y
 Owners, creating channels, private, public
 
 ## Message Snippets 
+
+## Integrations (Incoming/Outgoing Webhooks)
+
+## Installing Rocket Chat Client
