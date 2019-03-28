@@ -3,7 +3,7 @@ data:
   dragent.yaml: |-
     ### Agent tags
     # tags: linux:ubuntu,dept:dev,local:nyc
-    tags: cluster:openshift
+    tags: cluster:openshift,env:lab
 
     #### Sysdig Software related config ####
 
