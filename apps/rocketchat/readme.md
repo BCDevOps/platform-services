@@ -71,6 +71,8 @@ We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to aut
 
 #### RocketChat Deployment
 
+!! Need to select pop-up for auth once, then can use re-dir
+
 All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy the template through the web console `oc create -f template-rocketchat-mongodb.yaml`.
 
 You can also edit the template parameters and deploy all the objects: `oc process -f template-rocketchat-mongodb.yaml | oc create -f -`

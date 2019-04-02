@@ -18,7 +18,6 @@ parameters:
     description: The size of storage to allocate for file uploads to RocketChat
     displayName: File Upload Storage Size
     required: true
-    value: "5Gi"
 
   - name: SC_FILE_UPLOAD
     description: The Storage Class for the RocketChat uploads volume
@@ -29,7 +28,6 @@ parameters:
   - name: HOSTNAME_HTTPS
     description: Hostname serving the application
     displayName: Route Name
-    value: chat-dev.pathfinder.gov.bc.ca 
     required: true
 
   - name: ROCKETCHAT_ADMIN_PASSWORD
@@ -48,25 +46,22 @@ parameters:
   - name: ROCKETCHAT_IMAGE_TAG
     description: Name of the RocketChat tag that should be used
     displayName: RocketChat Tag
-    value: "0.71.1"
+    value: "latest"
     required: true
 
   - name: ROCKETCHAT_REPLICAS
     description: Number of RocketChat replica pods
     displayName: RocketChat Replicas
-    value: "2"
     required: true
 
   - name: ROCKETCHAT_MIN_HPA
     description: Min Number of RocketChat pods for HPA
     displayName: RocketChat Min HPA
-    value: "2"
     required: true
 
   - name: ROCKETCHAT_MAX_HPA
     description: Max Number of RocketChat pods for HPA
     displayName: RocketChat Max HPA
-    value: "3"
     required: true
 
   - name: MONGODB_REPLICAS
@@ -84,13 +79,21 @@ parameters:
   - name: MEMORY_REQUEST
     description: Amount of Memory to Request.
     displayName: Memory Request
-    value: "1Gi"
     required: true
 
   - name: MEMORY_LIMIT
     description: Amount of Memory to Limit.
     displayName: Memory Limit
-    value: "2Gi"
+    required: true
+
+  - name: CPU_REQUEST
+    description: Amount of CPU to Request.
+    displayName: Memory Request
+    required: true
+
+  - name: CPU_LIMIT
+    description: Amount of CPU to Limit.
+    displayName: Memory Limit
     required: true
 
   - name: MONGODB_SECRET_NAME
@@ -148,7 +151,6 @@ parameters:
   - name: VOLUME_CAPACITY
     displayName: "Volume Capacity for MongoDB"
     description: "Volume space available for data, e.g. 512Mi, 2Gi."
-    value: "10Gi"
     required: true
 
   - name: SC_MONGO
@@ -156,6 +158,113 @@ parameters:
     displayName: Storage Class for MongoDB
     required: true
     value: "gluster-file"
+
+# Rocket Chat Environment Variables
+  - name: FILEUPLOAD_ENABLED
+    displayName: Rocket Chat Environment Variable
+  
+  - name: FILEUPLOAD_STORAGE_TYPE
+    displayName: Rocket Chat Environment Variable
+  
+  - name: FILEUPLOAD_PROTECTFILES
+    displayName: Rocket Chat Environment Variable
+  
+  - name: FILEUPLOAD_FILESYSTEMPATH
+    displayName: Rocket Chat Environment Variable
+  
+  - name: FILEUPLOAD_MAXFILESIZE
+    displayName: Rocket Chat Environment Variable
+  
+  - name: FILEUPLOAD_MEDIATYPEWHITELIST
+    displayName: Rocket Chat Environment Variable
+  
+  - name: SHOW_SETUP_WIZARD
+    displayName: Rocket Chat Environment Variable
+  
+  - name: LAYOUT_LOGIN_TERMS
+    displayName: Rocket Chat Environment Variable
+  
+  - name: RETENTIONPOLICY_ENABLED
+    displayName: Rocket Chat Environment Variable
+  
+  - name: RETENTIONPOLICY_APPLIESTOCHANNELS
+    displayName: Rocket Chat Environment Variable
+  
+  - name: RETENTIONPOLICY_MAXAGE_CHANNELS
+    displayName: Rocket Chat Environment Variable
+  
+  - name: RETENTIONPOLICY_APPLIESTOGROUPS
+    displayName: Rocket Chat Environment Variable
+  
+  - name: RETENTIONPOLICY_MAXAGE_GROUPS
+    displayName: Rocket Chat Environment Variable
+    
+  - name: RETENTIONPOLICY_APPLIESTODMS
+    displayName: Rocket Chat Environment Variable
+  
+  - name: RETENTIONPOLICY_MAXAGE_DMS
+    displayName: Rocket Chat Environment Variable
+  
+  - name: RETENTIONPOLICY_FILESONLY
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_TWOFACTORAUTHENTICATION_ENABLED
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_REGISTRATIONFORM
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_ALLOWREALNAMECHANGE
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_ALLOWPASSWORDCHANGE
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_SHOWFORMLOGIN
+    displayName: Rocket Chat Environment Variable
+
+  - name: ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING
+    displayName: Rocket Chat Environment Variable
+
+  - name: ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING
+    displayName: Rocket Chat Environment Variable
+
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-URL
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_PATH
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_SENT_VIA
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_TOKEN_SENT_VIA
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_PATH
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-AUTHORIZE_PATH
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-ID
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-SECRET
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-LOGIN_STYLE
+    displayName: Rocket Chat Environment Variable
+  
+  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-BUTTON_LABEL_TEXT
+    displayName: Rocket Chat Environment Variable
+    
+  - name: MESSAGE_ALLOWSNIPPETING
+    displayName: Rocket Chat Environment Variable
+
 
 objects:
   - apiVersion: v1
@@ -167,41 +276,46 @@ objects:
       ADMIN_USERNAME: "admin"
       ADMIN_PASS: "${ROCKETCHAT_ADMIN_PASSWORD}"
       #File Upload Settings
-      OVERWRITE_SETTING_FileUpload_Enabled: "True"
-      OVERWRITE_SETTING_FileUpload_Storage_Type: "FileSystem"
-      OVERWRITE_SETTING_FileUpload_ProtectFiles: "False"
-      OVERWRITE_SETTING_FileUpload_FileSystemPath: "/app/uploads"
-      OVERWRITE_SETTING_FileUpload_MaxFileSize: "2000000"
+      OVERWRITE_SETTING_FileUpload_Enabled: "${FILEUPLOAD_ENABLED}"
+      OVERWRITE_SETTING_FileUpload_Storage_Type: "${FILEUPLOAD_STORAGE_TYPE}"
+      OVERWRITE_SETTING_FileUpload_ProtectFiles: "${FILEUPLOAD_PROTECTFILES}" 
+      OVERWRITE_SETTING_FileUpload_FileSystemPath: "${FILEUPLOAD_FILESYSTEMPATH}"
+      OVERWRITE_SETTING_FileUpload_MaxFileSize: "${FILEUPLOAD_MAXFILESIZE}"
+      OVERWRITE_SETTING_FileUpload_MediaTypeWhiteList: "${FILEUPLOAD_MEDIATYPEWHITELIST}" 
       #General Settings
       OVERWRITE_SETTING_Site_Url: "https://${HOSTNAME_HTTPS}"
       OVERWRITE_SETTING_Site_Name: "${HOSTNAME_HTTPS}"
-      OVERWRITE_SETTING_Show_Setup_Wizard: "Completed"
+      OVERWRITE_SETTING_Show_Setup_Wizard: "${SHOW_SETUP_WIZARD}"
+      OVERWRITE_SETTING_Layout_Login_Terms: "${LAYOUT_LOGIN_TERMS}"
       #Retention Settings
-      OVERWRITE_SETTING_RetentionPolicy_Enabled: "True"
-      OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: "True"
-      OVERWRITE_SETTING_RetentionPolicy_MaxAgeChannels: "365"
-      OVERWRITE_SETTING_RetentionPolicy_AppliesToGroups: "True"
-      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "365"
-      OVERWRITE_SETTING_RetentionPolicy_AppliesToDMs: "True"
-      OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "365"
-      OVERWRITE_SETTING_RetentionPolicy_FilesOnly: "True"
+      OVERWRITE_SETTING_RetentionPolicy_Enabled: "${RETENTIONPOLICY_ENABLED}"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: "${RETENTIONPOLICY_APPLIESTOCHANNELS}"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Channels: "${RETENTIONPOLICY_MAXAGE_CHANNELS}"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToGroups: "${RETENTIONPOLICY_APPLIESTOGROUPS}" 
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "${RETENTIONPOLICY_MAXAGE_GROUPS}"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToDMs: "${RETENTIONPOLICY_APPLIESTODMS}"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "${RETENTIONPOLICY_MAXAGE_DMS}" 
+      OVERWRITE_SETTING_RetentionPolicy_FilesOnly: "${RETENTIONPOLICY_FILESONLY}"
       #Account Settings
-      OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: "False"
-      OVERWRITE_SETTING_Accounts_RegistrationForm: "Disabled"
-      OVERWRITE_SETTING_Accounts_AllowRealNameChange: "False"
-      OVERWRITE_SETTING_Accounts_AllowPasswordChange: "False"
-      OVERWRITE_SETTING_Accounts_ShowFormLogin: "True"
+      OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: "${ACCOUNTS_TWOFACTORAUTHENTICATION_ENABLED}"
+      OVERWRITE_SETTING_Accounts_RegistrationForm: "${ACCOUNTS_REGISTRATIONFORM}"
+      OVERWRITE_SETTING_Accounts_AllowRealNameChange: "${ACCOUNTS_ALLOWREALNAMECHANGE}"
+      OVERWRITE_SETTING_Accounts_AllowPasswordChange: "${ACCOUNTS_ALLOWPASSWORDCHANGE}"
+      Accounts_ShowFormLogin: "${ACCOUNTS_SHOWFORMLOGIN}"
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Activating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
       #Custom OAuth
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "True"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "https://sso-dev.pathfinder.gov.bc.ca/auth"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "/realms/devhub/protocol/openid-connect/token"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "Header"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: "Header"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "/realms/devhub/protocol/openid-connect/userinfo"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "/realms/devhub/protocol/openid-connect/auth"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "rocketchat"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "63cb2a21-f115-4750-be21-aaa26bb95726"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "Login"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-URL}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_PATH}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_SENT_VIA}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via"Header": "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_TOKEN_SENT_VIA}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_PATH}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-AUTHORIZE_PATH}" 
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-ID}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-SECRET}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-LOGIN_STYLE}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "${MESSAGE_ALLOWSNIPPETING}"
       # Messaging Settings
       OVERWRITE_SETTING_Message_AllowSnippeting: "True"
       
@@ -250,23 +364,6 @@ objects:
         deploymentConfig: ${APPLICATION_NAME}
       type: ClusterIP
       SessionAffinity: None
-
-  # - apiVersion: v1
-  #   kind: ImageStream
-  #   metadata:
-  #     name: rocketchat
-  #   spec:
-  #     dockerImageRepository: rocketchat/rocket.chat 
-  #     tags:
-  #       - name: latest
-  #         annotations:
-  #           description: Provides a Rocket.Chat application
-  #           iconClass: icon-nodejs
-  #           tags: rocketchat
-  #         from:
-  #           kind: ImageStreamTag
-  #           name: 'latest'
-
   - apiVersion: v1
     kind: Route
     metadata:
@@ -284,6 +381,7 @@ objects:
         name: ${APPLICATION_NAME}
       tls:
         termination: edge
+        insecureEdgeTerminationPolicy: Redirect
 
   # A non-headless service which takes pod readiness into consideration
   - kind: Service
@@ -296,7 +394,6 @@ objects:
       ports:
         - name: mongodb
           port: 27017
-      # will route traffic to pods having labels matching this selector
       selector:
         name: "${MONGODB_SERVICE_NAME}"
 
@@ -329,16 +426,16 @@ objects:
           labels:
             name: "${MONGODB_SERVICE_NAME}"
         spec:
-#          affinity:
-#            podAntiAffinity:
-#              requiredDuringSchedulingIgnoredDuringExecution:
-#              - labelSelector:
-#                  matchExpressions:
-#                  - key: name
-#                    operator: In
-#                    values: 
-#                    - ${MONGODB_SERVICE_NAME}
-#                topologyKey: "kubernetes.io/hostname"
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: name
+                    operator: In
+                    values: 
+                    - ${MONGODB_SERVICE_NAME}
+                topologyKey: "kubernetes.io/hostname"
           containers:
             - name: mongo-container
               image: "${MONGODB_IMAGE}"
@@ -439,16 +536,16 @@ objects:
             app: "${APPLICATION_NAME}"
             deploymentConfig: "${APPLICATION_NAME}"
         spec:
-          # affinity:
-          #   podAntiAffinity:
-          #     requiredDuringSchedulingIgnoredDuringExecution:
-          #     - labelSelector:
-          #         matchExpressions:
-          #         - key: app
-          #           operator: In
-          #           values: 
-          #           - ${APPLICATION_NAME}
-          #       topologyKey: "kubernetes.io/hostname"
+          affinity:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values: 
+                    - ${APPLICATION_NAME}
+                topologyKey: "kubernetes.io/hostname"
           volumes:
             - name: rocketchat-uploads
               persistentVolumeClaim:
@@ -483,9 +580,9 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 150
-              timeoutSeconds: 1
-              periodSeconds: 10
+              initialDelaySeconds: 60
+              timeoutSeconds: 5
+              periodSeconds: 20
               successThreshold: 1
               failureThreshold: 3
             readinessProbe:
@@ -493,16 +590,18 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 150
-              timeoutSeconds: 1
-              periodSeconds: 10
+              initialDelaySeconds: 60
+              timeoutSeconds: 5
+              periodSeconds: 20
               successThreshold: 1
               failureThreshold: 3
             resources:
               limits:
+                cpu: "${CPU_LIMIT}"
                 memory: "${MEMORY_LIMIT}"
-#              requests:
-#                memory: "${MEMORY_REQUEST}"
+              requests:
+                memory: "${MEMORY_REQUEST}"
+                cpu: "${CPU_REQUEST}"
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
     status: {}
