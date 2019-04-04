@@ -144,7 +144,7 @@ objects:
                 apiVersion: v1
                 fieldPath: metadata.namespace
           - name: PATRONI_KUBERNETES_LABELS
-            value: '{"cluster-name": "${NAME}${SUFFIX}", "app.kubernetes.io/name": "${NAME}${SUFFIX}"}'
+            value: '{"cluster-name": "${NAME}${SUFFIX}", "app.kubernetes.io/name": "patroni"}'
           - name: PATRONI_SUPERUSER_USERNAME
             valueFrom:
               secretKeyRef:
@@ -219,7 +219,7 @@ objects:
                 - /usr/share/scripts/patroni/health_check.sh
           volumeMounts:
           - mountPath: /home/postgres/pgdata
-            name: ${NAME}${SUFFIX}
+            name: postgresql
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
