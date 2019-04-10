@@ -373,6 +373,28 @@ const githubEvents = {
     };
   },
   /* END OF RELEASE */
+
+  /* FORK */
+  fork(request) {
+    const user = request.content.forkee.owner;
+    const text = '_' + request.content.repository.full_name + '_\n' +
+      '**[Forked by ' + user.login + '](' +
+      request.content.forkee.html_url + ')**\n\n'
+
+    return {
+      content: {
+        attachments: [
+          {
+            thumb_url: user.avatar_url,
+            text: text,
+            fields: []
+          }
+        ]
+      }
+    };
+  },
+  /* END OF FORK */
+
 };
 
 class Script {
