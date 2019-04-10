@@ -143,6 +143,10 @@ const githubEvents = {
   /* PUSH TO REPO */
   push(request) {
     var commits = request.content.commits;
+    if (commits.length < 1 && typeof request.content.head_commit !== 'undefined') {
+      commits.push(request.content.head_commit);
+    }
+
     var multi_commit = ""
     var is_short = true;
     var changeset = 'Changeset';
