@@ -338,6 +338,41 @@ const githubEvents = {
   },
   /* END OF STATUS */
 
+  /* RELEASE */
+  release(request) {
+    const user = request.content.release.author;
+
+    if (request.content.action == "published") {
+      var body = request.content.release.body;
+    } else {
+      return {
+        error: {
+          success: false,
+          message: `Unsupported action: ${request.content.action}`
+        }
+      };
+    }
+
+    const action = request.content.action.capitalizeFirstLetter();
+
+    const text = '_' + request.content.repository.full_name + '_\n' +
+      '**[' + action + ' release - ' + request.content.release.name + '](' +
+      request.content.release.html_url + ')**\n\n' +
+      body;
+
+    return {
+      content: {
+        attachments: [
+          {
+            thumb_url: user.avatar_url,
+            text: text,
+            fields: []
+          }
+        ]
+      }
+    };
+  },
+  /* END OF RELEASE */
 };
 
 class Script {
