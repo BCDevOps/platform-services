@@ -161,110 +161,40 @@ parameters:
 
 # Rocket Chat Environment Variables
   - name: FILEUPLOAD_ENABLED
-    displayName: Rocket Chat Environment Variable
-  
   - name: FILEUPLOAD_STORAGE_TYPE
-    displayName: Rocket Chat Environment Variable
-  
   - name: FILEUPLOAD_PROTECTFILES
-    displayName: Rocket Chat Environment Variable
-  
   - name: FILEUPLOAD_FILESYSTEMPATH
-    displayName: Rocket Chat Environment Variable
-  
   - name: FILEUPLOAD_MAXFILESIZE
-    displayName: Rocket Chat Environment Variable
-  
   - name: FILEUPLOAD_MEDIATYPEWHITELIST
-    displayName: Rocket Chat Environment Variable
-  
   - name: SHOW_SETUP_WIZARD
-    displayName: Rocket Chat Environment Variable
-  
   - name: LAYOUT_LOGIN_TERMS
-    displayName: Rocket Chat Environment Variable
-  
   - name: RETENTIONPOLICY_ENABLED
-    displayName: Rocket Chat Environment Variable
-  
   - name: RETENTIONPOLICY_APPLIESTOCHANNELS
-    displayName: Rocket Chat Environment Variable
-  
   - name: RETENTIONPOLICY_MAXAGE_CHANNELS
-    displayName: Rocket Chat Environment Variable
-  
   - name: RETENTIONPOLICY_APPLIESTOGROUPS
-    displayName: Rocket Chat Environment Variable
-  
   - name: RETENTIONPOLICY_MAXAGE_GROUPS
-    displayName: Rocket Chat Environment Variable
-    
   - name: RETENTIONPOLICY_APPLIESTODMS
-    displayName: Rocket Chat Environment Variable
-  
   - name: RETENTIONPOLICY_MAXAGE_DMS
-    displayName: Rocket Chat Environment Variable
-  
   - name: RETENTIONPOLICY_FILESONLY
-    displayName: Rocket Chat Environment Variable
-  
   - name: ACCOUNTS_TWOFACTORAUTHENTICATION_ENABLED
-    displayName: Rocket Chat Environment Variable
-  
   - name: ACCOUNTS_REGISTRATIONFORM
-    displayName: Rocket Chat Environment Variable
-  
   - name: ACCOUNTS_ALLOWREALNAMECHANGE
-    displayName: Rocket Chat Environment Variable
-  
   - name: ACCOUNTS_ALLOWPASSWORDCHANGE
-    displayName: Rocket Chat Environment Variable
-  
   - name: ACCOUNTS_SHOWFORMLOGIN
-    displayName: Rocket Chat Environment Variable
-
   - name: ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING
-    displayName: Rocket Chat Environment Variable
-
   - name: ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING
-    displayName: Rocket Chat Environment Variable
-
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-URL
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_PATH
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_SENT_VIA
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_TOKEN_SENT_VIA
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_PATH
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-AUTHORIZE_PATH
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-ID
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-SECRET
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-LOGIN_STYLE
-    displayName: Rocket Chat Environment Variable
-  
-  - name: ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-BUTTON_LABEL_TEXT
-    displayName: Rocket Chat Environment Variable
-    
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_BUTTON_LABEL_TEXT
   - name: MESSAGE_ALLOWSNIPPETING
-    displayName: Rocket Chat Environment Variable
-
 
 objects:
   - apiVersion: v1
@@ -305,16 +235,16 @@ objects:
       OVERWRITE_SETTING_Accounts_Send_Email_When_Activating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
       OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
       #Custom OAuth
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-URL}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_PATH}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-TOKEN_SENT_VIA}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via"Header": "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_TOKEN_SENT_VIA}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-IDENTITY_PATH}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-AUTHORIZE_PATH}" 
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-ID}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-SECRET}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: "${ACCOUNTS_OAUTH_CUSTOM-KEYCLOAK-LOGIN_STYLE}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH}" 
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE}"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "${MESSAGE_ALLOWSNIPPETING}"
       # Messaging Settings
       OVERWRITE_SETTING_Message_AllowSnippeting: "True"

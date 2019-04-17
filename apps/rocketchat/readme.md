@@ -25,9 +25,9 @@ A secret is created to store credentials for mongoDB with the following informat
 * database
 * replica name
 
-### Image Stream
+### Images
 
-An ImageStream is created for the Rocket Chat docker image. The Rocket Chat deploymentConfig points to this ImageStream and watches for changes, if an image update is available the application will do a rolling re-deploy. The ImageStream points to the Docker Hub Rocket Chat image.
+The Rocket Chat image is pointing at a specific tag on docker hub. The MongoDB image is pointing at the internal MongoDB image that ships with OpenShift using the `latest` tag.
 
 ### Storage
 
@@ -63,21 +63,18 @@ Three services are utilized for the Rocket Chat application
 We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to authenticate to it.
 
 * create a new client in the RH-SSO admin console, call it rocketchat, leave defaults
-* fill in the `Valid Redirect URIs` with the redirt URI valid for current deployment e.g.; `https://chat-test.pathfinder.gov.bc.ca/_oauth/keycloak`
-* fill in the `Web Origins` with the redirt URI valid for current deployment e.g.; `https://chat-test.pathfinder.gov.bc.ca/_oauth/keycloak`
+* fill in the `Valid Redirect URIs` with the redirect URI valid for current deployment e.g.; `https://chat-test.pathfinder.gov.bc.ca/_oauth/keycloak`
 * add a role to the client called `rocketchat-users` 
 * turn off full scope allowed under `scope`
 * group role & flow auth in here...
 
 #### RocketChat Deployment
 
-!! Need to select pop-up for auth once, then can use re-dir
-
 All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy the template through the web console `oc create -f template-rocketchat-mongodb.yaml`.
 
-You can also edit the template parameters and deploy all the objects: `oc process -f template-rocketchat-mongodb.yaml | oc create -f -`
+All of the template parameters are defined in environment files specific to the environment to deploy Rocket Chat into, dev, test, and prod.
 
-Before you deploy the Rocket Chat/Mongo DB template go through the file (`template-rocketchat-mongodb.yaml`) and update the template parameters and configmap values to ones that make sense for your deployment.
+Before you deploy the Rocket Chat/Mongo DB template go through the environment file and update the template parameters values to ones that make sense for your deployment and deploy all the objects: `oc process -f template-rocketchat-mongodb.yaml --param-file=dev.env | oc create -f -`
 
 A standard DeploymentConfig is created for the Rocket Chat NodeJS application. Environment variables are loaded in from the mongodb secret. Liveness and readiness health checks on HTTP port 3000 are set. The DeploymentConfig is set up for a rolling deployment with 3 replicas
 
@@ -87,6 +84,9 @@ After the Rocket Chat and MongoDB pods are up and running you can connect to the
  * Add custom oauth -> Enter in "Keycloak"
  * Under Administration -> Accounts
  * Set "Show default login form" False (This will make sure only the custom Keycloak oauth is available for log in)
+
+We also Need to select pop-up for log in style and auth once, then can change to Redirect option.
+
 
 #### Add Channels
 
@@ -101,8 +101,6 @@ If you want to make any of these channels default (all users auto added) you can
 ### Upgrades
 
 Upgrades to Rocket Chat will be handled by deployment of a new image version.
-
-!! testing image change trigger with image stream
 
 ### Backup & restore
 
@@ -127,12 +125,6 @@ To restore the database you will have to start another mongodb instance, then co
 ```
 mongorestore -u admin -p \$MONGODB_ADMIN_PASSWORD --authenticationDatabase admin --gzip $DIR/DB_TO_RESTORE -d DB_TO_RESTORE_INTO"
 ```
-
-### Load Testing
-
-- how many resources are required by the project
-- how should data be protected
-- whats the expected behavior when nodes are patched, has this been tested (ie. rolling availability)
 
 ### Scaling 
 
@@ -167,12 +159,3 @@ Get DB stats:
 * https://docs.openshift.com/container-platform/3.10/using_images/db_images/mongodb.html#using-mongodb-replication
 * https://docs.mongodb.com/manual/core/read-preference/
 * https://github.com/appuio/mongodb-backup
-
-
-## FOR REVIEW
-
-* Max autoscale pods?
-* Memory request & limit?
-* CPU request & limit?
-* mongo image to use? Using internal image
-* docker image to use? dockerhub or RH?
