@@ -202,6 +202,8 @@ const githubEvents = {
     } else if (request.content.action == "assigned" || request.content.action == "unassigned") {
       // Note that the issues API only gives you one assignee.
       var body = "Current assignee: " + request.content.pull_request.assignee.login;
+    } else if (request.content.action == "review_requested") {
+      var body = request.content.sender.login + " requested a review from *" + request.content.requested_reviewer.login + "*"
     } else if (request.content.action == "closed") {
       if (request.content.pull_request.merged) {
         var body = "Merged by: " + request.content.pull_request.merged_by.login;
