@@ -6,6 +6,19 @@ data:
     tags: cluster:openshift,env:prod
 
     #### Sysdig Software related config ####
+    # Agent Log priority
+    log:
+      file_priority: debug
+
+    # Watchdog config fr: troubleshooting
+    watchdog:
+      max_memory_usage_mb: 1024
+      max_memory_usage_subprocesses:
+        sdchecks: 128
+        sdjagent: 256
+        mountedfs_reader: 32
+        statsite_forwarder: 32
+        cointerface: 1024
 
     # Sysdig collector address
     collector: collector-static.sysdigcloud.com
