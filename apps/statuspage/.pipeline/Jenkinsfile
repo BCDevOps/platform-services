@@ -15,12 +15,12 @@ def PROMETHEUS_VERSION = 'latest'
                 parallel (
                     'Prometheus': {
                         stage ('Stage1') {
-                            dir ('apps/statuspage/manifests') {
-                                sh "ls -lha"
+                           // dir ('apps/statuspage/manifests') {
                                 sh "pwd" 
+                                sh "ls -lha"
                                 sh "oc project ${DEV_NAMESPACE}"
                                 sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f -"""
-                            }
+                            //}
                         }
                     },
                     'Blackbox': {
