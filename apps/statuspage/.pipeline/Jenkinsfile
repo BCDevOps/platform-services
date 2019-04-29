@@ -16,12 +16,13 @@ def BRANCH_NAME = 'status-page'
 // Pipeline Execution
 
     node {
+            stage ('Clone repo'){
+                git branch: "${BRANCH_NAME}", url: "https://github.com/${GIT_REPO}"
+            }
             stage ('Deploy Dev'){
                 parallel (
                     'Prometheus': {
-                        stage ('Stage1') {
-                            git branch: "${BRANCH_NAME}", url: "https://github.com/${GIT_REPO}"
-                            sh "ls -lha"
+                        stage ('Deploy Prometheys') {
                             dir ("apps/statuspage/manifests") {
                                 sh "ls -lha"
                                 sh """oc apply -f service-prometheus.yml -n ${DEV_NAMESPACE}"""
@@ -62,6 +63,21 @@ def BRANCH_NAME = 'status-page'
                     },
                 )
                 
+            }
+            stage ("Configure Dev")
+            {
+                parallel (
+                    'Grafana': {
+                        stage ('Configure Grafana') {
+                            dir ("apps/statuspage/manifests") {
+                                sh """until [ "$(oc get pods -n ${DEV_NAMESPACE}| grep Running | grep grafana | awk '{print $2}')" = "1/1" ]; do echo "Waiting for Grafana to be ready..."; done """
+                                sh "echo 'Generating API Token for Read Only User'"
+                                sh """GRAFANA_API_KEY=$(curl -H "Content-Type: application/json" -X POST -d '{"name": "public", "role": "Viewer"}' http://admin:admin@$(oc get routes -n ${DEV_NAMESPACE} | grep grafana | awk '{print $2}')/api/auth/keys | jq -r '.key')"""
+                                sh """cat configmap-envoy.yml | sed 's/{{ GRAFANA_TOKEN }}/'"$GRAFANA_API_KEY"'/g' | oc apply -f - -n ${DEV_NAMESPACE}"""
+                            }
+                        }
+                    },
+                )
             }
             stage ("Wait for Validation"){
                     input id: 'Approve02', message: 'Deploy in Test?', ok: 'HANG TIGHT!'
