@@ -46,7 +46,7 @@ def BRANCH_NAME = 'status-page'
                                 sh """oc apply -f service-grafana.yml -n ${DEV_NAMESPACE}"""
                                 sh """oc apply -f route-grafana.yml -n ${DEV_NAMESPACE}"""
                                 sh """oc apply -f pvc-grafana.yml -n ${DEV_NAMESPACE}"""
-                                sh """cat deployment-envoy.yml | sed 's/{{ VERSION }}/${GRAFANA_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
+                                sh """cat deployment-grafana.yml | sed 's/{{ VERSION }}/${GRAFANA_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
                             }
                         }
                     },
