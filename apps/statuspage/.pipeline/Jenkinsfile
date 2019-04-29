@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 //ENV Vars
-// def TOOLS_NAMESPACE = 'c81e6h-tools'
+def TOOLS_NAMESPACE = 'c81e6h-tools'
 // def DEV_NAMESPACE = 'c81e6h-dev'
 // def TEST_NAMESPACE = 'c81e6h-test'
 // def PROD_NAMESPACE = 'c81e6h-prod'
