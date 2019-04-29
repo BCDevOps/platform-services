@@ -17,7 +17,7 @@ def PROMETHEUS_VERSION = 'latest'
                         stage ('Stage1') {
                             dir ('manifests') {
                                 sh "oc project ${DEV_NAMESPACE}"
-                                sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION :=latest}/g'| oc apply -f -"""
+                                sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f -"""
                             }
                         }
                     },
