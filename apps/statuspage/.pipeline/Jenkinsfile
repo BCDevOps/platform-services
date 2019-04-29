@@ -24,7 +24,7 @@ def BRANCH_NAME = 'status-page'
                                 sh """oc apply -f service-prometheus.yml -n ${DEV_NAMESPACE}"""
                                 sh """oc apply -f configmap-prometheus.yml -n ${DEV_NAMESPACE}"""
                                 sh """oc apply -f route-prometheus.yml -n ${DEV_NAMESPACE}"""
-                                sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
+                                sh """cat statefulset-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
                             }
                         }
                     },
