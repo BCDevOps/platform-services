@@ -8,8 +8,8 @@ def TOOLS_NAMESPACE = 'c81e6h-tools'
 
 
 // Pipeline Execution
-{
-    node('node') {
+
+    node {
             stage ('Deploy Test'){
                 parallel (
                     'Prometheus': {
@@ -62,4 +62,3 @@ def TOOLS_NAMESPACE = 'c81e6h-tools'
                 )
             }
     }
-}
