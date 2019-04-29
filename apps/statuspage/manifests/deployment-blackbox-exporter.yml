@@ -26,7 +26,7 @@ spec:
         terminationMessagePolicy: File
         volumeMounts:
           - mountPath: /etc/blackbox_exporter
-            name: volume-wqosh
+            name: blackbox-exporter
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -36,7 +36,4 @@ spec:
       - configMap:
           defaultMode: 420
           name: blackbox-exporter
-        name: volume-y2dtp
-      - name: blackbox-exporter-1
-        persistentVolumeClaim:
-          claimName: blackbox-exporter
+        name: blackbox-exporter
