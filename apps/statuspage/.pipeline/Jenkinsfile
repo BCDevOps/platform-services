@@ -6,6 +6,8 @@ def DEV_NAMESPACE = 'c81e6h-dev'
 def TEST_NAMESPACE = 'c81e6h-test'
 def PROD_NAMESPACE = 'c81e6h-prod'
 def PROMETHEUS_VERSION = 'latest'
+def GIT_URL = 'https://github.com/BCDevOps/platform-services'
+def BRANCH_NAME = 'status-page'
 
 
 // Pipeline Execution
@@ -15,11 +17,15 @@ def PROMETHEUS_VERSION = 'latest'
                 parallel (
                     'Prometheus': {
                         stage ('Stage1') {
+                            git branch: "${BRANCH_NAME}", url: "https://github.com/${GIT_URL}"
+                            sh "ls -lha"
+                            dir ("paltform-services") {
                                 sh "ls -lha"
                                 sh "cd apps/statuspage/manifests" 
                                 sh "ls -lha"
                                 sh "oc project ${DEV_NAMESPACE}"
                                 sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f -"""
+                            }
                         }
                     },
                     'Blackbox': {
