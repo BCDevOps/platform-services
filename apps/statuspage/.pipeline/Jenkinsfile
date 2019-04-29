@@ -2,20 +2,22 @@
 
 //ENV Vars
 def TOOLS_NAMESPACE = 'c81e6h-tools'
-// def DEV_NAMESPACE = 'c81e6h-dev'
-// def TEST_NAMESPACE = 'c81e6h-test'
-// def PROD_NAMESPACE = 'c81e6h-prod'
+def DEV_NAMESPACE = 'c81e6h-dev'
+def TEST_NAMESPACE = 'c81e6h-test'
+def PROD_NAMESPACE = 'c81e6h-prod'
+def PROMETHEUS_VERSION = 'latest'
 
 
 // Pipeline Execution
 
     node {
-            stage ('Deploy Test'){
+            stage ('Deploy Dev'){
                 parallel (
                     'Prometheus': {
                         stage ('Stage1') {
                             dir ('manifests') {
-                                sh "echo ${TOOLS_NAMESPACE}"
+                                sh "oc project ${DEV_NAMESPACE}"
+                                sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION :=latest}/g'| oc apply -f -"""
                             }
                         }
                     },
