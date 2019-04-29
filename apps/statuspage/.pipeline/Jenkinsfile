@@ -1,10 +1,10 @@
 #!/usr/bin/env groovy
 
 //ENV Vars
-def TOOLS_NAMESPACE = 'c81e6h-tools'
-def DEV_NAMESPACE = 'c81e6h-dev'
-def TEST_NAMESPACE = 'c81e6h-test'
-def PROD_NAMESPACE = 'c81e6h-prod'
+// def TOOLS_NAMESPACE = 'c81e6h-tools'
+// def DEV_NAMESPACE = 'c81e6h-dev'
+// def TEST_NAMESPACE = 'c81e6h-test'
+// def PROD_NAMESPACE = 'c81e6h-prod'
 
 
 // Pipeline Execution
@@ -34,6 +34,7 @@ def PROD_NAMESPACE = 'c81e6h-prod'
                     input id: 'Approve02', message: 'Deploy in Test?', ok: 'HANG TIGHT!'
             }
             stage('Depoly in Test'){
+                    sh "echo test"
             }
             stage('Testing Stage'){
                 
@@ -59,7 +60,6 @@ def PROD_NAMESPACE = 'c81e6h-prod'
                         echo "Security Update"
                     }
                 )
-
             }
     }
 }
