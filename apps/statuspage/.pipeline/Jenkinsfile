@@ -15,6 +15,7 @@ def PROMETHEUS_VERSION = 'latest'
                 parallel (
                     'Prometheus': {
                         stage ('Stage1') {
+                                sh "ls -lha"
                                 sh "cd apps/statuspage/manifests" 
                                 sh "ls -lha"
                                 sh "oc project ${DEV_NAMESPACE}"
@@ -23,10 +24,7 @@ def PROMETHEUS_VERSION = 'latest'
                     },
                     'Blackbox': {
                         stage('Deploy Blackbox'){
-                            dir ('manifests'){
                                 sh "echo test"
-
-                            }
                         }
                     },
                 )
