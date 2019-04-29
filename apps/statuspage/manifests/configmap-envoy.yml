@@ -30,7 +30,7 @@ data:
                   request_headers_to_add:
                   - header:
                       key: "authorization"
-                      value: "Bearer eyJrIjoiN0s0d1ZEeXo1UkpIbDZXM2ZmdkZSS1JkZjlyMkQ0UlUiLCJuIjoicmVhZGVyIiwiaWQiOjF9"
+                      value: "Bearer {{ GRAFANA_TOKEN }}" #Use an ENV var once this is created by Grafana
                     append: true
                   routes:
                   - match:
