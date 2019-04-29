@@ -1,0 +1,65 @@
+#!/usr/bin/env groovy
+
+//ENV Vars
+def TOOLS_NAMESPACE = 'c81e6h-tools'
+def DEV_NAMESPACE = 'c81e6h-dev'
+def TEST_NAMESPACE='c81e6h-test'
+def PROD_NAMESPACE = 'c81e6h-prod'
+
+
+// Pipeline Execution
+{
+    node('node') {
+            stage ('Deploy Test'){
+                parallel (
+                    'Prometheus': {
+                        stage ('Stage1') {
+                            dir ('manifests') {
+                                sh "echo test"
+                            }
+                        }
+                    },
+                    'Blackbox': {
+                        stage('Deploy Blackbox'){
+                            dir ('manifests'){
+                                sh "echo test"
+
+                            }
+                        }
+                    },
+                )
+                
+            }
+            stage ("Wait for Validation"){
+                    input id: 'Approve02', message: 'Deploy in Test?', ok: 'HANG TIGHT!'
+            }
+            stage('Depoly in Test'){
+            }
+            stage('Testing Stage'){
+                
+                parallel (
+                    'validate all upstreams': {
+                        sh "echo load test"
+                    },
+                    'validate all components': {
+                        echo "e2e test"
+                    }
+                )
+
+            }
+            stage ("Wait for Validation"){
+                    input id: 'Approve03', message: 'Deploy in Prod?', ok: 'HANG TIGHT!'
+            }
+            stage ("Deploy in Production"){
+                parallel (
+                    'Prod Rollout': {
+
+                    },
+                    'Notify RocketChat': {
+                        echo "Security Update"
+                    }
+                )
+
+            }
+    }
+}
