@@ -72,8 +72,8 @@ def BRANCH_NAME = 'status-page'
                             dir ("apps/statuspage/manifests") {
                                 sh """until [ "\$(oc get pods -n ${DEV_NAMESPACE} | grep Running | grep grafana | awk '{print \$2}')" = "1/1" ]; do echo "Waiting for Grafana to be ready..."; done """
                                 sh "echo 'Generating API Token for Read Only User'"
-                                sh """GRAFANA_API_KEY=\$(curl -H "Content-Type: application/json" -X POST -d '{"name": "public", "role": "Viewer"}' http://admin:admin@\$(oc get routes -n ${DEV_NAMESPACE} | grep grafana | awk '{print $2}')/api/auth/keys | jq -r '.key')"""
-                                sh """cat configmap-envoy.yml | sed 's/{{ GRAFANA_TOKEN }}/'"$GRAFANA_API_KEY"'/g' | oc apply -f - -n ${DEV_NAMESPACE} """
+                                sh """GRAFANA_API_KEY=\$(curl -H "Content-Type: application/json" -X POST -d '{"name": "public", "role": "Viewer"}' http://admin:admin@\$(oc get routes -n ${DEV_NAMESPACE} | grep grafana | awk '{print \$2}')/api/auth/keys | jq -r '.key')"""
+                                sh """cat configmap-envoy.yml | sed 's/{{ GRAFANA_TOKEN }}/'"\$GRAFANA_API_KEY"'/g' | oc apply -f - -n ${DEV_NAMESPACE} """
                             }
                         }
                     },
