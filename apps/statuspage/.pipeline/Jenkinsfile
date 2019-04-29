@@ -21,10 +21,10 @@ def BRANCH_NAME = 'status-page'
                             sh "ls -lha"
                             dir ("apps/statuspage/manifests") {
                                 sh "ls -lha"
-                              //  sh "cd apps/statuspage/manifests" 
-                                sh "ls -lha"
-                                sh "oc project ${DEV_NAMESPACE}"
-                                sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f -"""
+                                sh """oc apply -f service-prometheus.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f configmap-prometheus.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f route-prometheus.yml -n ${DEV_NAMESPACE}"""
+                                sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
                             }
                         }
                     },
