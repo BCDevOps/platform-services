@@ -36,4 +36,4 @@ data:
             insecure_skip_verify: true
 kind: ConfigMap
 metadata:
-  name: blackbox-config
+  name: blackbox-exporter
