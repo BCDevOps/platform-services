@@ -15,7 +15,7 @@ def PROMETHEUS_VERSION = 'latest'
                 parallel (
                     'Prometheus': {
                         stage ('Stage1') {
-                           dir ('apps/statuspage') {
+                           dir ('apps/statuspage/manifests') {
                                 sh "pwd" 
                                 sh "ls -lha"
                                 sh "oc project ${DEV_NAMESPACE}"
