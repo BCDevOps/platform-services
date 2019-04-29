@@ -15,7 +15,7 @@ def TOOLS_NAMESPACE = 'c81e6h-tools'
                     'Prometheus': {
                         stage ('Stage1') {
                             dir ('manifests') {
-                                sh "echo test"
+                                sh "echo ${TOOLS_NAMESPACE}"
                             }
                         }
                     },
