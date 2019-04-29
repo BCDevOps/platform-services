@@ -19,9 +19,9 @@ def BRANCH_NAME = 'status-page'
                         stage ('Stage1') {
                             git branch: "${BRANCH_NAME}", url: "https://github.com/${GIT_REPO}"
                             sh "ls -lha"
-                            dir ("paltform-services") {
+                            dir ("apps/statuspage/manifests") {
                                 sh "ls -lha"
-                                sh "cd apps/statuspage/manifests" 
+                              //  sh "cd apps/statuspage/manifests" 
                                 sh "ls -lha"
                                 sh "oc project ${DEV_NAMESPACE}"
                                 sh """cat deployment-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f -"""
