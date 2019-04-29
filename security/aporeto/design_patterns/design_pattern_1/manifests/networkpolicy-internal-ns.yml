@@ -1,0 +1,11 @@
+APIVersion: 1
+label: inter-ns-network-policies
+data:
+  networkaccesspolicies:
+  - name: inter-ns-network-policies
+    action: "Allow"
+    propagate: false
+    subject:
+    - - "$namespace={{ .Aporeto.Namespace }}"
+    object:
+    - - "$namespace={{ .Aporeto.Namespace }}"
