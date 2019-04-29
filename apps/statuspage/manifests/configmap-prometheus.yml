@@ -44,4 +44,4 @@ data:
             
 kind: ConfigMap
 metadata:
-  name: prometheus
+  name: prometheus-config
