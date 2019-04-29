@@ -11,6 +11,6 @@ spec:
       protocol: TCP
       targetPort: 10000
   selector:
-    app: alpine
+    app: envoy
   sessionAffinity: None
   type: ClusterIP
