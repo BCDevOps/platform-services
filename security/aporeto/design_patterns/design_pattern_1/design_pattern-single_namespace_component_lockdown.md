@@ -17,6 +17,13 @@ For a successful deployment:
 
 A new app `app-3` will be added once all rules are in place to validate that no changes are required to maintain `app-1 -> db-1` isolation. 
 
+## Aporeto Configuration
+This will all be automated, the docs are purely for reference until such automation is built. 
+
+- Deploy manifests into aporeto namespace
+```
+apoctl api import --file manifests/networkpolicy-internal-ns.yml -n /bcgov-devex/lab/devops-platform-security
+```
 
 ## OpenShift App Deployment
 
@@ -60,6 +67,9 @@ From the above output, it is clear that each pod can communicate with the desire
 
 ## Aporeto Configuration
 
-
+```
+apoctl api import --file manifests/networkpolicy-internal-ns.yml -n /bcgov-devex/lab/devops-platform-security
+apoctl api import --file manifests/ -n /bcgov-devex/lab/devops-platform-security
+```
 
 ## Todo
