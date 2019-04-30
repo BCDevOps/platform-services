@@ -1,0 +1,13 @@
+---
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].env.tools }}"
+  when:  env  == 'tools'
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].env.dev }}"
+  when: env == 'dev'
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].env.test }}"
+  when: env == 'test'
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].env.prod }}"
+  when: env == 'prod'

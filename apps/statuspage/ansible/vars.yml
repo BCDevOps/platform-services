@@ -1,0 +1,6 @@
+activity: install
+env: dev
+grafana_version: latest
+prometheus_version: latest
+blackbox_version: latest
+envoy_version: latest
