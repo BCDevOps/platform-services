@@ -7,8 +7,8 @@ data:
 
     #### Sysdig Software related config ####
     # Agent Log priority
-    log:
-      file_priority: debug
+    #log:
+    #  file_priority: debug
 
     # Watchdog config fr: troubleshooting
     watchdog:
