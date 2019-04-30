@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+//Replacing this file with a Jenkins + Ansible workflow for easier logic handling
+
 //ENV Vars
 def TOOLS_NAMESPACE = 'c81e6h-tools'
 def DEV_NAMESPACE = 'c81e6h-dev'
