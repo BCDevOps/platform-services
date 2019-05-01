@@ -32,6 +32,10 @@ apoctl api create namespace \
 --data '{
   "name": "'"$BASE_ENV"'"
 }'
+
+apoctl api import --file profiles/openshift-default-profile.yml -n $APOCTL_NAMESPACE/$BASE_ENV
+apoctl api import --file profiles/openshift-default-profile-mapping.yml -n $APOCTL_NAMESPACE/$BASE_ENV
+
 ```
 
 
@@ -64,6 +68,9 @@ helm template ./enforcerd-*.tgz \
   --namespace $APORETO_NAMESPACE \
   | oc apply -f - -n $APORETO_NAMESPACE
 
+
+apoctl api delete profile operator-enforcer-profile -n $APOCTL_NAMESPACE/$BASE_ENV
+apoctl api delete enforcerprofilemappingpolicies operator-enforcer-profile-mapping -n $APOCTL_NAMESPACE/$BASE_ENV
 ```
 
 - Patch daemonset and label nodes
@@ -91,8 +98,17 @@ eval $(apoctl auth aporeto -e \
   --account [aporeto user account] )
 apoctl api import --file external_networks/any.yml -n /bcgov-devex/lab
 apoctl api import --file external_networks/lab-host-network.yml -n /bcgov-devex/lab
+apoctl api import --file external_networks/cluster-network.yml -n /bcgov-devex/lab
+apoctl api import --file networkaccesspolicies/cluster-network-ingress.yml -n /bcgov-devex/lab
+apoctl api import --file networkaccesspolicies/internet-egress.yml -n /bcgov-devex/lab
+
 ```
 
+- Per namespace testing
+```
+apoctl api import --file external_networks/any.yml -n /bcgov-devex/lab/devops-platform-security
+
+```
 
 
 # References
