@@ -1,13 +1,19 @@
 ---
 - set_fact: 
-    namespace: "{{ hostvars[inventory_hostname].env.tools }}"
+    state: present
+  when: activity == "install"
+- set_fact: 
+    state: absent
+  when: activity == "uninstall"
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].project.tools }}"
   when:  env  == 'tools'
 - set_fact: 
-    namespace: "{{ hostvars[inventory_hostname].env.dev }}"
-  when: env == 'dev'
+    namespace: "{{ hostvars[inventory_hostname].project.dev }}"
+  when: env == "dev"
 - set_fact: 
-    namespace: "{{ hostvars[inventory_hostname].env.test }}"
+    namespace: "{{ hostvars[inventory_hostname].project.test }}"
   when: env == 'test'
 - set_fact: 
-    namespace: "{{ hostvars[inventory_hostname].env.prod }}"
+    namespace: "{{ hostvars[inventory_hostname].project.prod }}"
   when: env == 'prod'
