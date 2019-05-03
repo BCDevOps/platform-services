@@ -2,42 +2,44 @@ FROM postgres:10
 MAINTAINER Alexander Kukushkin <alexander.kukushkin@zalando.de>
 
 ARG PGHOME=/home/postgres
+ARG YUM_REPOS=rhel-7-server-rpms,rhel-7-server-optional-rpms,rhel-server-rhscl-7-rpms,rhel-7-server-extras-rpms
+ARG VENV_DIR=$APP_ROOT/patroni
 
-RUN export DEBIAN_FRONTEND=noninteractive \
-    && echo 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01norecommend \
-    && apt-get update -y \
-    && apt-get upgrade -y \
-    && apt-cache depends patroni | sed -n -e 's/.* Depends: \(python3-.\+\)$/\1/p' \
-            | grep -Ev '^python3-(sphinx|etcd|consul|kazoo|kubernetes)' \
-            | xargs apt-get install -y gettext curl jq locales git python3-pip python3-wheel \
+USER 0
 
-    ## Make sure we have a en_US.UTF-8 locale available
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-
-    && pip3 install setuptools \
-    && pip3 install 'git+https://github.com/zalando/patroni.git#egg=patroni[kubernetes]' \
-
-    && mkdir -p $PGHOME \
-    && sed -i "s|/var/lib/postgresql.*|$PGHOME:/bin/bash|" /etc/passwd \
-
-    # Set permissions for OpenShift
-    && chmod 775 $PGHOME \
-    && chmod 664 /etc/passwd \
-    && mkdir -p $PGHOME/pgdata/pgroot \
-    && chgrp -R 0 $PGHOME \
-    && chown -R postgres $PGHOME \
-    && chmod -R 775 $PGHOME \
-    # Clean up
-    && apt-get remove -y git python3-pip python3-wheel \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* /root/.cache
+RUN set -x && \
+    #yum repolist all && \
+    yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+    #yum "--enablerepo=$YUM_REPOS" list available && \
+    yum "--enablerepo=$YUM_REPOS" install -y gettext curl jq locales hostname rh-git29 rh-python36 rh-python36-python-pip && \
+    #scl enable rh-python36 'pip3 freeze' && \
+    yum "--enablerepo=$YUM_REPOS" install -y rh-python36-python-wheel rh-python36-python-setuptools rh-postgresql10-postgresql-devel && \
+    yum "--enablerepo=$YUM_REPOS" "--disablerepo=epel" --setopt=group_package_types=mandatory groupinstall -y "Development Tools" && \
+    scl --list && \
+    chgrp -R 0 /usr/local/bin && \
+    chmod -R g=u /usr/local/bin && \
+    scl --list && \
+    source scl_source enable "rh-git29" "rh-python36" "rh-postgresql10" && \
+    mkdir -p $VENV_DIR && \
+    virtualenv $VENV_DIR && \
+    $VENV_DIR/bin/pip --isolated --no-cache-dir install -U pipenv && \
+    $VENV_DIR/bin/pip --isolated --no-cache-dir install -U 'requests==2.21.0' && \
+    $VENV_DIR/bin/pip --isolated --no-cache-dir install 'patroni[kubernetes]==1.5.6' && \
+    mkdir -p $APP_ROOT/bin && \
+    ln -s $VENV_DIR/bin/patroni $APP_ROOT/bin/patroni && \
+    ln -s $VENV_DIR/bin/patroni_wale_restore $APP_ROOT/bin/patroni_wale_restore && \
+    ln -s $VENV_DIR/bin/patronictl $APP_ROOT/bin/patronictl && \
+    $VENV_DIR/bin/pip --isolated freeze && \
+    fix-permissions $APP_ROOT && \
+    yum '--enablerepo=*' clean all
 
 COPY contrib/root /
 
-VOLUME /home/postgres/pgdata
+RUN chgrp -R 0 /usr/bin/run-* && \
+    chmod -R g=u /usr/bin/run-*
+
 EXPOSE 5432 8008
 ENV LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
-USER postgres
-WORKDIR /home/postgres
-CMD ["/bin/bash", "/usr/bin/entrypoint.sh"]
+ENV ENABLED_COLLECTIONS="rh-postgresql10 rh-python36"
+USER 26
+CMD ["run-patroni"]
