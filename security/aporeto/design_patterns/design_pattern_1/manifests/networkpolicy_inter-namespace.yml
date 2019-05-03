@@ -4,7 +4,7 @@ data:
   networkaccesspolicies:
   - name: inter-ns-network-policies
     action: "Allow"
-    propagate: false
+    propagate: true
     subject:
     - - "$namespace={{ .Aporeto.Namespace }}"
     object:

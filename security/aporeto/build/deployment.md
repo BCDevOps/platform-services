@@ -94,13 +94,15 @@ aporeto-enforcer   12        12        12        12           12          aporet
 - Any and Lab Host Subnets 
 ```
 eval $(apoctl auth aporeto -e \
-  --validity 30m \
+  --validity 60m \
   --account [aporeto user account] )
 apoctl api import --file external_networks/any.yml -n /bcgov-devex/lab
 apoctl api import --file external_networks/lab-host-network.yml -n /bcgov-devex/lab
 apoctl api import --file external_networks/cluster-network.yml -n /bcgov-devex/lab
 apoctl api import --file networkaccesspolicies/cluster-network-ingress.yml -n /bcgov-devex/lab
 apoctl api import --file networkaccesspolicies/internet-egress.yml -n /bcgov-devex/lab
+apoctl api import --file networkaccesspolicies/internet-ingress.yml -n /bcgov-devex/lab
+apoctl api import --file networkaccesspolicies/global_namespaces.yml -n /bcgov-devex/lab
 
 ```
 

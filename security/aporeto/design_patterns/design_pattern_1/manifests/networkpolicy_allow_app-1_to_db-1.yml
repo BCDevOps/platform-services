@@ -1,0 +1,11 @@
+APIVersion: 1
+label: allow_app-1_to_db-1
+data:
+  networkaccesspolicies:
+  - name: allow_app-1_to_db-1
+    action: "Allow"
+    propagate: true
+    subject:
+    - - "app=app-1"
+    object:
+    - - "app=db-1"

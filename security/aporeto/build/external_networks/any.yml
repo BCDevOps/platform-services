@@ -10,5 +10,6 @@ data:
     protocols:
     - udp
     - tcp
+    - icmp
     associatedTags:
     - ext:network=any

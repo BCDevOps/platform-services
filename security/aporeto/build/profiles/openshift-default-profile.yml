@@ -15,7 +15,8 @@ data:
       excludedInterfaces: []
       excludedNetworks:
         - 10.30.0.1
-        - 172.30.0.0/8
+        - 127.0.0.0/8
+        - 172.0.0.0/8
       hostModeEnabled: false
       hostServices: []
       ignoreExpression:
