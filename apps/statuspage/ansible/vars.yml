@@ -1,5 +1,5 @@
 activity: install
-env: dev
+#env: dev
 grafana_version: latest
 prometheus_version: latest
 blackbox_version: latest

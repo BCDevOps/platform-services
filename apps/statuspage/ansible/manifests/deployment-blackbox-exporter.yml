@@ -15,7 +15,7 @@ spec:
         app: blackbox-exporter
     spec:
       containers:
-      - image: prom/blackbox-exporter:{{ VERSION }}
+      - image: prom/blackbox-exporter:latest
         imagePullPolicy: Always
         name: blackbox-exporter
         ports:

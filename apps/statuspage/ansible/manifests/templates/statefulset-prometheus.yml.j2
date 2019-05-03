@@ -47,7 +47,7 @@ spec:
               cpu: 10m
               memory: 10Mi
         - name: prometheus-server
-          image: "prom/prometheus:latest"
+          image: "prom/prometheus:{{ prometheus_version }}"
           imagePullPolicy: "IfNotPresent"
           args:
             - --config.file=/etc/config/prometheus.yml

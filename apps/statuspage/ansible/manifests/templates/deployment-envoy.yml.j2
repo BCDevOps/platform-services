@@ -15,7 +15,7 @@ spec:
         app: envoy
     spec:
       containers:
-      - image: envoyproxy/envoy-alpine:latest
+      - image: envoyproxy/envoy-alpine:{{ envoy_version }}
         imagePullPolicy: Always
         name: envoy
         ports:

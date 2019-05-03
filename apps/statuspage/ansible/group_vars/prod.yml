@@ -1,4 +1,4 @@
-env: 
+project: 
   tools: c81e6h-tools
   dev: c81e6h-dev
   test: c81e6h-test

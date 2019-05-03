@@ -15,7 +15,7 @@ spec:
         app: grafana
     spec:
       containers:
-      - image: grafana/grafana:latest
+      - image: grafana/grafana:{{ grafana_version }}
         imagePullPolicy: Always
         name: grafana
         ports:
