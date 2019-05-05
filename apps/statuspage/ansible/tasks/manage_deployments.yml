@@ -13,6 +13,7 @@
     - configmap
     - route
     - deployment
+    - pvc
   loop_control:
     loop_var: component
   ignore_errors: true
