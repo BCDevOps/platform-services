@@ -13,6 +13,6 @@
     - include_tasks: tasks/manage_components.yml
       when: activity == "install"
     - include_tasks: tasks/configure.yml
-      when: activity == "install"
+      when: activity == "configure"
     - include_tasks: tasks/manage_components.yml
       when: activity == "uninstall"

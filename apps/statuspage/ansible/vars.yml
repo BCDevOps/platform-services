@@ -1,6 +1,7 @@
 activity: install
-#env: dev
+env: dev
 grafana_version: latest
 prometheus_version: latest
 blackbox_version: latest
 envoy_version: latest
+pwd_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"

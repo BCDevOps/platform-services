@@ -1,0 +1,134 @@
+--- 
+- name: Configure Grafana
+  block: 
+  - name: Wait for Grafana to be ready...
+    shell: "oc get pods -n {{ namespace }} | grep Running | grep grafana | awk '{print $2}'"
+    register: pod_ready
+    until: pod_ready.stdout == "1/1"
+  - name: Get Route
+    shell: "oc get routes -n {{ namespace }} | grep grafana | awk '{print $2}'"
+    register: grafana_route
+  - name: Get existing admin password
+    shell: oc set env deployment grafana --list -n {{ namespace }} | grep GF_SECURITY_ADMIN_PASSWORD | awk -F "=" '{print $2}'
+    register: grafana_admin_password
+  - name: Generate admin password
+    set_fact:
+      grafana_admin_password: "{{ pwd_alias }}"
+      admin_default: true
+    when: grafana_admin_password.stdout | length == 0
+  - name: Set password variable
+    set_fact: 
+      grafana_admin_password: "{{ grafana_admin_password.stdout }}"
+      admin_default: false
+    when: grafana_admin_password.stdout | length > 0
+  - name: Reset admin password
+    uri: 
+      url: "http://{{ grafana_route.stdout }}/api/admin/users/1/password"
+      method: PUT
+      user: "admin"
+      password: "admin"
+      force_basic_auth: true
+      return_content: true
+      headers: 
+        Content-Type: application/json
+      body_format: json
+      body: {"password": "{{ grafana_admin_password }}"}
+    when: admin_default == true
+  - name: Add grafana admin password to deployment
+    shell: "oc set env deployment grafana GF_SECURITY_ADMIN_PASSWORD={{ grafana_admin_password }} -n {{ namespace }}"
+  - name:  Set light theme 
+    shell: "oc set env deployment grafana GF_USERS_DEFAULT_THEME='light' -n {{ namespace }}"
+  - name: Delete existing public viewer API key
+    uri: 
+      url: "http://{{ grafana_route.stdout }}/api/auth/keys"
+      method: GET 
+      user: "admin"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: true
+      return_content: true
+      headers: 
+        Content-Type: application/json
+    register: existing_keys
+    ignore_errors: true
+  - set_fact: 
+      api_key_query: "[?name ==`public`].id"
+  - set_fact: 
+      public_api_id: "{{ existing_keys.content | from_json | json_query(api_key_query) | replace('[', '') | replace(']', '') }}"
+  - name: Delete existing public viewer API key
+    uri: 
+      url: "http://{{ grafana_route.stdout }}/api/auth/keys/{{ public_api_id }} "
+      method: DELETE 
+      user: "admin"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: true
+      return_content: true
+      headers: 
+        Content-Type: application/json
+    ignore_errors: true
+  - name: Create new public viewer API key
+    uri: 
+      url: "http://{{ grafana_route.stdout }}/api/auth/keys"
+      method: POST
+      user: "admin"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: true
+      return_content: true
+      headers: 
+        Content-Type: application/json
+      body_format: json
+      body: {"name": "public", "role": "Viewer"}
+    register: grafana_apikey
+  - name: Add api key to envoy ConfigMap
+    template: 
+      src: "manifests/templates/configmap-envoy.yml.j2"
+      dest: "manifests/configmap-envoy.yml"
+  - name: Reapply envoy configmap
+    k8s_raw:
+      state: present
+      src: manifests/configmap-envoy.yml
+      namespace: "{{ namespace }}"
+  - name: Redeploy Envoy
+    command: "oc delete pod -l app=envoy -n {{ namespace }}"
+  - name: Configure Grafana Datasource
+    grafana_datasource:
+      name: "Prometheus"
+      grafana_url: "http://{{ grafana_route.stdout }}"
+      grafana_user: "admin"
+      grafana_password: "{{ grafana_admin_password }}"
+      org_id: "1"
+      ds_type: "prometheus"
+      url: "http://prometheus:9090"
+      state: present
+  - name: Get list of dashbaords to Import
+    command: "ls ../grafana/dashboards/"
+    register: dashboard_list
+  - name: debug list  
+    debug: 
+      msg: "{{ dashboard_list }}"
+  - name: Import Grafana dashboard {{ dashboard_item }}
+    grafana_dashboard:
+      grafana_url: http://{{ grafana_route.stdout }}
+      grafana_user: "admin"
+      grafana_password: "{{ grafana_admin_password }}"
+      state: present
+      org_id: 1
+      message: Updated by ansible
+      overwrite: yes
+      path: ../grafana/dashboards/{{ dashboard_item }}
+      validate_certs: false
+    with_items: 
+      - "{{ dashboard_list.stdout }}"
+    loop_control: 
+      loop_var: dashboard_item
+    ignore_errors: true
+  - name:  Set home dashboard # Todo: the dashboard ID should be determined via code
+    uri:
+      url: http://{{ grafana_route.stdout }}/api/org/preferences
+      method: PUT
+      body_format: json
+      body: '{"homeDashboardId": 1 }'
+      user: "admin"
+      password: "{{ grafana_admin_password }}"
+      force_basic_auth: true
+      return_content: true
+
