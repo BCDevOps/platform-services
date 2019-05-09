@@ -87,4 +87,5 @@ sh-4.2$ curl http://db-1:5432
 ```
 
 
-## Todo
+## Validating through the Aporeto UI
+![](../assets/aporeto_design_pattern_1_001.png)
