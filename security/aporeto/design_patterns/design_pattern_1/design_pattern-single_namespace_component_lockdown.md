@@ -11,19 +11,16 @@ In this design pattern, 2 front end application pods and 1 single database pod i
 
 OpenShift services are deployed for each application and `curl` is used to validate connectivity to each service port.
 For a successful deployment: 
-- `app-1` can connect to `db-1`
-- `app-2` cannot connect to `db-1`
-- any other pod cannot connect o `db-1`
+- `app-1` can only connect to `db-1` and egress internet addresses
+- `app-2` cannot connect to `db-1` or any other pod, and only has access to egress internet addresses
+- any other pod can only connect to egress internet services unless explicitly configured
 
 A new app `app-3` will be added once all rules are in place to validate that no changes are required to maintain `app-1 -> db-1` isolation. 
 
 ## Aporeto Configuration
-This will all be automated, the docs are purely for reference until such automation is built. 
+This will all be automated, the docs are purely for reference until such automation is built.
+In this design, while most namespaces will be allow "internal namespace communication", this design pattern requires explicit `allow` policies. 
 
-- Deploy manifests into aporeto namespace
-```
-apoctl api import --file manifests/networkpolicy-internal-ns.yml -n /bcgov-devex/lab/devops-platform-security
-```
 
 ## OpenShift App Deployment
 
@@ -41,62 +38,36 @@ This default configuration for every namespace will enable pods to commuicate ex
 apoctl api import --file manifests/networkpolicy_inter-namespace.yml -n /bcgov-devex/lab/devops-platform-security
 ```
 
-## Verify that Pods Can Communicate
+## Verify that No Pods Can Communicate
 - Validate all components can communicate freely
 ```
 oc rsh $(oc get pods | grep Running | grep app-1 | awk '{print $1}')
 sh-4.2$ curl http://db-1:5432
-curl: (52) Empty reply from server
+...
 sh-4.2$ curl http://app-2:8080
-<!doctype html>
-....
-....
+...
+sh-4.2$ curl www.google.ca
+<!doctype html>..
 
 oc rsh $(oc get pods | grep Running | grep app-2 | awk '{print $1}')
 sh-4.2$ curl http://db-1:5432
-curl: (52) Empty reply from server
+...
 sh-4.2$ curl http://app-1:8080
-<!doctype html>
-....
-....
+...
+sh-4.2$ curl www.google.ca
+<!doctype html>..
 
 oc rsh $(oc get pods | grep Running | grep db-1 | awk '{print $1}')
 sh-4.2$ curl http://app-2:8080
-<!doctype html>
-....
-....
+...
 sh-4.2$ curl http://app-1:8080
-<!doctype html>
-....
-....
-
-```
-
-From the above output, it is clear that each pod can communicate with the desired service and backing pods. 
-
-## Aporeto DB-1 Isolation
-Apply the following policy to reject traffic from any pod to `db-1`:
-```
-apoctl api import --file manifests/networkpolicy_deny_all_to_db-1.yml -n /bcgov-devex/lab/devops-platform-security
-```
-
-## Validate Both Apps Cannot Connect to DB-1
-
-
-```
-oc rsh $(oc get pods | grep Running | grep app-1 | awk '{print $1}')
-sh-4.2$ curl http://db-1:5432
-^C
-
 ...
-...
-
-oc rsh $(oc get pods | grep Running | grep app-2 | awk '{print $1}')
-sh-4.2$ curl http://db-1:5432
-^C
-sh-4.2$ 
+sh-4.2$ curl www.google.ca
+<!doctype html>..
 
 ```
+
+From the above output, it is clear that each pod can not communicate with any other pod. They do, however, have egress internet access.  
 
 ## Aporeto APP-1 to DB-1 Allow
 Apply the following policy to all traffic from `app-1` pod to `db-1`:
@@ -111,6 +82,8 @@ apoctl api import --file manifests/networkpolicy_allow_app-1_to_db-1.yml -n /bcg
 - Deploy `app-3`
 ```
 oc new-app nginx-example --name="app-3" -p NAME="app-3"
+sh-4.2$ curl http://db-1:5432
+...
 ```
 
 

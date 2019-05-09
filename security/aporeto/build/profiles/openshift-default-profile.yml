@@ -14,7 +14,7 @@ data:
       dockerSocketAddress: 'unix:///var/run/docker.sock'
       excludedInterfaces: []
       excludedNetworks:
-        - 10.30.0.1
+        - 10.131.0.1
         - 127.0.0.0/8
         - 172.0.0.0/8
       hostModeEnabled: false
