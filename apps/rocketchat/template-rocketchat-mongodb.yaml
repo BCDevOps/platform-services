@@ -18,7 +18,6 @@ parameters:
     description: The size of storage to allocate for file uploads to RocketChat
     displayName: File Upload Storage Size
     required: true
-    value: "20Gi"
 
   - name: SC_FILE_UPLOAD
     description: The Storage Class for the RocketChat uploads volume
@@ -29,13 +28,19 @@ parameters:
   - name: HOSTNAME_HTTPS
     description: Hostname serving the application
     displayName: Route Name
-    value: chat.pathfinder.gov.bc.ca
+    required: true
+
+  - name: ROCKETCHAT_ADMIN_PASSWORD
+    displayName: "RocketChat Admin Password"
+    description: "Password for the RocketChat admin user."
+    generate: expression
+    from: "[a-zA-Z0-9]{16}"
     required: true
 
   - name: ROCKETCHAT_IMAGE_REGISTRY
     description: Location of the RocketChat Image
     displayName: RocketChat Image
-    value: registry.connect.redhat.com/rocketchat/rocketchat
+    value: docker.io/library/rocket.chat
     required: true
   
   - name: ROCKETCHAT_IMAGE_TAG
@@ -47,19 +52,16 @@ parameters:
   - name: ROCKETCHAT_REPLICAS
     description: Number of RocketChat replica pods
     displayName: RocketChat Replicas
-    value: "3"
     required: true
 
   - name: ROCKETCHAT_MIN_HPA
     description: Min Number of RocketChat pods for HPA
     displayName: RocketChat Min HPA
-    value: "3"
     required: true
 
   - name: ROCKETCHAT_MAX_HPA
     description: Max Number of RocketChat pods for HPA
     displayName: RocketChat Max HPA
-    value: "4"
     required: true
 
   - name: MONGODB_REPLICAS
@@ -77,13 +79,21 @@ parameters:
   - name: MEMORY_REQUEST
     description: Amount of Memory to Request.
     displayName: Memory Request
-    value: "1Gi"
     required: true
 
   - name: MEMORY_LIMIT
     description: Amount of Memory to Limit.
     displayName: Memory Limit
-    value: "2Gi"
+    required: true
+
+  - name: CPU_REQUEST
+    description: Amount of CPU to Request.
+    displayName: Memory Request
+    required: true
+
+  - name: CPU_LIMIT
+    description: Amount of CPU to Limit.
+    displayName: Memory Limit
     required: true
 
   - name: MONGODB_SECRET_NAME
@@ -141,7 +151,6 @@ parameters:
   - name: VOLUME_CAPACITY
     displayName: "Volume Capacity for MongoDB"
     description: "Volume space available for data, e.g. 512Mi, 2Gi."
-    value: "10Gi"
     required: true
 
   - name: SC_MONGO
@@ -150,46 +159,96 @@ parameters:
     required: true
     value: "gluster-file"
 
+# Rocket Chat Environment Variables
+  - name: FILEUPLOAD_ENABLED
+  - name: FILEUPLOAD_STORAGE_TYPE
+  - name: FILEUPLOAD_PROTECTFILES
+  - name: FILEUPLOAD_FILESYSTEMPATH
+  - name: FILEUPLOAD_MAXFILESIZE
+  - name: FILEUPLOAD_MEDIATYPEWHITELIST
+  - name: SHOW_SETUP_WIZARD
+  - name: LAYOUT_LOGIN_TERMS
+  - name: RETENTIONPOLICY_ENABLED
+  - name: RETENTIONPOLICY_APPLIESTOCHANNELS
+  - name: RETENTIONPOLICY_MAXAGE_CHANNELS
+  - name: RETENTIONPOLICY_APPLIESTOGROUPS
+  - name: RETENTIONPOLICY_MAXAGE_GROUPS
+  - name: RETENTIONPOLICY_APPLIESTODMS
+  - name: RETENTIONPOLICY_MAXAGE_DMS
+  - name: RETENTIONPOLICY_FILESONLY
+  - name: ACCOUNTS_TWOFACTORAUTHENTICATION_ENABLED
+  - name: ACCOUNTS_REGISTRATIONFORM
+  - name: ACCOUNTS_ALLOWREALNAMECHANGE
+  - name: ACCOUNTS_ALLOWPASSWORDCHANGE
+  - name: ACCOUNTS_SHOWFORMLOGIN
+  - name: ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING
+  - name: ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE
+  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_BUTTON_LABEL_TEXT
+  - name: MESSAGE_ALLOWSNIPPETING
+
 objects:
   - apiVersion: v1
     kind: ConfigMap
     metadata:
       name: rocketchat-config
     data:
+      #Admin user
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASS: "${ROCKETCHAT_ADMIN_PASSWORD}"
       #File Upload Settings
-      OVERWRITE_SETTING_FileUpload_Enabled: "True"
-      OVERWRITE_SETTING_FileUpload_Storage_Type: "FileSystem"
-      OVERWRITE_SETTING_FileUpload_ProtectFiles: "False"
-      OVERWRITE_SETTING_FileUpload_FileSystemPath: "/app/uploads"
-      OVERWRITE_SETTING_FileUpload_MaxFileSize: "2000000"
+      OVERWRITE_SETTING_FileUpload_Enabled: "${FILEUPLOAD_ENABLED}"
+      OVERWRITE_SETTING_FileUpload_Storage_Type: "${FILEUPLOAD_STORAGE_TYPE}"
+      OVERWRITE_SETTING_FileUpload_ProtectFiles: "${FILEUPLOAD_PROTECTFILES}" 
+      OVERWRITE_SETTING_FileUpload_FileSystemPath: "${FILEUPLOAD_FILESYSTEMPATH}"
+      OVERWRITE_SETTING_FileUpload_MaxFileSize: "${FILEUPLOAD_MAXFILESIZE}"
+      OVERWRITE_SETTING_FileUpload_MediaTypeWhiteList: "${FILEUPLOAD_MEDIATYPEWHITELIST}" 
       #General Settings
-      OVERWRITE_SETTING_Site_Url: "https://chat-pilot.pathfinder.gov.bc.ca"
-      OVERWRITE_SETTING_Site_Name: "chat-pilot.pathfinder.gov.bc.ca"
+      OVERWRITE_SETTING_Site_Url: "https://${HOSTNAME_HTTPS}"
+      OVERWRITE_SETTING_Site_Name: "${HOSTNAME_HTTPS}"
+      OVERWRITE_SETTING_Show_Setup_Wizard: "${SHOW_SETUP_WIZARD}"
+      OVERWRITE_SETTING_Layout_Login_Terms: "${LAYOUT_LOGIN_TERMS}"
       #Retention Settings
-      OVERWRITE_SETTING_RetentionPolicy_Enabled: "True"
-      OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: "True"
-      OVERWRITE_SETTING_RetentionPolicy_MaxAgeChannels: "365"
-      OVERWRITE_SETTING_RetentionPolicy_AppliesToGroups: "True"
-      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "365"
-      OVERWRITE_SETTING_RetentionPolicy_AppliesToDMs: "True"
-      OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "365"
-      OVERWRITE_SETTING_RetentionPolicy_FilesOnly: "True"
+      OVERWRITE_SETTING_RetentionPolicy_Enabled: "${RETENTIONPOLICY_ENABLED}"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToChannels: "${RETENTIONPOLICY_APPLIESTOCHANNELS}"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Channels: "${RETENTIONPOLICY_MAXAGE_CHANNELS}"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToGroups: "${RETENTIONPOLICY_APPLIESTOGROUPS}" 
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_Groups: "${RETENTIONPOLICY_MAXAGE_GROUPS}"
+      OVERWRITE_SETTING_RetentionPolicy_AppliesToDMs: "${RETENTIONPOLICY_APPLIESTODMS}"
+      OVERWRITE_SETTING_RetentionPolicy_MaxAge_DMs: "${RETENTIONPOLICY_MAXAGE_DMS}" 
+      OVERWRITE_SETTING_RetentionPolicy_FilesOnly: "${RETENTIONPOLICY_FILESONLY}"
       #Account Settings
-      OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: "False"
-      OVERWRITE_SETTING_Accounts_RegistrationForm: "Disabled"
-      OVERWRITE_SETTING_Accounts_AllowRealNameChange: "False"
-      OVERWRITE_SETTING_Accounts_AllowPasswordChange: "False"
-      OVERWRITE_SETTING_Accounts_ShowFormLogin: "False"
+      OVERWRITE_SETTING_Accounts_TwoFactorAuthentication_Enabled: "${ACCOUNTS_TWOFACTORAUTHENTICATION_ENABLED}"
+      OVERWRITE_SETTING_Accounts_RegistrationForm: "${ACCOUNTS_REGISTRATIONFORM}"
+      OVERWRITE_SETTING_Accounts_AllowRealNameChange: "${ACCOUNTS_ALLOWREALNAMECHANGE}"
+      OVERWRITE_SETTING_Accounts_AllowPasswordChange: "${ACCOUNTS_ALLOWPASSWORDCHANGE}"
+      Accounts_ShowFormLogin: "${ACCOUNTS_SHOWFORMLOGIN}"
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Activating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
       #Custom OAuth
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "True"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "https://sso-dev.pathfinder.gov.bc.ca/auth"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token-path: "/realms/devhub/protocol/openid-connect/token"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "Header"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "/realms/devhub/protocol/openid-connect/userinfo"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "/realms/devhub/protocol/openid-connect/auth"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "rocket-chat-test"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "63cb2a21-f115-4750-be21-aaa26bb95726"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "Login"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH}" 
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE}"
+      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "${MESSAGE_ALLOWSNIPPETING}"
+      # Messaging Settings
+      OVERWRITE_SETTING_Message_AllowSnippeting: "True"
+      
       ## Rooms
       # DevOps Alerts
       # Random - Default
@@ -235,23 +294,6 @@ objects:
         deploymentConfig: ${APPLICATION_NAME}
       type: ClusterIP
       SessionAffinity: None
-
-  - apiVersion: v1
-    kind: ImageStream
-    metadata:
-      name: rocketchat
-    spec:
-      dockerImageRepository: rocketchat/rocket.chat 
-      tags:
-        - name: latest
-          annotations:
-            description: Provides a Rocket.Chat application
-            iconClass: icon-nodejs
-            tags: rocketchat
-          from:
-            kind: ImageStreamTag
-            name: 'latest'
-
   - apiVersion: v1
     kind: Route
     metadata:
@@ -269,6 +311,7 @@ objects:
         name: ${APPLICATION_NAME}
       tls:
         termination: edge
+        insecureEdgeTerminationPolicy: Redirect
 
   # A non-headless service which takes pod readiness into consideration
   - kind: Service
@@ -281,7 +324,6 @@ objects:
       ports:
         - name: mongodb
           port: 27017
-      # will route traffic to pods having labels matching this selector
       selector:
         name: "${MONGODB_SERVICE_NAME}"
 
@@ -414,14 +456,6 @@ objects:
           maxUnavailable: "25%"
       triggers:
       - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - rocketchat
-          from:
-            kind: ImageStreamTag
-            name: 'rocketchat:latest'
       replicas: "${ROCKETCHAT_REPLICAS}"
       selector:
         app: "${APPLICATION_NAME}"
@@ -476,9 +510,9 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 150
-              timeoutSeconds: 1
-              periodSeconds: 10
+              initialDelaySeconds: 60
+              timeoutSeconds: 5
+              periodSeconds: 20
               successThreshold: 1
               failureThreshold: 3
             readinessProbe:
@@ -486,16 +520,18 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 150
-              timeoutSeconds: 1
-              periodSeconds: 10
+              initialDelaySeconds: 60
+              timeoutSeconds: 5
+              periodSeconds: 20
               successThreshold: 1
               failureThreshold: 3
             resources:
               limits:
+                cpu: "${CPU_LIMIT}"
                 memory: "${MEMORY_LIMIT}"
-#              requests:
-#                memory: "${MEMORY_REQUEST}"
+              requests:
+                memory: "${MEMORY_REQUEST}"
+                cpu: "${CPU_REQUEST}"
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
     status: {}
