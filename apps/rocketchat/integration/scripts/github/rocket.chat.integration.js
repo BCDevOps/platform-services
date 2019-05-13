@@ -403,8 +403,6 @@ const githubEvents = {
     const alert = request.content.alert;
     const action = 'Repository vulnerability alert ' + request.content.action + 'd';
 
-
-
     const text = '**' + action + ':**\n' +
       '**[' + alert.external_identifier + '](' + alert. external_reference + ')**\n' +
       'Affected package: ' + alert.affected_package_name + ' ' + alert.affected_range + '\n' +
