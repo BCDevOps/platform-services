@@ -1,0 +1,8 @@
+--- 
+- name: Get route version
+  shell: "curl --header 'Authorization: Bearer {{ oc_token.stdout }}' https://{{ item }} -I | grep 'X-Jenkins:' | awk '{print $2}'"
+  register: version
+- name: 
+  set_fact: 
+    report_output: "{{ report_output|default([]) + [ {'url': item, 'version': version.stdout_lines} ] }}"
+
