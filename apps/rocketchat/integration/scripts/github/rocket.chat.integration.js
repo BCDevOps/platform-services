@@ -397,6 +397,33 @@ const githubEvents = {
   },
   /* END OF FORK */
 
+  /* repository_vulnerability_alert */
+  repository_vulnerability_alert(request) {
+    const user = request.content.sender;
+    const alert = request.content.alert;
+    const action = 'Repository vulnerability alert ' + request.content.action + 'd';
+
+
+
+    const text = '**' + action + ':**\n' +
+      '**[' + alert.external_identifier + '](' + alert. external_reference + ')**\n' +
+      'Affected package: ' + alert.affected_package_name + ' ' + alert.affected_range + '\n' +
+      'Fixed in: ' + alert.fixed_in
+
+    return {
+      content: {
+        attachments: [
+          {
+            thumb_url: user.avatar_url,
+            text: text,
+            fields: []
+          }
+        ]
+      }
+    };
+  },
+  /* END OF repository_vulnerability_alert */
+
 };
 
 class Script {
