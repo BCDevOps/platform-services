@@ -12,5 +12,5 @@ This playbook uses the local `oc` client and user credentials, so ensure you can
 
 ```
 oc login https://console.pathfinder.gov.bc.ca:8443 --token=[token]
-
+ansible-playbook ocp_jenkins_audit.yml
 ```
