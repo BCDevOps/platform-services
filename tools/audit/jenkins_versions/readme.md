@@ -8,8 +8,9 @@ The `ansible` directory provides a playbook to audit the environment and create 
 This playbook uses the local `oc` client and user credentials, so ensure you can login with rights to read from all project namespaces. 
 
 
-## Sample 
+## Sample Usage
 
 ```
-curl --header "Authorization: Bearer bDfxroot0IQ8Q-quVaUNrP-dsjhSVwdmWaYigp9K7Qk" https://jenkins-c81e6h-tools.pathfinder.gov.bc.ca/ -I | grep "X-Jenkins:" | awk '{print $2}'
+oc login https://console.pathfinder.gov.bc.ca:8443 --token=[token]
+
 ```

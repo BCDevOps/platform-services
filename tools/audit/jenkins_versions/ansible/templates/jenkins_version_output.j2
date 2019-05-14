@@ -1,5 +1,5 @@
 # Jenkins Version List
 
 {% for dict_item in report_output %}
-url: {{ dict_item.url }} version: {{  dict_item.version }}
+namespace: {{ dict_item.namespace }} url: {{ dict_item.url }} version: {{  dict_item.version }}
 {% endfor %}

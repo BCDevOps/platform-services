@@ -2,7 +2,10 @@
 - name: Get route version
   shell: "curl --header 'Authorization: Bearer {{ oc_token.stdout }}' https://{{ item }} -I | grep 'X-Jenkins:' | awk '{print $2}'"
   register: version
+- name: Get project namespace details
+  shell: "oc get route --all-namespaces  | grep {{ item }} | awk '{print $1}'"
+  register: namespace
 - name: 
   set_fact: 
-    report_output: "{{ report_output|default([]) + [ {'url': item, 'version': version.stdout_lines} ] }}"
+    report_output: "{{ report_output|default([]) + [ {'namespace': namespace.stdout_lines, 'url': item, 'version': version.stdout_lines} ] }}"
 
