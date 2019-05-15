@@ -10,7 +10,6 @@
     - name: Get list of routes
       shell: "oc get routes  --all-namespaces | grep jenkins | awk '{print $3}'"
       register: jenkins_route_list
-    - 
     - include_tasks: tasks/route_version_map.yml
       with_items: "{{ jenkins_route_list.stdout_lines }}"
     - name: generate report
