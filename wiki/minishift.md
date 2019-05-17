@@ -91,6 +91,15 @@ minishift ssh -- bash <<< 'seq 20 29 | xargs -t -I {} bash -c "sudo rm -rf /var/
 
 ```
 
+# Create a priviled service account
+This account will have `anyuid` privilege so you can run as root and for instance iteratively figure out how to create an image
+```
+oc -n myproject create sa privileged
+oc -n myproject adm policy add-scc-to-user anyuid -z privileged
+oc -n myproject run rhel7-tools --serviceaccount=privileged --image=registry.access.redhat.com/rhel7/rhel-tools:latest -it --rm=true --restart=Never --command=true -- bash
+
+```
+
 # Testing
 ```
 oc import-image helloworld-http:latest --from=registry.hub.docker.com/strm/helloworld-http:latest --confirm
