@@ -1,7 +1,7 @@
 
 # Setup Red Hat Container Development Kit (for MacOS)
 
-Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/)
+Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/) (tested with CDK v3.8.0-2)
 ```
 minishift setup-cdk --force
 minishift addons enable registry-route
