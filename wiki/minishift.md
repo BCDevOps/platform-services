@@ -26,6 +26,9 @@ minishift ssh -- 'sudo bash -c "echo 172.30.1.1 docker-registry.default.svc >> /
 
 oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
 
+# Attach RHEL subscription (enables Red Hat Software Collections)
+minishift ssh 'sudo bash -c "subscription-manager attach --pool=8a85f99c68b939320168f2d9c3d4748a"'
+
 ```
 # Setting up shared namespaces/resources
 ```
