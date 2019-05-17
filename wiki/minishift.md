@@ -91,7 +91,7 @@ minishift ssh -- bash <<< 'seq 20 29 | xargs -t -I {} bash -c "sudo rm -rf /var/
 
 ```
 
-# Create a priviled service account
+# Create a privileged service account
 This account will have `anyuid` privilege so you can run as root and for instance iteratively figure out how to create an image
 ```
 oc -n myproject create sa privileged
