@@ -1,0 +1,43 @@
+--- 
+- hosts: localhost
+  become: no
+  connection: local
+  gather_facts: no
+  vars: 
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  vars: 
+    - path_prefix: "../notifications/"
+    - namespace: devops-status-page
+  tasks: 
+    - name: Get file list 
+      command: > 
+        ls -vr ../notifications
+      register: notifications
+    - name: Find all templates
+      find: 
+        paths: templates/
+        patterns: "*.json.j2"
+      register: dashboard_list
+    - name: Render Dashboard 
+      template: 
+        src: "templates/{{ item }}"
+        dest: "output/{{ item.split('.')[0] }}.json"
+      with_items: 
+        - "{{ dashboard_list.files[0].path.split('/')[1] }}"
+    - name: Delete configmap
+      shell: > 
+        oc delete configmap/grafana-dashboards -n "{{ namespace }}"
+      ignore_errors: true
+    - name: Create configmap
+      shell: > 
+        oc create configmap grafana-dashboards --from-file=output/ -n "{{ namespace }}"
+    - name: Send notification message via Rocket Chat
+      rocketchat:
+        domain: chat.pathfinder.gov.bc.ca
+        token: "{{ lookup('env', 'RC_TOKEN')}}"
+        msg: "A notice has been posted on http://lab-status.lab.pathfinder.gov.bc.ca/"
+        channel: #sheatest
+        username: "{{ lookup('env', 'RC_USER')}}"
+        icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
+        link_names: 0
+      delegate_to: localhost

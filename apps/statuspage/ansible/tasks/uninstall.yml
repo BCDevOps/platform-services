@@ -1,0 +1,9 @@
+---
+- name: Remove all core artifacts
+  command: "oc delete all -n {{ namespace }} --all=true"
+- name: Get PVCs
+  shell: "oc get pvc -n {{ namespace }} | awk 'FNR>1 {print $1}'"
+  register: pvc_list
+- name: Delete PVCs
+  command: "oc delete pvc {{ item }} -n {{ namespace }}"
+  with_items: "{{ pvc_list.stdout_lines }}"
