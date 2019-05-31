@@ -6,14 +6,18 @@ label: 'ansible-pod',
 cloud: 'openshift',
 containers: [
     containerTemplate(name: 'ansible',
-                    image: 'docker.io/arctiqteam/jenkins-agent-ansible:latest',
+                    image: 'docker.io/stewartshea/jenkins-ansible-agent:latest',
                     resourceLimitMemory: '512Mi',
+                    resourceLimitCpu: '1',
                     workingDir:'/home/jenkins',
                     command: '/bin/sh',
                     args: '',
                     ttyEnabled: true
                     )
-            ]
+            ],
+                    volumes: [
+                        secretVolume(secretName: 'rocketchat', mountPath: '/home/jenkins/creds', defaultmode: 0644),
+                ],
 )
 
 
@@ -25,9 +29,14 @@ containers: [
                     timeout (time: 5, unit: "MINUTES"){
                         checkout scm
                         dir ('ansible'){
-                            sh 'echo "tempuser:x:$(id -u):$(id -g):,,,:${HOME}:/bin/bash" >> /etc/passwd'
-                            sh '''echo "tempuser:x:$(id -G | cut -d\' \' -f 2)" >> /etc/group'''
-                            sh "ansible-playbook update_dashboard.yaml"
+                            sh 'echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd'
+                           // sh 'echo "tempuser:x:$(id -u):$(id -g):,,,:${HOME}:/bin/bash" >> /etc/passwd'
+                          //  sh '''echo "tempuser:x:$(id -G | cut -d\' \' -f 2)" >> /etc/group'''
+                            sh 'export RC_TOKEN=$(cat /home/jenkins/creds/token)'
+                            sh 'export RC_USER=$(cat /home/jenkins/creds/user)'
+                            sh 'id'
+                            sh "ls"
+                            sh "ansible-playbook update_dashboard.yaml -e rc_token=\$(cat /home/jenkins/creds/token) -e rc_user=\$(cat /home/jenkins/creds/user)"
                         }
                     }
                 }
