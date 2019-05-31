@@ -28,7 +28,7 @@ containers: [
                 stage ("Run dashboard updater"){
                     timeout (time: 5, unit: "MINUTES"){
                         checkout scm
-                        dir ('ansible'){
+                        dir ('apps/statuspage/dashboard_updater/ansible'){
                             sh 'echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd'
                            // sh 'echo "tempuser:x:$(id -u):$(id -g):,,,:${HOME}:/bin/bash" >> /etc/passwd'
                           //  sh '''echo "tempuser:x:$(id -G | cut -d\' \' -f 2)" >> /etc/group'''
