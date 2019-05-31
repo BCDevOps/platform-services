@@ -1,0 +1,36 @@
+#!/usr/bin/env groovy
+
+// Pod Templates for Build
+podTemplate(
+label: 'ansible-pod',
+cloud: 'openshift',
+containers: [
+    containerTemplate(name: 'ansible',
+                    image: 'docker.io/arctiqteam/jenkins-agent-ansible:latest',
+                    resourceLimitMemory: '512Mi',
+                    workingDir:'/home/jenkins',
+                    command: '/bin/sh',
+                    args: '',
+                    ttyEnabled: true
+                    )
+            ]
+)
+
+
+//Pipeline Execution
+{
+    node ('ansible-pod'){
+            container('ansible'){
+                stage ("Run dashboard updater"){
+                    timeout (time: 5, unit: "MINUTES"){
+                        checkout scm
+                        dir ('ansible'){
+                            sh 'echo "tempuser:x:$(id -u):$(id -g):,,,:${HOME}:/bin/bash" >> /etc/passwd'
+                            sh '''echo "tempuser:x:$(id -G | cut -d\' \' -f 2)" >> /etc/group'''
+                            sh "ansible-playbook update_dashboard.yaml"
+                        }
+                    }
+                }
+            }
+    }
+}
