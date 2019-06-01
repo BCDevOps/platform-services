@@ -31,17 +31,18 @@
     - name: Create configmap
       shell: > 
         oc create configmap grafana-dashboards --from-file=output/ -n "{{ namespace }}"
-    - name: Debug Env Vars
-      debug: msg="{{ rc_user }} {{ rc_token }}"
+    - name: Set Fact for latest notification
+      set_fact: 
+        latest_update: "{{ lookup ('file', path_prefix+notifications.stdout_lines[0]) }}"
     - name: Send notification message via Rocket Chat
       rocketchat:
         domain: chat.pathfinder.gov.bc.ca
-  #      token: "{{ lookup('env', 'RC_TOKEN')}}"
-        token: "{{ rc_token }} "
-        msg: "A notice has been posted on http://lab-status.lab.pathfinder.gov.bc.ca/"
+        token: "{{ lookup('env', 'RC_TOKEN')}}"
+  #      token: "{{ rc_token }} "
+        msg: "A notice has been posted on http://lab-status.lab.pathfinder.gov.bc.ca/ \n The latest message is: {{ latest_update }}"
         channel: #sheatest
-  #      username: "{{ lookup('env', 'RC_USER')}}"
-        username: "{{ rc_user }}"
+        username: "{{ lookup('env', 'RC_USER')}}"
+  #      username: "{{ rc_user }}"
         icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
         link_names: 0
       delegate_to: localhost
