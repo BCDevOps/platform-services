@@ -2,7 +2,7 @@
 
 // Environment Variables
 def NOTIFICATIONS_DIR_NAME = "../notifications"
-def NAMESPACES = /['devops-status-page']/
+def NAMESPACES = '''["devops-status-page"]'''
 
 // Pod Templates for Build
 podTemplate(
