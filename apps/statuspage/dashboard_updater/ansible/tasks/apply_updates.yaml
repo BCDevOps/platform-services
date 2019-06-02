@@ -1,0 +1,11 @@
+---
+- name: Delete configmap
+  shell: > 
+    oc delete configmap "{{ grafana_configmap_name }}" -n "{{ namespace }}"
+  ignore_errors: true
+- name: Create configmap
+  shell: > 
+    oc create configmap "{{ grafana_configmap_name }}" --from-file=output/ -n "{{ namespace }}"
+- name: Set Fact for latest notification
+  set_fact: 
+    latest_update: "{{ lookup ('file', notifications_path+notifications.stdout_lines[0]) }}"

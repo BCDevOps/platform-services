@@ -6,12 +6,19 @@
   vars: 
     ansible_python_interpreter: "{{ ansible_playbook_python }}"
   vars: 
-    - path_prefix: "../notifications/"
-    - namespace: devops-status-page
+    - notifications_dir_name: "notifications"
+    - notifications_path: "{{ notifications_dir_name }}/"
+    - namespaces: 
+        - specify-your-namespaces
+    - grafana_configmap_name: "grafana-dashboards"
+    - status_page_url: "http://lab-status.lab.pathfinder.gov.bc.ca/"
+    - rc_notification_channel: "#sheatest"
+    - rc_domain: "chat.pathfinder.gov.bc.ca"
+    - rc_icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
   tasks: 
     - name: Get file list 
       command: > 
-        ls -vr ../notifications
+        ls -vr "{{ notifications_path }}"
       register: notifications
     - name: Find all templates
       find: 
@@ -24,26 +31,20 @@
         dest: "output/{{ item.split('.')[0] }}.json"
       with_items: 
         - "{{ dashboard_list.files[0].path.split('/')[1] }}"
-    - name: Delete configmap
-      shell: > 
-        oc delete configmap/grafana-dashboards -n "{{ namespace }}"
-      ignore_errors: true
-    - name: Create configmap
-      shell: > 
-        oc create configmap grafana-dashboards --from-file=output/ -n "{{ namespace }}"
-    - name: Set Fact for latest notification
-      set_fact: 
-        latest_update: "{{ lookup ('file', path_prefix+notifications.stdout_lines[0]) }}"
+    - name: Apply configMap updates to namespaces
+      include_tasks: tasks/apply_updates.yaml
+      with_items: 
+        - "{{ namespaces }}"
+      loop_control: 
+        loop_var: namespace
     - name: Send notification message via Rocket Chat
       rocketchat:
-        domain: chat.pathfinder.gov.bc.ca
+        domain: "{{ rc_domain }}"
         token: "{{ lookup('env', 'RC_TOKEN')}}"
-  #      token: "{{ rc_token }} "
-        msg: "A notice has been posted on http://lab-status.lab.pathfinder.gov.bc.ca/ \n The latest message is: {{ latest_update }}"
-        channel: #sheatest
+        msg: "A notice has been posted on {{ status_page_url }} \n The latest message is: {{ latest_update }}"
+        channel: "{{ rc_notification_channel }}"
         username: "{{ lookup('env', 'RC_USER')}}"
-  #      username: "{{ rc_user }}"
-        icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
+        icon_url: "{{ rc_icon_url }}"
         link_names: 0
       delegate_to: localhost
       ignore_errors: true

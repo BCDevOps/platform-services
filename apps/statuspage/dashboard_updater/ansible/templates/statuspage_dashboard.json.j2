@@ -872,7 +872,7 @@
         },
         {
 {% endraw %}
-          "content": "{% for filename in notifications.stdout_lines %}---\n\n# Notice: {{ filename }} \n\n## {{ lookup ('file', path_prefix+filename) | replace('\n', '\\n') }} \n\n{% endfor %}",
+          "content": "{% for filename in notifications.stdout_lines %}---\n\n# Notice: {{ filename }} \n\n## {{ lookup ('file', notifications_path+filename) | replace('\n', '\\n') }} \n\n{% endfor %}",
 {% raw %}
           "gridPos": {
             "h": 8,

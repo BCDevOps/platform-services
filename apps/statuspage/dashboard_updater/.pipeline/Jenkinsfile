@@ -1,5 +1,9 @@
 #!/usr/bin/env groovy
 
+// Environment Variables
+def NOTIFICATIONS_DIR_NAME = "notifications"
+def NAMESPACES="['devops-status-page']"
+
 // Pod Templates for Build
 podTemplate(
 label: 'ansible-pod',
@@ -30,13 +34,9 @@ containers: [
                         checkout scm
                         dir ('apps/statuspage/dashboard_updater/ansible'){
                             sh 'echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd'
-                           // sh 'echo "tempuser:x:$(id -u):$(id -g):,,,:${HOME}:/bin/bash" >> /etc/passwd'
-                          //  sh '''echo "tempuser:x:$(id -G | cut -d\' \' -f 2)" >> /etc/group'''
                             sh 'export RC_TOKEN=$(cat /home/jenkins/creds/token)'
                             sh 'export RC_USER=$(cat /home/jenkins/creds/user)'
-                            sh 'id'
-                            sh "ls"
-                            sh "ansible-playbook update_dashboard.yaml -e rc_token=\$(cat /home/jenkins/creds/token) -e rc_user=\$(cat /home/jenkins/creds/user)"
+                            sh "ansible-playbook update_dashboard.yaml -e namespaces=${env.NAMESPACES} -e notifications_dir_name=${NOTIFICATIONS_DIR_NAME}"
                         }
                     }
                 }
