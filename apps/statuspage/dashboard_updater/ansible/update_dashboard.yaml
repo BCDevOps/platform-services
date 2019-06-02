@@ -15,6 +15,8 @@
     - rc_notification_channel: "#sheatest"
     - rc_domain: "chat.pathfinder.gov.bc.ca"
     - rc_icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
+    - rc_token: "{{ lookup('env', 'RC_TOKEN')}}"
+    - rc_user: "{{ lookup('env', 'RC_USER')}}"
   tasks: 
     - name: Get file list 
       command: > 
@@ -43,10 +45,10 @@
     - name: Send notification message via Rocket Chat
       rocketchat:
         domain: "{{ rc_domain }}"
-        token: "{{ lookup('env', 'RC_TOKEN')}}"
+        token: "{{ rc_token }}"
         msg: "A notice has been posted on {{ status_page_url }} \n The latest message is: {{ latest_update }}"
         channel: "{{ rc_notification_channel }}"
-        username: "{{ lookup('env', 'RC_USER')}}"
+        username: "{{ rc_user }}"
         icon_url: "{{ rc_icon_url }}"
         link_names: 0
       delegate_to: localhost

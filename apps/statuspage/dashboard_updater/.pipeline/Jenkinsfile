@@ -35,9 +35,9 @@ containers: [
                         checkout scm
                         dir ('apps/statuspage/dashboard_updater/ansible'){
                             sh 'echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd'
-                            sh 'export RC_TOKEN=$(cat /home/jenkins/creds/token)'
-                            sh 'export RC_USER=$(cat /home/jenkins/creds/user)'
-                            sh "ansible-playbook update_dashboard.yaml -e namespaces=${NAMESPACES} -e notifications_dir_name=${NOTIFICATIONS_DIR_NAME} -vvv"
+                            // sh 'export RC_TOKEN=$(cat /home/jenkins/creds/token)'
+                            // sh 'export RC_USER=$(cat /home/jenkins/creds/user)'
+                            sh "ansible-playbook update_dashboard.yaml -e namespaces=${NAMESPACES} -e notifications_dir_name=${NOTIFICATIONS_DIR_NAME} -e rc_token=\$(cat /home/jenkins/creds/token) -e rc_user=\$(cat /home/jenkins/creds/user) -vvv "
                         }
                     }
                 }
