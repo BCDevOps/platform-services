@@ -37,6 +37,9 @@
         - "{{ namespaces }}"
       loop_control: 
         loop_var: namespace
+    - name: Set Fact for latest notification
+      set_fact: 
+        latest_update: "{{ lookup ('file', notifications_path+notifications.stdout_lines[0]) }}"
     - name: Send notification message via Rocket Chat
       rocketchat:
         domain: "{{ rc_domain }}"
