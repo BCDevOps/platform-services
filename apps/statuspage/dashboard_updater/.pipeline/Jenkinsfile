@@ -8,6 +8,7 @@ def NAMESPACES = '''[\"devops-status-page\"]'''
 podTemplate(
 label: 'ansible-pod',
 cloud: 'openshift',
+idleMinutes: '5',
 containers: [
     containerTemplate(name: 'ansible',
                     image: 'docker.io/stewartshea/jenkins-ansible-agent:latest',
