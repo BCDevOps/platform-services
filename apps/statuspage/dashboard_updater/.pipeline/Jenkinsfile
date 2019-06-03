@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 // Environment Variables
-def NOTIFICATIONS_DIR_NAME = "../notifications"
+def NOTIFICATIONS_DIR_NAME = "notifications"
 def NAMESPACES = '[\\"c81e6h-dev\\"]'
 
 // Pod Templates for Build
