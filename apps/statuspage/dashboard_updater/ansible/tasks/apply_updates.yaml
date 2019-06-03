@@ -1,8 +1,0 @@
----
-- name: Delete configmap
-  shell: > 
-    oc delete configmap "{{ grafana_configmap_name }}" -n "{{ namespace }}"
-  ignore_errors: true
-- name: Create configmap
-  shell: > 
-    oc create configmap "{{ grafana_configmap_name }}" --from-file=output/ -n "{{ namespace }}"
