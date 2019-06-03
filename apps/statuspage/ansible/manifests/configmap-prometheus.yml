@@ -16,7 +16,7 @@ data:
           - targets:
             - https://github.com/bcdevops/platform-services 
             - https://access.redhat.com/containers/
-            - https://console.pathfinder.gov.bc.ca
+            - https://console.pathfinder.gov.bc.ca:8443
             - https://failme.pathfinder.gov.bc.ca
             - https://hawkular-metrics.pathfinder.gov.bc.ca
             - http://labs-devops-platform-workshops.lab.pathfinder.gov.bc.ca 
@@ -41,7 +41,6 @@ data:
             target_label: instance
           - target_label: __address__
             replacement: blackbox-exporter:9115  # The blackbox exporter's real hostname:port.        
-            
 kind: ConfigMap
 metadata:
   name: prometheus-config

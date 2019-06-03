@@ -1,0 +1,47 @@
+#!/usr/bin/env groovy
+
+// Environment Variables
+def NOTIFICATIONS_DIR_NAME = "../notifications"
+def NAMESPACES = '[\\"c81e6h-dev\\"]'
+
+// Pod Templates for Build
+podTemplate(
+label: 'ansible-pod',
+cloud: 'openshift',
+idleMinutes: '5',
+serviceAccount: 'jenkins',
+containers: [
+    containerTemplate(name: 'ansible',
+                    image: 'docker.io/stewartshea/jenkins-ansible-agent:latest',
+                    resourceLimitMemory: '512Mi',
+                    resourceLimitCpu: '1',
+                    workingDir:'/home/jenkins',
+                    command: '/bin/sh',
+                    args: '',
+                    ttyEnabled: true
+                    )
+            ],
+                    volumes: [
+                        secretVolume(secretName: 'rocketchat', mountPath: '/home/jenkins/creds', defaultmode: 0644),
+                ],
+)
+
+
+//Pipeline Execution
+{
+    node ('ansible-pod'){
+            container('ansible'){
+                stage ("Run dashboard updater"){
+                    timeout (time: 5, unit: "MINUTES"){
+                        checkout scm
+                        dir ('apps/statuspage/dashboard_updater/ansible'){
+                            // Add the random UID to the pwd file for Ansible to run
+                            sh 'echo "${USER_NAME:-default}:x:$(id -u):0:${USER_NAME:-default} user:${HOME}:/sbin/nologin" >> /etc/passwd'
+                            // Run Ansible playbook with the the necessary variable substitutions 
+                            sh "ansible-playbook update_dashboard.yaml -e namespaces=${NAMESPACES} -e notifications_dir_name=${NOTIFICATIONS_DIR_NAME} -e rc_token=\$(cat /home/jenkins/creds/token) -e rc_user=\$(cat /home/jenkins/creds/user)"
+                        }
+                    }
+                }
+            }
+    }
+}

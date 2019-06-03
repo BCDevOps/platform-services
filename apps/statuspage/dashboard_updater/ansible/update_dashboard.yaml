@@ -1,0 +1,65 @@
+--- 
+- hosts: localhost
+  become: no
+  connection: local
+  gather_facts: no
+  vars: 
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  vars: 
+    - notifications_repo: "https://github.com/BCDevOps/platform-services-status-page-notifications"
+    - notifications_repo_branch: "prod"
+    - notifications_dir_name: "notifications"
+    - notifications_path: "{{ notifications_dir_name }}/"
+    - namespaces: 
+        - specify-your-namespaces
+    - grafana_configmap_name: "grafana-dashboards"
+    - status_page_url: "http://lab-status.lab.pathfinder.gov.bc.ca/"
+    - rc_notification_channel: "#sheatest"
+    - rc_domain: "chat.pathfinder.gov.bc.ca"
+    - rc_icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
+    - rc_token: "{{ lookup('env', 'RC_TOKEN')}}"
+    - rc_user: "{{ lookup('env', 'RC_USER')}}"
+  tasks: 
+    - name: Fetch notifications repo content
+      git: 
+        repo: "{{ notifications_repo }}"
+        version: "{{ notifications_repo_branch }}"
+        dest: git_checkout/
+    - name: Set notifications fact path
+      set_fact: 
+        notifications_path: "git_checkout/{{ notifications_path }}"
+    - name: Get file list 
+      command: > 
+        ls -vr "{{ notifications_path }}"
+      register: notifications
+    - name: Find all templates
+      find: 
+        paths: templates/
+        patterns: "*.json.j2"
+      register: dashboard_list
+    - name: Render Dashboard 
+      template: 
+        src: "templates/{{ item }}"
+        dest: "output/{{ item.split('.')[0] }}.json"
+      with_items: 
+        - "{{ dashboard_list.files[0].path.split('/')[1] }}"
+    - name: Apply configMap updates to namespaces
+      include_tasks: tasks/apply_updates.yaml
+      with_items: 
+        - "{{ namespaces }}"
+      loop_control: 
+        loop_var: namespace
+    - name: Set Fact for latest notification
+      set_fact: 
+        latest_update: "{{ lookup ('file', notifications_path+notifications.stdout_lines[0]) }}"
+    - name: Send notification message via Rocket Chat
+      rocketchat:
+        domain: "{{ rc_domain }}"
+        token: "{{ rc_token }}"
+        msg: "A notice has been posted on {{ status_page_url }} \n The latest message is: {{ latest_update }}"
+        channel: "{{ rc_notification_channel }}"
+        username: "{{ rc_user }}"
+        icon_url: "{{ rc_icon_url }}"
+        link_names: 0
+      delegate_to: localhost
+      ignore_errors: true
