@@ -1,0 +1,14 @@
+APIVersion: 1
+label: cluster-network
+data:
+  externalnetworks:
+  - name: cluster-network
+    entries:
+    - 10.131.0.0/16
+    ports:
+    - "1:65535"
+    protocols:
+    - udp
+    - tcp
+    associatedTags:
+    - int:network=cluster

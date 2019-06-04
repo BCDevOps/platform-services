@@ -1,0 +1,21 @@
+APIVersion: 0
+data:
+  enforcerprofilemappingpolicies:
+    - annotations: {}
+      associatedTags:
+        - profilemapping=operator-enforcer-profile-mapping
+      description: ''
+      disabled: true
+      fallback: false
+      metadata:
+        - '@sys:k8s:reference=operator-enforcer-profile-mapping'
+      name: operator-enforcer-profile-mapping
+      object:
+        - - profile=operator-enforcer-profile
+      propagate: false
+      protected: false
+      subject:
+        - - $namespace=/bcgov-devex/lab
+identities:
+  - enforcerprofilemappingpolicy
+label: Friendmulberry Collar

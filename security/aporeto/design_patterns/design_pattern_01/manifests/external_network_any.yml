@@ -1,0 +1,15 @@
+APIVersion: 1
+label: any-network
+data:
+  externalnetworks:
+  - name: any-network
+    entries:
+    - 0.0.0.0/0
+    ports:
+    - "1:65535"
+    protocols:
+    - udp
+    - tcp
+    - icmp
+    associatedTags:
+    - ext:network=any

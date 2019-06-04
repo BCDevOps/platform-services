@@ -1,0 +1,12 @@
+APIVersion: 1
+label: cluster-network-policies
+data:
+  networkaccesspolicies:
+  - name: cluster-network-policies
+    action: "Allow"
+    propagate: true
+    applyPolicyMode: "IncomingTraffic"
+    subject:
+    - - int:network=cluster
+    object:
+    - - "$namespace=/bcgov-devex/lab/*"
