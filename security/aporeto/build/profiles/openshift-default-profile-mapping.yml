@@ -1,0 +1,21 @@
+APIVersion: 0
+data:
+  enforcerprofilemappingpolicies:
+    - annotations: {}
+      associatedTags:
+        - profilemapping=openshift-enforcer-profile-mapping
+      description: ''
+      disabled: false
+      fallback: false
+      metadata:
+        - '@sys:k8s:reference=openshift-enforcer-profile-mapping'
+      name: openshift-enforcer-profile-mapping
+      object:
+        - - profile=openshift-enforcer-profile
+      propagate: false
+      protected: false
+      subject:
+        - - $namespace=/bcgov-devex/lab
+identities:
+  - enforcerprofilemappingpolicy
+label: OpenShift-Profile-Mapping
