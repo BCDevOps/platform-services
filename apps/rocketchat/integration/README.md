@@ -1,3 +1,23 @@
+---
+
+title: Rocket.Chat WebHook Integration
+description: Documentation and resources (complete with examples) on how to integrate your tools and services with Rocket.Chat, allowing you to create notification channels for your teams.
+author: WadeBarnes
+resourceType: Components
+personas: 
+  - Developer
+  - Product Owner
+  - Designer
+labels:
+  - rocket.chat
+  - webhook
+  - git
+  - github
+  - docker
+  - chatops
+
+---
+
 # Incoming WebHook Scripting:
 
 Refer to the official [Incoming WebHook Scripting](https://rocket.chat/docs/administrator-guides/integrations/) documentation for information on how to setup an incoming WebHook in Rocket.Chat.  Use one of the following scripts (or create your own) and paste it into the **Script** field associated with the WebHook integration.
