@@ -63,3 +63,6 @@ typings/
 
 # temp folders
 *git_checkout
+
+# creds
+*creds*
