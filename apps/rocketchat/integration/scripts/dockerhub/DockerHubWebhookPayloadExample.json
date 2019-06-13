@@ -1,0 +1,25 @@
+{
+  "push_data": {
+    "pushed_at": 1554747384,
+    "images": [],
+    "tag": "py36-1.8-2",
+    "pusher": "andrewwhitehead"
+  },
+  "callback_url": "https://registry.hub.docker.com/u/bcgovimages/von-image/hook/2gfg43e14cc3g4fbad5d0i5bd1hj2cc52/",
+  "repository": {
+    "status": "Active",
+    "description": "Standard docker images for building VON components",
+    "is_trusted": false,
+    "full_description": "## Docker images for Verified Organizations Network components\n\n# Included:\n- Hyperledger Indy-SDK, along with `indy-node`, `indy-crypto`, `indy-cli`, `indy-plenum`, and `indy-anoncreds`\n- Python version 3.5 or 3.6\n- von-anchor\n- von-x\n- didauth\n\n# Two Python versions:\nThe `py35-*` images are intended for running `indy-node` containers such as `von-network`.\nFor other usage `py36-*` is recommended.\n\n# `s2i` images:\nThese images include configuration for building and deploying on OpenShift using the source-to-image builds.\n\n# Enterprise Wallet images:\nThe `-ew-` images include the postgres-based Enterprise Wallet extensions to indy-sdk.\n\n# Library versions:\n\n| Image tag | indy-sdk | von_anchor | von-x | didauth | indy-node |\n|-----------------|----------------------------|-------------|-------------|-------------|-----------------|\n| 1.8-1 | 1.8.1-dev-1033 | -- | -- | -- | dev-1.6.862 |\n| 1.8-0 | 1.8.0 | -- | -- | -- | dev-1.6.636 |\n| 1.7-ew-0 | 1.7.0 with postgres plugin | 1.7.1 | 1.4.7 | 1.2.3 | dev-1.6.636 |\n| 1.6-9 | 1.6.7 | 1.6.33 | 1.4.2 | 1.2.2 | dev-1.6.636 |\n| 1.6-8 | 1.6.7 | 1.6.31 | 1.4.0 | 1.2.2 | dev-1.6.636 |\n| 1.6-7 | 1.6.5 | 1.6.28 | 1.4.0 | 1.2.2 | dev-1.4.463 |\n| 1.6-6 | 1.6.5 | 1.6.25 | 1.3.6 | 1.2.2 | dev-1.4.463 |\n| 1.6-5 | 1.6.5 | 1.6.25 | 1.3.4 | 1.2.1 | dev-1.4.463 |\n| 1.6-4 | 1.6.5 | 1.6.22 | 1.3.3 | 1.2.1 | dev-1.4.463 |\n| 1.6-3 | 1.6.5 | 1.6.20 | 1.3.3 | 1.2.1 | dev-1.4.463 |\n| 1.6-2 | 1.6.2 | 1.6.15 | 1.3.2 | 1.2.1 | dev-1.4.463 |\n| 1.6-ew-13 | 1.6.7 with postgres plugin | 1.6.41 | 1.4.6 | 1.2.3 | dev-1.6.636 |\n| 1.6-ew-12 | 1.6.7 with postgres plugin | 1.6.37 | 1.4.5 | 1.2.3 | dev-1.6.636 |\n| 1.6-ew-11 | 1.6.7 with postgres plugin | 1.6.37 | 1.4.4 | 1.2.3 | dev-1.6.636 |\n| 1.6-ew-10 | 1.6.7 with postgres plugin | 1.6.34 | 1.4.3 | 1.2.3 | dev-1.6.636 |\n| 1.6-ew-9 | 1.6.7 with postgres plugin | 1.6.33 | 1.4.2 | 1.2.2 | dev-1.6.636 |\n| 1.6-ew-7 | 1.6.5 with postgres plugin | 1.6.28 | 1.4.0 | 1.2.2 | dev-1.4.463 |\n| 1.6-ew-4 | 1.6.5 with postgres plugin | 1.6.25 | 1.3.6 | 1.2.2 | dev-1.4.463 |\n| 1.6-ew-3 | 1.6.5 with postgres plugin | 1.6.25 | 1.3.4 | 1.2.1 | dev-1.4.463 |\n| 1.6-ew-2 | 1.6.5 with postgres plugin | 1.6.22 | 1.3.3 | 1.2.1 | dev-1.4.463 |\n| 1.6-ew | 1.6.5 with postgres plugin | 1.6.22 | 1.3.3 | 1.2.1 | dev-1.4.463 |\n\nSource Dockerfiles are located on GitHub at PSPC-SPAC-buyandsell/von-image.\n",
+    "repo_url": "https://hub.docker.com/r/bcgovimages/von-image",
+    "owner": "bcgovimages",
+    "is_official": false,
+    "is_private": false,
+    "name": "von-image",
+    "namespace": "bcgovimages",
+    "star_count": 2,
+    "comment_count": 0,
+    "date_created": 1526327904,
+    "repo_name": "bcgovimages/von-image"
+  }
+}
