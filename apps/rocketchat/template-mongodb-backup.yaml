@@ -35,7 +35,7 @@ objects:
                     claimName: ${MONGODB_BACKUP_VOLUME_CLAIM}
               containers:
                 - name: mongodb-backup
-                  image: 'registry.access.redhat.com/rhscl/mongodb-32-rhel7@sha256:4143584de718ef477fe03e3ae15985c68e0ce9dca8ba089dfa5927e800e59e69'
+                  image: 'docker-registry.default.svc:5000/openshift/mongodb:latest'
                   command:
                     - 'bash'
                     - '-c'

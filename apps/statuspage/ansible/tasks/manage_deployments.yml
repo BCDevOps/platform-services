@@ -1,0 +1,30 @@
+---
+- name: Create deployment file
+  template:
+    src: manifests/templates/deployment-{{ item }}.yml.j2
+    dest: manifests/deployment-{{ item }}.yml
+- name: "{{ activity }} {{ env }} {{ item }}"
+  k8s_raw:
+    state: "{{ state }}"
+    src: manifests/{{ component }}-{{ item }}.yml
+    namespace: "{{ namespace }}"
+  with_items: 
+    - service
+    - configmap
+    - route
+    - deployment
+    - pvc
+  loop_control:
+    loop_var: component
+  ignore_errors: true
+- name: Get PVCs
+  shell: "oc get pvc -n {{ namespace }} | awk 'FNR>1 {print $1}'"
+  register: pvc_list
+  when: activity == "uninstall"
+- name: Delete PVCs
+  command: "oc delete pvc {{ pvc }} -n {{ namespace }}"
+  with_items: "{{ pvc_list.stdout_lines }}"
+  loop_control:
+    loop_var: pvc
+  when: activity == "uninstall"
+

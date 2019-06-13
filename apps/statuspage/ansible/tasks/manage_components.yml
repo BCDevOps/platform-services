@@ -1,0 +1,11 @@
+--- 
+- name: "{{ activity }} {{ item }}  in {{ env }}" 
+  include_tasks: manage_statefulsets.yml
+  with_items: 
+    - prometheus
+- name: "{{ activity }} {{ item }}  in {{ env }}" 
+  include_tasks: manage_deployments.yml
+  with_items: 
+    - blackbox-exporter
+    - grafana
+    - envoy

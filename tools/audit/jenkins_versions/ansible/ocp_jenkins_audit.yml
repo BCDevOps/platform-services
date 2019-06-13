@@ -1,0 +1,19 @@
+--- 
+- hosts: localhost
+  connection: local
+  vars: 
+    ansible_command_timeout: 10
+  tasks: 
+    - name: set oc token
+      command: oc whoami -t 
+      register: oc_token
+    - name: Get list of routes
+      shell: "oc get routes  --all-namespaces | grep jenkins | awk '{print $3}'"
+      register: jenkins_route_list
+    - include_tasks: tasks/route_version_map.yml
+      with_items: "{{ jenkins_route_list.stdout_lines }}"
+    - name: generate report
+      template: 
+        src: templates/jenkins_version_output.j2
+        dest: sensitive-jenkins_report_output.txt
+
