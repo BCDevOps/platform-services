@@ -162,6 +162,30 @@ Repository 'rhel-server-rhscl-7-rpms' is enabled for this system.
 [docker@minishift ~]$ [ctrl+d]
 logout
 ```
+
+# Setup Red Hat Container Development Kit (for Win10 with HyperV)
+
+minishift is avaliable as Chocolatey package, or download 'cdk-3.8.0-2-minishift-windows-amd64.exe' for Windows from RedHat web site, then rename to 'minishift.exe'
+
+```
+cinst minishift -y
+```
+
+The steps are the same as above with the following differences:
+
+```
+//Check number of logical CPUs in the machine (PS)
+$env:NUMBER_OF_PROCESSORS
+//Check number of logical CPUs in the machine (cmd)
+echo %NUMBER_OF_PROCESSORS%
+
+//configure HyperV before running start
+minishift setup
+
+//set the HyperV switch
+minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8 --hyperv-virtual-switch=minishift-external
+```
+
 # Setting up shared namespaces/resources
 ```
 oc new-project bcgov
@@ -178,14 +202,14 @@ oc policy add-role-to-group system:image-puller 'system:serviceaccounts' -n bcgo
 # Create a secret using the username/token from https://console.pathfinder.gov.bc.ca:8443/console/command-line
 oc -n bcgov create secret docker-registry pathfinder \
     '--docker-server=docker-registry.pathfinder.gov.bc.ca' \
-    "--docker-username=<username" \
+    "--docker-username=<username>" \
     "--docker-password=<token>"
 
 # Use secret for pulling images for pods
-oc secrets link default pathfinder --for=pull
+oc -n bcgov secrets link default pathfinder --for=pull
 
 # use a secret for pushing and pulling build images
-oc secrets link builder pathfinder
+oc -n bcgov secrets link builder pathfinder
 
 # Import/Pull images
 oc -n bcgov import-image jenkins-basic:v2-stable --from=docker-registry.pathfinder.gov.bc.ca:443/bcgov/jenkins-basic:v2-stable --confirm --insecure --reference-policy=local
