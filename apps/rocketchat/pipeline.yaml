@@ -6,38 +6,38 @@ spec:
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfile: |-
+        def env='dev'
         pipeline {
             agent any
-        
             stages {
-                stage('Delete') {
-                    steps {
-                        script {
-                            openshift.withProject(dev)
-                        openshift.selector("all", [ template : templateName ]).delete()
-                        #https://kubernetes.io/docs/tasks/run-application/delete-stateful-set/
-                        }
-                    }
-                }
                 stage('Checkout') {
                     steps {
-                        git url: https://github.com/BCDevOps/platform-services
+                        git branch: 'master', url: 'https://github.com/BCDevOps/platform-services'
+                    }
+                }
+                stage('Delete') {
+                    steps {
+                        sh "oc project pthomson-test && oc process -n pthomson-test -f apps/rocketchat/template-rocketchat-mongodb.yaml --param-file=apps/rocketchat/${env}.env | oc delete -f -"
                     }
                 }
                 stage('Deploy') {
                     steps {
-                        script {
-                            openshift.withProject(dev) {
-                                openshift.process("template-rocketchat-mongodb.yaml | oc create -f -")
-                            }
-                        }
-                    }
+                        sh "oc project pthomson-test && oc process -n pthomson-test -f apps/rocketchat/template-rocketchat-mongodb.yaml --param-file=apps/rocketchat/${env}.env | oc create -f -"
+                    }    
                 }
                 stage('Config') {
                     steps {
                         script {
                             sh channel-creator.sh admin-user-name admin-password
+                         }
                     }
                 }
             }
         }
+
+#https://kubernetes.io/docs/tasks/run-application/delete-stateful-set/
+# add about delete storage too?
+# add step delete just rocketchat keep mongo?
+# add update image version with new env file, ask for env file
+# ask for user password for shell script step
+# trigger when push

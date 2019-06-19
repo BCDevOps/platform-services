@@ -72,29 +72,6 @@ We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to aut
 
 All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy the template through the web console `oc create -f template-rocketchat-mongodb.yaml`.
 
-#### Backup & restore
-
-Once the MongoDB and Rocket Chat pods are up and running we probably want to backup the rocketdb. Rocket Chat stores all configuration and chat history in the database which makes restoring after a disaster easy.
-
-##### Backup Volume
-
-We'll need some storage that we can dump the database backup to. Using the NFS APB gives us a easy option to get a PVC mapped to our project. This storage lives outside the cluster which is ideal for back up, details: https://github.com/BCDevOps/provision-nfs-apb 
-
-##### Backup CronJob
-
-Once we have a PVC in our project we can deploy the CronJob template that will schedule a job to run at a defined interval that will start a MongoDB pod and run `monogdump` against the MongoDB service and dump the backup files to the PVC.
-
-```
-oc process -f mongodb-backup-template.yaml MONGODB_ADMIN_PASSWORD=adminpass MONGODB_BACKUP_VOLUME_CLAIM=nfs-pvc MONGODB_BACKUP_KEEP=7 MONGODB_BACKUP_SCHEDULE='1 0 * * *' | oc create -f -
-```
-
-##### Restore Backup
-
-To restore the database you will have to start another mongodb instance, then copy or mount the backup files to this instance and issue this restore command.
-
-```
-mongorestore -u admin -p \$MONGODB_ADMIN_PASSWORD --authenticationDatabase admin --gzip $DIR/DB_TO_RESTORE -d DB_TO_RESTORE_INTO"
-```
 All of the template parameters are defined in environment files specific to the environment to deploy Rocket Chat into, dev, test, and prod.
 
 Before you deploy the Rocket Chat/Mongo DB template go through the environment file and update the template parameters values to ones that make sense for your deployment and deploy all the objects: `oc process -f template-rocketchat-mongodb.yaml --param-file=dev.env | oc create -f -`
@@ -118,6 +95,30 @@ To batch create channels to start off with fill in `channels` file with channel 
 Update `./channel-creator.sh` with the route to rocket chat. Run `./channel-creator.sh admin-user-name admin-password` to create the channels. 
 
 If you want to make any of these channels default (all users auto added) you can do so from the administration -> rooms page.
+
+#### Backup & restore
+
+Once the MongoDB and Rocket Chat pods are up and running we probably want to backup the rocketdb. Rocket Chat stores all configuration and chat history in the database which makes restoring after a disaster easy.
+
+##### Backup Volume
+
+We'll need some storage that we can dump the database backup to. Using the NFS APB gives us a easy option to get a PVC mapped to our project. This storage lives outside the cluster which is ideal for back up, details: https://github.com/BCDevOps/provision-nfs-apb 
+
+##### Backup CronJob
+
+Once we have a PVC in our project we can deploy the CronJob template that will schedule a job to run at a defined interval that will start a MongoDB pod and run `monogdump` against the MongoDB service and dump the backup files to the PVC.
+
+```
+oc process -f mongodb-backup-template.yaml MONGODB_ADMIN_PASSWORD=adminpass MONGODB_BACKUP_VOLUME_CLAIM=nfs-pvc MONGODB_BACKUP_KEEP=7 MONGODB_BACKUP_SCHEDULE='1 0 * * *' | oc create -f -
+```
+
+##### Restore Backup
+
+To restore the database you will have to start another mongodb instance, then copy or mount the backup files to this instance and issue this restore command.
+
+```
+mongorestore -u admin -p \$MONGODB_ADMIN_PASSWORD --authenticationDatabase admin --gzip $DIR/DB_TO_RESTORE -d DB_TO_RESTORE_INTO"
+```
 
 ## Operations
 
@@ -176,13 +177,6 @@ Get DB stats:
 
 `db.runCommand({ dbStats: 1, scale: 1048576 })`
 
-Query the collection:
-
-`db.rocketchat_uploads.find( {} )`
-
-Get DB stats:
-
-`db.runCommand({ dbStats: 1, scale: 1048576 })`
 
 ## Refrences
 
