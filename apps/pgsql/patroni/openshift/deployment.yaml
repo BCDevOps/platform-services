@@ -207,7 +207,13 @@ objects:
             protocol: TCP
           - containerPort: 5432
             protocol: TCP
-          resources: {}
+          resources:
+            requests:
+              cpu: ${CPU_REQUEST}
+              memory: ${MEMORY_REQUEST}
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           readinessProbe:
@@ -330,6 +336,18 @@ parameters:
   value: patroni
 - name: SUFFIX
   description: A suffix appended to all artifact's name (NAME)
+- description: Starting amount of CPU the container can use.
+  displayName: CPU REQUEST
+  name: CPU_REQUEST
+  value: '250m'
+- description: Maximum amount of CPU the container can use.
+  displayName: CPU Limit
+  name: CPU_LIMIT
+  value: '1'
+- description: Starting amount of memory the container can use.
+  displayName: Memory Request
+  name: MEMORY_REQUEST
+  value: 512Mi
 - description: Maximum amount of memory the container can use.
   displayName: Memory Limit
   name: MEMORY_LIMIT
