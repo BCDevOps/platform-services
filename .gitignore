@@ -66,3 +66,6 @@ typings/
 
 # creds
 *creds*
+
+# templated files
+apps/statuspage/ansible/manifests/*.yml

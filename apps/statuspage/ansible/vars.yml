@@ -5,3 +5,17 @@ prometheus_version: latest
 blackbox_version: latest
 envoy_version: latest
 pwd_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+
+## Template Defaults
+grafana_service_name: grafana
+db_service_name: patroni-master
+grafana_db_type: postgres
+grafana_database_service: patroni-master
+grafana_route_name: grafana-statuspage-dev.pathfinder.gov.bc.ca
+
+prometheus_service_name: prometheus
+prometheus_pvc_size: 5Gi
+
+blackbox_service_name: blackbox-exporter
+
+envoy_service_name: envoy
