@@ -28,22 +28,20 @@ pipelines:
                 run_if: passed
                 working_directory: apps/statuspage/ansible
             - exec:
-                command: ls
+                command: /bin/bash
+                arguments: 
+                  - -c 
+                  - apps/statuspage/.gocd/uninstall.sh
                 run_if: passed
-                working_directory: apps/statuspage/ansible
-            - exec:
-                command: pwd
-                run_if: passed
-                working_directory: apps/statuspage/ansible
-            - exec:
-                arguments:
-                - -i 
-                - prod 
-                - statuspage.yml  
-                - -e
-                - activity=uninstall 
-                - -e 
-                - env=prod
-                command: ansible-playbook
-                run_if: passed
-                working_directory: apps/statuspage/ansible
+            # - exec:
+            #     arguments:
+            #     - -i 
+            #     - prod 
+            #     - statuspage.yml  
+            #     - -e
+            #     - activity=uninstall 
+            #     - -e 
+            #     - env=prod
+            #     command: ansible-playbook
+            #     run_if: passed
+            #     working_directory: apps/statuspage/ansible
