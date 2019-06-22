@@ -19,6 +19,7 @@ pipelines:
         approval:
           type: success
         jobs:
+          elastic_profile_id: standard-agent
           defaultJob:
             timeout: 0
             tasks:
