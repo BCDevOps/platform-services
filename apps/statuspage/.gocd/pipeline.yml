@@ -29,6 +29,13 @@ pipelines:
                   - -c 
                   - apps/statuspage/.gocd/uninstall.sh
                 run_if: passed
+    - install-dev:
+        fetch_materials: false
+        keep_artifacts: false
+        clean_workspace: false
+        approval:
+          type: success
+        jobs:
           deployDev:
             # elastic_profile_id: standard-agent
             timeout: 0
