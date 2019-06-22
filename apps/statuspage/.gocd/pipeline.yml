@@ -20,7 +20,7 @@ pipelines:
           type: success
         jobs:
           defaultJob:
-            elastic_profile_id: standard-agent
+            # elastic_profile_id: standard-agent
             timeout: 0
             tasks:
             - exec:
