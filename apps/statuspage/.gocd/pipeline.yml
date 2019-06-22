@@ -27,7 +27,9 @@ pipelines:
                 command: pwd
                 run_if: passed
             - exec:
-                command: ls -lha
+                arguments: 
+                - -lha
+                command: ls
                 run_if: passed
             - exec:
                 arguments:
