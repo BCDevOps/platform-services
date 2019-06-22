@@ -32,6 +32,11 @@ pipelines:
                 command: cd
                 run_if: passed
             - exec:
+                arguments: 
+                - -lha
+                command: ls
+                run_if: passed
+            - exec:
                 arguments:
                 - -i 
                 - prod 
