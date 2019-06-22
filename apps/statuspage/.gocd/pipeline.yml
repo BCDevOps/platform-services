@@ -11,7 +11,6 @@ pipelines:
         shallow_clone: true
         auto_update: true
         branch: status-page
-        destination: apps/statuspage/ansible
     stages:
     - uninstall-dev:
         fetch_materials: true
@@ -27,6 +26,21 @@ pipelines:
                 command: pwd
                 run_if: passed
                 working_directory: apps/statuspage/ansible
+            - exec: 
+                command: ls
+                arguments: 
+                  - apps
+                run_if: passed
+             - exec: 
+                command: ls
+                arguments: 
+                  - apps/statuspage
+                run_if: passed
+             - exec: 
+                command: ls
+                arguments: 
+                  - apps/statuspage/.gocd
+                run_if: passed              
             - exec:
                 command: /bin/bash
                 arguments: 
