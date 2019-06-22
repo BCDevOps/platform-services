@@ -5,6 +5,8 @@
     shell: "oc get pods -n {{ namespace }} | grep Running | grep grafana | awk '{print $2}'"
     register: pod_ready
     until: pod_ready.stdout == "1/1"
+    retries: 50
+    delay: 10
   - name: Get Route
     shell: "oc get routes -n {{ namespace }} | grep grafana | awk '{print $2}'"
     register: grafana_route
