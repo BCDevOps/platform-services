@@ -1,0 +1,102 @@
+
+apiVersion: v1
+kind: List
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: blackbox-exporter
+    labels:
+      app: blackbox-exporter
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: blackbox-exporter
+    template:
+      metadata:
+        labels:
+          app: blackbox-exporter
+      spec:
+        containers:
+        - image: prom/blackbox-exporter:latest
+          imagePullPolicy: Always
+          name: blackbox-exporter
+          ports:
+            - containerPort: 9115
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /etc/blackbox-exporter
+              name: blackbox-exporter
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: blackbox-exporter
+          name: blackbox-exporter
+- apiVersion: v1
+  data:
+    config.yml: |-
+      modules:
+        http_2xx:
+          prober: http
+          http:
+            valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+            valid_status_codes: []  # Defaults to 2xx
+            method: GET
+            preferred_ip_protocol: "ip4" # defaults to "ip6"
+            ip_protocol_fallback: false  # no fallback to "ip6"
+        http_2xx__no_tls_verify:
+          prober: http
+          http:
+            valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+            valid_status_codes: []  # Defaults to 2xx
+            method: GET
+            preferred_ip_protocol: "ip4" # defaults to "ip6"
+            ip_protocol_fallback: false  # no fallback to "ip6"
+            tls_config:
+              insecure_skip_verify: true
+        http_post_2xx:
+          prober: http
+          http:
+            method: POST
+        tcp_connect:
+          prober: tcp
+        pop3s_banner:
+          prober: tcp
+          tcp:
+            query_response:
+            - expect: "^+OK"
+            tls: true
+            tls_config:
+              insecure_skip_verify: true
+  kind: ConfigMap
+  metadata:
+    name: blackbox-exporter
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      prometheus.io/port: '9115'
+      prometheus.io/scheme: http
+      prometheus.io/scrape: 'true'
+    labels:
+      app: blackbox-exporter
+    name: blackbox-exporter
+  spec:
+    ports:
+      - name: 9115-tcp
+        port: 9115
+        protocol: TCP
+        targetPort: 9115
+    selector:
+      app: blackbox-exporter
+    sessionAffinity: None
+    type: ClusterIP
