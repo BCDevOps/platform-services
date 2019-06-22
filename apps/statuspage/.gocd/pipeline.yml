@@ -33,6 +33,12 @@ pipelines:
                 run_if: passed
             - exec:
                 arguments:
-                - -i prod statuspage.yml  -e activity=uninstall -e env=prod
+                - -i 
+                - prod 
+                - statuspage.yml  
+                - -e a
+                - activity=uninstall 
+                - -e 
+                - env=prod
                 command: ansible-playbook
                 run_if: passed
