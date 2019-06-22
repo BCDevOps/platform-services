@@ -3,7 +3,7 @@ kind: DaemonSet
 metadata:
   labels:
     app: sysdig-agent
-  name: sysdig-agent
+  name: sysdig-agent-storage
   namespace: devops-sysdig
 spec:
   revisionHistoryLimit: 10
@@ -69,6 +69,7 @@ spec:
       hostPID: true
       nodeSelector:
         sysdig-agent: 'true'
+        region: 'storage'
       restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
@@ -108,7 +109,7 @@ spec:
           name: usr-vol
         - configMap:
             defaultMode: 420
-            name: sysdig-agent
+            name: sysdig-agent-storage
             optional: true
           name: sysdig-agent-config
         - name: sysdig-agent-secrets
