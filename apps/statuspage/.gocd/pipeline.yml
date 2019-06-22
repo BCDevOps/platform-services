@@ -26,6 +26,11 @@ pipelines:
             - exec:
                 command: pwd
                 run_if: passed
+                working_directory: apps/statuspage/ansible
+            - exec:
+                command: ls
+                run_if: passed
+                working_directory: apps/statuspage/ansible
             - exec:
                 arguments:
                 - -i 
