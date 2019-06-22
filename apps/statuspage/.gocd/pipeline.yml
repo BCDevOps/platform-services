@@ -27,6 +27,9 @@ pipelines:
                 command: pwd
                 run_if: passed
             - exec:
+                command: ls -lha
+                run_if: passed
+            - exec:
                 arguments:
                 - -i prod statuspage.yml  -e activity=uninstall -e env=prod
                 command: ansible-playbook
