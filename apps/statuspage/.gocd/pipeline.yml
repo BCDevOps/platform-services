@@ -1,0 +1,33 @@
+format_version: 3
+pipelines:
+  test:
+    group: defaultGroup
+    label_template: ${COUNT}
+    lock_behavior: none
+    display_order: -1
+    materials:
+      git:
+        git: https://github.com/BCDevOps/platform-services
+        shallow_clone: true
+        auto_update: true
+        branch: status-page
+        destination: apps/statuspage/ansible
+    stages:
+    - uninstall-dev:
+        fetch_materials: true
+        keep_artifacts: false
+        clean_workspace: false
+        approval:
+          type: success
+        jobs:
+          defaultJob:
+            timeout: 0
+            tasks:
+            - exec:
+                command: pwd
+                run_if: passed
+            - exec:
+                arguments:
+                - -i prod statuspage.yml  -e activity=uninstall -e env=prod
+                command: ansible-playbook
+                run_if: passed
