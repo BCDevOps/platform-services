@@ -27,16 +27,6 @@ pipelines:
                 command: pwd
                 run_if: passed
             - exec:
-                arguments: 
-                - apps/statuspage/ansible
-                command: cd
-                run_if: passed
-            - exec:
-                arguments: 
-                - -lha
-                command: ls
-                run_if: passed
-            - exec:
                 arguments:
                 - -i 
                 - prod 
@@ -47,3 +37,4 @@ pipelines:
                 - env=prod
                 command: ansible-playbook
                 run_if: passed
+                working_directory: apps/statuspage/ansible
