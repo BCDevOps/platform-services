@@ -28,8 +28,8 @@ pipelines:
                 run_if: passed
             - exec:
                 arguments: 
-                - -lha
-                command: ls
+                - apps/statuspage/ansible
+                command: cd
                 run_if: passed
             - exec:
                 arguments:
