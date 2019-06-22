@@ -31,12 +31,12 @@ pipelines:
                 arguments: 
                   - apps
                 run_if: passed
-             - exec: 
+            - exec: 
                 command: ls
                 arguments: 
                   - apps/statuspage
                 run_if: passed
-             - exec: 
+            - exec: 
                 command: ls
                 arguments: 
                   - apps/statuspage/.gocd
