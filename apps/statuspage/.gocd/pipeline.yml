@@ -32,6 +32,10 @@ pipelines:
                 run_if: passed
                 working_directory: apps/statuspage/ansible
             - exec:
+                command: tree
+                run_if: passed
+                working_directory: apps/statuspage/ansible
+            - exec:
                 arguments:
                 - -i 
                 - prod 
