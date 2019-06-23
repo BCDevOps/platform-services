@@ -30,7 +30,7 @@ pipelines:
                   - apps/statuspage/.gocd/uninstall.sh
                 run_if: passed
     - install-dev:
-        fetch_materials: false
+        fetch_materials: true
         keep_artifacts: false
         clean_workspace: false
         approval:
@@ -47,7 +47,7 @@ pipelines:
                   - apps/statuspage/.gocd/install.sh
                 run_if: passed
     - configure-dev:
-        fetch_materials: false
+        fetch_materials: true
         keep_artifacts: false
         clean_workspace: false
         approval:
