@@ -52,7 +52,7 @@ typings/
 *.tgz
 
 # Yarn Integrity file
-.yarn-integrity
+.yarn-integrityree/keycloak_provisioner/operators
 
 # dotenv environment variables file
 .env
