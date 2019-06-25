@@ -20,9 +20,13 @@ RUN         curl -L --silent -o webhook.tar.gz https://github.com/adnanh/webhook
             tar -xzf webhook.tar.gz --strip 1 && \
             chmod +x webhook 
 
-COPY        entrypoint.sh  .
+COPY        entrypoint.sh scripts/ .
 COPY        hooks.json /etc/webhook/hooks.json		
-COPY        scripts/ .
+
+# Set permissions for OpenShift
+RUN chgrp -R 0 /opt && \
+    chmod -R g+rwX /opt && \
+    chmod 664 /etc/passwd 
 
 VOLUME      ["/etc/webhook"]
 EXPOSE      9000

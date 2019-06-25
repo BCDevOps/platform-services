@@ -1,2 +1,2 @@
 #!/bin/bash
-/bin/bash /opt/webhook -verbose
+/opt/webhook -verbose
