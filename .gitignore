@@ -64,3 +64,5 @@ typings/
 
 # sensitive items
 *sensitive*
+*creds*
+*.retry*
