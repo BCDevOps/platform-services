@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: pathfinder.gov.bc.ca
+  kind: KeycloakRealm
+  role: /opt/ansible/roles/keycloakrealm

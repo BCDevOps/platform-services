@@ -1,0 +1,73 @@
+---
+#tasks file for keycloakrealm
+
+## Auth to Keycloak with ServiceAccount and get token
+- name: Get access token
+  uri: 
+    url: "{{ keycloak_url }}/auth/realms/master/protocol/openid-connect/token"
+    method: POST
+    body_format: form-urlencoded
+    body:
+      grant_type: client_credentials
+      client_id: provisioner
+      client_secret: "{{ keycloak_client_secret }}"
+    return_content: yes
+  register: token_output
+  no_log: true
+- name: set fact for token_data
+  set_fact: 
+    token_data: "{{ token_output.json.access_token }}"
+  no_log: true
+
+
+## Bring in realm data
+- name: Read in new json data for realm
+  set_fact: 
+    realm_data: "{{ lookup ('file', 'source_data/sample.json') | from_json }}"
+
+# ## Provision Realm
+- name: Render realm template from input content
+  set_fact: 
+    realm_content: "{{ lookup('template', 'templates/new_realm.json.j2') }}"
+- name: Check if realm exists
+  uri: 
+    url: "{{ keycloak_url }}/auth/admin/realms/{{ realm_data.realm.id }}"
+    method: GET
+    body_format: json
+    return_content: yes
+    headers: 
+      Authorization: "Bearer {{ token_data }}"
+  register: realm_status
+  ignore_errors: true
+- name: Set realm id fact
+  set_fact: 
+    realm_id: "{{ realm_status.json.id | default('') }}"
+- name: Create realm
+  uri: 
+    url: "{{ keycloak_url }}/auth/admin/realms"
+    method: POST
+    body_format: json
+    body: "{{ realm_content }}"
+    return_content: yes
+    status_code: 201
+    headers: 
+      Authorization: "Bearer {{ token_data }}"
+  register: token_output
+  when: realm_id == ""
+  
+## Update Realm Viewer
+- name: Get Group ID
+  uri: 
+    url: "{{ keycloak_url }}/auth/admin/realms/master/groups/?{{ 'search=Realm Viewer' | urlencode}}"
+    method: GET
+    return_content: true
+    headers: 
+      Authorization: "Bearer {{ token_data }}"
+  register: groupid_search
+- debug: msg="{{ groupid_search }}"
+- name: set group_id fact
+  set_fact: 
+    group_id: "{{ groupid_search.json[0].id }}"
+- debug: msg="{{ group_id }}"
+  
+  

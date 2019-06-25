@@ -1,0 +1,30 @@
+{
+  "id": "{{ realm_data.realm.id }}",
+  "realm": "{{ realm_data.realm.id }}",
+  "displayName":"{{ realm_data.realm.displayName }}",
+  "displayNameHtml":"<a>{{ realm_data.realm.displayName }}</a>",
+  "enabled": true,
+  "groups":[
+    {
+      "name": "Realm Administrator",
+      "path": "/Realm Administrator",
+      "clientRoles": {
+        "realm-management": [
+          "realm-admin",
+          "manage-identity-providers",
+          "query-realms",
+          "query-groups",
+          "manage-authorization",
+          "impersonation",
+          "query-clients",
+          "manage-realm",
+          "manage-clients",
+          "query-users",
+          "create-client",
+          "manage-events",
+          "manage-users"
+        ]
+      }
+    }
+  ]
+}
