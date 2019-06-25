@@ -38,6 +38,9 @@ minishift timezone --set America/Vancouver
 # This does NOT persist on mnishift stop/start
 minishift ssh -- 'sudo bash -c "echo 172.30.1.1 docker-registry.default.svc >> /etc/hosts"'
 
+# for the following command to work, you must be logged into minishift as admin 
+oc login -u admin -p system
+
 oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
 ```
 
