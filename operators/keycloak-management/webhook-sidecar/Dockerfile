@@ -7,7 +7,6 @@ RUN         curl -L --silent -o webhook.tar.gz https://github.com/adnanh/webhook
             chmod +x webhook 
 
 COPY        scripts/  .
-COPY        hooks.json /etc/webhook/hooks.json		
 
 # Set permissions for OpenShift
 RUN chgrp -R 0 /opt && \

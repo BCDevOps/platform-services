@@ -6,4 +6,5 @@ if ! whoami &> /dev/null; then
   fi
 fi
 
-/opt/webhook -verbose
+
+/opt/webhook -hooks /opt/hooks/hooks.yml -verbose

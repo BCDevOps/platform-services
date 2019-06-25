@@ -1,7 +1,7 @@
 [
   {
     "id": "webhook",
-    "execute-command": "/opt/scripts/run-playbook.sh",
+    "execute-command": "/opt/un-playbook.sh",
     "command-working-directory": "/opt/",
     "response-message": "I got the payload!",
     "response-headers":
