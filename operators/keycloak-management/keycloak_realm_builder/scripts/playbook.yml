@@ -1,0 +1,57 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    creds/vars.yml
+  tasks: 
+    - include_tasks: tasks/set_facts.yml
+    - include_tasks: tasks/pr_interrogate.yml
+    - include_tasks: tasks/pr_merge_and_close.yml
+    # - name: Set facts for URL endpoints
+    #   set_fact: 
+    #     "pr_{{ item }}_url": "{{ pull_request_url }}/{{ item }}"
+    #   with_items: 
+    #     - comments
+    #     - merge 
+    # - name: Get list of PR files
+    #   uri: 
+    #     method: GET
+    #     url: "{{ pull_request_url }}/files"
+    #     headers: 
+    #       Authorization: "Bearer {{ gh_token }}"
+    #     return_content: true
+    #   register: pr_files
+    # - name: Deterine length of file content 
+    #   set_fact: 
+    #     pr_file_count: "{{ pr_files.json | length }}"
+    # - name: Fail playbook if modified file count is not 1
+    #   fail: 
+    #     msg: "Only 1 file should be present in the PR. There are {{ pr_file_count }} files."
+    #   when: pr_file_count == 0 ## Fix this - should be 1 but isn't working
+    # - name: Get contents of new file
+    #   set_fact: 
+    #     realm_content: "{{ lookup('url', '{{ pr_files.json[0].raw_url }}' ) }}"
+    # - name: Add comment before closing
+    #   uri: 
+    #     method: POST
+    #     url: "{{ pr_comments_url }}"
+    #     headers: 
+    #       Authorization: "Bearer {{ gh_token }}"
+    #     body: '{ "body": "realm-o-matic auto-close"}'
+    #     status_code: 201
+    # - name: Merge Pull Request
+    #   uri: 
+    #     method: PUT
+    #     url: "{{ pr_merge_url }}"
+    #     headers: 
+    #       Authorization: "Bearer {{ gh_token }}"
+    #     body: '{"commit_title":"realm-o-matic auto-close", "commit_message": "realm successfully created", "merge_method":"squash"}'
+    # - name: Close Pull Request
+    #   uri: 
+    #     method: PATCH
+    #     url: "{{ pull_request_url }}"
+    #     headers: 
+    #       Authorization: "Bearer {{ gh_token }}"
+    #     body: '{"state":"closed"}'
+
