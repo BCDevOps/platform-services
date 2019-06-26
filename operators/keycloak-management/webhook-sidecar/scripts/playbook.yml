@@ -1,8 +1,8 @@
 ---
 - hosts: localhost
   connection: local
-  vars_files:
-    creds/vars.yml
+  # vars_files:
+  #   creds/vars.yml
   tasks: 
     # - name: Clone Repo
     #   git: 
@@ -10,6 +10,16 @@
     #     dest: git_checkout
     # - name: clean up git checkout
     #   command: rm -rf git_checkout/.git 
+    - name: Get list of PR files
+      uri: 
+        method: GET
+        url: "{{ pull_request_url }}/files"
+        headers: 
+          Authorization: "Bearer {{ gh_token }}"
+        return_content: true
+      register: pr_files
+    - name: debug
+      debug: msg="{{ pr_files }}"
     - name: Add comment before closing
       uri: 
         method: POST
