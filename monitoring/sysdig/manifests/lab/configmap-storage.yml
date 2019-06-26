@@ -3,7 +3,7 @@ data:
   dragent.yaml: |-
     ### Agent tags
     # tags: linux:ubuntu,dept:dev,local:nyc
-    tags: cluster:openshift,env:lab
+    tags: cluster:openshift,env:lab,datacenter:kamloops,region:storage
 
     #### Sysdig Software related config ####
     # Agent Log priority
@@ -97,7 +97,5 @@ data:
         #        auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
 kind: ConfigMap
 metadata:
-  name: sysdig-agent
-  namespace: devops-sysdig
-
+  name: sysdig-agent-storage
 
