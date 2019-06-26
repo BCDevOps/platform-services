@@ -1,6 +1,37 @@
 ---
 - hosts: localhost
   connection: local
+  vars_files:
+    creds/vars.yml
   tasks: 
-    - name: test output
-      debug: msg=" repo_url={{ repo_url }} branch={{ branch }} pull_request_number={{ pull_request_number }} repo_owner={{ repo_owner }}"
+    # - name: Clone Repo
+    #   git: 
+    #     repo: "{{ repo_url }}"
+    #     dest: git_checkout
+    # - name: clean up git checkout
+    #   command: rm -rf git_checkout/.git 
+    - name: Add comment before closing
+      uri: 
+        method: POST
+        url: "{{ pr_comments_url }}"
+        headers: 
+          Authorization: "Bearer {{ gh_token }}"
+        body: '{ "body": "realm-o-matic auto-close"}'
+        status_code: 201
+    - name: Merge Pull Request
+      uri: 
+        method: PUT
+        url: "{{ pull_request_url }}/merge"
+        headers: 
+          Authorization: "Bearer {{ gh_token }}"
+    - name: Close Pull Request
+      uri: 
+        method: PATCH
+        url: "{{ pull_request_url }}"
+        headers: 
+          Authorization: "Bearer {{ gh_token }}"
+        body: '{"state":"closed"}'
+    # - name: Cleanup
+    #   file: 
+    #     state: absent
+    #     path: git_checkout
