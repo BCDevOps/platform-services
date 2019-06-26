@@ -8,10 +8,10 @@ RUN         curl -L --silent -o webhook.tar.gz https://github.com/adnanh/webhook
 
 COPY        scripts/  .
 
-# Set permissions for OpenShift
-RUN chgrp -R 0 /opt && \
-    chmod -R g+rwX /opt && \
-    chmod 664 /etc/passwd 
+# Set permissions for OpenShift on webhook artifacts
+RUN         chgrp -R 0 /opt && \
+            chmod -R g+rwX /opt && \
+            chmod 664 /etc/passwd 
 
 VOLUME      ["/etc/webhook"]
 EXPOSE      9000
