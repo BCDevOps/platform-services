@@ -3,4 +3,4 @@
   connection: local
   tasks: 
     - name: test output
-      debug: msg="This is a test"
+      debug: msg=" repo_url={{ repo_url }} branch={{ branch }} pull_request_number={{ pull_request_number }} repo_owner={{ repo_owner }}"
