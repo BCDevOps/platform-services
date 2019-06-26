@@ -1,8 +1,8 @@
 ---
 - hosts: localhost
   connection: local
-  # vars_files:
-  #   creds/vars.yml
+  vars_files:
+    creds/vars.yml
   tasks: 
     # - name: Clone Repo
     #   git: 

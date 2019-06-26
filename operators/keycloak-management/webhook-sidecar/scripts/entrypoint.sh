@@ -6,5 +6,7 @@ if ! whoami &> /dev/null; then
   fi
 fi
 
+# Set Env variables from configMap data
+export TOKEN=$(cat /opt/creds/token)
 
 /opt/webhook -hooks /opt/hooks/hooks.yml -verbose
