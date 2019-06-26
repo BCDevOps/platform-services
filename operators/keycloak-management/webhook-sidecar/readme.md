@@ -3,6 +3,16 @@ Thsi container image is based on the ansible operator and includes a [webhook se
 
 This image is tested in kubernetes / OpenShift. 
 
+## Resources
+
+- secrets
+  - token - mounted at /opt/creds/token - GitHub Access Token
+- configMap
+  - required - mounted at /opt/hooks/ - One single hook config file
+- route
+  - required - for external access to the service - Can use multilple TLS options
+
+
 # Resources
 - GitHub Payload Example
 https://gist.github.com/gjtorikian/5171861
