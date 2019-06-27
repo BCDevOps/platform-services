@@ -1,0 +1,15 @@
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - import_role:
+        name: "foo"
+    - name: Debug Information 
+      debug: 
+        msg: "{{ hostvars[inventory_hostname] }}"
+    # - name: Create a file called '/tmp/testfile.txt' with the content 'hello world'.
+    #   copy:
+    #     content: "hello world {{ size }} xx\n"
+    #     dest: /tmp/testfile.txt
+    - name: echo
+      debug:
+        msg: "hi {{ size }}"

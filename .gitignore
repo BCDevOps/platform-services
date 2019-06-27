@@ -5,6 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# k8s
+*kubeconfig*.yaml
+
 # Runtime data
 pids
 *.pid
@@ -64,13 +67,5 @@ typings/
 # temp folders
 *git_checkout*
 
-# creds
-*creds*
-
-# statuspage template files
-*apps/statuspage/ansible/manifests/*.yml*
-*tmp-dashboard.json*
-
-
-# retry
-*.retry
+# sensitive items
+*sensitive*

@@ -1,0 +1,33 @@
+---
+
+- name: Converge
+  hosts: localhost
+  connection: local
+  vars:
+    ansible_python_interpreter: '{{ ansible_playbook_python }}'
+    deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
+    image_name: secops.pathfinder.gov.bc.ca/secopspolicy-operator:testing
+    custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/secops_v1alpha1_secopspolicy_cr.yaml'])) | from_yaml }}"
+  tasks:
+  - name: Create the secops.pathfinder.gov.bc.ca/v1alpha1.SecOpsPolicy
+    k8s:
+      namespace: '{{ namespace }}'
+      definition: "{{ lookup('file', '/'.join([deploy_dir, 'crds/secops_v1alpha1_secopspolicy_cr.yaml'])) }}"
+
+  - name: Get the newly created Custom Resource
+    debug:
+      msg: "{{ lookup('k8s', group='secops.pathfinder.gov.bc.ca', api_version='v1alpha1', kind='SecOpsPolicy', namespace=namespace, resource_name=custom_resource.metadata.name) }}"
+
+  - name: Wait 40s for reconciliation to run
+    k8s_facts:
+      api_version: 'v1alpha1'
+      kind: 'SecOpsPolicy'
+      namespace: '{{ namespace }}'
+      name: '{{ custom_resource.metadata.name }}'
+    register: reconcile_cr
+    until:
+    - "'Successful' in (reconcile_cr | json_query('resources[].status.conditions[].reason'))"
+    delay: 4
+    retries: 10
+
+- import_playbook: '{{ playbook_dir }}/../default/asserts.yml'
