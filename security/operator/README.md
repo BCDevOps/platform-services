@@ -10,6 +10,16 @@ k apply -f secopspolicy/deploy/crds/defenition.yaml \
 # Test
 k apply -f security/operator/secopspolicy/deploy/crds/example-resource.yaml
 
+This can also be tested locally with:
+
+```console
+pip install docker molecule openshift
+```
+
+```console
+molecule test -s test-local
+```
+
 # Validate 
 
 This is what you see before an event
