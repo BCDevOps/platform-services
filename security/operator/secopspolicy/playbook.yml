@@ -2,7 +2,7 @@
   gather_facts: no
   tasks:
     - import_role:
-        name: "foo"
+        name: "secopspolicy"
     - name: Debug Information 
       debug: 
         msg: "{{ hostvars[inventory_hostname] }}"

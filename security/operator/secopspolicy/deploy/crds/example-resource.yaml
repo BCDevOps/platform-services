@@ -4,4 +4,4 @@ metadata:
   name: example-secopspolicy
 spec:
   # Add fields here
-  size: 3
+  size: 35
