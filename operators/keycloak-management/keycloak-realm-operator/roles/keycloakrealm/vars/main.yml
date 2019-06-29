@@ -1,9 +1,0 @@
----
-# vars file for keycloakrealm
-keycloak_client_id: provisioner
-keycloak_client_secret: d962c96a-6bc7-40de-9b86-1a6aa47f087e
-keycloak_url: https://sso-22-devops-sso-sandbox.pathfinder.gov.bc.ca
-
-
-realm_name: sheatest
-realm_displayname: "shea test"
