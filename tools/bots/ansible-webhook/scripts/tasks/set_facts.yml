@@ -1,0 +1,6 @@
+# Use this tasklist to set all facts required at the beginning of the playbook run
+- name: Set facts for URL endpoints
+  set_fact: 
+    "pr_{{ item }}_url": "{{ pull_request_url }}/{{ item }}"
+  with_items: 
+    - merge
