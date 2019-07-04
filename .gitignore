@@ -69,3 +69,8 @@ typings/
 
 # sensitive items
 *sensitive*
+*creds*
+*.retry*
+
+# artifacts
+*.orig
