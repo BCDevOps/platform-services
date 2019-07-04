@@ -32,8 +32,8 @@ RUN cd /tmp && \
     cp operator-sdk-${OPERATOR_SDK_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && \
     rm operator-sdk-${OPERATOR_SDK_VERSION}-x86_64-linux-gnu && \
     rm operator-sdk-${OPERATOR_SDK_VERSION}-x86_64-linux-gnu.asc && \
-    mkdir -p /operator
-
+    mkdir -p /operator && \
+    mkdir -p /opt/ansible
 
 RUN cd /tmp && \
     curl -LO https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl && \
