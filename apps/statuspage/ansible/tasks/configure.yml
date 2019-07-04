@@ -11,18 +11,19 @@
     shell: "oc get routes -n {{ namespace }} | grep grafana | awk '{print $2}'"
     register: grafana_route
   - name: Get existing admin password
-    shell: oc set env deployment grafana --list -n {{ namespace }} | grep GF_SECURITY_ADMIN_PASSWORD | awk -F "=" '{print $2}'
+    shell: oc set env dc/grafana --list -n {{ namespace }} | grep GF_SECURITY_ADMIN_PASSWORD | awk -F "=" '{print $2}'
     register: grafana_admin_password
   - name: Generate admin password
     set_fact:
-      grafana_admin_password: "{{ pwd_alias }}"
+      grafana_admin_pwd: "{{ pwd_alias }}"
       admin_default: true
+      generated_pwd: true
     when: grafana_admin_password.stdout | length == 0
   - name: Set password variable
     set_fact: 
-      grafana_admin_password: "{{ grafana_admin_password.stdout }}"
+      grafana_admin_pwd: "{{ grafana_admin_password.stdout }}"
       admin_default: false
-    when: grafana_admin_password.stdout | length > 0
+    when: generated_pwd == false
   - name: Reset admin password
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/admin/users/1/password"
@@ -34,45 +35,54 @@
       headers: 
         Content-Type: application/json
       body_format: json
-      body: {"password": "{{ grafana_admin_password }}"}
+      body: {"password": "{{ grafana_admin_pwd }}"}
     when: admin_default == true
   - name: Add grafana admin password to deployment
-    shell: "oc set env deployment grafana GF_SECURITY_ADMIN_PASSWORD={{ grafana_admin_password }} -n {{ namespace }}"
+    shell: "oc set env dc/grafana GF_SECURITY_ADMIN_PASSWORD={{ grafana_admin_pwd }} -n {{ namespace }}"
+    when: admin_default == true
   - name:  Set light theme 
-    shell: "oc set env deployment grafana GF_USERS_DEFAULT_THEME='light' -n {{ namespace }}"
-  - name: Delete existing public viewer API key
+    shell: "oc set env dc/grafana GF_USERS_DEFAULT_THEME='light' -n {{ namespace }}"
+  - debug: msg="{{ grafana_admin_pwd }}"
+  - name: Get existing public viewer API key
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/auth/keys"
       method: GET 
       user: "admin"
-      password: "{{ grafana_admin_password }}"
+      password: "{{ grafana_admin_pwd }}"
       force_basic_auth: true
       return_content: true
       headers: 
         Content-Type: application/json
     register: existing_keys
     ignore_errors: true
+  - debug: msg="{{ existing_keys }}"
   - set_fact: 
-      api_key_query: "[?name ==`public`].id"
+      existing_api_key: true
+    when: existing_keys | length > 0 
+  - set_fact: 
+      api_key_query: "[?name =='public'].id"
+    when: existing_api_key == 'true'  
   - set_fact: 
       public_api_id: "{{ existing_keys.content | from_json | json_query(api_key_query) | replace('[', '') | replace(']', '') }}"
+    when: existing_api_key == 'true'  
   - name: Delete existing public viewer API key
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/auth/keys/{{ public_api_id }} "
       method: DELETE 
       user: "admin"
-      password: "{{ grafana_admin_password }}"
+      password: "{{ grafana_admin_pwd }}"
       force_basic_auth: true
       return_content: true
       headers: 
         Content-Type: application/json
     ignore_errors: true
+    when: existing_api_key == 'true'  
   - name: Create new public viewer API key
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/auth/keys"
       method: POST
       user: "admin"
-      password: "{{ grafana_admin_password }}"
+      password: "{{ grafana_admin_pwd }}"
       force_basic_auth: true
       return_content: true
       headers: 
@@ -82,7 +92,7 @@
     register: grafana_apikey
   - name: Add api key to envoy ConfigMap
     template: 
-      src: "manifests/templates/configmap-envoy.yml.j2"
+      src: "manifests/templates/template-configmap-envoy.yml.j2"
       dest: "manifests/configmap-envoy.yml"
   - name: Reapply envoy configmap
     k8s_raw:
@@ -96,7 +106,7 @@
       name: "Prometheus"
       grafana_url: "http://{{ grafana_route.stdout }}"
       grafana_user: "admin"
-      grafana_password: "{{ grafana_admin_password }}"
+      grafana_password: "{{ grafana_admin_pwd }}"
       org_id: "1"
       ds_type: "prometheus"
       url: "http://prometheus:9090"
@@ -111,7 +121,7 @@
     grafana_dashboard:
       grafana_url: http://{{ grafana_route.stdout }}
       grafana_user: "admin"
-      grafana_password: "{{ grafana_admin_password }}"
+      grafana_password: "{{ grafana_admin_pwd }}"
       state: present
       org_id: 1
       message: Updated by ansible
@@ -130,7 +140,7 @@
       body_format: json
       body: '{"homeDashboardId": 1 }'
       user: "admin"
-      password: "{{ grafana_admin_password }}"
+      password: "{{ grafana_admin_pwd }}"
       force_basic_auth: true
       return_content: true
 

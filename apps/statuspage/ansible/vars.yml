@@ -5,6 +5,9 @@ prometheus_version: latest
 blackbox_version: latest
 envoy_version: latest
 pwd_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+generated_pwd: false
+admin_default: false
+existing_api_key: false
 
 ## Template Defaults
 grafana_service_name: grafana
