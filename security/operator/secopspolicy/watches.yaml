@@ -3,3 +3,5 @@
   group: secops.pathfinder.gov.bc.ca
   kind: SecOpsPolicy
   playbook: /opt/ansible/playbook.yml
+  reconcilePeriod: 0
+
