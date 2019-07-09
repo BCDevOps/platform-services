@@ -1,20 +1,22 @@
 - hosts: localhost
   gather_facts: no
+  vars:
+    k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
   tasks:
     - import_role:
         name: "networksecuritypolicy"
     - name: Debug Information 
       debug: 
         msg: "myvars = {{ hostvars[inventory_hostname] }}"
-    - name: Generate Policy ID
+    - name: Generate policy ID
       command: openssl rand -base64 6
       register: polid_cmd
-    - name: Extract Variables UID
+    - name: Extract variables
       set_fact:
         pol_uid: "{{ polid_cmd.stdout }}"
-        metadata: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_networksecuritypolicy.metadata }}"
-        spec: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_networksecuritypolicy.spec }}"
-    - name: Debug - Extracted Variables
+        metadata: "{{ hostvars[inventory_hostname][k8s_message_key].metadata }}"
+        spec: "{{ hostvars[inventory_hostname][k8s_message_key].spec }}"
+    - name: Debug - extracted variables
       debug: 
         msg: "Policy ID: {{ pol_uid }}"
     - name: Create import values file
@@ -27,11 +29,11 @@
           Subject: {{  spec.source  }}
           Object: {{  spec.destination  }}
         dest: /tmp/values-{{ pol_uid }}.yaml
-    - name: Check template file exists.
+    - name: Check template file exists
       stat:
         path: ./templates/inter-ns-network.yaml
       register: template_file
-    - name: Check values file exists.
+    - name: Check values file exists
       stat:
         path: /tmp/values-{{ pol_uid }}.yaml
       register: values_file   
