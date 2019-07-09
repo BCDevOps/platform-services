@@ -38,3 +38,4 @@ USER 1001
 COPY watches.yaml ${HOME}/watches.yaml
 COPY roles/ ${HOME}/roles/
 COPY playbook.yml ${HOME}/playbook.yml
+COPY templates/ ${HOME}/templates/

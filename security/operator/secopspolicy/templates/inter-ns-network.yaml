@@ -1,12 +1,14 @@
 APIVersion: 1
-label: inter-ns-network-policies
+label: inter-ns-network-{{ .Values.ID }}
 data:
   networkaccesspolicies:
-  - name: inter-ns-network-policies
+  - name: inter-ns-network-{{ .Values.ID }}
+    associatedTags:
+    - k8s-uuid={{ .Values.UUID }}
+    applyPolicyMode: IncomingTraffic
     action: "{{ .Values.Action }}"
     propagate: true
     subject:
     - - "$namespace={{ .Values.Subject }}"
     object:
     - - "$namespace={{ .Values.Object }}"
-  

@@ -48,8 +48,9 @@ docker run -it --rm --name secops \
 Link the the operator `roles` and `playbook.yaml` so that ansible can access them:
 
 ```console
-ln -s $PWD/roles/secopspolicy /opt/ansible/roles/secopspolicy
+ln -s $PWD/roles /opt/ansible/roles
 ln -s $PWD/playbook.yml /opt/ansible/playbook.yml
+ln -s $PWD/destroy.yml /opt/ansible/destroy.yml
 ```
 
 Install the custom resource definition (CRD) on the k8s (OpenShift) cluster: 

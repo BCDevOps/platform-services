@@ -1,7 +1,11 @@
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: SecOpsPolicy
 metadata:
-  name: example-secopspolicy
+  name: inter-namespace-comms
 spec:
-  # Add fields here
-  size: 35
+  description: |
+    allow the devhub namespace to talk to the VON
+    namespace.
+  action: Allow
+  source: devhub-tools
+  destination: von-tools
