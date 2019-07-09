@@ -27,27 +27,23 @@
           Subject: {{  spec.source  }}
           Object: {{  spec.destination  }}
         dest: /tmp/values-{{ pol_uid }}.yaml
-
-
     - name: Check template file exists.
       stat:
         path: ./templates/inter-ns-network.yaml
-      register: template_stat
+      register: template_file
     - name: Check values file exists.
       stat:
         path: /tmp/values-{{ pol_uid }}.yaml
-      register: values_stat   
-
+      register: values_file   
     - name: Create policy
-      when: template_stat.stat.exists and values_stat.stat.exists
+      when: template_file.stat.exists and values_file.stat.exists
       shell: |
         /usr/local/bin/apoctl \
         api import \
         --namespace /bcgov-devex/lab \
         --file ./templates/inter-ns-network.yaml \
         --values "/tmp/values-{{ pol_uid }}.yaml"
-
-    # - name: Clean values file
-    #   file:
-    #     state: absent
-    #     path: "/tmp/values-{{ pol_uid }}.yaml"
+    - name: Clean values file
+      file:
+        state: absent
+        path: "/tmp/values-{{ pol_uid }}.yaml"
