@@ -1,7 +1,7 @@
 ---
 - version: v1alpha1
   group: secops.pathfinder.gov.bc.ca
-  kind: SecOpsPolicy
+  kind: NetworkSecurityPolicy
   reconcilePeriod: 0
   playbook: /opt/ansible/playbook.yml
   finalizer:

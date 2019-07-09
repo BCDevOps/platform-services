@@ -24,7 +24,7 @@ docker run -it --rm --name secops \
 Once the image is run you'll be placed in the `/operator` directory. Next, build the operator image that'll be run on OpenShift or k8s. Switch to the operator project directory:
 
 ```console
-cd secopspolicy
+cd networksecuritypolicy
 ```
 
 Then use the `operator-sdk` to build the image. You can vary the image tag `bcgov/secops-operator` shown below as you see fit. If you vary the tag name you will need to update it in (two places) in the `operator.yaml` file.
@@ -75,23 +75,23 @@ kubectl apply -f deploy/crds/example-resource.yaml
 You can do k8s operations on CRs by name, for example:
 
 ```
-➜  secopspolicy git:(master) ✗ kubectl get secopspolicy
+➜  networksecuritypolicy git:(master) ✗ kubectl get networksecuritypolicy
 NAME                   AGE
-example-secopspolicy   11m
+example-networksecuritypolicy   11m
 ```
 
 # Deploy It
 
 Get your operator up-and-running.
 
-k apply -f secopspolicy/deploy/crds/defenition.yaml \
-        -f secopspolicy/deploy/role.yaml \
-        -f secopspolicy/deploy/role_binding.yaml \
-        -f secopspolicy/deploy/service_account.yaml \
-        -f secopspolicy/deploy/operator.yaml
+k apply -f networksecuritypolicy/deploy/crds/defenition.yaml \
+        -f networksecuritypolicy/deploy/role.yaml \
+        -f networksecuritypolicy/deploy/role_binding.yaml \
+        -f networksecuritypolicy/deploy/service_account.yaml \
+        -f networksecuritypolicy/deploy/operator.yaml
 
 # Test It
-k apply -f security/operator/secopspolicy/deploy/crds/example-resource.yaml
+k apply -f security/operator/networksecuritypolicy/deploy/crds/example-resource.yaml
 
 This can also be tested locally with:
 
@@ -108,7 +108,7 @@ molecule test -s test-local
 This is what you see before an event
 
 ```console
-➜  platform-services git:(master) ✗ k logs secopspolicy-operator-6979588f9b-vbvhj ansible
+➜  platform-services git:(master) ✗ k logs networksecuritypolicy-operator-6979588f9b-vbvhj ansible
 Setting up watches.  Beware: since -r was given, this may take a while!
 Watches established.
 ```
@@ -116,10 +116,10 @@ Watches established.
 This is what you see after an event:
 
 ```console
-➜  platform-services git:(master) ✗ k logs secopspolicy-operator-6979588f9b-vbvhj ansible
+➜  platform-services git:(master) ✗ k logs networksecuritypolicy-operator-6979588f9b-vbvhj ansible
 Setting up watches.  Beware: since -r was given, this may take a while!
 Watches established.
-/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/artifacts/2501072949750338700//stdout
+/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/artifacts/2501072949750338700//stdout
 ansible-playbook 2.7.10
 
   config file = /etc/ansible/ansible.cfg
@@ -129,11 +129,11 @@ ansible-playbook 2.7.10
   python version = 2.7.5 (default, Jun 20 2019, 20:27:34) [GCC 4.8.5 20150623 (Red Hat 4.8.5-36)]
 Using /etc/ansible/ansible.cfg as config file
 
-/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory/hosts did not meet host_list requirements, check plugin documentation if this is unexpected
+/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory/hosts did not meet host_list requirements, check plugin documentation if this is unexpected
 
-/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory/hosts did not meet script requirements, check plugin documentation if this is unexpected
+/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory/hosts did not meet script requirements, check plugin documentation if this is unexpected
 
-/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory/hosts did not meet script requirements, check plugin documentation if this is unexpected
+/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory/hosts did not meet script requirements, check plugin documentation if this is unexpected
 
 PLAYBOOK: playbook.yml *********************************************************
 
@@ -150,17 +150,17 @@ task path: /opt/ansible/playbook.yml:6
     "msg": {
         "_secops_pathfinder_gov_bc_ca_secopspolicy": {
             "apiVersion": "secops.pathfinder.gov.bc.ca/v1alpha1", 
-            "kind": "SecOpsPolicy", 
+            "kind": "NetworkSecurityPolicy", 
             "metadata": {
                 "annotations": {
-                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"secops.pathfinder.gov.bc.ca/v1alpha1\",\"kind\":\"SecOpsPolicy\",\"metadata\":{\"annotations\":{},\"name\":\"example-secopspolicy\",\"namespace\":\"default\"},\"spec\":{\"size\":35}}\n"
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"secops.pathfinder.gov.bc.ca/v1alpha1\",\"kind\":\"NetworkSecurityPolicy\",\"metadata\":{\"annotations\":{},\"name\":\"example-networksecuritypolicy\",\"namespace\":\"default\"},\"spec\":{\"size\":35}}\n"
                 }, 
                 "creationTimestamp": "2019-06-28T17:12:12Z", 
                 "generation": 2, 
-                "name": "example-secopspolicy", 
+                "name": "example-networksecuritypolicy", 
                 "namespace": "default", 
                 "resourceVersion": "1677", 
-                "selfLink": "/apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/default/secopspolicies/example-secopspolicy/status", 
+                "selfLink": "/apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/default/secopspolicies/example-networksecuritypolicy/status", 
                 "uid": "de6681d0-99c7-11e9-a709-c20078c36a7a"
             }, 
             "spec": {
@@ -185,7 +185,7 @@ task path: /opt/ansible/playbook.yml:6
         "ansible_forks": 5, 
 
         "ansible_inventory_sources": [
-            "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory"
+            "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory"
         ], 
         "ansible_playbook_python": "/usr/bin/python2", 
         "ansible_run_tags": [
@@ -211,8 +211,8 @@ task path: /opt/ansible/playbook.yml:6
                 "localhost"
             ]
         }, 
-        "inventory_dir": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory", 
-        "inventory_file": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory/hosts", 
+        "inventory_dir": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory", 
+        "inventory_file": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory/hosts", 
         "inventory_hostname": "localhost", 
         "inventory_hostname_short": "localhost", 
         "meta": {
@@ -220,17 +220,17 @@ ok: [localhost] => {
     "msg": {
         "_secops_pathfinder_gov_bc_ca_secopspolicy": {
             "apiVersion": "secops.pathfinder.gov.bc.ca/v1alpha1", 
-            "kind": "SecOpsPolicy", 
+            "kind": "NetworkSecurityPolicy", 
             "metadata": {
                 "annotations": {
-                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"secops.pathfinder.gov.bc.ca/v1alpha1\",\"kind\":\"SecOpsPolicy\",\"metadata\":{\"annotations\":{},\"name\":\"example-secopspolicy\",\"namespace\":\"default\"},\"spec\":{\"size\":35}}\n"
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"secops.pathfinder.gov.bc.ca/v1alpha1\",\"kind\":\"NetworkSecurityPolicy\",\"metadata\":{\"annotations\":{},\"name\":\"example-networksecuritypolicy\",\"namespace\":\"default\"},\"spec\":{\"size\":35}}\n"
                 }, 
                 "creationTimestamp": "2019-06-28T17:12:12Z", 
                 "generation": 2, 
-                "name": "example-secopspolicy", 
+                "name": "example-networksecuritypolicy", 
                 "namespace": "default", 
                 "resourceVersion": "1677", 
-                "selfLink": "/apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/default/secopspolicies/example-secopspolicy/status", 
+                "selfLink": "/apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/default/secopspolicies/example-networksecuritypolicy/status", 
                 "uid": "de6681d0-99c7-11e9-a709-c20078c36a7a"
             }, 
             "spec": {
@@ -254,7 +254,7 @@ ok: [localhost] => {
         "ansible_facts": {}, 
         "ansible_forks": 5, 
         "ansible_inventory_sources": [
-            "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory"
+            "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory"
         ], 
         "ansible_playbook_python": "/usr/bin/python2", 
         "ansible_run_tags": [
@@ -280,12 +280,12 @@ ok: [localhost] => {
                 "localhost"
             ]
         }, 
-        "inventory_dir": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory", 
-        "inventory_file": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/SecOpsPolicy/default/example-secopspolicy/inventory/hosts", 
+        "inventory_dir": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory", 
+        "inventory_file": "/tmp/ansible-operator/runner/secops.pathfinder.gov.bc.ca/v1alpha1/NetworkSecurityPolicy/default/example-networksecuritypolicy/inventory/hosts", 
         "inventory_hostname": "localhost", 
         "inventory_hostname_short": "localhost", 
         "meta": {
-            "name": "example-secopspolicy", 
+            "name": "example-networksecuritypolicy", 
             "namespace": "default"
         }, 
         "playbook_dir": "/opt/ansible", 

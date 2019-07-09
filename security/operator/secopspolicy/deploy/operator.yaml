@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: secopspolicy-operator
+  name: networksecuritypolicy-operator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: secopspolicy-operator
+      name: networksecuritypolicy-operator
   template:
     metadata:
       labels:
-        name: secopspolicy-operator
+        name: networksecuritypolicy-operator
     spec:
-      serviceAccountName: secopspolicy-operator
+      serviceAccountName: networksecuritypolicy-operator
       containers:
         - name: ansible
           command:
@@ -43,7 +43,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "secopspolicy-operator"
+              value: "networksecuritypolicy-operator"
       volumes:
         - name: runner
           emptyDir: {}

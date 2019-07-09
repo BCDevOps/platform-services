@@ -2,7 +2,7 @@
   gather_facts: no
   tasks:
     - import_role:
-        name: "secopspolicy"
+        name: "networksecuritypolicy"
     - name: Debug Information 
       debug: 
         msg: "myvars = {{ hostvars[inventory_hostname] }}"
@@ -12,8 +12,8 @@
     - name: Extract Variables UID
       set_fact:
         pol_uid: "{{ polid_cmd.stdout }}"
-        metadata: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_secopspolicy.metadata }}"
-        spec: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_secopspolicy.spec }}"
+        metadata: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_networksecuritypolicy.metadata }}"
+        spec: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_networksecuritypolicy.spec }}"
     - name: Debug - Extracted Variables
       debug: 
         msg: "Policy ID: {{ pol_uid }}"

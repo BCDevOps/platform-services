@@ -2,13 +2,13 @@
   gather_facts: no
   tasks:
     - import_role:
-        name: "secopspolicy"
+        name: "networksecuritypolicy"
     - name: Debug Information 
       debug: 
         msg: "myvars = {{ hostvars[inventory_hostname] }}"
     - name: Extract k8s UID
       set_fact:
-        k8s_uuid: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_secopspolicy.metadata.uid }}"
+        k8s_uuid: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_networksecuritypolicy.metadata.uid }}"
     - name: Debug - Policy ID 
       debug: 
         msg: "Extracted UID = {{ k8s_uuid }}"

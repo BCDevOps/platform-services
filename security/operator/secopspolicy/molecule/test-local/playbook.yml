@@ -3,7 +3,7 @@
 - name: Build Operator in Kubernetes docker container
   hosts: k8s
   vars:
-    image_name: secops.pathfinder.gov.bc.ca/secopspolicy-operator:testing
+    image_name: secops.pathfinder.gov.bc.ca/networksecuritypolicy-operator:testing
   tasks:
   # using command so we don't need to install any dependencies
   - name: Get existing image hash
@@ -23,7 +23,7 @@
     ansible_python_interpreter: '{{ ansible_playbook_python }}'
     deploy_dir: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}/deploy"
     pull_policy: Never
-    REPLACE_IMAGE: secops.pathfinder.gov.bc.ca/secopspolicy-operator:testing
+    REPLACE_IMAGE: secops.pathfinder.gov.bc.ca/networksecuritypolicy-operator:testing
     custom_resource: "{{ lookup('file', '/'.join([deploy_dir, 'crds/secops_v1alpha1_secopspolicy_cr.yaml'])) | from_yaml }}"
   tasks:
   - block:
@@ -54,7 +54,7 @@
         namespace: '{{ namespace }}'
         definition: "{{ lookup('template', '/'.join([deploy_dir, 'operator.yaml'])) }}"
 
-    - name: Create the secops.pathfinder.gov.bc.ca/v1alpha1.SecOpsPolicy
+    - name: Create the secops.pathfinder.gov.bc.ca/v1alpha1.NetworkSecurityPolicy
       k8s:
         state: present
         namespace: '{{ namespace }}'

@@ -5,10 +5,10 @@ metadata:
 spec:
   group: secops.pathfinder.gov.bc.ca
   names:
-    kind: SecOpsPolicy
+    kind: NetworkSecurityPolicy
     listKind: SecOpsPolicyList
     plural: secopspolicies
-    singular: secopspolicy
+    singular: networksecuritypolicy
   scope: Namespaced
   subresources:
     status: {}

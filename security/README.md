@@ -6,7 +6,7 @@ Sample policy to allow two namesapces to talk; future version would be able to a
 
 ```yaml
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-kind: SecOpsPolicy
+kind: NetworkSecurityPolicy
 metadata:
   name: inter-namespace-comms
 spec:
