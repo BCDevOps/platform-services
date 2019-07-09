@@ -99,6 +99,8 @@ items:
   kind: ConfigMap
   metadata:
     name: {{ envoy_service_name  }}-config
+    labels: 
+      app: {{ envoy_service_name  }}
 
 - apiVersion: route.openshift.io/v1
   kind: Route

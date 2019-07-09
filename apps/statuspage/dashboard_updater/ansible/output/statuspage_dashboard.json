@@ -401,7 +401,7 @@
           },
           "id": 8,
           "panels": [],
-          "title": "INTERNAL CLUSTER SERVICES",
+          "title": "UPSTREAM CLUSTER SERVICES",
           "type": "row"
         },
         {
@@ -810,9 +810,7 @@
             {
               "expr": "probe_http_status_code",
               "format": "time_series",
-              "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
               "refId": "A"
             }
           ],
@@ -871,7 +869,7 @@
           "type": "row"
         },
         {
-          "content": "---\n\n# Notice: 06-02-19-1916.md \n\n## Testing Updates! \n\n---\n\n# Notice: 05-31-19-1915.md \n\n## Welcome to DevOpsDays\nThis is a broadcast message!! \n\n",
+          "content": "---\n\n# Notice: 06-03-19-1444.md \n\n## More tests. This is the mostest latest one! \n\n---\n\n# Notice: 06-02-19-1916.md \n\n## Testing Updates! \n\n---\n\n# Notice: 05-31-19-1915.md \n\n## This is a broadcast test. \nTesting 1,2,3,4,5,6,7,8,9 \n\n",
 
           "gridPos": {
             "h": 8,

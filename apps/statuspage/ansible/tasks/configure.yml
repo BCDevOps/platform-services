@@ -61,10 +61,10 @@
     when: existing_keys | length > 0 
   - set_fact: 
       api_key_query: "[?name =='public'].id"
-    when: existing_api_key == 'true'  
+    when: existing_api_key == true  
   - set_fact: 
       public_api_id: "{{ existing_keys.content | from_json | json_query(api_key_query) | replace('[', '') | replace(']', '') }}"
-    when: existing_api_key == 'true'  
+    when: existing_api_key == true  
   - name: Delete existing public viewer API key
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/auth/keys/{{ public_api_id }} "
@@ -76,7 +76,7 @@
       headers: 
         Content-Type: application/json
     ignore_errors: true
-    when: existing_api_key == 'true'  
+    when: existing_api_key == true  
   - name: Create new public viewer API key
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/auth/keys"
@@ -143,4 +143,18 @@
       password: "{{ grafana_admin_pwd }}"
       force_basic_auth: true
       return_content: true
+- name: Configure Prometheus targets
+  block: 
+  - name: set fact from yaml file
+    set_fact: 
+      url_watchlist: "{{ lookup ('file', '../url_watchlist.yml') | from_yaml  }}"
+  - name: Create new prometheus configmap
+    template: 
+      src: manifests/templates/template-prometheus-configmap.yml.j2
+      dest: manifests/template-prometheus-configmap.yml
+  - name: Apply new configmap
+    k8s_raw:
+      state: present
+      src: manifests/template-prometheus-configmap.yml
+      namespace: "{{ namespace }}"
 

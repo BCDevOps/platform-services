@@ -80,6 +80,8 @@ items:
   kind: ConfigMap
   metadata:
     name: {{ blackbox_service_name  }}
+    labels: 
+      app: {{ blackbox_service_name  }}
 - apiVersion: v1
   kind: Service
   metadata:

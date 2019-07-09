@@ -1,0 +1,12 @@
+internal_services: 
+  kubernetes_api: https://kubernetes.default.svc.cluster.local
+  console_api: https://console.pathfinder.gov.bc.ca:8443/healthz
+  metrics: https://hawkular-metrics.pathfinder.gov.bc.ca
+  logging: https://kibana.pathfinder.gov.bc.ca/api/status 
+  router: http://router.default.svc.cluster.local:1936/healthz
+  registry: https://docker-registry.default.svc.cluster.local:5000/healthz 
+upstream_services:
+  github: https://github.com/bcdevops/platform-services
+  redhat: https://access.redhat.com/containers/
+
+    

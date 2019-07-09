@@ -6,3 +6,6 @@
 - name: Create configmap
   shell: > 
     oc create configmap "{{ grafana_configmap_name }}" --from-file=output/ -n "{{ namespace }}"
+- name: Label configmap
+  shell: > 
+    oc label configmap  "{{ grafana_configmap_name }}" app=grafana -n "{{ namespace }}"
