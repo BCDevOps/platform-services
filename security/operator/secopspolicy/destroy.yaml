@@ -24,14 +24,14 @@
         -c ID
       register: output
     - name: Extract Policy ID
-      when: output.stdout | from_json | list | length > 0
+      when: output.stdout != "" and output.stdout | from_json | list | length > 0
       set_fact:
         policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
     - name: Debug - Policy Lookup
       debug:
         msg: "Extracted Policy ID = {{ policy_id }}"
     - name: Delete Policy
-      when: policy_id != ""
+      when: policy_id is defined
       shell: |
         /usr/local/bin/apoctl \
         api delete networkaccesspolicies \

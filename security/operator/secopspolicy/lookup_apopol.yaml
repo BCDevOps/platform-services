@@ -1,0 +1,19 @@
+- name: Debug Information 
+  debug: 
+    msg: "Recieved k8s_uuid = {{ k8s_uuid }}"
+- name: Policy Lookup
+  when: k8s_uuid is defined and appo_namespace is defined
+  shell: |
+    /usr/local/bin/apoctl \
+    api list networkaccesspolicies \
+    --namespace "{{ appo_namespace }}" \
+    --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
+    -c ID
+  register: output
+- name: Debug Information 
+  debug: 
+    msg: "{{ output.stdout }}"
+- name: Extract Policy ID
+  when: output.stdout != "" and output.stdout | from_json | list | length > 0
+  set_fact:
+    policy_id: "{{ (output.stdout | from_json | list | first).ID }}"

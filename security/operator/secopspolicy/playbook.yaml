@@ -1,0 +1,40 @@
+- hosts: localhost
+  gather_facts: no
+  vars:
+    k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
+    namespace: /bcgov-devex/lab
+  tasks:
+    - import_role:
+        name: "networksecuritypolicy"
+    - name: Debug Information 
+      debug: 
+        msg: "myvars = {{ hostvars[inventory_hostname] }}"
+    - name: Generate policy ID
+      command: openssl rand -base64 6
+      register: openssl_cmd
+    - name: Extract variables
+      set_fact:
+        puid: "{{ openssl_cmd.stdout }}"
+        metadata: "{{ hostvars[inventory_hostname][k8s_message_key].metadata }}"
+        spec: "{{ hostvars[inventory_hostname][k8s_message_key].spec }}"
+    # Prevent the Operator from creating a policy if one
+    # already exists. If an existing policy is found
+    # `policy_id` will be defined.
+    - import_tasks: lookup_apopol.yaml
+      vars:
+        k8s_uuid: "{{  metadata.uid  }}"
+        appo_namespace: "{{ namespace }}"
+    - name: Debug Information
+      when: policy_id is defined
+      debug: 
+        msg: "Found existing policy with ID {{ policy_id }}"
+    - name: Exist if policy exists
+      when: policy_id is defined
+      meta: end_play
+    # Create a policy if it does not already
+    # exists.
+    - import_tasks: create_netpol.yaml
+      vars:
+        pol_uid: "{{ puid }}"
+        k8s_uuid: "{{ metadata.uid }}"
+        netpol_spec: "{{ spec }}"
