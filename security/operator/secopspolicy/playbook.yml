@@ -5,11 +5,49 @@
         name: "secopspolicy"
     - name: Debug Information 
       debug: 
-        msg: "{{ hostvars[inventory_hostname] }}"
-    # - name: Create a file called '/tmp/testfile.txt' with the content 'hello world'.
-    #   copy:
-    #     content: "hello world {{ size }} xx\n"
-    #     dest: /tmp/testfile.txt
-    - name: echo
-      debug:
-        msg: "hi {{ size }}"
+        msg: "myvars = {{ hostvars[inventory_hostname] }}"
+    - name: Generate Policy ID
+      command: openssl rand -base64 6
+      register: polid_cmd
+    - name: Extract Variables UID
+      set_fact:
+        pol_uid: "{{ polid_cmd.stdout }}"
+        metadata: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_secopspolicy.metadata }}"
+        spec: "{{ hostvars[inventory_hostname]._secops_pathfinder_gov_bc_ca_secopspolicy.spec }}"
+    - name: Debug - Extracted Variables
+      debug: 
+        msg: "Policy ID: {{ pol_uid }}"
+    - name: Create import values file
+      copy:
+        content: |
+          Description: "{{  spec.description | replace('\n', '') }}"
+          ID: {{ pol_uid }}
+          UUID: {{  metadata.uid  }}
+          Mode: IncomingTraffic
+          Subject: {{  spec.source  }}
+          Object: {{  spec.destination  }}
+        dest: /tmp/values-{{ pol_uid }}.yaml
+
+
+    - name: Check template file exists.
+      stat:
+        path: ./templates/inter-ns-network.yaml
+      register: template_stat
+    - name: Check values file exists.
+      stat:
+        path: /tmp/values-{{ pol_uid }}.yaml
+      register: values_stat   
+
+    - name: Create policy
+      when: template_stat.stat.exists and values_stat.stat.exists
+      shell: |
+        /usr/local/bin/apoctl \
+        api import \
+        --namespace /bcgov-devex/lab \
+        --file ./templates/inter-ns-network.yaml \
+        --values "/tmp/values-{{ pol_uid }}.yaml"
+
+    # - name: Clean values file
+    #   file:
+    #     state: absent
+    #     path: "/tmp/values-{{ pol_uid }}.yaml"

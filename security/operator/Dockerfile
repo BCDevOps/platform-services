@@ -15,7 +15,8 @@ RUN apk update && \
     apk --update add --virtual devpkgs gcc musl-dev \
         libffi-dev openssl-dev python-dev && \
     apk add --no-cache ca-certificates bash openssh-client openssh-keygen git gnupg curl \
-        tar sshpass python py-boto py-dateutil py-httplib2 py-jinja2 py-paramiko py-pip py-yaml docker && \
+        tar sshpass python py-boto py-dateutil py-httplib2 py-jinja2 py-paramiko py-pip \
+        py-yaml docker openssl && \
     pip install --upgrade pip python-keyczar docker-py \
         ansible==${ANSIBLE_VERSION} \
         ansible-runner==${ANSIBLE_RUNNER_VERSION} \

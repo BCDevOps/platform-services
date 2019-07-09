@@ -3,10 +3,11 @@ label: inter-ns-network-{{ .Values.ID }}
 data:
   networkaccesspolicies:
   - name: inter-ns-network-{{ .Values.ID }}
+    description: "{{ .Values.Description }}"
     associatedTags:
     - k8s-uuid={{ .Values.UUID }}
-    applyPolicyMode: IncomingTraffic
-    action: "{{ .Values.Action }}"
+    applyPolicyMode:  "{{ .Values.Mode }}"
+    action: "Allow"
     propagate: true
     subject:
     - - "$namespace={{ .Values.Subject }}"
