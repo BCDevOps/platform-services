@@ -57,3 +57,22 @@ class Script {
 }
 ```
 
+## Grafyaml
+Grafyaml is used to help with automation of the dashboards. Due to the latest release 0.0.7 not providing the a feature that is already in the master branch, this is cloned from source and installed manually on the installation host. 
+
+```
+git clone https://opendev.org/opendev/grafyaml.git
+cd grafyaml/
+./setup.py build 
+sudo ./setup.py install
+```
+
+- Usage
+```
+grafana-dashboard  --grafana-url $GRAFANA_URL --grafana-apikey $GRAFANA_APIKEY validate  grafyaml.sample.yml
+```
+
+- Resources
+  - [https://docs.openstack.org/infra/grafyaml/grafana-dashboard.html](https://docs.openstack.org/infra/grafyaml/grafana-dashboard.html)
+  - [https://opendev.org/opendev/grafyaml](https://opendev.org/opendev/grafyaml)
+  - [https://opendev.org/openstack/project-config/src/branch/master/grafana](https://opendev.org/openstack/project-config/src/branch/master/grafana)
