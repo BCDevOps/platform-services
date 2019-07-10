@@ -1,6 +1,11 @@
-- name: Debug Information 
-  debug: 
-    msg: "Recieved k8s_uuid = {{ k8s_uuid }}"
+# This collection of tasks will lookup an Aporeto
+# `networkaccesspolicies` policy by filtering for a
+# known tag.
+# Variables
+#   - k8s_uuid
+#   - appo_namespace
+# Sets
+#   - policy_id
 - name: Policy Lookup
   when: k8s_uuid is defined and appo_namespace is defined
   shell: |
@@ -10,10 +15,11 @@
     --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
     -c ID
   register: output
-- name: Debug Information 
-  debug: 
-    msg: "{{ output.stdout }}"
 - name: Extract Policy ID
   when: output.stdout != "" and output.stdout | from_json | list | length > 0
   set_fact:
     policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
+- name: Found policy
+  when: policy_id is defined
+  debug: 
+    msg: "Found policy with ID {{ policy_id }}"

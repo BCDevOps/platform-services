@@ -2,6 +2,7 @@
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
+    namespace: /bcgov-devex/lab
   tasks:
     - import_role:
         name: "networksecuritypolicy"
@@ -10,33 +11,23 @@
         msg: "myvars = {{ hostvars[inventory_hostname] }}"
     - name: Extract k8s UID
       set_fact:
-        k8s_uuid: "{{ hostvars[inventory_hostname][k8s_message_key].metadata.uid }}"
-    - name: Debug - Policy ID 
-      debug: 
-        msg: "Extracted UID = {{ k8s_uuid }}"
-    - name: Policy Lookup
-      when: k8s_uuid != ""
-      shell: |
-        /usr/local/bin/apoctl \
-        api list networkaccesspolicies \
-        -n /bcgov-devex/lab \
-        --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
-        -c ID
-      register: output
-    - name: Extract Policy ID
-      when: output.stdout != "" and output.stdout | from_json | list | length > 0
-      set_fact:
-        policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
-    - name: Debug - Policy Lookup
-      debug:
-        msg: "Extracted Policy ID = {{ policy_id }}"
+        metadata: "{{ hostvars[inventory_hostname][k8s_message_key].metadata }}"
+    # Lookup the policy and fetch its uid; if a policy is found
+    # `policy_id` will be defined.
+    - import_tasks: lookup_netpol.yaml
+      vars:
+        k8s_uuid: "{{  metadata.uid  }}"
+        appo_namespace: "{{ namespace }}"
+    - name: Exist if no policy exists
+      when: policy_id is not defined
+      meta: end_play
     - name: Delete Policy
       when: policy_id is defined
       shell: |
         /usr/local/bin/apoctl \
         api delete networkaccesspolicies \
-        -n /bcgov-devex/lab \
+        --namespace "{{ namespace }}" \
         "{{ policy_id }}"
     - name: Finished
       debug:
-        msg: "Removed Policy {{ policy_id }} for k8s object {{ k8s_uuid }}"
+        msg: "Removed policy {{ policy_id }} for k8s object {{ metadata.uid }}"
