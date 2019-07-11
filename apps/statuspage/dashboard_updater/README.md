@@ -72,7 +72,12 @@ sudo ./setup.py install
 grafana-dashboard  --grafana-url $GRAFANA_URL --grafana-apikey $GRAFANA_APIKEY validate  grafyaml.sample.yml
 ```
 
-- Resources
+#### Known Issues
+Grafyaml doesn't yet support all grafana features (see above where we are working off master and not off an official release). Other issues have come up that have workarounds: 
+  - Can't invert the colors for thresholds
+      - blackbox_exporter returns a "1" for success and "0" for failure. Typically we would invert the thresholds to have "green" on "1" and    "red" on "0". Since grafyaml doesn't support manually setting the colors (ie. we can't invert them), the expression is multiplied by    (-1) and the thresholds set to (-0.5,0) such that -1 registers "green" and 0 registers "red"
+
+#### Resources
   - [https://docs.openstack.org/infra/grafyaml/grafana-dashboard.html](https://docs.openstack.org/infra/grafyaml/grafana-dashboard.html)
   - [https://opendev.org/opendev/grafyaml](https://opendev.org/opendev/grafyaml)
   - [https://opendev.org/openstack/project-config/src/branch/master/grafana](https://opendev.org/openstack/project-config/src/branch/master/grafana)

@@ -1,89 +1,81 @@
-"id": 10,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": true
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "expr": "probe_success{instance=\"https://kubernetes.default.svc.cluster.local\",job=\"blackbox_no_tls_verify\"}\t",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "refId": "A"
-            }
-          ],
-          "thresholds": "0.5,1",
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Kubernetes API",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "UP",
-              "value": "1"
-            },
-            {
-              "op": "=",
-              "text": "DOWN",
-              "value": "0"
-            }
-          ],
-          "valueName": "current"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorPrefix": false,
-          "colorValue": false,
-          "colors": [
-            "#d44a3a",
-            "rgba(237, 129, 40, 0.89)",
-            "#299c46"
-          ],
-          "datasource": "Prometheus",
-          "decimals": null,
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 3,
-            "x": 3,
-            "y": 1
-          },
+"id": 18,
+"legend": {
+  "alignAsTable": true,
+  "avg": false,
+  "current": true,
+  "max": false,
+  "min": false,
+  "rightSide": true,
+  "show": true,
+  "total": false,
+  "values": true
+},
+"lines": true,
+"linewidth": 1,
+"links": [],
+"nullPointMode": "null",
+"paceLength": 10,
+"percentage": false,
+"pointradius": 2,
+"points": false,
+"renderer": "flot",
+"seriesOverrides": [],
+"stack": false,
+"steppedLine": false,
+"targets": [
+  {
+    "expr": "probe_http_status_code",
+    "format": "time_series",
+    "intervalFactor": 1,
+    "refId": "A"
+  }
+],
+"thresholds": [],
+"timeFrom": null,
+"timeRegions": [],
+"timeShift": null,
+"title": "HTTP Status Code",
+"tooltip": {
+  "shared": true,
+  "sort": 0,
+  "value_type": "individual"
+},
+"type": "graph",
+"xaxis": {
+  "buckets": null,
+  "mode": "time",
+  "name": null,
+  "show": true,
+  "values": []
+},
+"yaxes": [
+  {
+    "format": "short",
+    "label": null,
+    "logBase": 1,
+    "max": null,
+    "min": null,
+    "show": true
+  },
+  {
+    "format": "short",
+    "label": null,
+    "logBase": 1,
+    "max": null,
+    "min": null,
+    "show": true
+  }
+],
+"yaxis": {
+  "align": false,
+  "alignLevel": null
+}
+},
+{
+"collapsed": false,
+"gridPos": {
+  "h": 1,
+  "w": 24,
+  "x": 0,
+  "y": 18
+},
