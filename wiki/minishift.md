@@ -38,7 +38,7 @@ minishift timezone --set America/Vancouver
 # This does NOT persist on mnishift stop/start
 minishift ssh -- 'sudo bash -c "echo 172.30.1.1 docker-registry.default.svc >> /etc/hosts"'
 
-# for the following command to work, you must be logged into minishift as admin 
+# for the following command to work, you must be logged into minishift as admin
 oc login -u admin -p system
 
 oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
@@ -215,7 +215,7 @@ oc -n bcgov secrets link default pathfinder --for=pull
 oc -n bcgov secrets link builder pathfinder
 
 # Import/Pull images
-oc -n bcgov import-image jenkins-basic:v2-stable --from=docker-registry.pathfinder.gov.bc.ca:443/bcgov/jenkins-basic:v2-stable --confirm --insecure --reference-policy=local
+oc -n bcgov import-image jenkins-basic --from=docker-registry.pathfinder.gov.bc.ca:443/bcgov/jenkins-basic --confirm --insecure --reference-policy=local --all
 
 oc -n bcgov import-image postgis-96:v1-latest --from=docker-registry.pathfinder.gov.bc.ca:443/bcgov/postgis-96:v1-latest --confirm --insecure --reference-policy=local
 
@@ -272,7 +272,7 @@ oc run rhel7 --image=registry.access.redhat.com/rhel7:latest -it --rm=true --res
 oc -n devops-sso-dev run psql --image=registry.access.redhat.com/rhscl/postgresql-96-rhel7:latest -it --rm=true --restart=Never --command=true -- bash
 
 
-oc run oc --image=registry.access.redhat.com/openshift3/ose-cli:v3.11 -it --rm=true --restart=Never --command=true -- bash 
+oc run oc --image=registry.access.redhat.com/openshift3/ose-cli:v3.11 -it --rm=true --restart=Never --command=true -- bash
 
 ```
 
@@ -295,5 +295,3 @@ rm -rf ~/.kube
 - https://github.com/minishift/minishift-centos-iso/issues/222
 - https://torstenwalter.de/minishift/openshift/homebrew/2017/07/18/install-minishift-on-osx.html
 - https://docs.openshift.com/container-platform/3.11/dev_guide/managing_images.html#allowing-pods-to-reference-images-from-other-secured-registries
-
-
