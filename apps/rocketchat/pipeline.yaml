@@ -35,8 +35,8 @@ spec:
                         
                     }
                     steps {
-                        sh "oc process -f apps/rocketchat/template-rocketchat.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true | oc delete -n ${project} -f -"
-                        sh "oc process -f apps/rocketchat/template-mongodb.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true | oc delete -n ${project} -f -"
+                        sh "oc process -f apps/rocketchat/template-mongodb.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true | oc delete -n ${project} -f - || :"
+                        sh "oc process -f apps/rocketchat/template-rocketchat.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true | oc delete -n ${project} -f - || :"
                         sh "oc delete -n ${project} pvc -l name=mongodb"
                     }
                 }
@@ -49,7 +49,9 @@ spec:
                 stage('Config') {
                     steps {
                         script {
-                            sh channel-creator.sh admin-user-name admin-password
+                            sh ```
+                            ./apps/rocketchat/channel-creator.sh https://$(oc -n ${project} get route rocketchat | grep gov.bc | awk '{printf $2}') admin $(oc get configmap -n ${project} rocketchat-config -o yaml | grep -i admin_pass | awk '{printf $2}')
+                            ```
                          }
                     }
                 }

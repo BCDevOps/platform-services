@@ -1,8 +1,8 @@
 #!/bin/bash
-filename=channels
-rocketurl="https://chat.pathfinder.gov.bc.ca"
-user=$1
-pass=$2
+filename=apps/rocketchat/channels
+rocketurl=$1
+user=$2
+pass=$3
 
 userid=$(curl $rocketurl/api/v1/login -d "user=$user&password=$pass" | jq '.data.userId' | tr -d '"')
 token=$(curl $rocketurl/api/v1/login -d "user=$user&password=$pass" | jq '.data.authToken' | tr -d '"')
