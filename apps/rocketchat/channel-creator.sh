@@ -1,11 +1,11 @@
 #!/bin/bash
-filename=apps/rocketchat/channels
+filename=channels
 rocketurl=$1
 user=$2
 pass=$3
 
-userid=$(curl $rocketurl/api/v1/login -d "user=$user&password=$pass" | jq '.data.userId' | tr -d '"')
-token=$(curl $rocketurl/api/v1/login -d "user=$user&password=$pass" | jq '.data.authToken' | tr -d '"')
+userid=$(curl $rocketurl/api/v1/login -d "user=$user&password=$pass" | ./jq '.data.userId' | tr -d '"')
+token=$(curl $rocketurl/api/v1/login -d "user=$user&password=$pass" | ./jq '.data.authToken' | tr -d '"')
 
 while read -r line; do
     channel="$line"

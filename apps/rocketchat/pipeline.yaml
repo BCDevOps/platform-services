@@ -49,9 +49,15 @@ spec:
                 stage('Config') {
                     steps {
                         script {
-                            sh ```
-                            ./apps/rocketchat/channel-creator.sh https://$(oc -n ${project} get route rocketchat | grep gov.bc | awk '{printf $2}') admin $(oc get configmap -n ${project} rocketchat-config -o yaml | grep -i admin_pass | awk '{printf $2}')
-                            ```
+                            openshift.withProject(project) {
+                                sh ```
+                                cd apps/rocketchat
+                                wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
+                                mv jq-linux64 jq
+                                chmod +x jq
+                                ./channel-creator.sh https://$(oc get route rocketchat | grep gov.bc | awk '{printf $2}') admin $(oc get configmap rocketchat-config -o yaml | grep -i admin_pass | awk '{printf $2}')
+                                ```
+                            }
                          }
                     }
                 }
