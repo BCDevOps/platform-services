@@ -1,3 +1,4 @@
+# openshift.withProject(env.PROJECT_NAME)
 apiVersion: v1
 kind: BuildConfig
 metadata:
@@ -6,23 +7,41 @@ spec:
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfile: |-
-        def env='dev'
         pipeline {
             agent any
             stages {
+                stage('Input') {
+                    steps {
+                        script {
+                            def userInput = input(
+                                id: 'userInput', message: 'Enter name of environment to deploy and prefix of your environment',
+                                parameters: [
+                                    choice(choices: ['dev', 'prod', 'test'], description: '', name: 'environ'),
+                                    string(defaultValue: 'a5bcde', description: '', name: 'prefix', trim: false),
+                                ])
+                            project = userInput.prefix+"-"+userInput.environ
+                            environment = userInput.environ
+                            echo("Deploying to Rocket Chat to: ${project}")
+                        }
+                    }
+                }
                 stage('Checkout') {
                     steps {
                         git branch: 'master', url: 'https://github.com/BCDevOps/platform-services'
                     }
                 }
-                stage('Delete') {
+                stage('Clean') {
+                    when {
+                        
+                    }
                     steps {
-                        sh "oc project pthomson-test && oc process -n pthomson-test -f apps/rocketchat/template-rocketchat-mongodb.yaml --param-file=apps/rocketchat/${env}.env | oc delete -f -"
+                        sh "oc process -n ${project} -f apps/rocketchat/template-rocketchat-mongodb.yaml --param-file=apps/rocketchat/${environment}.env | oc delete -f -"
+                        sh "oc delete -n ${project} pvc -l name=mongodb"
                     }
                 }
                 stage('Deploy') {
                     steps {
-                        sh "oc project pthomson-test && oc process -n pthomson-test -f apps/rocketchat/template-rocketchat-mongodb.yaml --param-file=apps/rocketchat/${env}.env | oc create -f -"
+                        sh "oc process -n ${project} -f apps/rocketchat/template-rocketchat-mongodb.yaml --param-file=apps/rocketchat/${environment}.env | oc create -f -"
                     }    
                 }
                 stage('Config') {
@@ -35,7 +54,7 @@ spec:
             }
         }
 
-#https://kubernetes.io/docs/tasks/run-application/delete-stateful-set/
+
 # add about delete storage too?
 # add step delete just rocketchat keep mongo?
 # add update image version with new env file, ask for env file
