@@ -1,8 +1,7 @@
-# openshift.withProject(env.PROJECT_NAME)
 apiVersion: v1
 kind: BuildConfig
 metadata:
-  name: "rocketchat-pipeline"
+  name: "rocketchat-deploy-pipeline"
 spec:
   strategy:
     jenkinsPipelineStrategy:
@@ -31,9 +30,6 @@ spec:
                     }
                 }
                 stage('Clean') {
-                    when {
-                        
-                    }
                     steps {
                         sh "oc process -f apps/rocketchat/template-mongodb.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true | oc delete -n ${project} -f - || :"
                         sh "oc process -f apps/rocketchat/template-rocketchat.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true | oc delete -n ${project} -f - || :"
@@ -46,27 +42,27 @@ spec:
                         sh "oc process -f apps/rocketchat/template-mongodb.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true | oc create -n ${project} -f -"
                     }    
                 }
+                stage ('Wait RC Ready') {
+                    steps {
+                        script {
+                            sh "while [[ "$(curl -s -o /dev/null -w %{http_code} https://$(oc -n ${project} get route rocketchat | grep gov.bc | awk '{printf $2}')/api/info)" != "200" ]]; do sleep 5; done"
+                        }
+                    }
+                }
                 stage('Config') {
                     steps {
                         script {
-                            openshift.withProject(project) {
-                                sh ```
+                            openshift.withProject(${project}) {
+                                sh '''
                                 cd apps/rocketchat
                                 wget https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
                                 mv jq-linux64 jq
                                 chmod +x jq
                                 ./channel-creator.sh https://$(oc get route rocketchat | grep gov.bc | awk '{printf $2}') admin $(oc get configmap rocketchat-config -o yaml | grep -i admin_pass | awk '{printf $2}')
-                                ```
+                                '''
                             }
                          }
                     }
                 }
             }
         }
-
-
-# add about delete storage too?
-# add step delete just rocketchat keep mongo?
-# add update image version with new env file, ask for env file
-# ask for user password for shell script step
-# trigger when push
