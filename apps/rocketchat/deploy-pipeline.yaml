@@ -45,7 +45,9 @@ spec:
                 stage ('Wait RC Ready') {
                     steps {
                         script {
-                            sh "while [[ "$(curl -s -o /dev/null -w %{http_code} https://$(oc -n ${project} get route rocketchat | grep gov.bc | awk '{printf $2}')/api/info)" != "200" ]]; do sleep 5; done"
+                            sh '''
+                            while [[ "$(curl -s -o /dev/null -w %{http_code} https://$(oc -n ${project} get route rocketchat | grep gov.bc | awk '{printf $2}')/api/info)" != "200" ]]; do sleep 5; done"
+                            '''
                         }
                     }
                 }
