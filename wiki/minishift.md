@@ -1,4 +1,3 @@
-
 # Setup Red Hat Container Development Kit (for MacOS)
 
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/)
@@ -284,7 +283,7 @@ A restart script can be found here:
 
 # Troubleshooting
 ```
-# WHo can PULL images
+# Who can PULL images
 oc policy who-can get imagestreams/layers
 ```
 
