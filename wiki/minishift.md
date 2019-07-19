@@ -276,6 +276,12 @@ oc run oc --image=registry.access.redhat.com/openshift3/ose-cli:v3.11 -it --rm=t
 
 ```
 
+# Restarting
+
+A restart script can be found here:
+
+[restart-minishift.sh](https://raw.githubusercontent.com/BCDevOps/platform-services/cvarjao-cdk-minishift/wiki/assets/restart-minishift.sh)
+
 # Troubleshooting
 ```
 # WHo can PULL images
