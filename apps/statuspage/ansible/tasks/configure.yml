@@ -61,13 +61,33 @@
     when: existing_keys | length > 0 
   - set_fact: 
       api_key_query: "[?name =='public'].id"
-    when: existing_api_key == true  
+    when: existing_api_key == true 
+    ignore_errors: true 
+  - set_fact: 
+      admin_api_key_query: "[?name =='admin'].id"
+    when: existing_api_key == true
+    ignore_errors: true
   - set_fact: 
       public_api_id: "{{ existing_keys.content | from_json | json_query(api_key_query) | replace('[', '') | replace(']', '') }}"
+    when: existing_api_key == true
+  - set_fact: 
+      admin_api_id: "{{ existing_keys.content | from_json | json_query(admin_api_key_query) | replace('[', '') | replace(']', '') }}"
     when: existing_api_key == true  
   - name: Delete existing public viewer API key
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/auth/keys/{{ public_api_id }} "
+      method: DELETE 
+      user: "admin"
+      password: "{{ grafana_admin_pwd }}"
+      force_basic_auth: true
+      return_content: true
+      headers: 
+        Content-Type: application/json
+    ignore_errors: true
+    when: existing_api_key == true  
+  - name: Delete existing admin viewer API key
+    uri: 
+      url: "http://{{ grafana_route.stdout }}/api/auth/keys/{{ admin_api_id }} "
       method: DELETE 
       user: "admin"
       password: "{{ grafana_admin_pwd }}"
@@ -90,6 +110,20 @@
       body_format: json
       body: {"name": "public", "role": "Viewer"}
     register: grafana_apikey
+
+  - name: Create new admin API key
+    uri: 
+      url: "http://{{ grafana_route.stdout }}/api/auth/keys"
+      method: POST
+      user: "admin"
+      password: "{{ grafana_admin_pwd }}"
+      force_basic_auth: true
+      return_content: true
+      headers: 
+        Content-Type: application/json
+      body_format: json
+      body: {"name": "admin", "role": "Admin"}
+    register: grafana_admin_apikey
   - name: Add api key to envoy ConfigMap
     template: 
       src: "manifests/templates/template-configmap-envoy.yml.j2"
@@ -100,7 +134,7 @@
       src: manifests/configmap-envoy.yml
       namespace: "{{ namespace }}"
   - name: Redeploy Envoy
-    command: "oc delete pod -l app=envoy -n {{ namespace }}"
+    command: "oc delete pod -l app=envoy -n {{ namespace }} --grace-period=0"
   - name: Configure Grafana Datasource
     grafana_datasource:
       name: "Prometheus"
@@ -111,27 +145,29 @@
       ds_type: "prometheus"
       url: "http://prometheus:9090"
       state: present
-  - name: Get list of dashbaords to Import
-    command: "ls ../grafana/dashboards/"
-    register: dashboard_list
-  - name: debug list  
-    debug: 
-      msg: "{{ dashboard_list }}"
-  - name: Import Grafana dashboard {{ dashboard_item }}
-    grafana_dashboard:
-      grafana_url: http://{{ grafana_route.stdout }}
-      grafana_user: "admin"
-      grafana_password: "{{ grafana_admin_pwd }}"
-      state: present
-      org_id: 1
-      message: Updated by ansible
-      overwrite: yes
-      path: ../grafana/dashboards/{{ dashboard_item }}
-      validate_certs: false
-    with_items: 
-      - "{{ dashboard_list.stdout }}"
-    loop_control: 
-      loop_var: dashboard_item
+  - name: Generate and apply dashboard
+    include_tasks: generate_dashboard.yml  
+  # - name: Get list of dashbaords to Import
+  #   command: "ls ../grafana/dashboards/"
+  #   register: dashboard_list
+  # - name: debug list  
+  #   debug: 
+  #     msg: "{{ dashboard_list }}"
+  # - name: Import Grafana dashboard {{ dashboard_item }}
+  #   grafana_dashboard:
+  #     grafana_url: http://{{ grafana_route.stdout }}
+  #     grafana_user: "admin"
+  #     grafana_password: "{{ grafana_admin_pwd }}"
+  #     state: present
+  #     org_id: 1
+  #     message: Updated by ansible
+  #     overwrite: yes
+  #     path: ../grafana/dashboards/{{ dashboard_item }}
+  #     validate_certs: false
+  #   with_items: 
+  #     - "{{ dashboard_list.stdout }}"
+  #   loop_control: 
+  #     loop_var: dashboard_item
     ignore_errors: true
   - name:  Set home dashboard # Todo: the dashboard ID should be determined via code
     uri:

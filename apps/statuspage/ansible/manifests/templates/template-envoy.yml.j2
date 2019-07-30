@@ -109,7 +109,7 @@ items:
       app: {{ envoy_service_name  }}
     name: {{ envoy_service_name  }}
   spec:
-    host: statuspage-dev.pathfinder.gov.bc.ca
+    host: {{ route }}
     port:
       targetPort: 10000-tcp
     to:
