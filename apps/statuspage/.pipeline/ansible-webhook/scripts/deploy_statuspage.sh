@@ -6,7 +6,7 @@ repourl=https://github.com/BCDevOps/platform-services
 branch=status-page 
 
 # Clone repo and branch
-if [ -d $repo ]; then (cd $repo && git pull); else git clone -f $branch $repourl;fi
+if [ -d $repo ]; then (cd $repo && git pull); else git clone -b $branch $repourl;fi
 
 ## Execute playbook with a timeout of 120 seconds
 ## If dev succeeds, apply the same in test, and then in prod
