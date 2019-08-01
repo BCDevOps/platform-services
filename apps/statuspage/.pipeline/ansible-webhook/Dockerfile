@@ -1,6 +1,7 @@
 FROM        quay.io/operator-framework/ansible-operator:v0.8.1
-ENV         WEBHOOK_VERSION 2.6.9 \
-            OC_URL https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
+ENV         WEBHOOK_VERSION=2.6.9
+ENV         OC_URL=https://github.com/openshift/origin/releases/download/v3.11.0/openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz
+
 USER        0
 WORKDIR     /opt/
 
