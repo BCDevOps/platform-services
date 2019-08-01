@@ -6,7 +6,15 @@ USER        0
 WORKDIR     /opt/
 
 ## Install necessary tools
-RUN         yum install -y git 
+RUN         yum install -y git
+
+## Install Grafyaml from source (latest pip version doesn't have all the features we need)
+ADD         requirements.txt . 
+RUN         pip install -r requirements.txt
+RUN         git clone https://opendev.org/opendev/grafyaml.git \
+            && cd grafyaml \
+            && ./setup.py build \ 
+            && ./setup.py install
 ADD         ${OC_URL} .
 RUN         tar -xvzf openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit.tar.gz --strip-components=1 \
             && mv oc /usr/local/bin/oc

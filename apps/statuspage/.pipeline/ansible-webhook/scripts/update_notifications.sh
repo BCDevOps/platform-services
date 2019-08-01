@@ -13,11 +13,11 @@ if [ -d $repo ]; then (cd $repo && git pull); else git clone -b $branch $repourl
 ## Todo; Replace this shell script with a more generic ansible playbook
 cd platform-services/apps/statuspage/ansible
 
-if (timeout --preserve-status 120 ansible-playbook -i prod -e activity=configure -e env=dev statuspage.yml)
+if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=dev statuspage.yml)
 then 
-  if (timeout --preserve-status 120 ansible-playbook -i prod -e activity=configure -e env=test statuspage.yml)
+  if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=test statuspage.yml)
   then 
-    if (timeout --preserve-status 120 ansible-playbook -i prod -e activity=configure -e env=prod statuspage.yml)
+    if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=prod statuspage.yml)
     then
       echo "Updated Prod"
     else

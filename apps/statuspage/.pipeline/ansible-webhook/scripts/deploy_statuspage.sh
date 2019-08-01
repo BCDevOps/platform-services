@@ -22,12 +22,14 @@ then
     if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=dev statuspage.yml)
     then
       echo "Configured Dev"
-      if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=test statuspage.yml)
+      if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=install -e env=test statuspage.yml)
       then 
-        echo "Configured Test"
-        if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=prod statuspage.yml)
+        echo "Configuring Test"
+        timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=test statuspage.yml
+        if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=install -e env=prod statuspage.yml)
         then 
-          echo "Configured prod"
+          echo "Configuring prod"
+          timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=prod statuspage.yml
         else
           echo "Failed to configure prod"
         fi
