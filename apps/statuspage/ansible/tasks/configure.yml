@@ -24,6 +24,8 @@
       grafana_admin_pwd: "{{ grafana_admin_password.stdout }}"
       admin_default: false
     when: generated_pwd == false
+  - name: Insert delay
+    command: sleep 15
   - name: Reset admin password
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/admin/users/1/password"
@@ -147,27 +149,6 @@
       state: present
   - name: Generate and apply dashboard
     include_tasks: generate_dashboard.yml  
-  # - name: Get list of dashbaords to Import
-  #   command: "ls ../grafana/dashboards/"
-  #   register: dashboard_list
-  # - name: debug list  
-  #   debug: 
-  #     msg: "{{ dashboard_list }}"
-  # - name: Import Grafana dashboard {{ dashboard_item }}
-  #   grafana_dashboard:
-  #     grafana_url: http://{{ grafana_route.stdout }}
-  #     grafana_user: "admin"
-  #     grafana_password: "{{ grafana_admin_pwd }}"
-  #     state: present
-  #     org_id: 1
-  #     message: Updated by ansible
-  #     overwrite: yes
-  #     path: ../grafana/dashboards/{{ dashboard_item }}
-  #     validate_certs: false
-  #   with_items: 
-  #     - "{{ dashboard_list.stdout }}"
-  #   loop_control: 
-  #     loop_var: dashboard_item
     ignore_errors: true
   - name:  Set home dashboard # Todo: the dashboard ID should be determined via code
     uri:
