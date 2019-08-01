@@ -24,27 +24,21 @@ data:
             parameter:
               source: header
               name: X-Hub-Signature
-        - match:
-            type: value
-            value: opened
-            parameter:
-              source: payload
-              name: action
     - id: update_notifications
       execute-command: /opt/update_notifications.sh
       command-working-directory: /opt
       response-message: I got the payload!
       pass-arguments-to-command:
       - source: payload
-        name: pull_request.head.repo.html_url
+        name: repository.html_url
       - source: payload
-        name: pull_request.head.ref
+        name: ref
       - source: payload
         name: number
       - source: payload
-        name: pull_request.head.repo.owner.login
+        name: head.repo.owner.login
       - source: payload
-        name: pull_request.url
+        name: url
       trigger-rule:
         and:
         - match:
@@ -53,12 +47,6 @@ data:
             parameter:
               source: header
               name: X-Hub-Signature
-        - match:
-            type: value
-            value: opened
-            parameter:
-              source: payload
-              name: action
 kind: ConfigMap
 metadata:
   name: webhook-ansible-hooks
