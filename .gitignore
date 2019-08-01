@@ -69,3 +69,6 @@ typings/
 
 # templated files
 apps/statuspage/ansible/manifests/*.yml
+
+# git_checkout dir
+*git_checkout*
