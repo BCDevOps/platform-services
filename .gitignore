@@ -62,7 +62,10 @@ typings/
 .DS_Store
 
 # temp folders
-*git_checkout
+*git_checkout*
 
 # creds
 *creds*
+
+# templated files
+apps/statuspage/ansible/manifests/*.yml
