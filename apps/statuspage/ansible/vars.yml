@@ -1,3 +1,4 @@
+## Template Defaults
 activity: install
 env: dev
 grafana_version: latest
@@ -9,14 +10,13 @@ generated_pwd: false
 admin_default: false
 existing_api_key: false
 
-## Template Defaults
+
 grafana_service_name: grafana
 grafana_db_type: postgres
 grafana_database_service: patroni-master
 grafana_db_name: patroni
 grafana_db_username: statuspage
 grafana_db_password: statuspage
-#grafana_route_name: grafana-statuspage-dev.pathfinder.gov.bc.ca
 
 prometheus_service_name: prometheus
 prometheus_pvc_size: 5Gi

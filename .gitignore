@@ -67,5 +67,8 @@ typings/
 # creds
 *creds*
 
-# templated files
-apps/statuspage/ansible/manifests/*.yml
+# statuspage template files
+*manifests/*.yml
+
+# retry
+*.retry
