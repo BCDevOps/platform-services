@@ -52,7 +52,7 @@ typings/
 *.tgz
 
 # Yarn Integrity file
-.yarn-integrity
+#.yarn-integrityree/keycloak_provisioner/operators
 
 # dotenv environment variables file
 .env
@@ -66,9 +66,3 @@ typings/
 
 # creds
 *creds*
-
-# templated files
-apps/statuspage/ansible/manifests/*.yml
-
-# git_checkout dir
-*git_checkout*

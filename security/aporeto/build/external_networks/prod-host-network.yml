@@ -1,0 +1,14 @@
+APIVersion: 1
+label: prod-host-network
+data:
+  externalnetworks:
+  - name: prod-host-network
+    entries:
+    - 142.34.143.128/26
+    ports:
+    - "1:65535"
+    protocols:
+    - udp
+    - tcp
+    associatedTags:
+    - ext:network=prod-host-network

@@ -1,0 +1,49 @@
+APIVersion: 0
+data:
+  enforcerprofiles:
+    - IPTablesMarkValue: 1000
+      PUBookkeepingInterval: 15m
+      PUHeartbeatInterval: 5s
+      annotations: {}
+      applicationProxyPort: 20992
+      associatedTags:
+        - profile=openshift-enforcer-profile
+      auditProfileSelectors: []
+      auditSocketBufferSize: 16384
+      description: ''
+      dockerSocketAddress: 'unix:///var/run/docker.sock'
+      excludedInterfaces: []
+      excludedNetworks:
+        - 10.131.0.1
+        - 127.0.0.0/8
+        - 172.0.0.0/8
+      hostModeEnabled: false
+      hostServices: []
+      ignoreExpression:
+        - - '@sys:k8s:namespace=devops-platform-security-aporeto'
+        - - '@sys:k8s:namespace=openshift-sdn'
+        - - '@sys:k8s:namespace=openshift-node'
+      killContainersOnFailure: true
+      kubernetesMetadataExtractor: PodAtomic
+      kubernetesSupportEnabled: true
+      linuxProcessesSupportEnabled: true
+      metadata:
+        - '@sys:k8s:reference=openshift-enforcer-profile'
+      metadataExtractor: Kubernetes
+      name: openshift-enforcer-profile
+      policySynchronizationInterval: 10m
+      protected: false
+      proxyListenAddress: 'unix:///var/run/aporeto.sock'
+      receiverNumberOfQueues: 4
+      receiverQueue: 0
+      receiverQueueSize: 500
+      remoteEnforcerEnabled: true
+      targetNetworks: []
+      targetUDPNetworks: []
+      transmitterNumberOfQueues: 4
+      transmitterQueue: 4
+      transmitterQueueSize: 500
+      trustedCAs: []
+identities:
+  - enforcerprofile
+label: OpenShift-Profile
