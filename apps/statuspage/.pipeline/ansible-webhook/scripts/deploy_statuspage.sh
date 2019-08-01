@@ -41,5 +41,5 @@ then
     echo "Failed to Install dev"
   fi
 else
-  echo "Failed to de;ete dev"
+  echo "Failed to delete dev"
 fi
