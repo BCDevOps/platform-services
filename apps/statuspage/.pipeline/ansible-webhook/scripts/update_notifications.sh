@@ -1,13 +1,36 @@
 #!/bin/bash
 
-# Set branch name from ref payload
-#export BRANCH=$(echo $2 | awk -F '/' '{print $3}')
+# Set variables
+repo=platform-services
+repourl=https://github.com/BCDevOps/platform-services
+branch=status-page 
 
 # Clone repo and branch
-git clone -b status-page https://github.com/BCDevOps/platform-services
+if [ -d $repo ]; then (cd $repo && git pull); else git clone -f $branch $repourl;fi
 
-## Execute playbook
+## Execute playbook with a timeout of 120 seconds
+## If dev succeeds, apply the same in test, and then in prod
+## Todo; Replace this shell script with a more generic ansible playbook
 cd platform-services/apps/statuspage/ansible
-ansible-playbook -i prod -e activity=configure -e env=dev statuspage.yml
 
-#ansible-playbook playbook.yml -e repo_url=$1 -e branch=$2 -e pull_request_number=$3 -e repo_owner=$4 -e pull_request_url=$5 -e gh_token=$TOKEN
+if (timeout --preserve-status 120 ansible-playbook -i prod -e activity=configure -e env=dev statuspage.yml)
+then 
+  if (timeout --preserve-status 120 ansible-playbook -i prod -e activity=configure -e env=test statuspage.yml)
+  then 
+    if (timeout --preserve-status 120 ansible-playbook -i prod -e activity=configure -e env=prod statuspage.yml)
+    then
+      echo "Updated Prod"
+    else
+      echo "Failed to update prod"
+    fi
+  else
+    echo "Failed to update test"
+  fi
+else
+  echo "Failed to update dev"
+fi
+
+
+
+
+  
