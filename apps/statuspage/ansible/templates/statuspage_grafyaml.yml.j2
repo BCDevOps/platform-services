@@ -17,10 +17,10 @@ dashboard:
       showTitle: true
       height: 200px
       panels:
-{% for obj in url_watchlist['internal_services'] | dict2items %}
+{% for obj in url_watchlist['internal_services_tls_verify'] | dict2items %}
         - title: {{ obj.key }} 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
@@ -35,6 +35,38 @@ dashboard:
                text: 'UP'
           valueFontSize: "100%"
 {% endfor %}
+{% for obj in url_watchlist['internal_services_no_tls_verify'] | dict2items %}
+        - title: {{ obj.key }} 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="{{ obj.value }}",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+{% endfor %}
+        - title: DNS Resolution Time(s)
+          datasource: Prometheus
+          span: 1
+          thresholds: 0,0.5,1
+          colorBackground: true
+          sparkline:
+            full: true
+            show: true
+          targets:
+            - expr: max(probe_dns_lookup_time_seconds)
+              refId: A
+          type: singlestat
+          valueName: current
+          valueFontSize: "100%"
     - title: Upstream Services
       showTitle: true
       height: 200px
@@ -42,7 +74,7 @@ dashboard:
 {% for obj in url_watchlist['upstream_services'] | dict2items %}
         - title: {{ obj.key }} 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:

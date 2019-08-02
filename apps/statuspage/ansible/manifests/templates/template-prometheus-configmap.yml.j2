@@ -14,7 +14,7 @@ data:
           module: [http_2xx]  # Look for a HTTP 200 response.
         static_configs:
           - targets:
-{% for value in url_watchlist['internal_services'].values() %}
+{% for value in url_watchlist['internal_services_tls_verify'].values() %}
             - {{ value }}
 {% endfor %}
 {% for value in url_watchlist['upstream_services'].values() %}
@@ -33,7 +33,9 @@ data:
           module: [http_2xx__no_tls_verify]  # Look for a HTTP 200 response.
         static_configs:
           - targets:
-            - https://kubernetes.default.svc.cluster.local
+{% for value in url_watchlist['internal_services_no_tls_verify'].values() %}
+            - {{ value }}
+{% endfor %}
         relabel_configs:
           - source_labels: [__address__]
             target_label: __param_target

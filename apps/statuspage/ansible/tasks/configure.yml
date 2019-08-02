@@ -44,7 +44,6 @@
     when: admin_default == true
   - name:  Set light theme 
     shell: "oc set env dc/grafana GF_USERS_DEFAULT_THEME='light' -n {{ namespace }}"
-  - debug: msg="{{ grafana_admin_pwd }}"
   - name: Get existing public viewer API key
     uri: 
       url: "http://{{ grafana_route.stdout }}/api/auth/keys"
@@ -57,7 +56,6 @@
         Content-Type: application/json
     register: existing_keys
     ignore_errors: true
-  - debug: msg="{{ existing_keys }}"
   - set_fact: 
       existing_api_key: true
     when: existing_keys | length > 0 
@@ -160,6 +158,41 @@
       password: "{{ grafana_admin_pwd }}"
       force_basic_auth: true
       return_content: true
+  - name: Get dashboard uid
+    uri: 
+      url: http://{{ grafana_route.stdout }}/api/search?folderIds=0&query=&starred=false
+      method: GET
+      user: "admin"
+      password: "{{ grafana_admin_pwd }}"
+      force_basic_auth: true
+      return_content: true
+    register: dashboard_list
+  - debug: msg="{{ item }}"
+    with_items: "{{ dashboard_list.json[0].uid }}"
+  - name: Export dashboard
+    grafana_dashboard:
+      grafana_url: http://{{ grafana_route.stdout }}
+      grafana_user: "admin"
+      grafana_password: "{{ grafana_admin_pwd }}"
+      org_id: 1
+      state: export
+      uid: "{{ dashboard_list.json[0].uid  }}"
+      path: "tmp-dashboard.json"
+  - name: Change uid of dashboard
+    replace:
+      path: tmp-dashboard.json
+      regexp: '"uid": "{{ dashboard_list.json[0].uid  }}"'
+      replace: '"uid": "homedashboard"'
+  - name: Import Grafana dashboard foo
+    grafana_dashboard:
+      grafana_url: http://{{ grafana_route.stdout }}
+      grafana_user: "admin"
+      grafana_password: "{{ grafana_admin_pwd }}"
+      state: present
+      message: Updated by ansible
+      overwrite: yes
+      path: tmp-dashboard.json
+- debug: msg={{ dashboard_list }}
 - name: Configure Prometheus targets
   block: 
   - name: set fact from yaml file

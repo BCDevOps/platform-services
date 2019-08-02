@@ -29,7 +29,7 @@ items:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-            - mountPath: /etc/{{ blackbox_service_name  }}
+            - mountPath: /etc/blackbox_exporter
               name: {{ blackbox_service_name  }}
         dnsPolicy: ClusterFirst
         restartPolicy: Always

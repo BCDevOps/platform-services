@@ -1,13 +1,22 @@
-internal_services: 
-  kubernetes_api: https://kubernetes.default.svc.cluster.local
+## Add desired URLS to be monitored under the appropriate heading
+internal_services_tls_verify: 
   console_api: https://console.pathfinder.gov.bc.ca:8443/healthz
   metrics: https://hawkular-metrics.pathfinder.gov.bc.ca
   logging: https://kibana.pathfinder.gov.bc.ca/api/status 
   router: http://router.default.svc.cluster.local:1936/healthz
+  sso-dev: https://sso-dev.pathfinder.gov.bc.ca
+  sso-test: https://sso-test.pathfinder.gov.bc.ca
+  sso-prod: https://sso.pathfinder.gov.bc.ca
+  devhub: https://developer.gov.bc.ca
+internal_services_no_tls_verify: 
+  kubernetes_api: https://kubernetes.default.svc.cluster.local
   registry: https://docker-registry.default.svc.cluster.local:5000/healthz 
 upstream_services:
   github: https://github.com/bcdevops/platform-services
   redhat: https://access.redhat.com/containers/
-  
+  sysdig: https://app.sysdigcloud.com
+  aporeto: https://console.aporeto.com
+
+
 
     

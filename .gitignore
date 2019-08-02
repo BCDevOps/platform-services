@@ -68,7 +68,9 @@ typings/
 *creds*
 
 # statuspage template files
-*manifests/*.yml
+*apps/statuspage/ansible/manifests/*.yml*
+*tmp-dashboard.json*
+
 
 # retry
 *.retry

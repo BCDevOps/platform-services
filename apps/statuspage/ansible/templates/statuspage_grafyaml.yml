@@ -16,25 +16,9 @@ dashboard:
       showTitle: true
       height: 200px
       panels:
-        - title: kubernetes_api 
-          datasource: Prometheus
-          span: 2
-          thresholds: -0.5,0
-          colorBackground: true
-          targets:
-            - expr: probe_success{instance="https://kubernetes.default.svc.cluster.local",job="blackbox_tls_verify"}*-1
-              refId: A
-          type: singlestat
-          valueName: current
-          valueMaps:
-             - value: 0
-               text: 'DOWN'
-             - value: -1
-               text: 'UP'
-          valueFontSize: "100%"
         - title: console_api 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
@@ -50,7 +34,7 @@ dashboard:
           valueFontSize: "100%"
         - title: metrics 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
@@ -66,7 +50,7 @@ dashboard:
           valueFontSize: "100%"
         - title: logging 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
@@ -82,7 +66,7 @@ dashboard:
           valueFontSize: "100%"
         - title: router 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
@@ -96,13 +80,13 @@ dashboard:
              - value: -1
                text: 'UP'
           valueFontSize: "100%"
-        - title: registry 
+        - title: sso-dev 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
-            - expr: probe_success{instance="https://docker-registry.default.svc.cluster.local:5000/healthz",job="blackbox_tls_verify"}*-1
+            - expr: probe_success{instance="https://sso-dev.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
               refId: A
           type: singlestat
           valueName: current
@@ -112,13 +96,107 @@ dashboard:
              - value: -1
                text: 'UP'
           valueFontSize: "100%"
+        - title: sso-test 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://sso-test.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: sso-prod 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://sso.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: devhub 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://developer.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: kubernetes_api 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://kubernetes.default.svc.cluster.local",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: registry 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://docker-registry.default.svc.cluster.local:5000/healthz",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: DNS Resolution Time(s)
+          datasource: Prometheus
+          span: 1
+          thresholds: 0,0.5,1
+          colorBackground: true
+          sparkline:
+            full: true
+            show: true
+          targets:
+            - expr: max(probe_dns_lookup_time_seconds)
+              refId: A
+          type: singlestat
+          valueName: current
+          valueFontSize: "100%"
     - title: Upstream Services
       showTitle: true
       height: 200px
       panels:
         - title: github 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
@@ -134,11 +212,43 @@ dashboard:
           valueFontSize: "100%"
         - title: redhat 
           datasource: Prometheus
-          span: 2
+          span: 1
           thresholds: -0.5,0
           colorBackground: true
           targets:
             - expr: probe_success{instance="https://access.redhat.com/containers/",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: sysdig 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://app.sysdigcloud.com",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: aporeto 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://console.aporeto.com",job="blackbox_tls_verify"}*-1
               refId: A
           type: singlestat
           valueName: current
@@ -169,14 +279,6 @@ dashboard:
       panels:
         - title: Operations Notices
           content: |
-
-              # Notice: 06-03-19-1444.md
-
-              ## More tests. This is the mostest latest one!
-
-              # Notice: 06-02-19-1916.md
-
-              ## Testing Updates!
 
               # Notice: 05-31-19-1915.md
 
