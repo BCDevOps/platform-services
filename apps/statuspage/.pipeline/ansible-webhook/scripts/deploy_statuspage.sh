@@ -8,7 +8,7 @@ branch=status-page
 # Check if this PR has any changes for this app
 file_list=$(curl $1/files | grep filename | grep "apps/stauspage")
 
-if [ -z "$$file_list" ]
+if [ -z "$file_list" ]
 then
   echo "PR does not include file changes for us"
 else
