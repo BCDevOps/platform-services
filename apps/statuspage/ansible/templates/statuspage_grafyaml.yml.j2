@@ -53,6 +53,24 @@ dashboard:
                text: 'UP'
           valueFontSize: "100%"
 {% endfor %}
+{% for obj in url_watchlist['ocp_green_status'] | dict2items %}
+        - title: {{ obj.key }} 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="{{ obj.value }}",job="http_ocp_status_green"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+{% endfor %}
         - title: DNS Resolution Time(s)
           datasource: Prometheus
           span: 1

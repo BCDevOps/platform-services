@@ -148,16 +148,6 @@
   - name: Generate and apply dashboard
     include_tasks: generate_dashboard.yml  
     ignore_errors: true
-  - name:  Set home dashboard # Todo: the dashboard ID should be determined via code
-    uri:
-      url: http://{{ grafana_route.stdout }}/api/org/preferences
-      method: PUT
-      body_format: json
-      body: '{"homeDashboardId": 1 }'
-      user: "admin"
-      password: "{{ grafana_admin_pwd }}"
-      force_basic_auth: true
-      return_content: true
   - name: Get dashboard uid
     uri: 
       url: http://{{ grafana_route.stdout }}/api/search?folderIds=0&query=&starred=false
@@ -167,8 +157,16 @@
       force_basic_auth: true
       return_content: true
     register: dashboard_list
-  - debug: msg="{{ item }}"
-    with_items: "{{ dashboard_list.json[0].uid }}"
+  - name:  Set home dashboard
+    uri:
+      url: http://{{ grafana_route.stdout }}/api/org/preferences
+      method: PUT
+      body_format: json
+      body: '{"homeDashboardId": {{ dashboard_list.json[0].id }} }'
+      user: "admin"
+      password: "{{ grafana_admin_pwd }}"
+      force_basic_auth: true
+      return_content: true
   - name: Export dashboard
     grafana_dashboard:
       grafana_url: http://{{ grafana_route.stdout }}
@@ -183,7 +181,7 @@
       path: tmp-dashboard.json
       regexp: '"uid": "{{ dashboard_list.json[0].uid  }}"'
       replace: '"uid": "homedashboard"'
-  - name: Import Grafana dashboard foo
+  - name: Import updated dashboard
     grafana_dashboard:
       grafana_url: http://{{ grafana_route.stdout }}
       grafana_user: "admin"
@@ -192,7 +190,6 @@
       message: Updated by ansible
       overwrite: yes
       path: tmp-dashboard.json
-- debug: msg={{ dashboard_list }}
 - name: Configure Prometheus targets
   block: 
   - name: set fact from yaml file

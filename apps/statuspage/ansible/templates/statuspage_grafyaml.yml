@@ -48,22 +48,6 @@ dashboard:
              - value: -1
                text: 'UP'
           valueFontSize: "100%"
-        - title: logging 
-          datasource: Prometheus
-          span: 1
-          thresholds: -0.5,0
-          colorBackground: true
-          targets:
-            - expr: probe_success{instance="https://kibana.pathfinder.gov.bc.ca/api/status",job="blackbox_tls_verify"}*-1
-              refId: A
-          type: singlestat
-          valueName: current
-          valueMaps:
-             - value: 0
-               text: 'DOWN'
-             - value: -1
-               text: 'UP'
-          valueFontSize: "100%"
         - title: router 
           datasource: Prometheus
           span: 1
@@ -128,22 +112,6 @@ dashboard:
              - value: -1
                text: 'UP'
           valueFontSize: "100%"
-        - title: devhub 
-          datasource: Prometheus
-          span: 1
-          thresholds: -0.5,0
-          colorBackground: true
-          targets:
-            - expr: probe_success{instance="https://developer.gov.bc.ca",job="blackbox_tls_verify"}*-1
-              refId: A
-          type: singlestat
-          valueName: current
-          valueMaps:
-             - value: 0
-               text: 'DOWN'
-             - value: -1
-               text: 'UP'
-          valueFontSize: "100%"
         - title: kubernetes_api 
           datasource: Prometheus
           span: 1
@@ -167,6 +135,38 @@ dashboard:
           colorBackground: true
           targets:
             - expr: probe_success{instance="https://docker-registry.default.svc.cluster.local:5000/healthz",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: devhub 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://developer.gov.bc.ca/",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: logging_elasticsearch 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://elasticsearch-logging.pathfinder.gov.bc.ca/_cluster/health",job="http_ocp_status_green"}*-1
               refId: A
           type: singlestat
           valueName: current

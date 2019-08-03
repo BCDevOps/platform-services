@@ -42,6 +42,22 @@ data:
           - source_labels: [__param_target]
             target_label: instance
           - target_label: __address__
+            replacement: blackbox-exporter:9115  # The blackbox exporter's real hostname:port. 
+      - job_name: 'http_ocp_status_green'
+        metrics_path: /probe
+        params:
+          module: [http_ocp_status_green]  # Look for a HTTP 200 response.
+        static_configs:
+          - targets:
+{% for value in url_watchlist['ocp_green_status'].values() %}
+            - {{ value }}
+{% endfor %}
+        relabel_configs:
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: instance
+          - target_label: __address__
             replacement: blackbox-exporter:9115  # The blackbox exporter's real hostname:port.        
 kind: ConfigMap
 metadata:
