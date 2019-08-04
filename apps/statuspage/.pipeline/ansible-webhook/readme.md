@@ -67,5 +67,3 @@ The sample playbook receives the webhook from GitHub, performs some work with th
 
 # Acknowledgements 
 - [webhook code](https://github.com/adnanh/webhook)
-pr-test
-pr-test2

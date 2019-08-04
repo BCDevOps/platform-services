@@ -3,7 +3,7 @@
 # Set variables
 repo=platform-services
 repourl=https://github.com/BCDevOps/platform-services
-branch=status-page 
+branch=master 
 
 # Check if this PR has any changes for this app
 file_list=$(curl $1/files | grep filename | grep "apps/statuspage")

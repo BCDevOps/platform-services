@@ -45,12 +45,12 @@ patroni_replica_service_name: patroni-replica
 
 # Status Update Variables
 notifications_repo: "https://github.com/BCDevOps/platform-services-status-page-notifications"
-notifications_repo_branch: "prod"
+notifications_repo_branch: "master"
 notifications_dir_name: "notifications"
 notifications_path: "{{ notifications_dir_name }}/"
 grafana_configmap_name: "grafana-dashboards"
 status_page_url: "http://status.pathfinder.gov.bc.ca/"
-rc_notification_channel: "{{ lookup('env', 'RC_')}}"
+rc_notification_channel: "#devops-alerts"
 rc_domain: "chat.pathfinder.gov.bc.ca"
 rc_icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
 rc_token: "{{ lookup('env', 'RC_TOKEN')}}"

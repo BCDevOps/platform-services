@@ -3,7 +3,7 @@
 # Set variables
 repo=platform-services
 repourl=https://github.com/BCDevOps/platform-services
-branch=status-page 
+branch=master 
 
 # Clone repo and branch
 if [ -d $repo ]; then (cd $repo && git pull); else git clone -b $branch $repourl;fi
