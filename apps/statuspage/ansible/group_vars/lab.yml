@@ -1,0 +1,6 @@
+project: 
+  tools: devops-status-page
+  dev: devops-status-page
+  test: devops-status-page
+  prod: devops-status-page
+
