@@ -61,8 +61,16 @@ typings/
 .next
 .DS_Store
 
+# temp folders
+*git_checkout*
 
-# sensitive items
-*sensitive*
+# creds
 *creds*
-*.retry*
+
+# statuspage template files
+*apps/statuspage/ansible/manifests/*.yml*
+*tmp-dashboard.json*
+
+
+# retry
+*.retry

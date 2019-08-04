@@ -1,0 +1,81 @@
+"id": 18,
+"legend": {
+  "alignAsTable": true,
+  "avg": false,
+  "current": true,
+  "max": false,
+  "min": false,
+  "rightSide": true,
+  "show": true,
+  "total": false,
+  "values": true
+},
+"lines": true,
+"linewidth": 1,
+"links": [],
+"nullPointMode": "null",
+"paceLength": 10,
+"percentage": false,
+"pointradius": 2,
+"points": false,
+"renderer": "flot",
+"seriesOverrides": [],
+"stack": false,
+"steppedLine": false,
+"targets": [
+  {
+    "expr": "probe_http_status_code",
+    "format": "time_series",
+    "intervalFactor": 1,
+    "refId": "A"
+  }
+],
+"thresholds": [],
+"timeFrom": null,
+"timeRegions": [],
+"timeShift": null,
+"title": "HTTP Status Code",
+"tooltip": {
+  "shared": true,
+  "sort": 0,
+  "value_type": "individual"
+},
+"type": "graph",
+"xaxis": {
+  "buckets": null,
+  "mode": "time",
+  "name": null,
+  "show": true,
+  "values": []
+},
+"yaxes": [
+  {
+    "format": "short",
+    "label": null,
+    "logBase": 1,
+    "max": null,
+    "min": null,
+    "show": true
+  },
+  {
+    "format": "short",
+    "label": null,
+    "logBase": 1,
+    "max": null,
+    "min": null,
+    "show": true
+  }
+],
+"yaxis": {
+  "align": false,
+  "alignLevel": null
+}
+},
+{
+"collapsed": false,
+"gridPos": {
+  "h": 1,
+  "w": 24,
+  "x": 0,
+  "y": 18
+},

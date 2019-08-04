@@ -1,0 +1,58 @@
+---
+    - name: set fact from yaml file
+      set_fact: 
+        url_watchlist: "{{ lookup ('file', '../../url_watchlist.yml') | from_yaml  }}"
+
+## Get list of notifications to post
+    - name: Fetch notifications repo content
+      git: 
+        repo: "{{ notifications_repo }}"
+        version: "{{ notifications_repo_branch }}"
+        dest: git_checkout/
+    - name: Set notifications fact path
+      set_fact: 
+        notifications_path: "git_checkout/{{ notifications_path }}"
+    - name: Get file list 
+      command: > 
+        ls -vr "{{ notifications_path }}"
+      register: notifications
+
+## Render template
+    - name: render template
+      template: 
+        src: templates/statuspage_grafyaml.yml.j2
+        dest: templates/statuspage_grafyaml.yml
+
+## Apply Dashboard      
+    - name: Validate dashboard
+      command: "bin/grafana-dashboard --debug --grafana-url http://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} validate templates/statuspage_grafyaml.yml"
+      register: validate_dashboard
+#      no_log: true
+  # Feels like this is a bug - like it needs to be run before the dashboard is "updated"
+    - name: Delete dashboard due to bug
+      shell: "bin/grafana-dashboard --debug --grafana-url http://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} delete templates/statuspage_grafyaml.yml"
+      when: validate_dashboard.stdout == 'SUCCESS!'
+      ignore_errors: true
+
+    - name: Update dashboard
+      shell: "bin/grafana-dashboard --debug --grafana-url http://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} update templates/statuspage_grafyaml.yml"
+      when: validate_dashboard.stdout == 'SUCCESS!'
+#      no_log: true
+
+      
+## Send Notices
+    - name: Set Fact for latest notification
+      set_fact: 
+        latest_update: "{{ lookup ('file', notifications_path+notifications.stdout_lines[0]) }}"
+    - name: Send notification message via Rocket Chat
+      rocketchat:
+        domain: "{{ rc_domain }}"
+        token: "{{ rc_token }}"
+        msg: "A notice has been posted on {{ status_page_url }} \n The latest message is: {{ latest_update }}"
+        channel: "{{ rc_notification_channel }}"
+        username: "{{ rc_user }}"
+        icon_url: "{{ rc_icon_url }}"
+        link_names: 0
+      delegate_to: localhost
+      ignore_errors: true
+      when: env == 'prod'

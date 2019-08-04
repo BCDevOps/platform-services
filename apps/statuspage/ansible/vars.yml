@@ -1,3 +1,4 @@
+## Template Defaults
 activity: install
 env: dev
 grafana_version: latest
@@ -5,3 +6,52 @@ prometheus_version: latest
 blackbox_version: latest
 envoy_version: latest
 pwd_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+generated_pwd: false
+admin_default: false
+existing_api_key: false
+
+
+grafana_service_name: grafana
+grafana_db_type: postgres
+grafana_database_service: patroni-master
+grafana_db_name: patroni
+grafana_db_username: statuspage
+grafana_db_password: statuspage
+
+prometheus_service_name: prometheus
+prometheus_pvc_size: 5Gi
+
+blackbox_service_name: blackbox-exporter
+
+envoy_service_name: envoy
+
+
+## Database Details
+#patroni_memory_limit: 512Mi
+patroni_image_tag: 10.6
+patroni_database_name: patroni
+patroni_image_namespace: c81e6h-tools
+patroni_superuser_username: postgres
+patroni_superuser_password: postgres
+patroni_replication_username: postgres
+patroni_replication_password: postgres
+patroni_service_account: patroniocp
+patroni_app_name: patroni
+patroni_cluster_name: patroni-cluster
+patroni_service_name: patroni-master
+patroni_replica_service_name: patroni-replica
+
+
+
+# Status Update Variables
+notifications_repo: "https://github.com/BCDevOps/platform-services-status-page-notifications"
+notifications_repo_branch: "master"
+notifications_dir_name: "notifications"
+notifications_path: "{{ notifications_dir_name }}/"
+grafana_configmap_name: "grafana-dashboards"
+status_page_url: "http://status.pathfinder.gov.bc.ca/"
+rc_notification_channel: "#devops-alerts"
+rc_domain: "chat.pathfinder.gov.bc.ca"
+rc_icon_url: "https://bcdevexchange.org/modules/core/client/img/logo/avatar-2.png"
+rc_token: "{{ lookup('env', 'RC_TOKEN')}}"
+rc_user: "{{ lookup('env', 'RC_USER')}}"

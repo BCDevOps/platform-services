@@ -1,0 +1,290 @@
+dashboard:
+  title: BCGov DevHub Status Page
+  time:
+      from: "now-15m"
+      to: "now"
+  rows:
+    - title: Description
+      showTitle: false
+      height: 50px
+      panels:
+        - title: Description
+          content: |
+            ### This dashboard shows the status of various BCGov Developer Platform Resources. This dashboard is auto-generated and should not be edited manually. 
+          type: text
+    - title: Internal Services
+      showTitle: true
+      height: 200px
+      panels:
+        - title: console_api 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://console.pathfinder.gov.bc.ca:8443/healthz",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: metrics 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://hawkular-metrics.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: router 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="http://router.default.svc.cluster.local:1936/healthz",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: sso-dev 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://sso-dev.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: sso-test 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://sso-test.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: sso-prod 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://sso.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: kubernetes_api 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://kubernetes.default.svc.cluster.local",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: registry 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://docker-registry.default.svc.cluster.local:5000/healthz",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: devhub 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://developer.gov.bc.ca/",job="blackbox_no_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: logging_elasticsearch 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://elasticsearch-logging.pathfinder.gov.bc.ca/_cluster/health",job="http_ocp_status_green"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: DNS Resolution Time(s)
+          datasource: Prometheus
+          span: 1
+          thresholds: 0,0.5,1
+          colorBackground: true
+          sparkline:
+            full: true
+            show: true
+          targets:
+            - expr: max(probe_dns_lookup_time_seconds)
+              refId: A
+          type: singlestat
+          valueName: current
+          valueFontSize: "100%"
+    - title: Upstream Services
+      showTitle: true
+      height: 200px
+      panels:
+        - title: github 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://github.com/bcdevops/platform-services",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: redhat 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://access.redhat.com/containers/",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: sysdig 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://app.sysdigcloud.com",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+        - title: aporeto 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://console.aporeto.com",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+    - title: Status Codes
+      showTitle: true
+      height: 400px
+      panels:
+        - title: HTTP Status Codes
+          datasource: Prometheus
+          span: 12
+          targets:
+            - expr: probe_http_status_code
+              format: time_series
+              intervalFactor: 1
+              refId: A
+
+              legendFormat: "{{ instance }}"
+          type: graph
+    - title: Operations Notices
+      showTitle: false
+      height: 400px
+      panels:
+        - title: Operations Notices
+          content: |
+
+              # Notice: 05-31-19-1915.md
+
+              ## This is a broadcast test.
+
+              ## Testing 1,2,3,4,5,6,7,8,9
+
+
+          type: text

@@ -1,0 +1,64 @@
+dashboard:
+  title: BCGov DevHub Status Page
+  time:
+      from: "now-15m"
+      to: "now"
+  rows:
+    # - title: Description
+    #   showTitle: false
+    #   height: 50px
+    #   panels:
+    #     - title: Description
+    #       content: |
+    #         ### This dashboard shows the status of various BCGov Developer Platform Resources. This dashboard is auto-generated and should not be edited manually. 
+    #       type: text
+    # - title: Internal Services
+    #   showTitle: true
+    #   height: 200px
+    #   panels:
+    #     - title: Kubernetes API 
+    #       datasource: Prometheus
+    #       span: 2
+    #       thresholds: -0.5,0
+    #       colorBackground: true
+    #       targets:
+    #         - expr: probe_success{instance="https://kubernetes.default.svc.cluster.local",job="blackbox_tls_verify"}*-1
+    #           refId: A
+    #       type: singlestat
+    #       valueName: current
+    #       valueMaps:
+    #          - value: 0
+    #            text: 'DOWN'
+    #          - value: -1
+    #            text: 'UP'
+    #       valueFontSize: "100%"
+    #     - title: Console API 
+    #       datasource: Prometheus
+    #       span: 2
+    #       thresholds: -0.5,0
+    #       colorBackground: true
+    #       targets:
+    #         - expr: probe_success{instance="https://console.pathfinder.gov.bc.ca:8443/healthz",job="blackbox_tls_verify"}*-1
+    #           refId: A
+    #       type: singlestat
+    #       valueName: current
+    #       valueMaps:
+    #          - value: 0
+    #            text: 'DOWN'
+    #          - value: -1
+    #            text: 'UP'
+    #       valueFontSize: "100%"
+    - title: Status Codes
+      showTitle: true
+      height: 600px
+      panels:
+        - title: HTTP Status Codes
+          datasource: Prometheus
+          span: 12
+          targets:
+            - expr: probe_http_status_code
+              format: time_series
+              intervalFactor: 1
+              refId: A
+              legendFormat: "{{ instance }}"
+          type: graph
