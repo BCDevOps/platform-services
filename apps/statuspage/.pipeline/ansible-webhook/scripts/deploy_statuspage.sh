@@ -6,7 +6,7 @@ repourl=https://github.com/BCDevOps/platform-services
 branch=status-page 
 
 # Check if this PR has any changes for this app
-file_list=$(curl $1/files | grep filename | grep "apps/stauspage")
+file_list=$(curl $1/files | grep filename | grep "apps/statuspage")
 
 if [ -z "$file_list" ]
 then
