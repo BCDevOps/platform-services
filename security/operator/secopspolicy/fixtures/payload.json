@@ -1,0 +1,39 @@
+{
+	"_secops_pathfinder_gov_bc_ca_secopspolicy": {
+		"status": {
+			"conditions": [{
+				"status": "True",
+				"type": "Running",
+				"message": "Running reconciliation",
+				"lastTransitionTime": "2019-07-08T22:36:00Z",
+				"reason": "Running"
+			}]
+		},
+		"kind": "NetworkSecurityPolicy",
+		"spec": {
+			"action": "Allow",
+			"source": "devhub-tools",
+			"destination": "von-tools",
+			"description": "allow the devhub namespace to talk to the VON\\nnamespace.\\n",
+			"size": 2
+		},
+		"apiVersion": "secops.pathfinder.gov.bc.ca/v1alpha1",
+		"metadata": {
+			"uid": "c27c0a89-a1d0-11e9-902b-8698ed42653d",
+			"deletionTimestamp": "2019-07-08T22:36:05Z",
+			"generation": 2,
+			"deletionGracePeriodSeconds": 0,
+			"namespace": "default",
+			"finalizers": [
+				"finalizer.secops.pathfinder.gov.bc.ca"
+			],
+			"resourceVersion": "344165",
+			"creationTimestamp": "2019-07-08T22:35:59Z",
+			"annotations": {
+				"kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"secops.pathfinder.gov.bc.ca/v1alpha1\",\"kind\":\"NetworkSecurityPolicy\",\"metadata\":{\"annotations\":{},\"name\":\"inter-namespace-comms\",\"namespace\":\"default\"},\"spec\":{\"action\":\"Allow\",\"description\":\"allow the devhub namespace to talk to the VON\\\\nnamespace.\\\\n\",\"destination\":\"von-tools\",\"size\":2,\"source\":\"devhub-tools\"}}\\n"
+			},
+			"selfLink": "/apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/default/secopspolicies/inter-namespace-comms/status",
+			"name": "inter-namespace-comms"
+		}
+	}
+}

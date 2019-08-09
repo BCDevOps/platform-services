@@ -1,0 +1,9 @@
+---
+- version: v1alpha1
+  group: secops.pathfinder.gov.bc.ca
+  kind: NetworkSecurityPolicy
+#   reconcilePeriod: 0
+  playbook: /opt/ansible/playbook.yaml
+  finalizer:
+    name: finalizer.secops.pathfinder.gov.bc.ca
+    playbook: /opt/ansible/destroy.yaml

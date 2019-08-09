@@ -3,9 +3,10 @@ label: inter-ns-network-policies
 data:
   networkaccesspolicies:
   - name: inter-ns-network-policies
-    action: "Allow"
+    action: "{{ .Values.Action }}"
     propagate: true
     subject:
-    - - "$namespace={{ .Aporeto.Namespace }}"
+    - - "$namespace={{ .Values.Subject }}"
     object:
-    - - "$namespace={{ .Aporeto.Namespace }}"
+    - - "$namespace={{ .Values.Object }}"
+  
