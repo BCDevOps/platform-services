@@ -1,0 +1,31 @@
+# Use this task list to get the relavent details about the PR content
+- name: Get all PR data 
+  uri: 
+    method: GET
+    url: "{{ pull_request_url }}"
+    headers: 
+      Authorization: "Bearer {{ gh_token }}"
+    return_content: true
+  register: pr_payload
+  
+- name: Get list of PR files
+  uri: 
+    method: GET
+    url: "{{ pull_request_url }}/files"
+    headers: 
+      Authorization: "Bearer {{ gh_token }}"
+    return_content: true
+  register: pr_files
+
+- name: Deterine length of file content 
+  set_fact: 
+    pr_file_count: "{{ pr_files.json | length }}"
+
+- name: Fail playbook if modified file count is not 1
+  fail: 
+    msg: "Only 1 file should be present in the PR. There are {{ pr_file_count }} files."
+  when: pr_file_count == 0 ## Fix this - should be 1 but isn't working
+
+- name: Get contents of new file
+  set_fact: 
+    realm_content: "{{ lookup('url', '{{ pr_files.json[0].raw_url }}' ) }}"

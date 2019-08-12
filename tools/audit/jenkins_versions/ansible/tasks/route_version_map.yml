@@ -1,0 +1,18 @@
+--- 
+- name: Get route version
+  shell: "curl --header 'Authorization: Bearer {{ oc_token.stdout }}' https://{{ item }} -I | grep 'X-Jenkins:' | awk '{print $2}'"
+  register: version
+- name: Get project namespace details
+  shell: "oc get route --all-namespaces  | grep {{ item }} | awk '{print $1}'"
+  register: namespace
+- name: Get plugin versions
+  shell:  |
+    curl --header 'Authorization: Bearer {{ oc_token.stdout }}' 'https://{{ item }}/pluginManager/api/xml?depth=1&xpath=/*/*/shortName|/*/*/version&wrapper=plugins' | perl -pe 's/.*?<shortName>([\w-]+).*?<version>([^<]+)()(<\/\w+>)+/\1 \2\n/g'|sed 's/ /:/'
+  register: plugins
+- name: debug
+  debug: 
+    msg: "{{ plugins.stdout_lines }}"
+- name: 
+  set_fact: 
+    report_output: "{{ report_output|default([]) + [ {'namespace': namespace.stdout_lines, 'url': item, 'version': version.stdout_lines, 'plugins': plugins.stdout_lines }] }}"
+

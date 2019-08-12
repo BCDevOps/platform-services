@@ -1,0 +1,10 @@
+project: 
+  tools: c81e6h-tools
+  dev: c81e6h-dev
+  test: c81e6h-test
+  prod: c81e6h-prod
+route:
+  dev: status-dev.pathfinder.gov.bc.ca
+  test: status-test.pathfinder.gov.bc.ca
+  prod: status.pathfinder.gov.bc.ca
+
