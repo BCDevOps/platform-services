@@ -1,0 +1,17 @@
+- hosts: localhost
+  connection: local
+  tasks: 
+    - name: set fact from yaml file
+      set_fact: 
+        url_watchlist: "{{ lookup ('file', 'url_watchlist.yml') | from_yaml  }}"
+    - debug: msg="{{ item.key }} {{ item.value }}"
+      with_dict:
+        - "{{ url_watchlist['internal_services']  }}"
+        - "{{ url_watchlist['upstream_services']  }}"
+    - name: render template
+      template: 
+        src: ansible/manifests/templates/template-prometheus-configmap.yml.j2
+        dest: configmaptest.yml
+
+      
+      

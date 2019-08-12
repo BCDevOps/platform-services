@@ -1,0 +1,22 @@
+---
+- set_fact: 
+    state: present
+  when: activity == "install"
+- set_fact: 
+    state: absent
+  when: activity == "uninstall"
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].project.tools }}"
+  when:  env  == 'tools'
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].project.dev }}"
+    route: "{{ hostvars[inventory_hostname].route.dev }}"
+  when: env == "dev"
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].project.test }}"
+    route: "{{ hostvars[inventory_hostname].route.test }}"
+  when: env == 'test'
+- set_fact: 
+    namespace: "{{ hostvars[inventory_hostname].project.prod }}"
+    route: "{{ hostvars[inventory_hostname].route.prod }}"
+  when: env == 'prod'

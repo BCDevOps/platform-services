@@ -1,0 +1,234 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+    name: {{ patroni_replica_service_name }}
+  spec:
+    ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+    name: {{ patroni_service_name }}
+  spec:
+    ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+      role: master
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: {{ patroni_cluster_name }}
+    labels:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+  stringData:
+    superuser-password: {{ patroni_superuser_password }}
+    replication-password: {{ patroni_replication_password }}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+    name: {{ patroni_replica_service_name }}
+  spec:
+    ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+#      role: replica
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    creationTimestamp: null
+    generation: 3
+    labels:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+    name: {{ patroni_cluster_name }}
+  spec:
+    podManagementPolicy: OrderedReady
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: {{ patroni_cluster_name }}
+        cluster-name: {{ patroni_cluster_name }}
+    serviceName: {{ patroni_cluster_name }}
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: {{ patroni_cluster_name }}
+          cluster-name: {{ patroni_cluster_name }}
+      spec:
+        containers:
+        - env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: status.podIP
+          - name: PATRONI_KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: PATRONI_KUBERNETES_LABELS
+            value: '{app: {{ patroni_cluster_name }}, cluster-name: {{ patroni_cluster_name }}}'
+          - name: PATRONI_SUPERUSER_USERNAME
+            value: {{ patroni_superuser_username }}
+          - name: PATRONI_SUPERUSER_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: superuser-password
+                name: {{ patroni_cluster_name }}
+          - name: PATRONI_REPLICATION_USERNAME
+            value: {{ patroni_replication_username }}
+          - name: PATRONI_REPLICATION_PASSWORD
+            value: {{ patroni_replication_username }}
+          - name: PATRONI_SCOPE
+            value: {{ patroni_cluster_name }}
+          - name: PATRONI_NAME
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: PATRONI_POSTGRESQL_DATA_DIR
+            value: /home/postgres/pgdata/pgroot/data
+          - name: PATRONI_POSTGRESQL_PGPASS
+            value: /tmp/pgpass
+          - name: PATRONI_POSTGRESQL_LISTEN
+            value: 0.0.0.0:5432
+          - name: PATRONI_RESTAPI_LISTEN
+            value: 0.0.0.0:8008
+          - name: APP_USER
+            value: {{ grafana_db_username }}
+          - name: APP_PASSWORD
+            value: {{ grafana_db_password }}
+          - name: APP_DATABASE
+            value: {{ grafana_db_name }}
+          image: docker-registry.default.svc:5000/{{ patroni_image_namespace }}/patroni:{{ patroni_image_tag }}
+          imagePullPolicy: IfNotPresent
+          name: {{ patroni_cluster_name }}
+          ports:
+          - containerPort: 8008
+            protocol: TCP
+          - containerPort: 5432
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /home/postgres/pgdata
+            name: pgdata
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: {{ patroni_service_account }}
+        serviceAccountName: {{ patroni_service_account }}
+        terminationGracePeriodSeconds: 0
+        volumes:
+        - name: pgdata
+          emptyDir: {}
+    updateStrategy:
+      type: OnDelete
+- apiVersion: v1
+  kind: Endpoints
+  metadata:
+    name: {{ patroni_cluster_name }}
+    labels:
+      app: {{ patroni_cluster_name }}
+      cluster-name: {{ patroni_cluster_name }}
+  subsets: []
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: {{ patroni_service_account }}
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: Role
+  metadata:
+    name: {{ patroni_service_account }}
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    verbs:
+    - create
+    - get
+    - list
+    - patch
+    - update
+    - watch
+    # delete is required only for 'patronictl remove'
+    - delete
+  - apiGroups:
+    - ""
+    resources:
+    - endpoints
+    verbs:
+    - get
+    - patch
+    - update
+    # the following three privileges are necessary only when using endpoints
+    - create
+    - list
+    - watch
+    # delete is required only for for 'patronictl remove'
+    - delete
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    verbs:
+    - get
+    - list
+    - patch
+    - update
+    - watch
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: {{ patroni_service_account }}
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: {{ patroni_service_account }}
+  subjects:
+  - kind: ServiceAccount
+    name: {{ patroni_service_account }}

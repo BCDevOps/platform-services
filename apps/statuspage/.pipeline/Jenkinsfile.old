@@ -1,0 +1,115 @@
+#!/usr/bin/env groovy
+
+//Replacing this file with a Ansible / webhook workflow for easier logic handling
+
+//ENV Vars
+def TOOLS_NAMESPACE = 'c81e6h-tools'
+def DEV_NAMESPACE = 'c81e6h-dev'
+def TEST_NAMESPACE = 'c81e6h-test'
+def PROD_NAMESPACE = 'c81e6h-prod'
+def PROMETHEUS_VERSION = 'latest'
+def BLACKBOX_VERSION = 'latest'
+def GRAFANA_VERSION = 'latest'
+def ENVOY_VERSION = 'latest'
+def GIT_REPO = 'BCDevOps/platform-services'
+def BRANCH_NAME = 'status-page'
+
+
+// Pipeline Execution
+
+    node {
+            stage ('Clone repo'){
+                git branch: "${BRANCH_NAME}", url: "https://github.com/${GIT_REPO}"
+            }
+            stage ('Deploy Dev'){
+                parallel (
+                    'Prometheus': {
+                        stage ('Deploy Prometheys') {
+                            dir ("apps/statuspage/manifests") {
+                                sh "ls -lha"
+                                sh """oc apply -f service-prometheus.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f configmap-prometheus.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f route-prometheus.yml -n ${DEV_NAMESPACE}"""
+                                sh """cat statefulset-prometheus.yml | sed 's/{{ VERSION }}/${PROMETHEUS_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
+                            }
+                        }
+                    },
+                    'Blackbox': {
+                        stage('Deploy Blackbox'){
+                            dir ("apps/statuspage/manifests") {                            
+                                sh """oc apply -f service-blackbox-exporter.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f configmap-blackbox-exporter.yml -n ${DEV_NAMESPACE}"""
+                                sh """cat deployment-blackbox-exporter.yml | sed 's/{{ VERSION }}/${BLACKBOX_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
+                            }
+                        }
+                    },
+                    'Grafana': {
+                        stage('Deploy Grafana'){
+                            dir ("apps/statuspage/manifests") {
+                                sh """oc apply -f service-grafana.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f route-grafana.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f pvc-grafana.yml -n ${DEV_NAMESPACE}"""
+                                sh """cat deployment-grafana.yml | sed 's/{{ VERSION }}/${GRAFANA_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
+                            }
+                        }
+                    },
+                    'Envoy': {
+                        stage('Deploy Envoy'){
+                            dir ("apps/statuspage/manifests") {
+                                sh """oc apply -f service-envoy.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f route-envoy.yml -n ${DEV_NAMESPACE}"""
+                                sh """oc apply -f configmap-envoy.yml -n ${DEV_NAMESPACE}"""
+                                sh """cat deployment-envoy.yml | sed 's/{{ VERSION }}/${ENVOY_VERSION}/g'| oc apply -f - -n ${DEV_NAMESPACE}"""
+                            }
+                        }
+                    },
+                )
+                
+            }
+            stage ("Configure Dev")
+            {
+                parallel (
+                    'Grafana': {
+                        stage ('Configure Grafana') {
+                            dir ("apps/statuspage/manifests") {
+                                sh """until [ "\$(oc get pods -n ${DEV_NAMESPACE} | grep Running | grep grafana | awk '{print \$2}')" = "1/1" ]; do echo "Waiting for Grafana to be ready..."; done """
+                                sh "echo 'Generating API Token for Read Only User'"
+                                sh """GRAFANA_API_KEY=\$(curl -H "Content-Type: application/json" -X POST -d '{"name": "public", "role": "Viewer"}' http://admin:admin@\$(oc get routes -n ${DEV_NAMESPACE} | grep grafana | awk '{print \$2}')/api/auth/keys | jq -r '.key')"""
+                                sh """cat configmap-envoy.yml | sed 's/{{ GRAFANA_TOKEN }}/'"\$GRAFANA_API_KEY"'/g' | oc apply -f - -n ${DEV_NAMESPACE} """
+                            }
+                        }
+                    },
+                )
+            }
+            stage ("Wait for Validation"){
+                    input id: 'Approve02', message: 'Deploy in Test?', ok: 'HANG TIGHT!'
+            }
+            stage('Depoly in Test'){
+                    sh "echo test"
+            }
+            stage('Testing Stage'){
+                
+                parallel (
+                    'validate all upstreams': {
+                        sh "echo load test"
+                    },
+                    'validate all components': {
+                        echo "e2e test"
+                    }
+                )
+
+            }
+            stage ("Wait for Validation"){
+                    input id: 'Approve03', message: 'Deploy in Prod?', ok: 'HANG TIGHT!'
+            }
+            stage ("Deploy in Production"){
+                parallel (
+                    'Prod Rollout': {
+
+                    },
+                    'Notify RocketChat': {
+                        echo "Security Update"
+                    }
+                )
+            }
+    }

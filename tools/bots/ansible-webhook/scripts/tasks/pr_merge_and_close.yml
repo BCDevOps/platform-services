@@ -1,0 +1,31 @@
+# Use this task list to merge and close the PR    
+- name: Merge Pull Request
+  uri: 
+    method: PUT
+    url: "{{ pr_merge_url }}"
+    headers: 
+      Authorization: "Bearer {{ gh_token }}"
+    body: '{"commit_title":"realm-o-matic auto-close", "commit_message": "realm successfully created", "merge_method":"squash"}'
+    return_content: true
+  register: merge_status
+  ignore_errors: true
+
+- name: Add comment to PR if merge is not successful
+  uri: 
+    method: POST
+    url: "{{ pr_payload.json._links.comments.href }}"
+    headers: 
+      Authorization: "Bearer {{ gh_token }}"
+    body: '{ "body": "Error merging request. The error was: {{ merge_status.json.message }}" }'
+    body_format: json
+    status_code: 201
+  when: merge_status.status != 200
+
+- name: Close Pull Request
+  uri: 
+    method: PATCH
+    url: "{{ pull_request_url }}"
+    headers: 
+      Authorization: "Bearer {{ gh_token }}"
+    body: '{"state":"closed"}'
+  when: merge_status.status == 200 
