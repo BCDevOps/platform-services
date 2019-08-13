@@ -1,0 +1,13 @@
+APIVersion: 1
+label: api-server-communications
+data:
+  networkaccesspolicies:
+  - name: api-server-communications
+    action: "Allow"
+    propagate: true
+    subject:
+    - - "$namespace=/bcgov-devex/lab/kube-service-catalog"
+    object:
+    - - "$namespace=/bcgov-devex/lab/openshift-template-service-broker"
+    - - "$namespace=/bcgov-devex/lab/osba"
+    - - "$namespace=/bcgov-devex/lab/openshift-ansible-service-broker"
