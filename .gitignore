@@ -71,6 +71,8 @@ typings/
 *apps/statuspage/ansible/manifests/*.yml*
 *tmp-dashboard.json*
 
-
 # retry
 *.retry
+
+# artifacts
+*.orig
