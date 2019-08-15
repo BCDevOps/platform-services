@@ -1,0 +1,4 @@
+openshift_project: test-aporeto
+aporeto_org: /bcgov-devex
+aporeto_namespace: lab
+openshift_cluster_name: kamloops

@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks: 
+    - include_tasks: tasks/set_env.yml
+    - include_tasks: tasks/namespace_preparation.yml
+  

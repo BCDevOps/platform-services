@@ -1,0 +1,11 @@
+---
+- name: Add the helm repo
+  command: "helm repo add {{ helm_repo_name }} {{ helm_repo_address }}"
+- name: Create OpenShift Namespace
+  command: 
+    "oc new-project {{ openshift_project }}"
+  ignore_errors: true
+- name: Patch namespace for Daemonset readiness
+  shell: > 
+    ''oc patch namespace {{ openshift_project }} -p '{"metadata": {"annotations": {"openshift.io/node-selector": ""}}}'''
+
