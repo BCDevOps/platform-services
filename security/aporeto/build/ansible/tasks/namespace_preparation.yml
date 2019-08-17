@@ -7,5 +7,12 @@
   ignore_errors: true
 - name: Patch namespace for Daemonset readiness
   shell: > 
-    ''oc patch namespace {{ openshift_project }} -p '{"metadata": {"annotations": {"openshift.io/node-selector": ""}}}'''
+    ''oc patch namespace {{ openshift_project }} -p '{"metadata": {"annotations": {"openshift.io/node-selector": ""}}}' ''
+  ignore_errors: true
 
+- name: Create Aporeto namesapce
+  shell: >
+    ''apoctl api create namespace --token {{ aporeto_temp_token }} --namespace {{ aporeto_org }} --api "https://api.console.aporeto.com" --data '{"name": "lab"}' ''
+
+
+  # --data '{"name": "{{ aporeto_namespace }}"}' 

@@ -17,6 +17,13 @@ The Aporeto solution is a multi-cluster multi-cloud zero trust network solution 
 - Design Patterns
   - [Design Pattern 01 - Single Namespace Microsegmentation](design_patterns/design_pattern_01/design_pattern-single_namespace_microsegmentation.md)
 
+# Aporeto Support
+Please see the the [support datasheet](pdfs/Aporeto_Support_Datasheet.pdf) here for Aporeto product support.
+
+- The following teams are able to contact Aporeto for support: 
+  - DXC
+  - DevOps Platform-Services Team
+
 # Issue Tracking
 Please use GitHub issues in this repo with the "security/aporeto". 
 
