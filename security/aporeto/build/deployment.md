@@ -63,15 +63,6 @@ apoctl appcred create aporeto-operator -n $APOCTL_NAMESPACE/$BASE_ENV --type k8s
 oc get secrets -n $APORETO_NAMESPACE
 ```
 
-- VERIFY IF THIS IS CORRECT OR NEEDED
-
-```
-### Not sure if we need this... it's pretty wide open
-oc adm policy add-cluster-role-to-user cluster-admin -z aporeto-operator
-###
-```
-
-**NOTE: Please set the namespace to "design mode" prior to deploying the following components when testing; otherwise no traffic will be allowed to pass. This will be carefully controlled on a prod rollout*
 
 ## Deploy Base Policies
 - Prior to deploying the operator and encforcers, deploy some base policies for the environment: 

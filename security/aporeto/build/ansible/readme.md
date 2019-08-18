@@ -16,3 +16,8 @@ export APOCTL_PASSWORD=mypassword
 - CLI tools
   - apoctl
   - helm
+
+
+## Todo
+- [ ] Sort out labels on appcred or appcred cleanup
+- [ ] Create test/error for existing namespace

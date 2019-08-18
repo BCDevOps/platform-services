@@ -8,4 +8,3 @@
   register: aporeto_temp_token_output
 - set_fact: 
     aporeto_temp_token: "{{ aporeto_temp_token_output.stdout.split('=')[1] }}"
-  
