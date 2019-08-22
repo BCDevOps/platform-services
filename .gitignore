@@ -52,7 +52,7 @@ typings/
 *.tgz
 
 # Yarn Integrity file
-.yarn-integrity
+#.yarn-integrityree/keycloak_provisioner/operators
 
 # dotenv environment variables file
 .env
@@ -61,6 +61,18 @@ typings/
 .next
 .DS_Store
 
+# temp folders
+*git_checkout*
 
-# sensitive items
-*sensitive*
+# creds
+*creds*
+
+# statuspage template files
+*apps/statuspage/ansible/manifests/*.yml*
+*tmp-dashboard.json*
+
+# retry
+*.retry
+
+# artifacts
+*.orig

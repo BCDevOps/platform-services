@@ -20,9 +20,11 @@ data:
       hostModeEnabled: false
       hostServices: []
       ignoreExpression:
+        - - '@sys:k8s:namespace=kube-system'
         - - '@sys:k8s:namespace=devops-platform-security-aporeto'
         - - '@sys:k8s:namespace=openshift-sdn'
         - - '@sys:k8s:namespace=openshift-node'
+        - - '@sys:k8s:namespace=openshift-monitoring'
       killContainersOnFailure: true
       kubernetesMetadataExtractor: PodAtomic
       kubernetesSupportEnabled: true
