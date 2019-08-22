@@ -107,7 +107,6 @@ parameters:
     description: The Storage Class for the MongoDB
     displayName: Storage Class for MongoDB
     required: true
-    value: "gluster-file"
 
 objects:
 # Secrets for mongo DB 

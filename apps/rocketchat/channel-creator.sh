@@ -12,7 +12,7 @@ while read -r line; do
     curl -H "X-Auth-Token: $token" -H "X-User-Id: $userid" -H "Content-type: application/json" $rocketurl/api/v1/channels.create -d '{ "name": "'$channel'" }'
 done < "$filename"
 
-
+#curl example
 #curl -H "X-Auth-Token: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq" \
 #     -H "X-User-Id: aobEdbYhXfu5hkeqG" \
 #     -H "Content-type:application/json" \

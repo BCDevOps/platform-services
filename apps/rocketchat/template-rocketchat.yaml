@@ -23,7 +23,6 @@ parameters:
     description: The Storage Class for the RocketChat uploads volume
     displayName: File Uploads Storage Class 
     required: true
-    value: "gluster-file"
 
   - name: HOSTNAME_HTTPS
     description: Hostname serving the application
@@ -46,7 +45,6 @@ parameters:
   - name: ROCKETCHAT_IMAGE_TAG
     description: Name of the RocketChat tag that should be used
     displayName: RocketChat Tag
-    value: "1.1.1"
     required: true
 
   - name: ROCKETCHAT_REPLICAS
@@ -180,17 +178,6 @@ objects:
       # Messaging Settings
       OVERWRITE_SETTING_Message_AllowSnippeting: "True"
       
-      ## Rooms
-      # DevOps Alerts
-      # Random - Default
-      # DevOps Questions Community
-      # CSI Lab
-      # DevOps Platform Team
-      # Kudos - Default
-      # DevOps Request
-      ## Permissions 
-      # Users- Manage Own Integrations: Enabled
-
   # Service for the Rocketchat NodeJS service
   - apiVersion: v1
     kind: Service
