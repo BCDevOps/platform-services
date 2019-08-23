@@ -197,6 +197,8 @@ objects:
             value: 0.0.0.0:5432
           - name: PATRONI_RESTAPI_LISTEN
             value: 0.0.0.0:8008
+          - name: PATRONI_SYNCHRONOUS_MODE
+            value: ${PATRONI_SYNCHRONOUS_MODE}
           image: ${IMAGE_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/${IMAGE_STREAM_TAG}
           # Because we are using image reference to a tag, we need to always pull the image otherwise
           #   we end up with outdated/out-of-sync image depending on the node where it is running
@@ -352,6 +354,11 @@ parameters:
   displayName: Memory Limit
   name: MEMORY_LIMIT
   value: 512Mi
+- description: Set Patroni to run in synchronous mode.  This parameter only affects the initial deployment.
+    To change the sync mode after initial deployment will require changing the dynamic config.  Default is false.
+  displayName: Sync Mode
+  name: PATRONI_SYNCHRONOUS_MODE
+  value: 'false'
 - description: The OpenShift Namespace where the patroni and postgresql ImageStream
     resides.
   displayName: ImageStream Namespace

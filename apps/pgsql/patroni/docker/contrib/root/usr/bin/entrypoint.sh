@@ -15,6 +15,7 @@ cat > /home/postgres/patroni.yml <<__EOF__
 bootstrap:
   post_bootstrap: /usr/share/scripts/patroni/post_init.sh
   dcs:
+    synchronous_mode: ${PATRONI_SYNCHRONOUS_MODE:-false}
     postgresql:
       use_pg_rewind: true
       parameters:
