@@ -82,7 +82,7 @@ spec:
       hostNetwork: true
       hostPID: true
       nodeSelector:
-        region: app
+        region: storage
         sysdig-agent: "true"
       restartPolicy: Always
       schedulerName: default-scheduler
