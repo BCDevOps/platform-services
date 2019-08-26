@@ -3,9 +3,13 @@ data:
   dragent.yaml: |-
     ### Agent tags
     # tags: linux:ubuntu,dept:dev,local:nyc
-    tags: cluster:openshift,env:lab
+    tags: cluster:openshift,env:lab,datacenter:kamloops,region:app
 
     #### Sysdig Software related config ####
+    # Agent Log priority
+    log:
+      file_priority: info
+      console_priority: warning
 
     # Sysdig collector address
     collector: collector-static.sysdigcloud.com
@@ -26,7 +30,8 @@ data:
     ### Prometheus
     prometheus:
       enabled: true
-      interval: 10
+      interval: 30
+      timeout: 5
       log_errors: true
       max_metrics: 3000
       max_metrics_per_process: 2000
@@ -93,7 +98,5 @@ data:
         #        auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
 kind: ConfigMap
 metadata:
-  name: sysdig-agent
-  namespace: devops-sysdig
-
-
+  creationTimestamp: null
+  name: sysdig-agent-app
