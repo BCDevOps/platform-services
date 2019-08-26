@@ -27,6 +27,14 @@ data:
     new_k8s: true
     k8s_cluster_name: lab-pathfinder
 
+    k8s_extra_resources:
+      include:
+        - services
+        - resourcequotas
+        - persistentvolumes
+        - persistentvolumeclaims
+        - horizontalpodautoscalers
+
     ### Prometheus
     prometheus:
       enabled: true
@@ -43,6 +51,14 @@ data:
       # If an include rule doesn't contain a port or port_filter in the conf
       # section, we will scan all the ports that a matching process is listening to.
       process_filter:
+        - include:
+            port: 2379
+            conf:
+              port: 2379
+              use_https: true
+              auth_cert_path: "/host/etc/etcd/peer.crt"
+              auth_key_path: "/host/etc/etcd/peer.key"
+              host: etcd.kube-system.svc
         - exclude:
             process.name: docker-proxy
         - exclude:

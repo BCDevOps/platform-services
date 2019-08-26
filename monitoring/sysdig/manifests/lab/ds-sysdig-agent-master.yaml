@@ -74,6 +74,8 @@ spec:
           readOnly: true
         - mountPath: /dev/shm
           name: dshm
+        - mountPath: /host/etc/etcd
+          name: etcd-vol
         - mountPath: /opt/draios/etc/kubernetes/config
           name: sysdig-agent-config
         - mountPath: /opt/draios/etc/kubernetes/secrets
@@ -82,7 +84,7 @@ spec:
       hostNetwork: true
       hostPID: true
       nodeSelector:
-        region: app
+        region: master
         sysdig-agent: "true"
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -109,6 +111,10 @@ spec:
           path: /proc
           type: ""
         name: proc-vol
+      - hostPath:
+          path: /etc/etcd
+          type: ""
+        name: etcd-vol
       - hostPath:
           path: /boot
           type: ""
