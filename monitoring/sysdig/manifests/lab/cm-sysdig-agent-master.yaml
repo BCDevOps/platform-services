@@ -1,0 +1,102 @@
+apiVersion: v1
+data:
+  dragent.yaml: |-
+    ### Agent tags
+    # tags: linux:ubuntu,dept:dev,local:nyc
+    tags: cluster:openshift,env:lab,datacenter:kamloops,region:master
+
+    #### Sysdig Software related config ####
+    # Agent Log priority
+    log:
+      file_priority: info
+      console_priority: warning
+
+    # Sysdig collector address
+    collector: collector-static.sysdigcloud.com
+
+    # Collector TCP port
+    collector_port: 6443
+
+    # Whether collector accepts ssl
+    ssl: true
+
+    # collector certificate validation
+    ssl_verify_certificate: true
+
+    #######################################
+    new_k8s: true
+    k8s_cluster_name: lab-pathfinder
+
+    ### Prometheus
+    prometheus:
+      enabled: true
+      interval: 30
+      timeout: 5
+      log_errors: true
+      max_metrics: 3000
+      max_metrics_per_process: 2000
+      max_tags_per_metric: 200
+      histograms: false
+
+      # Filtering processes to scan. Processes not matching a rule will not
+      # be scanned
+      # If an include rule doesn't contain a port or port_filter in the conf
+      # section, we will scan all the ports that a matching process is listening to.
+      process_filter:
+        - exclude:
+            process.name: docker-proxy
+        - exclude:
+            container.image: sysdig/agent
+        # special rule to exclude processes matching configured prometheus appcheck
+        - exclude:
+            appcheck.match: prometheus
+        - include:
+            container.label.io.prometheus.scrape: "true"
+            conf:
+                # Custom path definition
+                # If the label doesn't exist we'll still use "/metrics"
+                path: "{container.label.io.prometheus.path}"
+
+                # Port definition
+                # - If the label exists, only scan the given port.
+                # - If it doesn't, use port_filter instead.
+                # - If there is no port_filter defined, skip this process
+                port: "{container.label.io.prometheus.port}"
+                port_filter:
+                    - exclude: [9092,9200,9300]
+                    - include: 9090-9500
+                    - include: [9913,9984,24231,42004]
+        - exclude:
+            container.label.io.prometheus.scrape: "false"
+        - include:
+            kubernetes.pod.annotation.prometheus.io/scrape: true
+            conf:
+                path: "{kubernetes.pod.annotation.prometheus.io/path}"
+                port: "{kubernetes.pod.annotation.prometheus.io/port}"
+        - exclude:
+            kubernetes.pod.annotation.prometheus.io/scrape: false
+        - include:
+            kubernetes.service.annotation.prometheus.io/scrape: true
+            conf:
+                path: "{kubernetes.service.annotation.prometheus.io/path}"
+                port: "{kubernetes.service.annotation.prometheus.io/port}"
+        - exclude:
+            kubernetes.service.annotation.prometheus.io/scrape: false
+        - include:
+            kubernetes.pod.label.app: "kube-state-metrics"
+            conf:
+                host: kube-state-metrics.openshift-monitoring.svc
+                port: 8443
+                use_https: true
+                auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
+        #- include:
+        #    kubernetes.pod.label.app: "node-exporter"
+        #    conf:
+        #        host: localhost
+        #        port: 9100
+        #        use_https: true
+        #        auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: sysdig-agent-master
