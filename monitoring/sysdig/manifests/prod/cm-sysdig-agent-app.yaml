@@ -40,7 +40,8 @@ data:
     ### Prometheus
     prometheus:
       enabled: true
-      interval: 10
+      interval: 30
+      timeout: 5
       log_errors: true
       max_metrics: 3000
       max_metrics_per_process: 2000
