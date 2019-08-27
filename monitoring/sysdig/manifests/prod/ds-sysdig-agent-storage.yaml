@@ -5,6 +5,7 @@ metadata:
   labels:
     app: sysdig-agent
     app_group: sysdig-agent-storage
+  namespace: devops-sysdig
   name: sysdig-agent-storage
 spec:
   revisionHistoryLimit: 10
