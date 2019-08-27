@@ -115,4 +115,5 @@ data:
 kind: ConfigMap
 metadata:
   creationTimestamp: null
+  namespace: devops-sysdig
   name: sysdig-agent-master
