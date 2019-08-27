@@ -14,6 +14,7 @@ The Aporeto solution is a multi-cluster multi-cloud zero trust network solution 
   - [Deployment Steps](build/deployment.md)
 - Administration Documents
   - [Authentication & Authorization](admin/auth.md)
+  - [Troubleshooting](admin/troubleshooting.md)
 - Design Patterns
   - [Design Pattern 01 - Single Namespace Microsegmentation](design_patterns/design_pattern_01/design_pattern-single_namespace_microsegmentation.md)
 
