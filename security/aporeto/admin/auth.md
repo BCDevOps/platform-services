@@ -10,7 +10,7 @@ Aporeto is currently linked to the **sso-dev** for testing with the GitHub realm
 ## OIDC Configuration
 The following OIDC configurations are in place: 
 - sso-dev
-  ![](assets/oidc_config.png)
+  ![](assets/oidc_config_dev.png)
   Or the configuration as code (exported from the **Data Explorer**)
   ```
   APIVersion: 0
@@ -20,6 +20,22 @@ The following OIDC configurations are in place:
         clientSecret: **[REMOVED]**
         default: true
         endpoint: 'https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_github'
+        name: pathfinder-sso-dev
+        subjects:
+          - preferred_username
+  ```
+
+- sso-prod
+  ![](assets/oidc_config_prod.png)
+  Or the configuration as code (exported from the **Data Explorer**)
+  ```
+  APIVersion: 0
+  data:
+    oidcproviders:
+      - clientID: aporeto
+        clientSecret: **[REMOVED]**
+        default: true
+        endpoint: 'https://sso.pathfinder.gov.bc.ca/auth/realms/_github'
         name: pathfinder-sso-dev
         subjects:
           - preferred_username
