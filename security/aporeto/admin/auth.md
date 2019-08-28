@@ -2,10 +2,15 @@
 Aporeto can use many different types of authentication sources in order to provide access to the platform. These could be standard Aporeto-managed accounts, or through an enterprise provider via OIDC or LDAP.
 
 ## OIDC
-Aporeto is currently linked to the **sso-dev** for testing with the GitHub realm. 
+Aporeto is currently linked to the **sso-dev** and **sso-prod** with the GitHub realm. 
 - When logging into the console, specify the OIDC account and provider information
-![](assets/oidc_signin.png)  
+  - **sso-dev**
 
+![](assets/oidc_signin_dev.png)  
+
+  - **sso-prod**
+  
+![](assets/oidc_signin_prod.png) 
 
 ## OIDC Configuration
 The following OIDC configurations are in place: 
