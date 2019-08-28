@@ -24,7 +24,7 @@ The following OIDC configurations are in place:
       - clientID: aporeto
         clientSecret: **[REMOVED]**
         default: true
-        endpoint: 'https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_github'
+        endpoint: 'https://sso-dev.pathfinder.gov.bc.ca/auth/realms/devhub'
         name: pathfinder-sso-dev
         subjects:
           - preferred_username
@@ -40,7 +40,7 @@ The following OIDC configurations are in place:
       - clientID: aporeto
         clientSecret: **[REMOVED]**
         default: true
-        endpoint: 'https://sso.pathfinder.gov.bc.ca/auth/realms/_github'
+        endpoint: 'https://sso.pathfinder.gov.bc.ca/auth/realms/devhub'
         name: pathfinder-sso-dev
         subjects:
           - preferred_username
