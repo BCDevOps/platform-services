@@ -102,6 +102,7 @@ helm template ./enforcerd-*.tgz \
   | oc apply -f - -n $APORETO_NAMESPACE
 ```
 
+
 - Remove the default operator enforcer profile (**not sure if this is required**)
 
 ```
@@ -114,8 +115,11 @@ apoctl api delete enforcerprofilemappingpolicies operator-enforcer-profile-mappi
 ```
 oc patch daemonset enforcerd -n $APORETO_NAMESPACE -p '{"spec": {"template": {"spec": {"nodeSelector": {"aporeto-enforcerd":"true"}}}}}'
 
-## Build the appropriate list of nodes here
-oc label nodes ociopf-t-311.dmz ociopf-t-312.dmz ociopf-t-313.dmz ociopf-t-321.dmz ociopf-t-322.dmz aporeto-enforcerd=true
+## Label infra and compute nodes
+oc label nodes ociopf-t-311.dmz ociopf-t-312.dmz ociopf-t-313.dmz ociopf-t-321.dmz ociopf-t-322.dmz  aporeto-enforcerd=true --overwrite=true
+
+## Masters
+oc label nodes  ociopf-t-301.dmz ociopf-t-302.dmz ociopf-t-303.dmz aporeto-enforcerd=true --overwrite=true
 ```
 
 - Verify the daemonset deployment

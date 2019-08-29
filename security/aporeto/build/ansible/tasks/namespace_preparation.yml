@@ -1,25 +1,33 @@
 ---
-- name: Create OpenShift Namespace
+- name: Create Enforcer Namespace
   command: 
-    "oc new-project {{ openshift_project }}"
+    "oc new-project {{ openshift_project_prefix }}-enforcers"
+  ignore_errors: true
+- name: Create Operator Namespace
+  command: 
+    "oc new-project {{ openshift_project_prefix }}-operator"
   ignore_errors: true
 - name: Patch namespace for Daemonset readiness
   shell: > 
-    ''oc patch namespace {{ openshift_project }} -p '{"metadata": {"annotations": {"openshift.io/node-selector": ""}}}' ''
+    ''oc patch namespace {{ openshift_project_prefix }}-enforcers -p '{"metadata": {"annotations": {"openshift.io/node-selector": ""}}}' ''
   ignore_errors: true
 
-- name: Add aporeto service account to privileged scc
+- name: Add aporeto enforcerd service account to privileged scc
   command: 
-    "oc adm policy add-scc-to-user privileged -z aporeto-account -n {{ openshift_project }}"
+    "oc adm policy add-scc-to-user privileged -z enforcerd -n {{ openshift_project_prefix }}-enforcers"
 
-- name: Create Aporeto namesapce   ## Add some error handling for the above if the NS exists
+- name: Add aporeto operator service account to privileged scc
+  command: 
+    "oc adm policy add-cluster-role-to-user cluster-reader -z aporeto-operator -n {{ openshift_project_prefix }}-operator"
+
+- name: Create Aporeto namespace   ## Add some error handling for the above if the NS exists
   shell: >
     apoctl api create namespace -k name="{{ aporeto_namespace }}" --namespace="{{ aporeto_org }}" --token="{{ aporeto_temp_token }}"
   ignore_errors: true 
 
 - name: Create base enforcer profiles and policies 
   block: 
-    - name: Template file
+    - name: Template openshift default profile
       template: 
         src:  templates/profiles/openshift-default-profile.yml.j2
         dest: output/openshift-default-profile.yml
@@ -27,7 +35,7 @@
       shell: 
         apoctl api import --file output/openshift-default-profile.yml --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
 
-    - name: Template file
+    - name: Template openshift default profile mapping
       template: 
         src:  templates/profiles/openshift-default-profile-mapping.yml.j2
         dest: output/openshift-default-profile-mapping.yml
@@ -40,9 +48,9 @@
   block: 
     - name: Create enforcerd appcred
       shell: > 
-        apoctl appcred create enforcerd --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=enforcer" | oc apply -f - -n "{{ openshift_project }}"
+        apoctl appcred create enforcerd --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=enforcer" | oc apply -f - -n "{{ openshift_project_prefix }}-enforcers"
 
     - name: Create aporeto-operator appcred 
       shell: > 
-        apoctl appcred create aporeto-operator --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=aporeto-operator"  |  oc apply -f - -n "{{ openshift_project }}"
+        apoctl appcred create aporeto-operator --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=aporeto-operator"  |  oc apply -f - -n "{{ openshift_project_prefix }}-operator"
   ignore_errors: true

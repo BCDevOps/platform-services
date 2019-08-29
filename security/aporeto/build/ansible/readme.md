@@ -7,6 +7,8 @@
 ```
 export APOCTL_USER=myuser
 export APOCTL_PASSWORD=mypassword
+export APOCTL_NAMESPACE=/bcgov-devex
+export BASE_ENV=lab-test
 ```
 
 - Ensure the system running this playbook is already logged in with appropriate credentials to OpenShift

@@ -1,0 +1,37 @@
+---
+- name: Run through Helm deployment
+  block: 
+    - name: Add the helm repo
+      command: "helm repo add {{ helm_repo_name }} {{ helm_repo_address }}"
+
+    - name: Fetch helm charts for aporeto-crds
+      command: "helm fetch aporeto/aporeto-crds"
+    - name: Use Helm Template to create OpenShift Objects
+      shell: "helm template aporeto-crds-*.tgz | oc apply -f - "
+
+    - name: Fetch helm charts for aporeto-operator
+      command: "helm fetch aporeto/aporeto-operator"
+    - name: Use Helm Template to create OpenShift Objects
+      shell: "helm template aporeto-operator-*.tgz \
+        --name aporeto-operator \
+        --namespace {{ openshift_project_prefix }}-operator --set options.baseNamespace={{ openshift_project_prefix }}-enforcers \
+        | oc apply -f - -n {{ openshift_project_prefix }}-operator"
+      ignore_errors: true
+
+    - name: Fetch helm charts for enforcers
+      command: "helm fetch aporeto/enforcerd"
+    - name: Use Helm Template to create OpenShift Objects
+      shell: "helm template enforcerd-*.tgz \
+      --namespace {{ openshift_project_prefix }}-enforcers \
+      | oc apply -f - -n {{ openshift_project_prefix }}-enforcers "
+      ignore_errors: true
+
+    - name: Patch daemonset with appropriate label
+      shell: > 
+         ''oc patch daemonset enforcerd -n {{ openshift_project_prefix }}-enforcers -p '{"spec": {"template": {"spec": {"nodeSelector": {"aporeto-enforcerd":"true"}}}}}' ''
+      ignore_errors: true
+    
+    # - name: Label nodes to activate enforcers
+    #   shell: oc label node {{ node_name }} aporeto-enforcerd=trues
+    #   with_items: 
+    #     - {{ node_list }}

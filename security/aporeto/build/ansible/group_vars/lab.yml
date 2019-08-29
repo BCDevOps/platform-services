@@ -1,5 +1,11 @@
-openshift_project: test-aporeto
+openshift_project_prefix: test-aporeto
 aporeto_org: /bcgov-devex
 aporeto_namespace: lab-test
 openshift_cluster_name: kamloops
 cluster_network: 10.131.0.1
+node_list: 
+  - ociopf-t-311.dmz 
+  - ociopf-t-312.dmz 
+  - ociopf-t-313.dmz 
+  - ociopf-t-321.dmz 
+  - ociopf-t-322.dmz

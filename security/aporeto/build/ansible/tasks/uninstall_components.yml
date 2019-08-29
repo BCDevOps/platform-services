@@ -1,0 +1,52 @@
+---
+- name: Remove components with Helm Template
+  block: 
+    - name: Add the helm repo
+      command: "helm repo add {{ helm_repo_name }} {{ helm_repo_address }}"
+
+    - name: Fetch helm charts for enforcers
+      command: "helm fetch aporeto/enforcerd"
+    - name: Use Helm Template to delete OpenShift Objects
+      shell: "helm template enforcerd-*.tgz \
+      --namespace {{ openshift_project_prefix }}-enforcers \
+      | oc delete -f - -n {{ openshift_project_prefix }}-enforcers "
+      ignore_errors: true
+
+    - name: Disable Aporeto operator syncing
+      command: "oc annotate namespace {{ openshift_project_prefix }}-enforcers aporeto.io/disable-aporeto-ctrls='true' "
+      ignore_errors: true
+
+
+    - name: Remove all custom resources created by the Aporeto Operator
+      shell: "for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc delete $crd -n {{ openshift_project_prefix }}-enforcers --all ; done"
+
+    - name: Validate that no resources are left 
+      shell: "for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc get $crd --all-namespaces -o name; done"
+
+
+    - name: Fetch helm charts for aporeto-operator
+      command: "helm fetch aporeto/aporeto-operator"
+    - name: Use Helm Template to delete OpenShift Objects
+      shell: "helm template aporeto-operator-*.tgz \
+        --name aporeto-operator \
+        --namespace {{ openshift_project_prefix }}-operator --set options.baseNamespace={{ openshift_project_prefix }}-enforcers \
+        | oc delete -f - -n {{ openshift_project_prefix }}-operator"
+      ignore_errors: true
+
+  
+    - name: Fetch helm charts for aporeto-crds
+      command: "helm fetch aporeto/aporeto-crds"
+    - name: Use Helm Template to delete OpenShift Objects
+      shell: "helm template aporeto-crds-*.tgz | oc delete -f - "
+
+    - name: Remove OpenShift Projects
+      command: "oc delete project {{ openshift_project_prefix }}-enforcers {{ openshift_project_prefix }}-operator"
+
+# # works
+# for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc get $crd --all-namespaces -o name; done
+
+# # does not work
+# for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc delete $crd -n ; done
+
+# ## better (need to fix the namespace name in code)
+# for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc delete $crd -n {{ openshift_project_prefix }}-enforcers --all ; done
