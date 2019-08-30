@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks: 
+  - name: Template test
+    template: 
+      src: "templates/{{ item }}.yml.j2"
+      dest: "output/{{ item }}.yml"
+    with_items: 
+      - external_networks/cluster-network
+      - network_access_policies/cluster-api-communication
+      - network_access_policies/cluster-network-ingress

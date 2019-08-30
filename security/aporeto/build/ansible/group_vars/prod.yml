@@ -3,6 +3,7 @@ openshift_project_prefix: devops-security-aporeto
 aporeto_org: /bcgov-devex
 aporeto_namespace: prod
 openshift_cluster_name: kamloops
-cluster_network: 
+cluster_network: 10.131.0.1/16  # Validate this
+host_network: 142.34.143.128/26 # Validate this
 node_list: 
 

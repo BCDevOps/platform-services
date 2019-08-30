@@ -1,0 +1,14 @@
+APIVersion: 1
+label: lab-host-network
+data:
+  externalnetworks:
+  - name: host-network
+    entries:
+    - {{ host_network }}
+    ports:
+    - "1:65535"
+    protocols:
+    - udp
+    - tcp
+    associatedTags:
+    - ext:network=host-network
