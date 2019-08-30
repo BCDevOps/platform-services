@@ -3,14 +3,6 @@
 # Aporeto Deployment Docs
 This document outlines the manual steps used for deploying and configuring the environment. This will be converted to an Ansible playbook for consistency. 
 
-# Namespaces
-The following OpenShift namespaces are used for each configured environment: 
-
-| OpenShift Environment Name | OpenShift Project                | Aporeto Namespace Mapping |   |   |
-|----------------------------|----------------------------------|---------------------------|---|---|
-| LAB                        | devops-platform-security-aporeto | /bcgov-devex/lab          |   |   |
-|                            |                                  |                           |   |   |
-|                            |                                  |                           |   |   |
 
 # Deployment Steps
 
