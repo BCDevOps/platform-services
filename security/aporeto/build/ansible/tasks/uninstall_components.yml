@@ -42,11 +42,8 @@
     - name: Remove OpenShift Projects
       command: "oc delete project {{ openshift_project_prefix }}-enforcers {{ openshift_project_prefix }}-operator"
 
-# # works
-# for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc get $crd --all-namespaces -o name; done
-
-# # does not work
-# for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc delete $crd -n ; done
-
-# ## better (need to fix the namespace name in code)
-# for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc delete $crd -n {{ openshift_project_prefix }}-enforcers --all ; done
+    - name: Label nodes to remove enforcers
+      shell: oc label node {{ item }} aporeto-enforcerd=false --overwrite=true
+      with_items: 
+        - "{{ node_list }}"
+      ignore_errors: true

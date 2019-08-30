@@ -1,4 +1,4 @@
-aporeto_release: 3.11.9
+aporeto_release: 3.11.6
 openshift_project_prefix: devops-security-aporeto
 aporeto_org: /bcgov-devex
 aporeto_namespace: patch-test
