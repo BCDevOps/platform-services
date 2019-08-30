@@ -20,6 +20,13 @@ export BASE_ENV=lab-test
   - helm
 
 
+## Listing all Aporeto CRDs
+In order to list Aporeto CRDs, run the following command: 
+
+```
+oc api-resources --api-group=api.aporeto.io -o name
+```
+
 ## Todo
 - [ ] Sort out labels on appcred or appcred cleanup
 - [ ] Create test/error for existing namespace

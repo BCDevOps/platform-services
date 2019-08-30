@@ -2,7 +2,7 @@
 - name: Run through Helm deployment
   block: 
     - name: Add the helm repo
-      command: "helm repo add {{ helm_repo_name }} {{ helm_repo_address }}"
+      command: "helm repo add {{ helm_repo_name }} {{ aporeto_repo }}"
 
     - name: Fetch helm charts for aporeto-crds
       command: "helm fetch aporeto/aporeto-crds"
@@ -17,7 +17,9 @@
         --namespace {{ openshift_project_prefix }}-operator --set options.baseNamespace={{ openshift_project_prefix }}-enforcers \
         | oc apply -f - -n {{ openshift_project_prefix }}-operator"
       ignore_errors: true
-
+    - name: Add sleep
+      shell: 'sleep 600'
+      
     - name: Fetch helm charts for enforcers
       command: "helm fetch aporeto/enforcerd"
     - name: Use Helm Template to create OpenShift Objects

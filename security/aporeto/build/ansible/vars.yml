@@ -1,5 +1,5 @@
 helm_repo_name: aporeto
-helm_repo_address: "https://charts.aporeto.com/clients"
+helm_repo_address: "https://charts.aporeto.com"
 aporeto_user_account: "{{ lookup('env', 'APOCTL_USER')}}"
 aporeto_user_password: "{{ lookup('env', 'APOCTL_PASSWORD')}}"
 aporeto_auth_method: "aporeto"  # Could also be oidc or appcred when this is done

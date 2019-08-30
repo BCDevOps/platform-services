@@ -2,7 +2,7 @@
 - name: Remove components with Helm Template
   block: 
     - name: Add the helm repo
-      command: "helm repo add {{ helm_repo_name }} {{ helm_repo_address }}"
+      command: "helm repo add {{ helm_repo_name }} {{ aporeto_repo }}"
 
     - name: Fetch helm charts for enforcers
       command: "helm fetch aporeto/enforcerd"

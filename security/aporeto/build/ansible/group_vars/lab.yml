@@ -1,6 +1,7 @@
-openshift_project_prefix: test-aporeto
+aporeto_release: 3.11.9
+openshift_project_prefix: devops-security-aporeto
 aporeto_org: /bcgov-devex
-aporeto_namespace: lab-test
+aporeto_namespace: patch-test
 openshift_cluster_name: kamloops
 cluster_network: 10.131.0.1
 node_list: 

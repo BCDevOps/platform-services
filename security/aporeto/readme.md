@@ -1,6 +1,13 @@
 # Aporeto Zero Trust Network Security Enforcement
 The Aporeto solution is a multi-cluster multi-cloud zero trust network solution that will deny all traffic from all processing units until expliticly allowed. For the purpose of the OpenShift environment, a "Pod" is considered a "Processing Unit". This solution creates an "identity" for each processing unit that allows for much more granular access control policies beyond a simple network address. 
 
+## Accessing the Console
+Users can sign into the Aporeto Console with the following details below: 
+- URL: https://console.aporeto.com
+- Select the sign in options (three dots) and select *Sign in with OIDC*
+  - Namespace: /bcgov-devex
+  - Provider: pathfinder-sso-prod
+
 ## Resources
 - Aporeto Links
   - [Console](https://console.aporeto.com/app/)
