@@ -47,3 +47,5 @@ oc api-resources --api-group=api.aporeto.io -o name
 ## Todo
 - [ ] Sort out labels on appcred or appcred cleanup
 - [ ] Create test/error for existing namespace
+- [ ] Add error handling around existing namespace
+- [ ] Determine whether to remove Aporeto namespace when uninstalling

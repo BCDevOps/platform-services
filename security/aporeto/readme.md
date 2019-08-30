@@ -21,6 +21,7 @@ Users can sign into the Aporeto Console with the following details below:
   - [Deployment Steps](build/deployment.md)
 - Administration Documents
   - [Authentication & Authorization](admin/auth.md)
+  - [CLI Examples](admin/cli_examples.md)
   - [Troubleshooting](admin/troubleshooting.md)
 - Design Patterns
   - [Design Pattern 01 - Single Namespace Microsegmentation](design_patterns/design_pattern_01/design_pattern-single_namespace_microsegmentation.md)
