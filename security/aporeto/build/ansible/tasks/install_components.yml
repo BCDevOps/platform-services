@@ -18,7 +18,7 @@
         | oc apply -f - -n {{ openshift_project_prefix }}-operator"
       ignore_errors: true
     - name: Add sleep
-      shell: 'sleep 600'
+      shell: 'sleep 180'
       
     - name: Fetch helm charts for enforcers
       command: "helm fetch aporeto/enforcerd"
