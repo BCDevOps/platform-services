@@ -1,17 +1,34 @@
 # Aporeto Playbook
 
 ### Usage
+This playbook can be used to install or uninstall Aporeto in each BCGov OpenShift environment. 
+*Note: Only a single operator and set of enforcers must exist in an OpenShift cluster. Multiple implementations with this playbook will cause failures* 
 
 - Set the user credentials in environment variables
+  - These credentials are used to generate a temporary token for the install/uninstall process
+  ```
+  export APOCTL_USER=myuser
+  export APOCTL_PASSWORD=mypassword
+  ```
 
-```
-export APOCTL_USER=myuser
-export APOCTL_PASSWORD=mypassword
-export APOCTL_NAMESPACE=/bcgov-devex
-export BASE_ENV=lab-test
-```
+- Review/modify the inventory group vars as appropriate: 
+  - For the Lab environment edit the [group_vars](group_vars/lab.yml)
+  - For the Prod environment edit the [group_vars](group_vars/prod.yml)
+
+- Review/modify the general [vars.yml](vars.yml) file for accuracy
 
 - Ensure the system running this playbook is already logged in with appropriate credentials to OpenShift
+    - The user running this playbook bust had cluster-admin rights
+
+- Run the playbook with the desired action
+  - For installing the enforcers in the `lab`: 
+    ```
+    ansible-playbook -i lab aporeto.yml -e activity=install 
+    ```
+  - For removing the enforcers from the `lab`:
+    ```
+    ansible-playbook -i lab aporeto.yml -e activity=uninstall 
+    ```
 
 
 ### Requirements

@@ -1,2 +1,8 @@
-openshift_project: devops-platform-security-aporeto
+aporeto_release: 3.11.9
+openshift_project_prefix: devops-security-aporeto
+aporeto_org: /bcgov-devex
+aporeto_namespace: prod
+openshift_cluster_name: kamloops
+cluster_network: 
+node_list: 
 
