@@ -8,6 +8,7 @@
   tasks: 
     - include_tasks: tasks/set_env.yml
     - include_tasks: tasks/process_templates.yml
+      when: activity == "apply_policies" or activity == "install"
     - include_tasks: tasks/namespace_preparation.yml
       when: activity == 'install'
     - include_tasks: tasks/install_components.yml

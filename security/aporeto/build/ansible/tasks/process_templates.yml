@@ -11,7 +11,7 @@
     state: directory
   with_items: 
     - "{{ policy_template_file_list.files }}"
-- name: Template test
+- name: Render policy templates
   template: 
     src: "{{ item.path }}"
     dest: "output/{{ item.path.split('/')[1] }}/{{ item.path.split('/')[2].split('.')[0] }}.yml"
