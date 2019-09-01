@@ -6,11 +6,21 @@
   vars_files: 
     - vars.yml
   tasks: 
+  - name: Generate list of templates to process
+    find: 
+      paths: templates
+      recurse: yes
+      patterns: '*.yml.j2'
+    register: policy_template_file_list 
+  - name: Create output subdirectories
+    file:
+      path: output/{{ item.path.split('/')[1] }}
+      state: directory
+    with_items: 
+      - "{{ policy_template_file_list.files }}"
   - name: Template test
     template: 
-      src: "templates/{{ item }}.yml.j2"
-      dest: "output/{{ item }}.yml"
+      src: "{{ item.path }}"
+      dest: "output/{{ item.path.split('/')[1] }}/{{ item.path.split('/')[2].split('.')[0] }}.yml"
     with_items: 
-      - external_networks/cluster-network
-      - network_access_policies/cluster-api-communication
-      - network_access_policies/cluster-network-ingress
+      - "{{ policy_template_file_list.files }}"

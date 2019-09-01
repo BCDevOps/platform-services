@@ -27,21 +27,21 @@
 
 - name: Create base enforcer profiles and policies 
   block: 
-    - name: Template openshift default profile
-      template: 
-        src:  templates/profiles/openshift-default-profile.yml.j2
-        dest: output/openshift-default-profile.yml
+    # - name: Template openshift default profile
+    #   template: 
+    #     src:  templates/profiles/openshift-default-profile.yml.j2
+    #     dest: output/openshift-default-profile.yml
     - name: Import OpenShift profile & mapping
       shell: 
-        apoctl api import --file output/openshift-default-profile.yml --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
+        apoctl api import --file output/profiles/openshift-default-profile.yml --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
 
-    - name: Template openshift default profile mapping
-      template: 
-        src:  templates/profiles/openshift-default-profile-mapping.yml.j2
-        dest: output/openshift-default-profile-mapping.yml
+    # - name: Template openshift default profile mapping
+    #   template: 
+    #     src:  templates/profiles/openshift-default-profile-mapping.yml.j2
+    #     dest: output/openshift-default-profile-mapping.yml
     - name: Import OpenShift Profile Mapping
       shell: > 
-        apoctl api import --file output/openshift-default-profile-mapping.yml --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
+        apoctl api import --file output/profiles/openshift-default-profile-mapping.yml --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
   ignore_errors: true
 
 - name: Create Appcreds in Aporeto

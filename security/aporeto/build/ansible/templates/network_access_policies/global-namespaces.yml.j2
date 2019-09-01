@@ -1,0 +1,15 @@
+APIVersion: 1
+label: global-ns-network-policies
+data:
+  networkaccesspolicies:
+  - name: global-ns-network-policies
+    action: "Allow"
+    propagate: true
+    subject:
+    - - "$namespace={{ aporeto_org }}/{{ aporeto_namespace }}/lab/*"
+    object:
+    - - "@app:k8s:namespace=default"    
+    - - "@app:k8s:namespace=openshift-monitoring"
+    - - "@app:k8s:namespace=kube-service-catalog"
+    - - "@app:k8s:namespace=devops-sysdig"
+    - - "@app:k8s:namespace=cns"
