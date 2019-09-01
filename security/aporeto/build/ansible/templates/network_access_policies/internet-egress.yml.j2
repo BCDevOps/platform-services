@@ -7,6 +7,6 @@ data:
     propagate: true
     applyPolicyMode: "OutgoingTraffic"
     subject:
-    - - "$namespace={{ aporeto_org }}/{{ aporeto_namespace }}/*"
+    - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
     object:
     - - ext:network=any

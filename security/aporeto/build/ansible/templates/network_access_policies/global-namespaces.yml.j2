@@ -6,7 +6,7 @@ data:
     action: "Allow"
     propagate: true
     subject:
-    - - "$namespace={{ aporeto_org }}/{{ aporeto_namespace }}/lab/*"
+    - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/lab/*"
     object:
     - - "@app:k8s:namespace=default"    
     - - "@app:k8s:namespace=openshift-monitoring"

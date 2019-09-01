@@ -32,6 +32,10 @@ This playbook can be used to install or uninstall Aporeto in each BCGov OpenShif
 
 
 ### Requirements
+- Namespace Preparation
+The parent namespace must exist prior to running this playbook. A separate playbook [WIP] controls all Aporeto namespace creation and access controls. 
+
+
 - CLI tools
   - apoctl
   - helm

@@ -6,7 +6,7 @@
     patterns: '*.yml'
   register: policy_file_list
 - name: Apply policy files
-  command: apoctl api import --file {{ file.path }} --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
+  command: apoctl api import --file {{ file.path }} --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
   with_items: 
   - "{{ policy_file_list.files }}"
   loop_control: 

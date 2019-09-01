@@ -22,7 +22,7 @@
 
 - name: Create Aporeto namespace   ## Add some error handling for the above if the NS exists
   shell: >
-    apoctl api create namespace -k name="{{ aporeto_namespace }}" --namespace="{{ aporeto_org }}" --token="{{ aporeto_temp_token }}"
+    apoctl api create namespace -k name="{{ aporeto_namespace }}" --namespace="{{ aporeto_parent_namespace }}" --token="{{ aporeto_temp_token }}"
   ignore_errors: true 
 
 - name: Create base enforcer profiles and policies 
@@ -33,7 +33,7 @@
     #     dest: output/openshift-default-profile.yml
     - name: Import OpenShift profile & mapping
       shell: 
-        apoctl api import --file output/profiles/openshift-default-profile.yml --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
+        apoctl api import --file output/profiles/openshift-default-profile.yml --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
 
     # - name: Template openshift default profile mapping
     #   template: 
@@ -41,16 +41,16 @@
     #     dest: output/openshift-default-profile-mapping.yml
     - name: Import OpenShift Profile Mapping
       shell: > 
-        apoctl api import --file output/profiles/openshift-default-profile-mapping.yml --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
+        apoctl api import --file output/profiles/openshift-default-profile-mapping.yml --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
   ignore_errors: true
 
 - name: Create Appcreds in Aporeto
   block: 
     - name: Create enforcerd appcred
       shell: > 
-        apoctl appcred create enforcerd --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=enforcer" | oc apply -f - -n "{{ openshift_project_prefix }}-enforcers"
+        apoctl appcred create enforcerd --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=enforcer" | oc apply -f - -n "{{ openshift_project_prefix }}-enforcers"
 
     - name: Create aporeto-operator appcred 
       shell: > 
-        apoctl appcred create aporeto-operator --namespace="{{ aporeto_org }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=aporeto-operator"  |  oc apply -f - -n "{{ openshift_project_prefix }}-operator"
+        apoctl appcred create aporeto-operator --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=aporeto-operator"  |  oc apply -f - -n "{{ openshift_project_prefix }}-operator"
   ignore_errors: true
