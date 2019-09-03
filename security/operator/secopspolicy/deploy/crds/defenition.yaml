@@ -7,7 +7,7 @@ spec:
   names:
     kind: NetworkSecurityPolicy
     listKind: SecOpsPolicyList
-    plural: networksecurity
+    plural: networksecuritypolicies
     singular: networksecuritypolicy
   scope: Namespaced
   subresources:
