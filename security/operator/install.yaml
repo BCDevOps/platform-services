@@ -3,7 +3,8 @@
   connection: local
   vars:
     image_repo: dockerhub.com
-    image_name: fullboar/secops-operator:latest
+    image_name: fullboar/secops-operator
+    image_tag: latest
   tasks:
     - name: Process the operator manifest template
       template:
