@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  # Use a local vars file when testing locally; remotely the vars are passed from the webhook.
+  # vars_files:
+  #   creds/vars.yml
+  tasks: 
+    - include_tasks: tasks/set_facts.yml
+    - include_tasks: tasks/pr_interrogate.yml
+    - include_tasks: tasks/pr_merge_and_close.yml
+

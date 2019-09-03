@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks: 
+    - python_requirements_facts:
+        dependencies:
+          - openshift
+          - requests
+    - include_tasks: tasks/set_env.yml
+    - include_tasks: tasks/manage_components.yml
+      when: activity == "install"
+    - include_tasks: tasks/configure.yml
+      when: activity == "configure"
+    - include_tasks: tasks/manage_components.yml
+      when: activity == "uninstall"

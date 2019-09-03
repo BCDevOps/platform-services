@@ -1,0 +1,93 @@
+#jinja2:lstrip_blocks: True
+dashboard:
+  title: BCGov DevHub Status Page
+  time:
+      from: "now-15m"
+      to: "now"
+  rows:
+    - title: Description
+      showTitle: false
+      height: 50px
+      panels:
+        - title: Description
+          content: |
+            ### This dashboard shows the status of various BCGov Developer Platform Resources. This dashboard is auto-generated and should not be edited manually. 
+          type: text
+    - title: Internal Services
+      showTitle: true
+      height: 200px
+      panels:
+{% for obj in url_watchlist['internal_services'] | dict2items %}
+        - title: {{ obj.key }} 
+          datasource: Prometheus
+          span: 2
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="{{ obj.value }}",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+{% endfor %}
+    - title: Upstream Services
+      showTitle: true
+      height: 200px
+      panels:
+{% for obj in url_watchlist['upstream_services'] | dict2items %}
+        - title: {{ obj.key }} 
+          datasource: Prometheus
+          span: 2
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="{{ obj.value }}",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
+{% endfor %}
+    - title: Status Codes
+      showTitle: true
+      height: 400px
+      panels:
+        - title: HTTP Status Codes
+          datasource: Prometheus
+          span: 12
+          targets:
+            - expr: probe_http_status_code
+              format: time_series
+              intervalFactor: 1
+              refId: A
+{% raw %}
+              legendFormat: "{{ instance }}"
+{% endraw %}
+          type: graph
+    - title: Operations Notices
+      showTitle: false
+      height: 400px
+      panels:
+        - title: Operations Notices
+          content: |
+
+              {% for filename in notifications.stdout_lines %}
+              # Notice: {{ filename }}
+
+              {% set file_lines = lookup ('file', notifications_path+filename).splitlines() %}
+              {% for line in file_lines %}
+              ## {{ line }}
+
+              {% endfor %}
+              {% endfor %}
+
+          type: text
