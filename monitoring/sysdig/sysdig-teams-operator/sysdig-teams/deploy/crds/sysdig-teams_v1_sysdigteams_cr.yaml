@@ -1,0 +1,7 @@
+apiVersion: sysdig-teams.io/v1
+kind: SysdigTeams
+metadata:
+  name: example-sysdigteams
+spec:
+  # Add fields here
+  size: 3

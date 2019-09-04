@@ -1,0 +1,5 @@
+---
+- version: v1
+  group: sysdig-teams.io
+  kind: SysdigTeams
+  playbook: /opt/ansible/playbook.yml
