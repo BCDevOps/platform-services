@@ -1,0 +1,11 @@
+APIVersion: 1
+label: cluster-api-endpoint-access
+data:
+  networkaccesspolicies:
+  - name: cluster-api-endpoint-access
+    action: "Allow"
+    propagate: true
+    subject:
+    - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
+    object:
+    - - ext:network=cluster-api-endpoint

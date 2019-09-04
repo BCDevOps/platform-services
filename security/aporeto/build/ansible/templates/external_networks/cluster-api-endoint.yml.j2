@@ -1,0 +1,13 @@
+APIVersion: 1
+label: cluster-api-endpoint
+data:
+  externalnetworks:
+  - name: cluster-api-endpoint
+    entries:
+    - {{ cluster_api_endpoint }}
+    ports:
+    - "{{ cluster_api_port }}"
+    protocols:
+    - tcp
+    associatedTags:
+    - ext:network=cluster-api-endpoint

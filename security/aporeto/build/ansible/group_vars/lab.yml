@@ -1,10 +1,12 @@
 aporeto_release: 3.11.10
 openshift_project_prefix: devops-security-aporeto
-aporeto_parent_namespace: /bcgov-devex/test            #full path for parent namespace
+aporeto_parent_namespace: /bcgov/test            #full path for parent namespace
 aporeto_namespace: lab-pathfinder                       #single-level value only
 openshift_cluster_name: kamloops
 cluster_network: 10.131.0.0/16
 host_network: 142.34.217.32/27
+cluster_api_endpoint: console.lab.pathfinder.gov.bc.ca
+cluster_api_port: 8443
 node_list: 
   - ociopf-t-301.dmz
   - ociopf-t-302.dmz
