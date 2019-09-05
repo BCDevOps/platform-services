@@ -1,6 +1,6 @@
 # RocketChat
 
-All code related to the deployment and maintenance of a HA rocketchat instance for the BcDevExchange.
+All code related to the deployment and maintenance of a HA Rocket Chat instance for the BcDevExchange.
 
 ![diagram](RocketChat-MongoDB-HA-Design.png)
 
@@ -41,7 +41,7 @@ Local authentication is disabled on Rocket Chat and a custom OAuth configuration
 
 ### MongoDB StatefulSet
 
-MongoDB is set up in a StatefulSet which takes care of deploying the pods and provisioning and connecting storage. The StatefulSet will deploy one pod at a time and configure it's storage before moving to the next. StatefulSets keep pod names when pods get recreated and use PVCs and PVs for data, making sure restarting pods will remain "stateful" and not loose data.
+MongoDB is set up in a StatefulSet which takes care of deploying the pods and provisioning and connecting storage. The StatefulSet will deploy one pod at a time and configure it's storage before moving to the next. StatefulSets keep pod names when pods get recreated and use PVCs and PVs for data, making sure restarting pods will remain "stateful" and not lose data.
 
 #### DB Storage
 
@@ -70,7 +70,7 @@ We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to aut
 
 #### RocketChat Deployment
 
-All of the OpenShit objects are wrapped up in a template file you can load the template into OpenShift and deploy the template through the web console `oc create -f template-rocketchat-mongodb.yaml`.
+All of the OpenShift objects are wrapped up in two template files. You can load the templates into OpenShift and deploy the template through the web console `oc create -f template-rocketchat.yaml && oc create -f template-mongodb.yaml`.
 
 All of the template parameters are defined in environment files specific to the environment to deploy Rocket Chat into, dev, test, and prod.
 
@@ -87,14 +87,20 @@ After the Rocket Chat and MongoDB pods are up and running you can connect to the
 
 We also Need to select pop-up for log in style and auth once, then can change to Redirect option.
 
-
 #### Add Channels
 
-To batch create channels to start off with fill in `channels` file with channel names you would like.
+To batch create channels to start off with filling in `channels` file with channel names you would like.
 
-Update `./channel-creator.sh` with the route to rocket chat. Run `./channel-creator.sh admin-user-name admin-password` to create the channels. 
+Run `./channel-creator.sh https://route-to-rocketchat admin-user-name admin-password` to create the channels. 
 
 If you want to make any of these channels default (all users auto added) you can do so from the administration -> rooms page.
+
+#### Pipelines
+
+There is also pipelines that  
+
+##### Deployment Pipeline
+
 
 #### Backup & restore
 
@@ -124,7 +130,7 @@ mongorestore -u admin -p \$MONGODB_ADMIN_PASSWORD --authenticationDatabase admin
 
 ### Upgrades
 
-Upgrades to Rocket Chat will be handled by deployment of a new image version.
+Upgrades to Rocket Chat will be handled by deployment of a new image version to the deployment config.
 
 ### Backup & restore
 
