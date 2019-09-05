@@ -8,6 +8,9 @@
       command: "helm fetch aporeto/aporeto-crds"
     - name: Use Helm Template to create OpenShift Objects
       shell: "helm template aporeto-crds-*.tgz | oc apply -f - "
+    - name: Remove helm chart files (cleanup)
+      shell: rm -f  aporeto-crds-*.tgz  
+
 
     - name: Fetch helm charts for aporeto-operator
       command: "helm fetch aporeto/aporeto-operator"
@@ -17,8 +20,12 @@
         --namespace {{ openshift_project_prefix }}-operator --set options.baseNamespace={{ openshift_project_prefix }}-enforcers \
         | oc apply -f - -n {{ openshift_project_prefix }}-operator"
       ignore_errors: true
+    - name: Remove helm chart files (cleanup)
+      shell: rm -f  aporeto-operator-*.tgz     
+
+
     - name: Add sleep
-      shell: 'sleep 180'
+      shell: 'sleep 60'
       
     - name: Fetch helm charts for enforcers
       command: "helm fetch aporeto/enforcerd"
@@ -27,6 +34,9 @@
       --namespace {{ openshift_project_prefix }}-enforcers \
       | oc apply -f - -n {{ openshift_project_prefix }}-enforcers "
       ignore_errors: true
+    
+    - name: Remove helm chart files (cleanup)
+      shell: rm -f  enforcerd-*.tgz
 
     - name: Patch daemonset with appropriate label
       shell: > 
