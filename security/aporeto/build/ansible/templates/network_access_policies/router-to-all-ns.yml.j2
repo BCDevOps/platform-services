@@ -1,0 +1,13 @@
+APIVersion: 1
+label: router-to-all-ns
+data:
+  networkaccesspolicies:
+  - name: router-to-all-ns
+    action: "Allow"
+    propagate: true
+    subject:
+    - - "@app:k8s:namespace=default"
+      - "router=router"
+    object:
+    - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
+

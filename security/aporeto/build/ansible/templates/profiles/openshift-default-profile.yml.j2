@@ -14,7 +14,6 @@ data:
       dockerSocketAddress: 'unix:///var/run/docker.sock'
       excludedInterfaces: []
       excludedNetworks:
-        - {{ cluster_network }}
         - 127.0.0.0/8
         - 172.0.0.0/8
       hostModeEnabled: false
@@ -41,8 +40,12 @@ data:
       receiverQueue: 0
       receiverQueueSize: 500
       remoteEnforcerEnabled: true
-      targetNetworks: []
-      targetUDPNetworks: []
+      targetNetworks:
+       - {{ cluster_network }}
+       - {{ host_network }}
+      targetUDPNetworks: 
+       - {{ cluster_network }}
+       - {{ host_network }}
       transmitterNumberOfQueues: 4
       transmitterQueue: 4
       transmitterQueueSize: 500
