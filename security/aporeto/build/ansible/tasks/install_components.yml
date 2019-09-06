@@ -25,7 +25,7 @@
 
 
     - name: Add sleep
-      shell: 'sleep 60'
+      shell: 'sleep 180'
       
     - name: Fetch helm charts for enforcers
       command: "helm fetch aporeto/enforcerd"
