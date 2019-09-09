@@ -2,7 +2,7 @@
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
-    namespace: /bcgov-devex/lab
+    apo_base_namespace: /bcgov/lab
   tasks:
     - import_role:
         name: "networksecuritypolicy"
@@ -23,7 +23,7 @@
     - import_tasks: lookup_netpol.yaml
       vars:
         k8s_uuid: "{{  metadata.uid  }}"
-        appo_namespace: "{{ namespace }}"
+        apo_namespace: "{{  apo_base_namespace }}/{{ metadata.namespace }}"
     - name: Debug Information
       when: policy_id is defined
       debug: 
@@ -35,8 +35,9 @@
     # exists.
     - import_tasks: create_netpol.yaml
       vars:
-        pol_uid: "{{ puid }}"
+        pol_uuid: "{{ puid }}"
         k8s_uuid: "{{ metadata.uid }}"
+        apo_namespace: "{{  apo_base_namespace }}/{{ metadata.namespace }}"
         netpol_spec: "{{ spec }}"
     # - name: Finished
     #   debug:

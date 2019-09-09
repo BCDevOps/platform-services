@@ -1,8 +1,9 @@
 # This collection of tasks will create an Aporeto
 # `networkaccesspolicies` policy.
 # Variables
-#   - pol_uid
+#   - pol_uuid
 #   - k8s_uuid
+#   - apo_namespace
 #   - netpol_spec
 # Sets
 #   - policy_id
@@ -10,7 +11,7 @@
     data: "{{ data|default({}) | combine( {item.variable: item.value} ) }}"
   with_items:
   - variable: name
-    value: "inter-ns-network-{{ pol_uid }}"
+    value: "inter-ns-network-{{ pol_uuid }}"
   - variable: description
     value: "{{ netpol_spec.description | replace('\n', ' ') }}"
   - variable: associatedTags
@@ -26,11 +27,11 @@
   debug: 
     msg: "apoctl data = {{ data }}"
 - name: Create policy
-  when: data is defined and namespace is defined
+  when: data is defined and apo_namespace is defined
   shell: | 
     /usr/local/bin/apoctl \
     api create networkaccesspolicies \
-    --namespace "{{ namespace }}" \
+    --namespace "{{ apo_namespace }}" \
     -d '{{ data | to_json }}'
   register: output
 - name: Debug - policy id 

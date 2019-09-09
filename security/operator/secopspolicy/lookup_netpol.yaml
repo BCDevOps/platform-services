@@ -3,15 +3,15 @@
 # known tag.
 # Variables
 #   - k8s_uuid
-#   - appo_namespace
+#   - apo_namespace
 # Sets
 #   - policy_id
 - name: Policy Lookup
-  when: k8s_uuid is defined and appo_namespace is defined
+  when: k8s_uuid is defined and apo_namespace is defined
   shell: |
     /usr/local/bin/apoctl \
     api list networkaccesspolicies \
-    --namespace "{{ appo_namespace }}" \
+    --namespace "{{ apo_namespace }}" \
     --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
     -c ID
   register: output
