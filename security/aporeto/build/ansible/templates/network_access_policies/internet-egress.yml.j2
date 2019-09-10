@@ -7,6 +7,9 @@ data:
     propagate: true
     applyPolicyMode: "OutgoingTraffic"
     subject:
+    - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/default"
+    - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/logging"
+    - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/kube-system"
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
     object:
     - - ext:network=any

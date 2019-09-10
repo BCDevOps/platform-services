@@ -1,0 +1,11 @@
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: inter-namespace-comms
+spec:
+  description: |
+    allow the logging namespace to talk to itself
+  action: Allow
+  source: /bcgov/test/lab-pathfinder/devops-logging
+  destination:  /bcgov/test/lab-pathfinder/devops-logging
+  namespace: /bcgov/test/lab-pathfinder
