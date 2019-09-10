@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: networksecuritypolicy-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: networksecuritypolicy-operator
+  template:
+    metadata:
+      labels:
+        name: networksecuritypolicy-operator
+    spec:
+      serviceAccountName: networksecuritypolicy-operator
+      containers:
+        - name: ansible
+          command:
+          - /usr/local/bin/ao-logs
+          - /tmp/ansible-operator/runner
+          - stdout
+          # Replace this with the built image name
+          image: "{{ bcgov_networksecuritypolicy_operator_image }}"
+          imagePullPolicy: "Always"
+          volumeMounts:
+          - mountPath: /tmp/ansible-operator/runner
+            name: runner
+            readOnly: true
+          - mountPath: /opt/creds
+            name: creds
+          - mountPath: /opt/ansible/.apoctl
+            name: config
+        - name: operator
+          # Replace this with the built image name
+          image: "{{ bcgov_networksecuritypolicy_operator_image }}"
+          imagePullPolicy: "Always"
+          volumeMounts:
+          - mountPath: /tmp/ansible-operator/runner
+            name: runner
+          - mountPath: /opt/creds
+            name: creds
+          - mountPath: /opt/ansible/.apoctl
+            name: config
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "networksecuritypolicy-operator"
+      volumes:
+        - name: runner
+          emptyDir: {}
+        - name: creds
+          secret:
+            secretName: bcgov-networksecuritypolicy-operator
+        - name: config
+          configMap: 
+            name: apoctl-configmap

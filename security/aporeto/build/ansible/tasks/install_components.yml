@@ -1,5 +1,5 @@
 ---
-- name: Run through Helm deployment
+- name: Run through Helm deployment for Aporeto components
   block: 
     - name: Add the helm repo
       command: "helm repo add {{ helm_repo_name }} {{ aporeto_repo }}"
@@ -48,3 +48,4 @@
       with_items: 
         - "{{ node_list }}"
       ignore_errors: true
+  

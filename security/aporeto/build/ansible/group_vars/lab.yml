@@ -1,3 +1,4 @@
+# Aporeto Specific Details
 aporeto_release: 3.11.11
 openshift_project_prefix: devops-security-aporeto
 aporeto_parent_namespace: /bcgov/test           #full path for parent namespace
@@ -16,3 +17,7 @@ node_list:
   - ociopf-t-313.dmz 
   - ociopf-t-321.dmz 
   - ociopf-t-322.dmz
+
+
+# BCGov Operator Details
+bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:latest
