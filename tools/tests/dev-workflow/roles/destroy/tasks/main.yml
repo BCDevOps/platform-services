@@ -1,0 +1,12 @@
+---
+
+- name: Delete all items in projects.
+  shell: "oc delete all --all -n {{ item }}"
+  loop: "{{ projects }}"
+  ignore_errors: true
+
+- name: Delete all projects.
+  shell: "oc delete project {{ item }}"
+  loop: "{{ projects }}"
+  ignore_errors: true
+  

@@ -1,0 +1,39 @@
+---
+
+- name: Create projects.
+  shell: "oc new-project '{{ item }}' --display-name='{{ project_display_name }} [ {{ item | upper }} ]' --description='{{ project_desctiption }}' " 
+  loop: "{{ projects }}"
+
+- name: Create builds.
+  shell: "oc new-build {{ apps[item[1]].source }} --name {{ item[1] }} -n {{ item[0] }}"
+  with_nested: 
+    - "{{ projects }}"
+    - "{{ apps }}"
+  when: apps[item[1]].type == "repo"
+
+- name: Start builds.
+  shell: "oc start-build {{ item[1] }} --wait -n {{ item[0] }}"
+  with_nested:
+    - "{{ projects }}"
+    - "{{ apps }}"
+  when: apps[item[1]].type == "repo"
+
+- name: Deploy apps.
+  shell: "oc new-app {{ item[0] }}/{{ item[1] }} --name {{ item[1] }} -n {{ item[0] }}"
+  with_nested: 
+    - "{{ projects }}"
+    - "{{ apps }}"
+  when: apps[item[1]].type == "repo"
+
+- name: Deploy templates.
+  shell: "oc process -f templates/{{ apps[item[1]].source }} -p NAME={{ item[1] }} | oc create -f - -n {{ item[0] }}"
+  with_nested: 
+    - "{{ projects }}"
+    - "{{ apps }}"
+  when: apps[item[1]].type == "template"
+
+- name: Patch deployment for manual rollout.
+  shell: "oc set triggers dc/{{ item[1] }} --manual -n {{ item[0] }}"
+  with_nested:
+    - "{{ projects }}"
+    - "{{ apps }}" 
