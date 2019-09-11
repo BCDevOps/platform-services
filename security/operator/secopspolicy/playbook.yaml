@@ -2,7 +2,7 @@
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
-    apo_base_namespace: /bcgov/lab
+    apo_base_namespace: /bcgov/test
   tasks:
     - import_role:
         name: "networksecuritypolicy"
@@ -28,7 +28,17 @@
       when: policy_id is defined
       debug: 
         msg: "Found existing policy with ID {{ policy_id }}"
-    - name: Exist if policy exists
+
+    - import_tasks: update_netpol.yaml
+      when: policy_id is defined
+      vars:
+        policy_id: "{{ policy_id }}"
+        pol_uuid: "{{ puid }}"
+        k8s_uuid: "{{ metadata.uid }}"
+        apo_namespace: "{{  apo_base_namespace }}/{{ metadata.namespace }}"
+        netpol_spec: "{{ spec }}"
+
+    - name: Finished
       when: policy_id is defined
       meta: end_play
     # Create a policy if it does not already
