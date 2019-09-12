@@ -2,13 +2,12 @@
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
-    apo_base_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}"
   tasks:
     - import_role:
         name: "networksecuritypolicy"
-    - name: Debug Information 
-      debug: 
-        msg: "myvars = {{ hostvars[inventory_hostname] }}"
+    # - name: Debug Information 
+    #   debug: 
+    #     msg: "myvars = {{ hostvars[inventory_hostname] }}"
     - name: Generate policy ID
       command: openssl rand -base64 6
       register: openssl_cmd
@@ -21,8 +20,8 @@
     # so it can be updated later in the playbook.
     - import_tasks: lookup_netpol.yaml
       vars:
-        k8s_uuid: "{{  metadata.uid  }}"
-        apo_namespace: "{{ apo_base_namespace }}/{{ metadata.namespace }}"
+        k8s_uuid: "{{ metadata.uid  }}"
+        apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
     # Create a policy if it does not already
     # exists.
     - import_tasks: create_netpol.yaml
@@ -30,7 +29,7 @@
       vars:
         pol_uuid: "{{ puid }}"
         k8s_uuid: "{{ metadata.uid }}"
-        apo_namespace: "{{ apo_base_namespace }}/{{ metadata.namespace }}"
+        apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
         netpol_spec: "{{ spec }}"
     - name: Finished
       when: policy_id is not defined
@@ -43,7 +42,7 @@
         policy_id: "{{ policy_id }}"
         pol_uuid: "{{ puid }}"
         k8s_uuid: "{{ metadata.uid }}"
-        apo_namespace: "{{ apo_base_namespace }}/{{ metadata.namespace }}"
+        apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
         netpol_spec: "{{ spec }}"
     - name: Finished
       when: policy_id is defined
