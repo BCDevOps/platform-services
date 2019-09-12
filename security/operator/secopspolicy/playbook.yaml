@@ -2,10 +2,6 @@
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
-<<<<<<< HEAD
-=======
-    apo_base_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}"
->>>>>>> Lookup base namespace rather than hard code
   tasks:
     - import_role:
         name: "networksecuritypolicy"
