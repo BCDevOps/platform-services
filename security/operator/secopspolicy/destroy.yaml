@@ -1,8 +1,13 @@
+# This collection of tasks will lookup an Aporeto
+# `networkaccesspolicies` policy by filtering for a
+# known tag.
+# Variables
+#   - apo_namespace
 - hosts: localhost
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
-    namespace: /bcgov-devex/lab
+    apo_base_namespace: /bcgov/test
   tasks:
     - import_role:
         name: "networksecuritypolicy"
@@ -17,7 +22,7 @@
     - import_tasks: lookup_netpol.yaml
       vars:
         k8s_uuid: "{{  metadata.uid  }}"
-        appo_namespace: "{{ namespace }}"
+        apo_namespace: "{{ apo_base_namespace }}/{{ metadata.namespace }}"
     - name: Exist if no policy exists
       when: policy_id is not defined
       meta: end_play
@@ -26,7 +31,7 @@
       shell: |
         /usr/local/bin/apoctl \
         api delete networkaccesspolicies \
-        --namespace "{{ namespace }}" \
+        --namespace "{{ apo_base_namespace }}/{{ metadata.namespace }}" \
         "{{ policy_id }}"
     - name: Finished
       debug:
