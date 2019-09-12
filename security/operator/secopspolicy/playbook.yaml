@@ -2,6 +2,10 @@
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
+<<<<<<< HEAD
+=======
+    apo_base_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}"
+>>>>>>> Lookup base namespace rather than hard code
   tasks:
     - import_role:
         name: "networksecuritypolicy"
@@ -42,11 +46,7 @@
         policy_id: "{{ policy_id }}"
         pol_uuid: "{{ puid }}"
         k8s_uuid: "{{ metadata.uid }}"
-<<<<<<< HEAD
         apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
-=======
-        apo_namespace: "{{ apo_base_namespace }}/{{ metadata.namespace }}"
->>>>>>> Improve playbook logic
         netpol_spec: "{{ spec }}"
     - name: Finished
       when: policy_id is defined
