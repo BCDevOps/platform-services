@@ -11,12 +11,16 @@
       template:
         src: files/bcgov-networksecuritypolicy-operator/templates/apoctl_configmap.yml.j2
         dest: files/bcgov-networksecuritypolicy-operator/output/apoctl_configmap.yml
+    - name: Render Operator ClusterRoleBinding
+      template:
+        src: files/bcgov-networksecuritypolicy-operator/templates/role_binding.yml.j2
+        dest: files/bcgov-networksecuritypolicy-operator/output/role_binding.yml
     - name: Apply operator objects
       command: "oc apply -f {{ item }} -n {{ openshift_project_prefix }}-operator"
       with_items:
-        - files/bcgov-networksecuritypolicy-operator/role.yml
-        - files/bcgov-networksecuritypolicy-operator/role_binding.yml
         - files/bcgov-networksecuritypolicy-operator/service_account.yml
+        - files/bcgov-networksecuritypolicy-operator/role.yml
+        - files/bcgov-networksecuritypolicy-operator/output/role_binding.yml
         - files/bcgov-networksecuritypolicy-operator/output/operator.yml
         - files/bcgov-networksecuritypolicy-operator/output/apoctl_configmap.yml
 
