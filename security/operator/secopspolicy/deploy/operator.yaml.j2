@@ -19,17 +19,15 @@ spec:
           - /usr/local/bin/ao-logs
           - /tmp/ansible-operator/runner
           - stdout
-          # Replace this with the built image name
-          image: "jasoncleach/operator:latest"
-          imagePullPolicy: "Always"
+          image: "{{ image_repo }}/{{ image_name }}:{{ image_tag }}"
+          imagePullPolicy: "IfNotPresent"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner
             name: runner
             readOnly: true
         - name: operator
-          # Replace this with the built image name
-          image: "jasoncleach/operator:latest"
-          imagePullPolicy: "Always"
+          image: "{{ image_repo }}/{{ image_name }}:{{ image_tag }}"
+          imagePullPolicy: "IfNotPresent"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner
             name: runner
