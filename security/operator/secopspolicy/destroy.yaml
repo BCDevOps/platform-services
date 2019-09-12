@@ -7,6 +7,10 @@
   gather_facts: no
   vars:
     k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
+<<<<<<< HEAD
+=======
+    apo_base_namespace: /bcgov/test
+>>>>>>> Fix delete mechanics
   tasks:
     - import_role:
         name: "networksecuritypolicy"
