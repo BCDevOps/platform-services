@@ -42,7 +42,11 @@
         policy_id: "{{ policy_id }}"
         pol_uuid: "{{ puid }}"
         k8s_uuid: "{{ metadata.uid }}"
+<<<<<<< HEAD
         apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
+=======
+        apo_namespace: "{{ apo_base_namespace }}/{{ metadata.namespace }}"
+>>>>>>> Improve playbook logic
         netpol_spec: "{{ spec }}"
     - name: Finished
       when: policy_id is defined
