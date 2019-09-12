@@ -1,0 +1,20 @@
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  vars:
+    image_repo: dockerhub.com
+    image_name: fullboar/secops-operator
+    image_tag: latest
+  tasks:
+    - name: Process the operator manifest template
+      template:
+        src: secopspolicy/deploy/operator.yaml.j2
+        dest: secopspolicy/deploy/operator.yaml
+    - name: Install
+      shell: |
+        /usr/local/bin/kubectl apply \
+        -f secopspolicy/deploy/crds/defenition.yaml \
+        -f secopspolicy/deploy/role.yaml \
+        -f secopspolicy/deploy/role_binding.yaml \
+        -f secopspolicy/deploy/service_account.yaml \
+        -f secopspolicy/deploy/operator.yaml

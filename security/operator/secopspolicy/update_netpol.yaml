@@ -1,6 +1,7 @@
-# This collection of tasks will create an Aporeto
+# This collection of tasks will patch/update an existing Aporeto
 # `networkaccesspolicies` policy.
 # Variables
+#   - policy_id
 #   - pol_uuid
 #   - k8s_uuid
 #   - apo_namespace
@@ -10,6 +11,8 @@
 - set_fact:
     data: "{{ data|default({}) | combine( {item.variable: item.value} ) }}"
   with_items:
+  # Incremental updates are not possible as of 2019/09/10; all properties present
+  # during the create must be exist during the update.
   - variable: name
     value: "inter-ns-network-{{ pol_uuid }}"
   - variable: description
@@ -26,17 +29,20 @@
 - name: Debug - extracted variables
   debug: 
     msg: "apoctl data = {{ data }}"
-- name: Create policy
+- name: Debug - policy id 
+  debug: 
+    msg: "blarb = {{ netpol_spec }}"
+- name: Patch policy
   when: data is defined and apo_namespace is defined
   shell: | 
     /usr/local/bin/apoctl \
-    api create networkaccesspolicies \
+    api update networkaccesspolicies "{{ policy_id }}" \
     --namespace "{{ apo_namespace }}" \
     -d '{{ data | to_json }}'
   register: output
 - name: Debug - policy id 
   debug: 
-    msg: "Created policy with ID {{ output.stdout }}"
+    msg: "Patching policy with ID {{ output.stdout }}"
 - name: Extract policy id
   when: output.stdout != ""
   set_fact:
