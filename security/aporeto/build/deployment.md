@@ -3,14 +3,6 @@
 # Aporeto Deployment Docs
 This document outlines the manual steps used for deploying and configuring the environment. This will be converted to an Ansible playbook for consistency. 
 
-# Namespaces
-The following OpenShift namespaces are used for each configured environment: 
-
-| OpenShift Environment Name | OpenShift Project                | Aporeto Namespace Mapping |   |   |
-|----------------------------|----------------------------------|---------------------------|---|---|
-| LAB                        | devops-platform-security-aporeto | /bcgov-devex/lab          |   |   |
-|                            |                                  |                           |   |   |
-|                            |                                  |                           |   |   |
 
 # Deployment Steps
 
@@ -63,15 +55,6 @@ apoctl appcred create aporeto-operator -n $APOCTL_NAMESPACE/$BASE_ENV --type k8s
 oc get secrets -n $APORETO_NAMESPACE
 ```
 
-- VERIFY IF THIS IS CORRECT OR NEEDED
-
-```
-### Not sure if we need this... it's pretty wide open
-oc adm policy add-cluster-role-to-user cluster-admin -z aporeto-operator
-###
-```
-
-**NOTE: Please set the namespace to "design mode" prior to deploying the following components when testing; otherwise no traffic will be allowed to pass. This will be carefully controlled on a prod rollout*
 
 ## Deploy Base Policies
 - Prior to deploying the operator and encforcers, deploy some base policies for the environment: 
@@ -111,6 +94,7 @@ helm template ./enforcerd-*.tgz \
   | oc apply -f - -n $APORETO_NAMESPACE
 ```
 
+
 - Remove the default operator enforcer profile (**not sure if this is required**)
 
 ```
@@ -123,8 +107,11 @@ apoctl api delete enforcerprofilemappingpolicies operator-enforcer-profile-mappi
 ```
 oc patch daemonset enforcerd -n $APORETO_NAMESPACE -p '{"spec": {"template": {"spec": {"nodeSelector": {"aporeto-enforcerd":"true"}}}}}'
 
-## Build the appropriate list of nodes here
-oc label nodes ociopf-t-311.dmz ociopf-t-312.dmz ociopf-t-313.dmz ociopf-t-321.dmz ociopf-t-322.dmz aporeto-enforcerd=true
+## Label infra and compute nodes
+oc label nodes ociopf-t-311.dmz ociopf-t-312.dmz ociopf-t-313.dmz ociopf-t-321.dmz ociopf-t-322.dmz  aporeto-enforcerd=true --overwrite=true
+
+## Masters
+oc label nodes  ociopf-t-301.dmz ociopf-t-302.dmz ociopf-t-303.dmz aporeto-enforcerd=true --overwrite=true
 ```
 
 - Verify the daemonset deployment

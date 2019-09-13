@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  default.yaml: |-
+    api: https://api.console.aporeto.com 
+    namespace: /bcgov/test/lab-pathfinder 
+    creds: /opt/creds/aporeto.creds 
+    output: yaml
+kind: ConfigMap
+metadata:
+  name: apoctl-configmap

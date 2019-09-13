@@ -2,15 +2,20 @@
 Aporeto can use many different types of authentication sources in order to provide access to the platform. These could be standard Aporeto-managed accounts, or through an enterprise provider via OIDC or LDAP.
 
 ## OIDC
-Aporeto is currently linked to the **sso-dev** for testing with the GitHub realm. 
+Aporeto is currently linked to the **sso-dev** and **sso-prod** with the Devhub realm. 
 - When logging into the console, specify the OIDC account and provider information
-![](assets/oidc_signin.png)  
+  - **sso-dev**
 
+![](assets/oidc_signin_dev.png)  
+
+  - **sso-prod**
+  
+![](assets/oidc_signin_prod.png) 
 
 ## OIDC Configuration
 The following OIDC configurations are in place: 
 - sso-dev
-  ![](assets/oidc_config.png)
+  ![](assets/oidc_config_dev.png)
   Or the configuration as code (exported from the **Data Explorer**)
   ```
   APIVersion: 0
@@ -19,7 +24,23 @@ The following OIDC configurations are in place:
       - clientID: aporeto
         clientSecret: **[REMOVED]**
         default: true
-        endpoint: 'https://sso-dev.pathfinder.gov.bc.ca/auth/realms/_github'
+        endpoint: 'https://sso-dev.pathfinder.gov.bc.ca/auth/realms/devhub'
+        name: pathfinder-sso-dev
+        subjects:
+          - preferred_username
+  ```
+
+- sso-prod
+  ![](assets/oidc_config_prod.png)
+  Or the configuration as code (exported from the **Data Explorer**)
+  ```
+  APIVersion: 0
+  data:
+    oidcproviders:
+      - clientID: aporeto
+        clientSecret: **[REMOVED]**
+        default: true
+        endpoint: 'https://sso.pathfinder.gov.bc.ca/auth/realms/devhub'
         name: pathfinder-sso-dev
         subjects:
           - preferred_username

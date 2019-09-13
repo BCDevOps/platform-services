@@ -74,5 +74,7 @@ typings/
 # retry
 *.retry
 
+# Rendered Output Files
+*output*
 # artifacts
 *.orig
