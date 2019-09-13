@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks: 
+    - include_tasks: tasks/set_env.yml
+    - include_tasks: tasks/process_templates.yml
+      when: activity == "apply_policies" or activity == "install"
+    - include_tasks: tasks/namespace_preparation.yml
+      when: activity == 'install'
+    - include_tasks: tasks/apply_policies.yml
+      when: activity == "apply_policies" or activity == "install"
+      with_items: 
+        - external_networks
+        - network_access_policies  
+    - include_tasks: tasks/install_components.yml
+      when: activity == 'install'
+    - include_tasks: tasks/install_bcgov_networsecuritypolicy_operator.yml
+      when: activity == "bcgov-operator-install" or activity == "install"
+    - include_tasks: tasks/uninstall_components.yml
+      when: activity == 'uninstall'
+
+
+  
