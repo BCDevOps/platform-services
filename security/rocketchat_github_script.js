@@ -9,7 +9,7 @@ var labelMatch = ["security/aporeto", "security"];
 var filePathMatch = ["security"];
 
 
-/* perform label or path matching */
+/* perform label matching */
 var labelExists = false; 
 
 function searchLabelMatch(labels) {
@@ -18,21 +18,50 @@ function searchLabelMatch(labels) {
       if(labels.indexOf(labelMatch[i]) != -1){
           return labelExists = true; 
       }
-
   }
 return  labelExists = false ;
 }
 
 const getLabelsField = (labels) => {
-let labelsArray = [];
-labels.forEach(function(label) {
-  labelsArray.push(label.name);
+  let labelsArray = [];
+  labels.forEach(function(label) {
+    labelsArray.push(label.name);
+  });
+  labelsArray = labelsArray.join(', ');
+  return {
+    title: 'Labels',
+    value: labelsArray,
+    short: labelsArray.length <= 40
+  };
+  };
+
+/* perform  path matching */
+var filePathExists = false; 
+
+function searchFilePathMatch(files) {
+  for(var i=0;i < filePathMatch.length; i++)   {
+      testFileMatch = ".*" + filePathMatch[i] + ".*";
+      for(var g=0; g < files.length; g++){
+        if(files[g].match(testFileMatch) != null){
+            return filePathExists = true; 
+          }
+      }
+  }
+return  filePathExists = false ;
+}
+
+
+
+const getFilePaths = (files) => {
+let filePathArray = [];
+files.forEach(function(files) {
+  filePathArray.push(files);
 });
-labelsArray = labelsArray.join(', ');
+filePathArray = filePathArray.join(', ');
 return {
-  title: 'Labels',
-  value: labelsArray,
-  short: labelsArray.length <= 40
+  title: 'Files',
+  value: filePathArray,
+  short: filePathArray.length <= 40
 };
 };
 
@@ -171,51 +200,64 @@ commit_comment(request) {
 
 /* PUSH TO REPO */
 push(request) {
- /* console.log("Push to Repo"); */
+  //console.log("Push to Repo");
+  let files_added = [];
+  files_added = request.content.head_commit.added;  
+  files_removed = request.content.head_commit.removed;
+  files_modified = request.content.head_commit.modified;
+  let files = []; 
 
-  var commits = request.content.commits;
-  var multi_commit = ""
-  var is_short = true;
-  var changeset = 'Changeset';
-  if ( commits.length > 1 ) {
-    var multi_commit = " [Multiple Commits]";
-    var is_short = false;
-    var changeset = changeset + 's';
-    var output = [];
-  }
-  const user = request.content.sender;
+  files = files.concat(files_added, files_removed, files_modified);
+  filePathExists = searchFilePathMatch(files);
+  //console.log("Value of match:" + filePathExists);*/
+  if (filePathExists){
+      var commits = request.content.commits;
+      var multi_commit = ""
+      var is_short = true;
+      var changeset = 'Changeset';
+      if ( commits.length > 1 ) {
+        var multi_commit = " [Multiple Commits]";
+        var is_short = false;
+        var changeset = changeset + 's';
+        var output = [];
+      }
+      const user = request.content.sender;
 
-  var text = '**Pushed to ' + "["+request.content.repository.full_name+"]("+request.content.repository.url+"):"
-              + request.content.ref.split('/').pop() + "**\n\n";
+      var text = '**Pushed to ' + "["+request.content.repository.full_name+"]("+request.content.repository.url+"):"
+                  + request.content.ref.split('/').pop() + "**\n\n";
 
-  for (var i = 0; i < commits.length; i++) {
-    var commit = commits[i];
-    var shortID = commit.id.substring(0,7);
-    var a = '[' + shortID + '](' + commit.url + ') - ' + commit.message;
-    if ( commits.length > 1 ) {
-      output.push( a );
-    } else {
-      var output = a;
+      for (var i = 0; i < commits.length; i++) {
+        var commit = commits[i];
+        var shortID = commit.id.substring(0,7);
+        var a = '[' + shortID + '](' + commit.url + ') - ' + commit.message;
+        if ( commits.length > 1 ) {
+          output.push( a );
+        } else {
+          var output = a;
+        }
+      }
+
+      if (commits.length > 1) {
+        text += output.reverse().join('\n');
+      } else {
+        text += output;
+      }
+
+      return {
+        content: {
+          attachments: [
+              {
+                  thumb_url: user.avatar_url,
+                  text: text,
+                  fields: []
+              }
+          ]
+        }
+      };
     }
-  }
-
-  if (commits.length > 1) {
-    text += output.reverse().join('\n');
-  } else {
-    text += output;
-  }
-
-  return {
-    content: {
-      attachments: [
-          {
-              thumb_url: user.avatar_url,
-              text: text,
-              fields: []
-          }
-      ]
-    }
-  };
+    /*else{
+      console.log("Push does not match search string.");
+    }*/
 },  // End GitHub Push
 
 /* NEW PULL REQUEST */

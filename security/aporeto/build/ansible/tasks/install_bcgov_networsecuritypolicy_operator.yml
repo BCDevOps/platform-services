@@ -2,7 +2,7 @@
   block:
     - name: Generate Aporeto appcred
       shell: > 
-        apoctl appcred create bcgov-networksecuritypolicy-operator --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=aporeto-operator" | oc apply -f - -n "{{ openshift_project_prefix }}-operator"
+        apoctl appcred create bcgov-networksecuritypolicy-operator --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=aporeto-operator, @auth:role=namespace.contributor, @auth:role=namespace.viewer" | oc apply -f - -n "{{ openshift_project_prefix }}-operator"
     - name: Render Operator Deployment
       template:
         src: files/bcgov-networksecuritypolicy-operator/templates/operator.yml.j2
