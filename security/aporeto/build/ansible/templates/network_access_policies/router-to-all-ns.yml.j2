@@ -5,6 +5,7 @@ data:
   - name: router-to-all-ns
     action: "Allow"
     propagate: true
+    logsEnabled: true
     subject:
     - - "@app:k8s:namespace=default"
       - "router=router"
