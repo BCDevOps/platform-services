@@ -5,39 +5,16 @@
 #   - k8s_uuid
 #   - apo_namespace
 #   - netpol_spec
-# Sets
-#   - policy_id
-- set_fact:
-    data: "{{ data|default({}) | combine( {item.variable: item.value} ) }}"
-  with_items:
-  - variable: name
-    value: "inter-ns-network-{{ pol_uuid }}"
-  - variable: description
-    value: "{{ netpol_spec.description | replace('\n', ' ') }}"
-  - variable: associatedTags
-    value:
-      - k8s-uuid={{ k8s_uuid }}
-  - variable: object
-    value: 
-      - - "$namespace={{ netpol_spec.destination }}"
-  - variable: subject
-    value:
-      - - "$namespace={{ netpol_spec.source }}"
-- name: Debug - extracted variables
-  debug: 
-    msg: "apoctl data = {{ data }}"
+- name: Process j2 template
+  template:
+    src: ./templates/inter-ns-pol.yaml.j2
+    dest: "/tmp/inter-ns-pol-{{ pol_uuid }}.yaml"
 - name: Create policy
-  when: data is defined and apo_namespace is defined
   shell: | 
-    /usr/local/bin/apoctl \
-    api create networkaccesspolicies \
-    --namespace "{{ apo_namespace }}" \
-    -d '{{ data | to_json }}'
-  register: output
-- name: Debug - policy id 
-  debug: 
-    msg: "Created policy with ID {{ output.stdout }}"
-- name: Extract policy id
-  when: output.stdout != ""
-  set_fact:
-    policy_id: "{{ output.stdout }}"
+    /usr/local/bin/apoctl api import \
+    --namespace {{ apo_namespace }} \
+    --file "/tmp/inter-ns-pol-{{ pol_uuid }}.yaml"
+- name: Cleanup template
+  file:
+    path: "/tmp/inter-ns-pol-{{ pol_uuid }}.yaml"
+    state: absent

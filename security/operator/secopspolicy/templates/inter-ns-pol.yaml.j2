@@ -1,0 +1,20 @@
+APIVersion: 1
+label: inter-ns-network
+data:
+  networkaccesspolicies:
+  - name: inter-ns-network-{{ pol_uuid }}
+    description: {{ netpol_spec.description | replace('\n', ' ') }}
+    action: "Allow"
+    propagate: true
+    logsEnabled: true
+    object:
+    - - $namespace={{ netpol_spec.destination }}
+    subject:
+    - - $namespace={{ netpol_spec.source }}
+    associatedTags:
+    - k8s-uuid={{ k8s_uuid }}
+
+
+
+
+
