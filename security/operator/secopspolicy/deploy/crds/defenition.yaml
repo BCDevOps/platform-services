@@ -9,7 +9,7 @@ spec:
     listKind: SecOpsPolicyList
     plural: networksecuritypolicies
     singular: networksecuritypolicy
-  scope: Cluster
+  scope: Namespaced
   subresources:
     status: {}
   version: v1alpha1

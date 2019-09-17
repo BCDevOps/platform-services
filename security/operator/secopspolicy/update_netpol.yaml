@@ -11,8 +11,6 @@
 - set_fact:
     data: "{{ data|default({}) | combine( {item.variable: item.value} ) }}"
   with_items:
-  # Incremental updates are not possible as of 2019/09/10; all properties present
-  # during the create must be exist during the update.
   - variable: name
     value: "inter-ns-network-{{ pol_uuid }}"
   - variable: description
@@ -29,9 +27,6 @@
 - name: Debug - extracted variables
   debug: 
     msg: "apoctl data = {{ data }}"
-- name: Debug - policy id 
-  debug: 
-    msg: "blarb = {{ netpol_spec }}"
 - name: Patch policy
   when: data is defined and apo_namespace is defined
   shell: | 
@@ -42,7 +37,7 @@
   register: output
 - name: Debug - policy id 
   debug: 
-    msg: "Patching policy with ID {{ output.stdout }}"
+    msg: "Updated policy with ID {{ output.stdout }}"
 - name: Extract policy id
   when: output.stdout != ""
   set_fact:
