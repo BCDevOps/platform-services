@@ -1,11 +1,14 @@
 APIVersion: 1
-label: cluster-api-endpoint-access
+label: dns-all-access
 data:
   networkaccesspolicies:
-  - name: cluster-api-endpoint-access
+  - name: dns-all-access
     action: "Allow"
     propagate: true
+    applyPolicyMode: "OutgoingTraffic"
     subject:
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
     object:
-    - - ext:network=exernal-cluster-api-endpoint
+    - - ext:network=any
+    ports:
+      - udp/53

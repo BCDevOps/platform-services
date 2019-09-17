@@ -24,7 +24,7 @@ data:
         - - '@app:k8s:namespace=openshift-node'
         - - '@app:k8s:namespace=openshift-monitoring'
         - - '@app:k8s:namespace={{ openshift_project_prefix }}-operator'
-        - - '@app:k8s:namespace={{ openshift_project_prefix }}-enforcer'
+        - - '@app:k8s:namespace={{ openshift_project_prefix }}-enforcers'
       killContainersOnFailure: true
       kubernetesMetadataExtractor: PodAtomic
       kubernetesSupportEnabled: true
