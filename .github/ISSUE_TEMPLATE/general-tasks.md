@@ -14,4 +14,4 @@ A clear and concise description of what the problem is. Ex. I'm always frustrate
 Describe the end state of this feature as if it would be ready for release.
 
 **Additional context**
-Add any other context or screenshots about the feature request here.
+Add any other context, labels, assignees, epics or screenshots about the feature request when possible.
