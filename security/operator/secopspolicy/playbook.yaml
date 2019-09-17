@@ -9,7 +9,7 @@
     #   debug: 
     #     msg: "myvars = {{ hostvars[inventory_hostname] }}"
     - name: Generate policy ID
-      command: openssl rand -base64 6
+      command: openssl rand -hex 6
       register: openssl_cmd
     - name: Extract variables
       set_fact:
