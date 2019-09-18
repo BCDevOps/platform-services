@@ -6,5 +6,5 @@ spec:
   description: |
     allow the devhub namespace to talk to the VON
     namespace.
-  destination: /bcgov-devex/lab/blarb2
-  source: /bcgov-devex/lab/blarb1
+  destination: blarb1
+  source: blarb2

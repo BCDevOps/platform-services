@@ -8,8 +8,26 @@ data:
     propagate: true
     logsEnabled: true
     object:
+{% if '/bcgov' in netpol_spec.destination %}
     - - $namespace={{ netpol_spec.destination }}
+{% else %}
+{% if  netpol_spec.destination.startswith('/') %}
+{% set destination = netpol_spec.destination[1:] %}
+{% else %}
+{% set source = netpol_spec.destination %}
+{% endif %}
+    - - $namespace={{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ destination }}
+{% endif %}
     subject:
+{% if '/bcgov' in netpol_spec.source %}
     - - $namespace={{ netpol_spec.source }}
+{% else %}
+{% if  netpol_spec.source.startswith('/') %}
+{% set source = netpol_spec.source[1:] %}
+{% else %}
+{% set source = netpol_spec.source %}
+{% endif %}
+    - - $namespace={{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ source }}
+{% endif %}
     associatedTags:
     - k8s-uuid={{ k8s_uuid }}

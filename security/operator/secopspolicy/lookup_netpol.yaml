@@ -16,8 +16,8 @@
     --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
     -c ID,name
   register: output
-- name: Extract Policy ID
-  when: output.stdout != "" and output.stdout | from_json | list | length > 0
+- name: Extract policy attributes
+  when: output.stdout and output.stdout != "" | from_json | list | length > 0
   set_fact:
     policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
     policy_uuid: "{{ ((output.stdout | from_json | list | first).name).split('-')[-1] }}"
