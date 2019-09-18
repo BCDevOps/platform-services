@@ -21,6 +21,7 @@
     - output.rc == 0
     - output.stdout is defined
     - output.stdout != ""
+    - output.stdout != "[]"
   set_fact:
     policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
     policy_uuid: "{{ ((output.stdout | from_json | list | first).name).split('-')[-1] }}"
