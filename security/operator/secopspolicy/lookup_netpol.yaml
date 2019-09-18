@@ -17,7 +17,10 @@
     -c ID,name
   register: output
 - name: Extract policy attributes
-  when: output.stdout and output.stdout != "" | from_json | list | length > 0
+  when:
+    - output.rc == 0
+    - output.stdout is defined
+    - output.stdout != ""
   set_fact:
     policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
     policy_uuid: "{{ ((output.stdout | from_json | list | first).name).split('-')[-1] }}"
