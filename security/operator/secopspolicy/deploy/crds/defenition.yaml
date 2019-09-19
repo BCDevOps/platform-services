@@ -6,7 +6,7 @@ spec:
   group: secops.pathfinder.gov.bc.ca
   names:
     kind: NetworkSecurityPolicy
-    listKind: SecOpsPolicyList
+    listKind: NetworkSecurityList
     plural: networksecuritypolicies
     singular: networksecuritypolicy
   scope: Namespaced
