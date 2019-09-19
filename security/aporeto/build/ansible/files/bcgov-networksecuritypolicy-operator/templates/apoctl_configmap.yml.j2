@@ -4,7 +4,7 @@ data:
     api: https://api.console.aporeto.com 
     namespace: {{ aporeto_parent_namespace }}/{{ aporeto_namespace }} 
     creds: /opt/creds/aporeto.creds 
-    output: yaml
+    output: json
 kind: ConfigMap
 metadata:
   name: apoctl-configmap
