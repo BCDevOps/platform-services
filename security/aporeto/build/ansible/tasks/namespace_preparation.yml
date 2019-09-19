@@ -7,6 +7,12 @@
   command: 
     "oc new-project {{ openshift_project_prefix }}-operator"
   ignore_errors: true
+- name: Add OpenShift editor roles to operator namespace
+  command: 
+    "oc policy add-role-to-user edit {{ item }} -n {{ openshift_project_prefix }}-operator"
+  with_items: 
+  - "{{ openshift_project_editors }}"
+
 - name: Patch namespace for Daemonset readiness
   shell: > 
     ''oc patch namespace {{ openshift_project_prefix }}-enforcers -p '{"metadata": {"annotations": {"openshift.io/node-selector": ""}}}' ''
