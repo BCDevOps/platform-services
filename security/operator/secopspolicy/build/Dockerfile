@@ -36,5 +36,6 @@ RUN curl -sL https://get.aquasec.com/aquactl/stable/aquactl \
 USER 1001
 
 COPY watches.yaml ${HOME}/watches.yaml
+COPY templates/ ${HOME}/templates/
 COPY roles/ ${HOME}/roles/
 COPY *.yaml ${HOME}/
