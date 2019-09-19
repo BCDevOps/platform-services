@@ -1,33 +1,81 @@
+{#
+    Set global variables.
+#}
+{% set base = lookup('env', 'APOCTL_BASE_NAMESPACE') %}
 APIVersion: 1
 label: inter-ns-network-{{ pol_uuid }}
 data:
   networkaccesspolicies:
   - name: inter-ns-network-{{ pol_uuid }}
     description: {{ netpol_spec.description | replace('\n', ' ') }}
-    action: "Allow"
+    action: {{ netpol_spec.action | default("Allow") }}
     propagate: true
     logsEnabled: true
-    object:
-{% if '/bcgov' in netpol_spec.destination %}
-    - - $namespace={{ netpol_spec.destination }}
-{% else %}
-{% if  netpol_spec.destination.startswith('/') %}
-{% set destination = netpol_spec.destination[1:] %}
-{% else %}
-{% set source = netpol_spec.destination %}
-{% endif %}
-    - - $namespace={{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ destination }}
-{% endif %}
+{#
+    Process `source` to `subject` properties
+#}
     subject:
-{% if '/bcgov' in netpol_spec.source %}
-    - - $namespace={{ netpol_spec.source }}
-{% else %}
-{% if  netpol_spec.source.startswith('/') %}
-{% set source = netpol_spec.source[1:] %}
-{% else %}
-{% set source = netpol_spec.source %}
+{% for items in netpol_spec.source %}
+{% for i in items %}
+{# 
+    If any item represents a namespace we need to make sure
+    that it represents a fully qualified namespace.
+#}
+{% if '$namespace' in i %}
+{% set value = i.split('=')[1] %}
+{% if base not in value %}
+{# String leading character so we can join later #}
+{% if  value.startswith('/') %}
+{% set value = value[1:] %}
 {% endif %}
-    - - $namespace={{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ source }}
+{# Rebuild the namespace property #}
+{% set i = '$namespace=' + base + '/' + value %}
 {% endif %}
+{% endif %}
+{# 
+    The first item needs to be preceeded with two dashes `- -` while
+    subsaquent items need only a single dash `-`; this groups them in
+    a logical AND.
+#}
+{% if loop.index == 1 %}
+    - - {{ i }}
+{% else %}
+      - {{ i }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{#
+    Process `destination` to `object` properties
+#}
+    object:
+{% for items in netpol_spec.destination %}
+{% for j in items %}
+{# 
+    If any item represents a namespace we need to make sure
+    that it represents a fully qualified namespace.
+#}
+{% if '$namespace' in j %}
+{% set value = j.split('=')[1] %}
+{% if base not in value %}
+{# String leading character so we can join later #}
+{% if  value.startswith('/') %}
+{% set value = value[1:] %}
+{% endif %}
+{# Rebuild the namespace property #}
+{% set j = '$namespace=' + base + '/' + value %}
+{% endif %}
+{% endif %}
+{# 
+    The first item needs to be preceeded with two dashes `- -` while
+    subsaquent items need only a single dash `-`; this groups them in
+    a logical AND.
+#}
+{% if loop.index == 1 %}
+    - - {{ j }}
+{% else %}
+      - {{ j }}
+{% endif %}
+{% endfor %}
+{% endfor %}
     associatedTags:
     - k8s-uuid={{ k8s_uuid }}
