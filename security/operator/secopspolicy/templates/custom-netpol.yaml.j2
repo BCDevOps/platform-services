@@ -3,10 +3,10 @@
 #}
 {% set base = lookup('env', 'APOCTL_BASE_NAMESPACE') %}
 APIVersion: 1
-label: inter-ns-network-{{ pol_uuid }}
+label: custom-netpol-{{ pol_uuid }}
 data:
   networkaccesspolicies:
-  - name: inter-ns-network-{{ pol_uuid }}
+  - name: custom-netpol-{{ pol_uuid }}
     description: {{ netpol_spec.description | replace('\n', ' ') }}
     action: {{ netpol_spec.action | default("Allow") }}
     propagate: true
