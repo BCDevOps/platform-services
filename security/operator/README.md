@@ -49,6 +49,7 @@ Link the the operator `roles` and `playbook.yaml` so that ansible can access the
 
 ```console
 ln -s $PWD/roles /opt/ansible/roles
+ln -s $PWD/templates /opt/ansible/templates
 ln -s $PWD/*.yaml /opt/ansible/
 ```
 

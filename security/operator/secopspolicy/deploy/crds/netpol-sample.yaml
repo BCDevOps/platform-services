@@ -6,5 +6,10 @@ spec:
   description: |
     allow the devhub namespace to talk to the VON
     namespace.
-  destination: blarb1
-  source: blarb2
+  source:
+    - - $namespace=blarb2
+    - - app=web
+  destination:
+    - - $namespace=blarb1
+    - - env=prod
+      - app=api
