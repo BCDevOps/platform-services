@@ -1,0 +1,9 @@
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: ExternalNetworkPolicy
+metadata:
+  name: custom-extnet
+spec:
+  description: |
+    specify a custom external network that can be
+    referenced by name.
+  bla: 1
