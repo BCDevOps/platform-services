@@ -1,0 +1,15 @@
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: inter-namespace-comms
+spec:
+  description: |
+    allow the devhub namespace to talk to the VON
+    namespace.
+  source:
+    - - $namespace=blarb2
+    - - app=web
+  destination:
+    - - $namespace=blarb1
+    - - env=prod
+      - app=api

@@ -1,0 +1,20 @@
+# This collection of tasks will create an Aporeto
+# `networkaccesspolicies` policy.
+# Variables
+#   - pol_uuid
+#   - k8s_uuid
+#   - apo_namespace
+#   - netpol_spec
+- name: Process j2 template
+  template:
+    src: ./templates/custom-netpol.yaml.j2
+    dest: "/tmp/custom-netpol-{{ pol_uuid }}.yaml"
+- name: Create policy
+  shell: | 
+    /usr/local/bin/apoctl api import \
+    --namespace {{ apo_namespace }} \
+    --file "/tmp/custom-netpol-{{ pol_uuid }}.yaml"
+- name: Cleanup template
+  file:
+    path: "/tmp/custom-netpol-{{ pol_uuid }}.yaml"
+    state: absent

@@ -49,6 +49,7 @@ Link the the operator `roles` and `playbook.yaml` so that ansible can access the
 
 ```console
 ln -s $PWD/roles /opt/ansible/roles
+ln -s $PWD/templates /opt/ansible/templates
 ln -s $PWD/*.yaml /opt/ansible/
 ```
 
@@ -58,10 +59,10 @@ Install the custom resource definition (CRD) on the k8s (OpenShift) cluster:
 kubectl apply -f deploy/crds/defenition.yaml
 ```
 
-Bring the operator on-line. The `config.yaml` is your k8s config file with credentials to access the cluster. The flag `zap-encoder` is used to make the logging slightly more readable; if you don't use `console` you'll get fairly unreadable `JSON`.
+Bring the operator on-line. The `config.yaml` is your k8s config file with credentials to access the cluster. The flag `zap-encoder` is used to make the logging slightly more readable; if you don't use `console` you'll get fairly unreadable `JSON`. The argumentd `--namespace` needs to be a specific namespace or an empty string to monitor __all__ namespaces.
 
 ```console
-operator-sdk up local --kubeconfig=config.yaml --zap-encoder console
+operator-sdk up local --kubeconfig=config.yaml --zap-encoder console --namespace ''
 ```
 
 At this point you'll see some JSON debug messages in the console and you're ready to go. The operator is running locally and the `playbook.yaml` will be run whenever a CRUD change is made to the associated CR. Open another terminal and try creating a CR:
