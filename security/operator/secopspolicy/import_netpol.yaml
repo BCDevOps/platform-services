@@ -7,14 +7,14 @@
 #   - netpol_spec
 - name: Process j2 template
   template:
-    src: ./templates/inter-ns-pol.yaml.j2
-    dest: "/tmp/inter-ns-pol-{{ pol_uuid }}.yaml"
+    src: ./templates/custom-netpol.yaml.j2
+    dest: "/tmp/custom-netpol-{{ pol_uuid }}.yaml"
 - name: Create policy
   shell: | 
     /usr/local/bin/apoctl api import \
     --namespace {{ apo_namespace }} \
-    --file "/tmp/inter-ns-pol-{{ pol_uuid }}.yaml"
+    --file "/tmp/custom-netpol-{{ pol_uuid }}.yaml"
 - name: Cleanup template
   file:
-    path: "/tmp/inter-ns-pol-{{ pol_uuid }}.yaml"
+    path: "/tmp/custom-netpol-{{ pol_uuid }}.yaml"
     state: absent

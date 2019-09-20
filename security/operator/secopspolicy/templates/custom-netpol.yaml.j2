@@ -1,0 +1,81 @@
+{#
+    Set global variables.
+#}
+{% set base = lookup('env', 'APOCTL_BASE_NAMESPACE') %}
+APIVersion: 1
+label: custom-netpol-{{ pol_uuid }}
+data:
+  networkaccesspolicies:
+  - name: custom-netpol-{{ pol_uuid }}
+    description: {{ netpol_spec.description | replace('\n', ' ') }}
+    action: {{ netpol_spec.action | default("Allow") }}
+    propagate: true
+    logsEnabled: true
+{#
+    Process `source` to `subject` properties
+#}
+    subject:
+{% for items in netpol_spec.source %}
+{% for i in items %}
+{# 
+    If any item represents a namespace we need to make sure
+    that it represents a fully qualified namespace.
+#}
+{% if '$namespace' in i %}
+{% set value = i.split('=')[1] %}
+{% if base not in value %}
+{# String leading character so we can join later #}
+{% if  value.startswith('/') %}
+{% set value = value[1:] %}
+{% endif %}
+{# Rebuild the namespace property #}
+{% set i = '$namespace=' + base + '/' + value %}
+{% endif %}
+{% endif %}
+{# 
+    The first item needs to be preceeded with two dashes `- -` while
+    subsaquent items need only a single dash `-`; this groups them in
+    a logical AND.
+#}
+{% if loop.index == 1 %}
+    - - {{ i }}
+{% else %}
+      - {{ i }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{#
+    Process `destination` to `object` properties
+#}
+    object:
+{% for items in netpol_spec.destination %}
+{% for j in items %}
+{# 
+    If any item represents a namespace we need to make sure
+    that it represents a fully qualified namespace.
+#}
+{% if '$namespace' in j %}
+{% set value = j.split('=')[1] %}
+{% if base not in value %}
+{# String leading character so we can join later #}
+{% if  value.startswith('/') %}
+{% set value = value[1:] %}
+{% endif %}
+{# Rebuild the namespace property #}
+{% set j = '$namespace=' + base + '/' + value %}
+{% endif %}
+{% endif %}
+{# 
+    The first item needs to be preceeded with two dashes `- -` while
+    subsaquent items need only a single dash `-`; this groups them in
+    a logical AND.
+#}
+{% if loop.index == 1 %}
+    - - {{ j }}
+{% else %}
+      - {{ j }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+    associatedTags:
+    - k8s-uuid={{ k8s_uuid }}
