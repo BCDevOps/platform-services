@@ -5,6 +5,7 @@ data:
   - name: multicast-vrrp-permit
     action: "Allow"
     propagate: true
+    logsEnabled: true
     subject:
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/default"
     object:

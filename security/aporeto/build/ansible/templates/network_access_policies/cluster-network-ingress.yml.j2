@@ -5,6 +5,7 @@ data:
   - name: cluster-network-policies
     action: "Allow"
     propagate: true
+    logsEnabled: true
     applyPolicyMode: "IncomingTraffic"
     subject:
     - - int:network=cluster

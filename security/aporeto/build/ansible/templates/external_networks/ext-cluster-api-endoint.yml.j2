@@ -1,0 +1,14 @@
+APIVersion: 1
+label: ext-cluster-api-endpoint
+data:
+  externalnetworks:
+  - name: ext-cluster-api-endpoint
+    description: "External / Public OpenShift Cluster API Endpoint"
+    entries:
+    - {{ external_cluster_api_endpoint }}
+    ports:
+    - "{{ external_cluster_api_port }}"
+    protocols:
+    - tcp
+    associatedTags:
+    - ext:network=exernal-cluster-api-endpoint

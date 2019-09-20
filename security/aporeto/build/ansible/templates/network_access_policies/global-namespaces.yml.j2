@@ -5,6 +5,7 @@ data:
   - name: global-ns-network-policies
     action: "Allow"
     propagate: true
+    logsEnabled: true
     subject:
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
     object:

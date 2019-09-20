@@ -5,6 +5,7 @@ data:
   - name: api-server-communications
     action: "Allow"
     propagate: true
+    logsEnabled: true
     subject:
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/kube-service-catalog"
     object:
