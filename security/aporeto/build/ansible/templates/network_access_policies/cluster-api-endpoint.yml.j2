@@ -5,7 +5,9 @@ data:
   - name: cluster-api-endpoint-access
     action: "Allow"
     propagate: true
+    logsEnabled: true
+    applyPolicyMode: "OutgoingTraffic"
     subject:
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
     object:
-    - - ext:network=cluster-api-endpoint
+    - - ext:network=exernal-cluster-api-endpoint

@@ -5,6 +5,7 @@ data:
   - name: internet-ingress-network-policies
     action: "Allow"
     propagate: true
+    logsEnabled: true
     applyPolicyMode: "IncomingTraffic"
     subject:
     - - ext:network=any

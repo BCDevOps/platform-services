@@ -23,6 +23,8 @@
     - name: Validate that no resources are left 
       shell: "for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc get $crd --all-namespaces -o name; done"
 
+    # - name: Remove all BCGov SecOps custom resources 
+    #   shell: "for ns in $(oc get secopspolicies.secops.pathfinder.gov.bc.ca --all-namespaces | awk '{print $1}'); do oc delete secopspolicies.secops.pathfinder.gov.bc.ca --all -n $ns; done"
 
     - name: Fetch helm charts for aporeto-operator
       command: "helm fetch aporeto/aporeto-operator"

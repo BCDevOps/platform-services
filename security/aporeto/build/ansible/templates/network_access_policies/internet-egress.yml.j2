@@ -6,6 +6,7 @@ data:
     action: "Allow"
     propagate: true
     applyPolicyMode: "OutgoingTraffic"
+    logsEnabled: true
     subject:
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/default"
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/logging"
