@@ -7,7 +7,7 @@ spec:
     allow the devhub namespace to talk to the VON
     namespace.
   source:
-    - - $namespace=blarb2
+    - - $namespace=/blarb3
     - - app=web
   destination:
     - - $namespace=blarb1
