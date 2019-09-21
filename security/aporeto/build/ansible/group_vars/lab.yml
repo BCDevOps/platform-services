@@ -28,4 +28,4 @@ node_list:
 
 
 # BCGov Operator Details
-bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:latest
+bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:v0.8.2

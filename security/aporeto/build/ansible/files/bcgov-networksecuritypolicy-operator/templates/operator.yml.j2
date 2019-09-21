@@ -40,7 +40,7 @@ spec:
               memory: 256Mi
           command:
             - /usr/local/bin/entrypoint
-            - '--max-workers=10'
+            - '--max-workers=25'
           # Replace this with the built image name
           image: "{{ bcgov_networksecuritypolicy_operator_image }}"
           imagePullPolicy: "Always"
