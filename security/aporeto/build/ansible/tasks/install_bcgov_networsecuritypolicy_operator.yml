@@ -18,8 +18,10 @@
     - name: Apply operator objects
       command: "oc apply -f {{ item }} -n {{ openshift_project_prefix }}-operator"
       with_items:
+        - files/bcgov-networksecuritypolicy-operator/crds/definition.yaml
         - files/bcgov-networksecuritypolicy-operator/service_account.yml
         - files/bcgov-networksecuritypolicy-operator/role.yml
+        - files/bcgov-networksecuritypolicy-operator/user_cluster_role.yml
         - files/bcgov-networksecuritypolicy-operator/output/role_binding.yml
         - files/bcgov-networksecuritypolicy-operator/output/operator.yml
         - files/bcgov-networksecuritypolicy-operator/output/apoctl_configmap.yml
