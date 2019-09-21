@@ -15,11 +15,15 @@
       when: activity == "apply_policies" or activity == "install"
       with_items: 
         - external_networks
-        - network_access_policies  
-    - include_tasks: tasks/install_components.yml
-      when: activity == 'install'
+        - network_access_policies
     - include_tasks: tasks/install_bcgov_networsecuritypolicy_operator.yml
       when: activity == "bcgov-operator-install" or activity == "install"
+    - include_tasks: tasks/create_basic_policies.yml
+      when: activity == "install" or activity == "apply_basic_user_policies"
+      with_items: 
+      - "{{ project_list.stdout_lines }}"
+    - include_tasks: tasks/install_components.yml
+      when: activity == 'install'
     - include_tasks: tasks/uninstall_components.yml
       when: activity == 'uninstall'
 
