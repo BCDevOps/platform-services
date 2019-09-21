@@ -31,6 +31,13 @@ spec:
           - mountPath: /opt/ansible/.apoctl
             name: config
         - name: operator
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
           # Replace this with the built image name
           image: "{{ bcgov_networksecuritypolicy_operator_image }}"
           imagePullPolicy: "Always"

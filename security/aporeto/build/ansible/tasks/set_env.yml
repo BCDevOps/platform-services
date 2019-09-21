@@ -9,3 +9,7 @@
 - set_fact: 
     aporeto_temp_token: "{{ aporeto_temp_token_output.stdout.split('=')[1] }}"
     aporeto_repo: "{{ helm_repo_address }}/releases/release-{{ aporeto_release }}/clients"
+- name: Get list of openshift projects
+  shell: 
+    "oc get projects | awk 'NR>1  {print $1}'"
+  register: project_list
