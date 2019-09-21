@@ -3,6 +3,7 @@
   group: secops.pathfinder.gov.bc.ca
   kind: NetworkSecurityPolicy
 #   reconcilePeriod: 0
+#  maxWorkers: 10
   playbook: /opt/ansible/playbook.yaml
   finalizer:
     name: finalizer.secops.pathfinder.gov.bc.ca

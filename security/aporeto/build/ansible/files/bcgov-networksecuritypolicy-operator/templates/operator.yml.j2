@@ -33,11 +33,14 @@ spec:
         - name: operator
           resources:
             limits:
-              cpu: '1'
-              memory: 1Gi
+              cpu: '4'
+              memory: 4Gi
             requests:
               cpu: 100m
               memory: 256Mi
+          command:
+            - /usr/local/bin/entrypoint
+            - '--max-workers=10'
           # Replace this with the built image name
           image: "{{ bcgov_networksecuritypolicy_operator_image }}"
           imagePullPolicy: "Always"
