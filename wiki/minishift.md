@@ -1,5 +1,7 @@
 # Setup Red Hat Container Development Kit (for MacOS)
 
+## Note for Windows Developers: All the commands mentioned in this document for MacOS are slightly different in Windows. Please use assets\delete-and-recreate-minishift.bat for Windows commands.
+
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/)
 ```
 minishift setup-cdk --force
@@ -180,6 +182,8 @@ oc run oc --image=registry.access.redhat.com/openshift3/ose-cli:v3.11 -it --rm=t
 A restart script can be found here:
 
 [restart-minishift.sh](https://raw.githubusercontent.com/BCDevOps/platform-services/cvarjao-cdk-minishift/wiki/assets/restart-minishift.sh)
+
+[restart-ninishift.bat] (https://raw.githubusercontent.com/BCDevOps/platform-services/cvarjao-cdk-minishift/wiki/assets/restart-minishift.bat)
 
 # Troubleshooting
 ```
