@@ -53,3 +53,14 @@ oc api-resources --api-group=api.aporeto.io -o name
 - [ ] Create test/error for existing namespace
 - [ ] Add error handling around existing namespace
 - [ ] Determine whether to remove Aporeto namespace when uninstalling
+
+
+
+## Helpful Notes
+### Removing CRDs
+All CR's pertaining to a CRD must be removed prior to the CRD being removed. 
+
+- For example, to delete all secopspolicies objects across all namespaces: 
+```
+for n in $(oc get networksecuritypolicies --all-namespaces | awk 'FNR>1 {print $1}'); do oc delete networksecuritypolicies.secops.pathfinder.gov.bc.ca --all -n  $n; done
+```

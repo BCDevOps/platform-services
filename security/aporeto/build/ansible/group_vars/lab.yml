@@ -1,5 +1,5 @@
 # Aporeto Specific Details
-aporeto_release: 3.11.13
+aporeto_release: 3.11.15
 openshift_project_prefix: devops-security-aporeto
 openshift_project_editors: 
   - jleach
@@ -8,7 +8,7 @@ openshift_project_editors:
   - sbarre-esit
   - wmhutchison
 aporeto_parent_namespace: /bcgov/test                             #full path for parent namespace
-aporeto_namespace: lab-pathfinder-092019-01                       #single-level value only
+aporeto_namespace: lab-pathfinder-092319-02                      #single-level value only
 openshift_cluster_name: kamloops
 cluster_network: 10.131.0.0/16
 host_network: 142.34.217.32/27
@@ -25,7 +25,14 @@ node_list:
   - ociopf-t-313.dmz 
   - ociopf-t-321.dmz 
   - ociopf-t-322.dmz
+openshift_project_exclusions: 
+- kube-system
+- openshift-sdn
+- openshift-node
+- openshift-monitoring
+- "{{ openshift_project_prefix }}-operator"
+- "{{ openshift_project_prefix }}-enforcers"
 
 
 # BCGov Operator Details
-bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:latest
+bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:v0.8.2

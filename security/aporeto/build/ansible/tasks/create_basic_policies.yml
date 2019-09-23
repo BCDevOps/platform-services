@@ -1,0 +1,15 @@
+---
+- name: Render egress internet policy
+  template: 
+    src: ./templates/user_policy/internet_egress.yml.j2
+    dest: ./output/internet_egress.yml
+- name: Apply egress internet policy for "{{ item }}"
+  shell: 
+    "oc apply -f ./output/internet_egress.yml -n {{ item }}"
+- name: Render intra namespace communications policy
+  template: 
+    src: ./templates/user_policy/intra-namespace-comms.yml.j2
+    dest: ./output/intra-namespace-comms.yml
+- name: Apply intra namespace communications policy "{{ item }}"
+  shell: 
+    "oc apply -f ./output/intra-namespace-comms.yml -n {{ item }}"

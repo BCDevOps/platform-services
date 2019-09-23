@@ -6,21 +6,14 @@
   vars_files: 
     - vars.yml
   tasks: 
-  - name: Generate list of templates to process
-    find: 
-      paths: templates
-      recurse: yes
-      patterns: '*.yml.j2'
-    register: policy_template_file_list 
-  - name: Create output subdirectories
-    file:
-      path: output/{{ item.path.split('/')[1] }}
-      state: directory
-    with_items: 
-      - "{{ policy_template_file_list.files }}"
-  - name: Template test
-    template: 
-      src: "{{ item.path }}"
-      dest: "output/{{ item.path.split('/')[1] }}/{{ item.path.split('/')[2].split('.')[0] }}.yml"
-    with_items: 
-      - "{{ policy_template_file_list.files }}"
+    - include_tasks: tasks/set_env.yml
+    - name: Set fact for current policy count
+      command: 
+        "apoctl api count  networkaccesspolicies --namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}"
+      register: current_policy_count
+    # - name: template the thing
+    #   template: 
+    #     src: templates/profiles/openshift-default-profile.yml.j2
+    #     dest: output/test.yml
+    - include_tasks: tasks/monitor_policy_creation.yml
+      

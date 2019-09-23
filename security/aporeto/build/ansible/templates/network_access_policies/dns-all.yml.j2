@@ -5,6 +5,7 @@ data:
   - name: dns-all-access
     action: "Allow"
     propagate: true
+    logsEnabled: true
     applyPolicyMode: "OutgoingTraffic"
     subject:
     - - "$namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}/*"
