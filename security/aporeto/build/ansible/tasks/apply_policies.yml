@@ -11,3 +11,5 @@
   - "{{ policy_file_list.files }}"
   loop_control: 
     loop_var: file
+- name: Clean up policy folder
+  command: rm -rf output/*
