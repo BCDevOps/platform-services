@@ -5,9 +5,28 @@
   tasks:
     - import_role:
         name: "externalnetworkpolicy"
-    # - name: Debug Information 
-    #   debug: 
-    #     msg: "myvars = {{ hostvars[inventory_hostname] }}"
     - name: Generate policy ID
       command: openssl rand -hex 6
       register: openssl_cmd
+    - name: Extract variables
+      set_fact:
+        puid: "{{ openssl_cmd.stdout }}"
+        metadata: "{{ hostvars[inventory_hostname][k8s_message_key].metadata }}"
+        spec: "{{ hostvars[inventory_hostname][k8s_message_key].spec }}"
+    # Check if a the external network already exists. If so, return the ID
+    # so it can be re-used later in the playbook.
+    - import_tasks: lookup_apoobj.yaml
+      vars:
+        k8s_uuid: "{{ metadata.uid  }}"
+        apo_kind: externalnetworks
+        apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
+    # Create or update a policy if it does not already
+    # exists.
+    - import_tasks: import_extnet.yaml
+      vars:
+        pol_uuid: "{{ policy_uuid | default(puid) }}"
+        k8s_uuid: "{{ metadata.uid }}"
+        apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
+        extnet_spec: "{{ spec }}"
+    - name: Finished
+      meta: end_play

@@ -1,0 +1,26 @@
+APIVersion: 1
+{#
+    The `label` field is used by the import routine to determine the
+    uniqueness of an object. If the label is unique it will create
+    new objects; if the label matches an existing import it will
+    update / replace existing objects.
+#}
+label: custom-extnet-{{ pol_uuid }}
+data:
+  externalnetworks:
+  - name: {{ extnet_spec.name }}
+    entries:
+{% for entry in extnet_spec.entries %}
+    - "{{ entry }}"
+{% endfor %}
+    protocols:
+{% for protocol in extnet_spec.protocols %}
+    - "{{ protocol }}"
+{% endfor %}
+    ports:
+{% for port in extnet_spec.ports %}
+    - "{{ port }}"
+{% endfor %}
+    associatedTags:
+    - k8s-uuid={{ k8s_uuid }}
+    - ext:name={{ extnet_spec.name }}

@@ -4,6 +4,7 @@
 # Variables
 #   - k8s_uuid
 #   - apo_namespace
+#   - apo_kind
 # Sets
 #   - policy_id
 #   - policy_uuid
@@ -11,7 +12,7 @@
   when: k8s_uuid is defined and apo_namespace is defined
   shell: |
     /usr/local/bin/apoctl \
-    api list networkaccesspolicies \
+    api list "{{ apo_kind }}" \
     --namespace "{{ apo_namespace }}" \
     --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
     -c ID,name
