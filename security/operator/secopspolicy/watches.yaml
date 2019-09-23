@@ -12,4 +12,7 @@
   group: secops.pathfinder.gov.bc.ca
   kind: ExternalNetworkPolicy
   # reconcilePeriod: 0
-  playbook: /opt/ansible/extnetpol-main.yaml
+  playbook: /opt/ansible/extnet-main.yaml
+  finalizer:
+    name: finalizer.secops.pathfinder.gov.bc.ca
+    playbook: /opt/ansible/extnet-destroy.yaml
