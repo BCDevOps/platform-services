@@ -22,6 +22,7 @@
       when: activity == "install" or activity == "apply_basic_user_policies"
       with_items: 
       - "{{ project_list.stdout_lines }}"
+      when: item not in openshift_project_exclusions
     - include_tasks: tasks/install_components.yml
       when: activity == 'install'
     - include_tasks: tasks/uninstall_components.yml

@@ -25,6 +25,13 @@ node_list:
   - ociopf-t-313.dmz 
   - ociopf-t-321.dmz 
   - ociopf-t-322.dmz
+openshift_project_exclusions: 
+- kube-system
+- openshift-sdn
+- openshift-node
+- openshift-monitoring
+- "{{ openshift_project_prefix }}-operator"
+- "{{ openshift_project_prefix }}-enforcers"
 
 
 # BCGov Operator Details

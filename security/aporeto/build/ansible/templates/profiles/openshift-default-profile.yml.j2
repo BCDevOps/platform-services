@@ -18,12 +18,9 @@ data:
       hostModeEnabled: false
       hostServices: []
       ignoreExpression:
-        - - '@app:k8s:namespace=kube-system'
-        - - '@app:k8s:namespace=openshift-sdn'
-        - - '@app:k8s:namespace=openshift-node'
-        - - '@app:k8s:namespace=openshift-monitoring'
-        - - '@app:k8s:namespace={{ openshift_project_prefix }}-operator'
-        - - '@app:k8s:namespace={{ openshift_project_prefix }}-enforcers'
+{% for ns in openshift_project_exclusions %}
+        - - '@app:k8s:namespace={{ ns }}'
+{% endfor %}
       killContainersOnFailure: true
       kubernetesMetadataExtractor: PodAtomic
       kubernetesSupportEnabled: true

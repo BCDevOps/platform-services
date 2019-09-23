@@ -18,4 +18,6 @@
       include_tasks: tasks/create_basic_policies.yml
       with_items: 
       - "{{ project_list.stdout_lines }}"
+      when: item not in openshift_project_exclusions
+
         
