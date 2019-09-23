@@ -2,7 +2,7 @@
 - version: v1alpha1
   group: secops.pathfinder.gov.bc.ca
   kind: NetworkSecurityPolicy
-  reconcilePeriod: 30m
+  reconcilePeriod: 24h
 #  maxWorkers: 10
   playbook: /opt/ansible/playbook.yaml
   finalizer:
