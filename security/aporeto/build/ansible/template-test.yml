@@ -6,7 +6,14 @@
   vars_files: 
     - vars.yml
   tasks: 
-    - name: template the thing
-      template: 
-        src: templates/profiles/openshift-default-profile.yml.j2
-        dest: output/test.yml
+    - include_tasks: tasks/set_env.yml
+    - name: Set fact for current policy count
+      command: 
+        "apoctl api count  networkaccesspolicies --namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}"
+      register: current_policy_count
+    # - name: template the thing
+    #   template: 
+    #     src: templates/profiles/openshift-default-profile.yml.j2
+    #     dest: output/test.yml
+    - include_tasks: tasks/monitor_policy_creation.yml
+      

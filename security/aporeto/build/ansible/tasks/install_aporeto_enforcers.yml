@@ -1,0 +1,23 @@
+---
+- name: Fetch helm charts for enforcers
+  command: "helm fetch aporeto/enforcerd"
+  
+- name: Use Helm Template to create OpenShift Objects
+  shell: "helm template enforcerd-*.tgz \
+  --namespace {{ openshift_project_prefix }}-enforcers \
+  | oc apply -f - -n {{ openshift_project_prefix }}-enforcers "
+  ignore_errors: true
+
+- name: Remove helm chart files (cleanup)
+  shell: rm -f  enforcerd-*.tgz
+
+- name: Patch daemonset with appropriate label
+  shell: > 
+      ''oc patch daemonset enforcerd -n {{ openshift_project_prefix }}-enforcers -p '{"spec": {"template": {"spec": {"nodeSelector": {"aporeto-enforcerd":"true"}}}}}' ''
+  ignore_errors: true
+
+- name: Label nodes to activate enforcers
+  shell: oc label node {{ item }} aporeto-enforcerd=true --overwrite=true
+  with_items: 
+    - "{{ node_list }}"
+  ignore_errors: true
