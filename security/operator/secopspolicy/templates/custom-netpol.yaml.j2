@@ -3,6 +3,12 @@
 #}
 {% set base = lookup('env', 'APOCTL_BASE_NAMESPACE') %}
 APIVersion: 1
+{#
+    The `label` field is used by the import routine to determine the
+    uniqueness of an object. If the label is unique it will create
+    new objects; if the label matches an existing import it will
+    update / replace existing objects.
+#}
 label: custom-netpol-{{ pol_uuid }}
 data:
   networkaccesspolicies:

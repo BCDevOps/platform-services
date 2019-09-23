@@ -3,7 +3,14 @@ kind: ExternalNetworkPolicy
 metadata:
   name: custom-extnet
 spec:
+  name: secret-zone-x
   description: |
     specify a custom external network that can be
     referenced by name.
-  bla: 1
+  entries:
+  - 0.0.0.0/0
+  protocols:
+  - tcp
+  ports:
+  - "80"
+  - "443"
