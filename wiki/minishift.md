@@ -183,7 +183,7 @@ A restart script can be found here:
 
 [restart-minishift.sh](https://raw.githubusercontent.com/BCDevOps/platform-services/cvarjao-cdk-minishift/wiki/assets/restart-minishift.sh)
 
-[restart-ninishift.bat] (https://raw.githubusercontent.com/BCDevOps/platform-services/cvarjao-cdk-minishift/wiki/assets/restart-minishift.bat)
+[restart-ninishift.bat](https://raw.githubusercontent.com/BCDevOps/platform-services/cvarjao-cdk-minishift/wiki/assets/restart-minishift.bat)
 
 # Troubleshooting
 ```
