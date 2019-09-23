@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks: 
+    - name: Get list of openshift projects
+      shell: 
+        "oc get projects | awk 'NR>1  {print $1}'"
+      register: project_list
+    - name:
+      debug: msg="{{ item }}"
+      with_items: 
+      - "{{ project_list.stdout_lines }}"
+    - name: create_basic_policies
+      include_tasks: tasks/create_basic_policies.yml
+      with_items: 
+      - "{{ project_list.stdout_lines }}"
+      when: item not in openshift_project_exclusions
+
+        

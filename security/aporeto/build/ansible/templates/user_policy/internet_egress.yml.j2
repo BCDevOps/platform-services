@@ -1,0 +1,11 @@
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: egress-internet-{{ item }}
+spec:
+  description: |
+    allow {{ item }} to talk to the internet
+  source:
+    - - $namespace={{ item }}
+  destination:
+    - - ext:network=any
