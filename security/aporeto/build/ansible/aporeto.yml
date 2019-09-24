@@ -12,7 +12,7 @@
     - include_tasks: tasks/namespace_preparation.yml
       when: activity == 'install'
     - include_tasks: tasks/install_aporeto_operator.yml
-      when: activity == 'install'
+      when: activity == 'install' or activity == 'upgrade'
     - include_tasks: tasks/apply_policies.yml
       when: activity == "apply_policies" or activity == "install"
       with_items: 
@@ -36,7 +36,7 @@
       when: 
       - activity == "install" or activity == "apply_basic_user_policies"
     - include_tasks: tasks/install_aporeto_enforcers.yml
-      when: activity == 'install'
+      when: activity == 'install' or activity == 'upgrade'
     - include_tasks: tasks/uninstall_components.yml
       when: activity == 'uninstall'
 
