@@ -130,7 +130,7 @@ ansible-playbook -i lab aporeto.yml -e activity=install
 6. Identify the total amount of current policies in the namespace for later calculation in the basic user policy tasks
 
 7. install_bcgov_networsecuritypolicy_operator.yml
-    - **All files and templates in this task are located in [./files/bcgov-networksecuritypolicy-operator](/files/bcgov-networksecuritypolicy-operator)**
+    - **All files and templates in this task are located in [./files/bcgov-networksecuritypolicy-operator](./files/bcgov-networksecuritypolicy-operator)**
     - Generate an Aporeto App Credential for the operator and create the k8s secret
     - Render the deployment maniefest
     - Render the configMap so that `apoctl` is pre-configured
