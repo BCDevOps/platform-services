@@ -1,15 +1,15 @@
 # This collection of tasks will lookup an Aporeto
-# `externalnetworkpolicy` policy by filtering for a
+# `externalnetwork` by filtering for a
 # known tag.
 # Variables
 #   - apo_namespace
 - hosts: localhost
   gather_facts: no
   vars:
-    k8s_message_key: _secops_pathfinder_gov_bc_ca_externalnetworkpolicy
+    k8s_message_key: _secops_pathfinder_gov_bc_ca_externalnetwork
   tasks:
     - import_role:
-        name: "externalnetworkpolicy"
+        name: "externalnetwork"
     - name: Extract k8s UID
       set_fact:
         metadata: "{{ hostvars[inventory_hostname][k8s_message_key].metadata }}"
