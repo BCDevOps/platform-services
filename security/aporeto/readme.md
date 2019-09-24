@@ -17,8 +17,8 @@ Users can sign into the Aporeto Console with the following details below:
   - BCDevOps Security Team
 
 ## Documentation Layout
-- Build Documents
-  - [Deployment Steps](build/readme.md)
+- Build & Deploy Documents
+  - [Anisble Automated Deployment](build/readme.md)
 - Administration Documents
   - [Authentication & Authorization](admin/auth.md)
   - [CLI Examples](admin/cli_examples.md)
