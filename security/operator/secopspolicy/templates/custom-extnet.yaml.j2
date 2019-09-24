@@ -8,7 +8,7 @@ APIVersion: 1
 label: custom-extnet-{{ pol_uid }}
 data:
   externalnetworks:
-  - name: "{{ extnet_spec.name }}-{{ pol_uid }}"
+  - name: "custom-extnet-{{ pol_uid }}"
     description: {{ extnet_spec.description | replace('\n', ' ') }}
     entries:
 {% for entry in extnet_spec.entries %}

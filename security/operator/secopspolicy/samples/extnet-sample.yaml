@@ -3,7 +3,6 @@ kind: ExternalNetwork
 metadata:
   name: custom-extnet
 spec:
-  name: secret-zone-x
   description: |
     specify a custom external network that can be
     referenced by name.
