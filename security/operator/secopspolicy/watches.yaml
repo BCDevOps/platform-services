@@ -10,7 +10,7 @@
     playbook: /opt/ansible/netsecpol-destroy.yaml
 - version: v1alpha1
   group: secops.pathfinder.gov.bc.ca
-  kind: ExternalNetworkPolicy
+  kind: ExternalNetwork
   # reconcilePeriod: 0
   playbook: /opt/ansible/extnet-main.yaml
   finalizer:

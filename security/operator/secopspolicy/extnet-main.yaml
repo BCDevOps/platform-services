@@ -1,10 +1,10 @@
 - hosts: localhost
   gather_facts: no
   vars:
-    k8s_message_key: _secops_pathfinder_gov_bc_ca_externalnetworkpolicy
+    k8s_message_key: _secops_pathfinder_gov_bc_ca_externalnetwork
   tasks:
     - import_role:
-        name: "externalnetworkpolicy"
+        name: "externalnetwork"
     - name: Generate policy ID
       command: openssl rand -hex 6
       register: openssl_cmd
