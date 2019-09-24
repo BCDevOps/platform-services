@@ -11,7 +11,7 @@
 - version: v1alpha1
   group: secops.pathfinder.gov.bc.ca
   kind: ExternalNetwork
-  # reconcilePeriod: 0
+  reconcilePeriod: 24h
   playbook: /opt/ansible/extnet-main.yaml
   finalizer:
     name: finalizer.secops.pathfinder.gov.bc.ca
