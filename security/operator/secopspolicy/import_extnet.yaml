@@ -1,20 +1,20 @@
 # This collection of tasks will create an Aporeto
 # `externalnetwork` object.
 # Variables
-#   - pol_uuid
+#   - pol_uid
 #   - k8s_uuid
 #   - apo_namespace
 #   - extnet_spec
 - name: Process j2 template
   template:
     src: ./templates/custom-extnet.yaml.j2
-    dest: "/tmp/custom-extnet-{{ pol_uuid }}.yaml"
+    dest: "/tmp/custom-extnet-{{ pol_uid }}.yaml"
 - name: Create external network
   shell: | 
     /usr/local/bin/apoctl api import \
     --namespace {{ apo_namespace }} \
-    --file "/tmp/custom-extnet-{{ pol_uuid }}.yaml"
+    --file "/tmp/custom-extnet-{{ pol_uid }}.yaml"
 - name: Cleanup template
   file:
-    path: "/tmp/custom-extnet-{{ pol_uuid }}.yaml"
+    path: "/tmp/custom-extnet-{{ pol_uid }}.yaml"
     state: absent

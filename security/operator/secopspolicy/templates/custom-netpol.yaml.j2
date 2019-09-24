@@ -9,10 +9,10 @@ APIVersion: 1
     new objects; if the label matches an existing import it will
     update / replace existing objects.
 #}
-label: custom-netpol-{{ pol_uuid }}
+label: custom-netpol-{{ pol_uid }}
 data:
   networkaccesspolicies:
-  - name: custom-netpol-{{ pol_uuid }}
+  - name: custom-netpol-{{ pol_uid }}
     description: {{ netpol_spec.description | replace('\n', ' ') }}
     action: {{ netpol_spec.action | default("Allow") }}
     propagate: true

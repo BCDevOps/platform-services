@@ -5,10 +5,10 @@ APIVersion: 1
     new objects; if the label matches an existing import it will
     update / replace existing objects.
 #}
-label: custom-extnet-{{ pol_uuid }}
+label: custom-extnet-{{ pol_uid }}
 data:
   externalnetworks:
-  - name: {{ extnet_spec.name }}
+  - name: "{{ extnet_spec.name }}-{{ pol_uid }}"
     description: {{ extnet_spec.description | replace('\n', ' ') }}
     entries:
 {% for entry in extnet_spec.entries %}
