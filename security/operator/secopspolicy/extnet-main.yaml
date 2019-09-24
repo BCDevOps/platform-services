@@ -24,7 +24,7 @@
     # exists.
     - import_tasks: import_extnet.yaml
       vars:
-        pol_uuid: "{{ policy_uuid | default(puid) }}"
+        pol_uid: "{{ policy_uid | default(puid) }}"
         k8s_uuid: "{{ metadata.uid }}"
         apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
         extnet_spec: "{{ spec }}"
