@@ -2,7 +2,7 @@
 # `networkaccesspolicies` policy.
 # Variables
 #   - policy_id
-#   - pol_uuid
+#   - pol_uid
 #   - k8s_uuid
 #   - apo_namespace
 #   - netpol_spec
@@ -12,7 +12,7 @@
     data: "{{ data|default({}) | combine( {item.variable: item.value} ) }}"
   with_items:
   - variable: name
-    value: "inter-ns-network-{{ pol_uuid }}"
+    value: "inter-ns-network-{{ pol_uid }}"
   - variable: description
     value: "{{ netpol_spec.description | replace('\n', ' ') }}"
   - variable: associatedTags

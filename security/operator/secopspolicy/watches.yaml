@@ -4,7 +4,15 @@
   kind: NetworkSecurityPolicy
   reconcilePeriod: 24h
 #  maxWorkers: 10
-  playbook: /opt/ansible/playbook.yaml
+  playbook: /opt/ansible/netsecpol-main.yaml
   finalizer:
     name: finalizer.secops.pathfinder.gov.bc.ca
-    playbook: /opt/ansible/destroy.yaml
+    playbook: /opt/ansible/netsecpol-destroy.yaml
+- version: v1alpha1
+  group: secops.pathfinder.gov.bc.ca
+  kind: ExternalNetwork
+  reconcilePeriod: 24h
+  playbook: /opt/ansible/extnet-main.yaml
+  finalizer:
+    name: finalizer.secops.pathfinder.gov.bc.ca
+    playbook: /opt/ansible/extnet-destroy.yaml

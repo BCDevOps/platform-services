@@ -4,14 +4,15 @@
 # Variables
 #   - k8s_uuid
 #   - apo_namespace
+#   - apo_kind
 # Sets
 #   - policy_id
-#   - policy_uuid
+#   - policy_uid
 - name: Policy Lookup
   when: k8s_uuid is defined and apo_namespace is defined
   shell: |
     /usr/local/bin/apoctl \
-    api list networkaccesspolicies \
+    api list "{{ apo_kind }}" \
     --namespace "{{ apo_namespace }}" \
     --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
     -c ID,name
@@ -24,7 +25,7 @@
     - output.stdout != "[]"
   set_fact:
     policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
-    policy_uuid: "{{ ((output.stdout | from_json | list | first).name).split('-')[-1] }}"
+    policy_uid: "{{ ((output.stdout | from_json | list | first).name).split('-')[-1] }}"
 - name: Found policy
   when: policy_id is defined
   debug: 
