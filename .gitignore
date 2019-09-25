@@ -62,7 +62,7 @@ typings/
 .DS_Store
 
 # temp folders
-*git_checkout*
+#*git_checkout*
 
 # creds
 *creds*
