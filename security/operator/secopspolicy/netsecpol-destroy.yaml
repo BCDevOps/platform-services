@@ -10,17 +10,15 @@
   tasks:
     - import_role:
         name: "networksecuritypolicy"
-    - name: Debug Information 
-      debug: 
-        msg: "myvars = {{ hostvars[inventory_hostname] }}"
     - name: Extract k8s UID
       set_fact:
         metadata: "{{ hostvars[inventory_hostname][k8s_message_key].metadata }}"
     # Lookup the policy and fetch its uid; if a policy is found
     # `policy_id` will be defined.
-    - import_tasks: lookup_netpol.yaml
+    - import_tasks: lookup_apoobj.yaml
       vars:
         k8s_uuid: "{{  metadata.uid  }}"
+        apo_kind: networkaccesspolicies
         apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
     - name: Exist if no policy exists
       when: policy_id is not defined
