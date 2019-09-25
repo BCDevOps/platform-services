@@ -1,11 +1,22 @@
 # This collection of tasks will create an Aporeto
 # `networkaccesspolicies` policy.
 # Variables
-#   - pol_uid
 #   - k8s_uuid
+#   - template_name
+#   - import_label
 #   - apo_namespace
 #   - spec
-#   - template_name
+- name: Generate policy ID
+  command: openssl rand -hex 6
+  register: openssl_cmd
+- name: Extract variables
+  when:
+    - openssl_cmd is defined
+    - openssl_cmd.rc == 0
+    - openssl_cmd.stdout is defined
+    - openssl_cmd.stdout != ""
+  set_fact:
+    pol_uid: "{{ openssl_cmd.stdout }}"
 - name: Process j2 template
   set_fact:
     tdata: "{{ lookup('template', './templates/{{ template_name }}') }}"
