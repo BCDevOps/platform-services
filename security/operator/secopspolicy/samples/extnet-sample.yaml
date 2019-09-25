@@ -3,6 +3,7 @@ kind: ExternalNetwork
 metadata:
   name: custom-extnet
 spec:
+  name: bla-bla
   description: |
     specify a custom external network that can be
     referenced by name.
