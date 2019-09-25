@@ -9,19 +9,19 @@ label: custom-extnet-{{ pol_uid }}
 data:
   externalnetworks:
   - name: "custom-extnet-{{ pol_uid }}"
-    description: {{ extnet_spec.description | replace('\n', ' ') }}
+    description: {{ spec.description | replace('\n', ' ') }}
     entries:
-{% for entry in extnet_spec.entries %}
+{% for entry in spec.entries %}
     - "{{ entry }}"
 {% endfor %}
     protocols:
-{% for protocol in extnet_spec.protocols %}
+{% for protocol in spec.protocols %}
     - "{{ protocol }}"
 {% endfor %}
     ports:
-{% for port in extnet_spec.ports %}
+{% for port in spec.ports %}
     - "{{ port }}"
 {% endfor %}
     associatedTags:
     - k8s-uuid={{ k8s_uuid }}
-    - ext:name={{ extnet_spec.name }}
+    - ext:name={{ spec.name }}

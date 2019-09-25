@@ -13,15 +13,15 @@ label: custom-netpol-{{ pol_uid }}
 data:
   networkaccesspolicies:
   - name: custom-netpol-{{ pol_uid }}
-    description: {{ netpol_spec.description | replace('\n', ' ') }}
-    action: {{ netpol_spec.action | default("Allow") }}
+    description: {{ spec.description | replace('\n', ' ') }}
+    action: {{ spec.action | default("Allow") }}
     propagate: true
     logsEnabled: true
 {#
     Process `source` to `subject` properties
 #}
     subject:
-{% for items in netpol_spec.source %}
+{% for items in spec.source %}
 {% for i in items %}
 {# 
     If any item represents a namespace we need to make sure
@@ -54,7 +54,7 @@ data:
     Process `destination` to `object` properties
 #}
     object:
-{% for items in netpol_spec.destination %}
+{% for items in spec.destination %}
 {% for j in items %}
 {# 
     If any item represents a namespace we need to make sure
