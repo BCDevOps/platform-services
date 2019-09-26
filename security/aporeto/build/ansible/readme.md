@@ -68,7 +68,7 @@ The Ansible playbook accepts a few switches:
     - default is `false`
     - does not create / apply the egress and intra namespace policies
 
-- **activity=bcgov-operator-install**
+- **activity=uninstall**
     - removes all aporeto components including the CRD 
     - does not currently remove the rolebindings/clusterrolebindings for the operator
     - does not remove the bcgov networksecuritypolicy operator
