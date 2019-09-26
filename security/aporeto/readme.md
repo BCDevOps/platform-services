@@ -5,7 +5,7 @@ The Aporeto solution is a multi-cluster multi-cloud zero trust network solution 
 Users can sign into the Aporeto Console with the following details below: 
 - URL: https://console.aporeto.com
 - Select the sign in options (three dots) and select *Sign in with OIDC*
-  - Namespace: /bcgov-devex
+  - Namespace: /bcgov
   - Provider: pathfinder-sso-prod
 
 ## Resources
@@ -17,8 +17,8 @@ Users can sign into the Aporeto Console with the following details below:
   - BCDevOps Security Team
 
 ## Documentation Layout
-- Build Documents
-  - [Deployment Steps](build/deployment.md)
+- Build & Deploy Documents
+  - [Anisble Automated Deployment](build/readme.md)
 - Administration Documents
   - [Authentication & Authorization](admin/auth.md)
   - [CLI Examples](admin/cli_examples.md)

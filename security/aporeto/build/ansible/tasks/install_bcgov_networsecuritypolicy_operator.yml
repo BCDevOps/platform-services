@@ -7,7 +7,7 @@
       template:
         src: files/bcgov-networksecuritypolicy-operator/templates/operator.yml.j2
         dest: files/bcgov-networksecuritypolicy-operator/output/operator.yml
-    - name: Render Operator Deployment
+    - name: Render Operator ConfigMap
       template:
         src: files/bcgov-networksecuritypolicy-operator/templates/apoctl_configmap.yml.j2
         dest: files/bcgov-networksecuritypolicy-operator/output/apoctl_configmap.yml
