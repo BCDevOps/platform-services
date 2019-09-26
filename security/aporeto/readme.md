@@ -38,3 +38,11 @@ Please see the the [support datasheet](pdfs/Aporeto_Support_Datasheet.pdf) here 
 # Issue Tracking
 Please use GitHub issues in this repo with the "security/aporeto". 
 
+
+# Videos
+
+#### Operational Videos
+[Aporeto Automation Playbook Walkthrough](https://www.youtube.com/watch?v=yQzJiExljrY)
+
+#### Spint Demo Videos
+[Sprint 2 - Demo 1 - Single Namespace NetworkSecurityPolicy Objects](https://youtu.be/qWt9gtaHFQQ)
