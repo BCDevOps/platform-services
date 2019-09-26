@@ -60,7 +60,7 @@ The Ansible playbook accepts a few switches:
     - only installs the bcgov networksecuritypolicy operator
 
 - **activity=apply_basic_user_policies**
-    - creates egress internet and intra namespace policies
+    - creates egress internet, internal cluster api, and intra namespace policies
     - should only be used when cutting into prod
     - 
 
