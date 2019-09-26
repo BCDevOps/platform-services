@@ -19,6 +19,8 @@ Users can sign into the Aporeto Console with the following details below:
 ## Documentation Layout
 - Build & Deploy Documents
   - [Anisble Automated Deployment](build/readme.md)
+- Production Rollout Plan
+  - [Rollout Plan](rollout_plan.md)
 - Administration Documents
   - [Authentication & Authorization](admin/auth.md)
   - [CLI Examples](admin/cli_examples.md)
