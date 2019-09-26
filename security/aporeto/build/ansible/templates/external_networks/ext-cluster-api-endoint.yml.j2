@@ -3,6 +3,7 @@ label: ext-cluster-api-endpoint
 data:
   externalnetworks:
   - name: ext-cluster-api-endpoint
+    propagate: true
     description: "External / Public OpenShift Cluster API Endpoint"
     entries:
     - {{ external_cluster_api_endpoint }}
