@@ -8,5 +8,5 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-edit: "true" 
 rules:
 - apiGroups: ["secops.pathfinder.gov.bc.ca"] 
-  resources: ["networksecuritypolicies"] 
+  resources: ["networksecuritypolicies", "externalnetworks"] 
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"] 
