@@ -7,7 +7,7 @@
   --namespace {{ openshift_project_prefix }}-enforcers \
   --set resources.enabled=true \
   --set resources.limits.memory={{ aporeto_enforcer_memory_limit }} \ 
-  --set resources.limits.cpu= {{ aporeto_enforcer_cpu_limit }} \
+  --set resources.limits.cpu={{ aporeto_enforcer_cpu_limit }} \
   | oc apply -f - -n {{ openshift_project_prefix }}-enforcers "
   ignore_errors: true
 
