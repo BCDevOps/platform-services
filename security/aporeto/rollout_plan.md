@@ -43,3 +43,13 @@ The production rollout plan has not yet been communicated to the end-user commun
 ## Troubleshooting
 Basic troubleshooting steps can be found [here](admin/troubleshooting.md). 
 
+# Once Complete
+Remember to celebrate and find your favorite Giphy! 
+
+<iframe src="https://giphy.com/embed/XreQmk7ETCak0" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/retro-thumbs-up-XreQmk7ETCak0">via GIPHY</a></p>
+
+<iframe src="https://giphy.com/embed/xNBcChLQt7s9a" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/win-xNBcChLQt7s9a">via GIPHY</a></p>
+
+<iframe src="https://giphy.com/embed/xNBcChLQt7s9a" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/win-xNBcChLQt7s9a">via GIPHY</a></p>
+
+<iframe src="https://giphy.com/embed/vtVpHbnPi9TLa" width="480" height="271" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/barney-stinson-neil-patrick-harris-success-vtVpHbnPi9TLa">via GIPHY</a></p>
