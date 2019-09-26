@@ -2,7 +2,7 @@
 - name: Get Temporary Aporeto Token
   shell: > 
     apoctl auth {{ aporeto_auth_method }} -e \
-    --validity 10m \
+    --validity 30m \
     --account {{ aporeto_user_account }} \
     --password {{ aporeto_user_password }}
   register: aporeto_temp_token_output

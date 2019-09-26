@@ -5,17 +5,18 @@ The [ansible](ansible/readme.md) directory contains a playbook to:
 - Install Aporeto
 - Uninstall Aporeto
 - Configure Aporeto base policies
+- Configure per-project basic policies for cut-in
 
 ## Namespaces 
 Aporeto and OpenShift/Kuberenetes both usee the concept of `namespaces`. This table is used to map an Aporeto `namespace` to an OpenShift `namespace`, as they are not the same thing. 
 
 The following OpenShift namespaces are used for each configured environment: 
 
-| OpenShift Environment Name | OpenShift Project                | Aporeto Namespace Mapping |   |   |
-|----------------------------|----------------------------------|---------------------------|---|---|
-| LAB                        | devops-platform-security-aporeto | /bcgov-devex/lab          |   |   |
-|                            |                                  |                           |   |   |
-|                            |                                  |                           |   |   |
+| OpenShift Environment Name | OpenShift Project                               | Aporeto Namespace Mapping                                |   |   |
+|----------------------------|-------------------------------------------------|----------------------------------------------------------|---|---|
+| LAB                        | devops-platform-security-[operator / enforcers] | /bcgov/platform-sevices/lab/kamloops/lab                 |   |   |
+| Pathfinder                 | devops-platform-security-[operator / enforcers] | /bcgov/platform-sevices/production/kamloops/pathfinder   |   |   |
+|                            |                                                 |                                                          |   |   |
 
 
 ## Legacy Docs 
