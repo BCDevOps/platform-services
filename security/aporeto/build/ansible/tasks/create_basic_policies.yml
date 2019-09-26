@@ -13,3 +13,10 @@
 - name: Apply intra namespace communications policy "{{ item }}"
   shell: 
     "oc apply -f ./output/intra-namespace-comms.yml -n {{ item }}"
+- name: Render internal api communications policy
+  template: 
+    src: ./templates/user_policy/int-cluster-k8s-api-permit.yml.j2
+    dest: ./output/int-cluster-k8s-api-permit.yml
+- name: Apply internal api communications policy "{{ item }}"
+  shell: 
+    "oc apply -f ./output/int-cluster-k8s-api-permit.yml -n {{ item }}"
