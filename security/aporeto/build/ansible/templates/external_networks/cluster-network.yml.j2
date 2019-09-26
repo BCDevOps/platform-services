@@ -3,6 +3,7 @@ label: cluster-network
 data:
   externalnetworks:
   - name: cluster-network
+    propagate: true
     entries:
     - {{ cluster_network }}
     ports:

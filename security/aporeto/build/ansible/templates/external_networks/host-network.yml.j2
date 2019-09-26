@@ -3,6 +3,7 @@ label: lab-host-network
 data:
   externalnetworks:
   - name: host-network
+    propagate: true
     entries:
     - {{ host_network }}
     ports:

@@ -3,6 +3,7 @@ label: int-cluster-api-endpoint
 data:
   externalnetworks:
   - name: int-cluster-api-endpoint
+    propagate: true
     description: "Internal Kubernetes Cluster API Endpoint"
     entries:
     - {{ internal_cluster_api_endpoint }}
