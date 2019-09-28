@@ -22,6 +22,7 @@
       command: 
         "apoctl api count  networkaccesspolicies --namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}"
       register: current_policy_count
+      when: activity == "install" or activity == "apply_basic_user_policies"
     - include_tasks: tasks/install_bcgov_networsecuritypolicy_operator.yml
       when: activity == "bcgov-operator-install" or activity == "install"
     - include_tasks: tasks/create_basic_policies.yml
