@@ -1,0 +1,18 @@
+# This collection of tasks will create an Aporeto
+# `networkaccesspolicies` policy.
+# Variables
+#   - pol_uid
+#   - k8s_uuid
+#   - apo_namespace
+#   - spec
+#   - template_name
+- name: Process j2 template
+  set_fact:
+    tdata: "{{ lookup('template', './templates/{{ template_name }}') }}"
+- name: Create policy
+  command: |
+    /usr/local/bin/apoctl api import \
+    --namespace {{ apo_namespace }} \
+    -f -
+  args:
+    stdin: "{{ tdata }}"
