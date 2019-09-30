@@ -46,3 +46,4 @@ Please use GitHub issues in this repo with the "security/aporeto".
 
 #### Spint Demo Videos
 [Sprint 2 - Demo 1 - Single Namespace NetworkSecurityPolicy Objects](https://youtu.be/qWt9gtaHFQQ)
+[Sprint 2 - Demo 2 - Securing the Family Protection Order Project Namespace](https://www.youtube.com/watch?v=v2I0HCKRrgk)
