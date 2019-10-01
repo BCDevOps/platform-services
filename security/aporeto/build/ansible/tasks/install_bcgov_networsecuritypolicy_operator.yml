@@ -1,5 +1,10 @@
 - name: Deploy BCGov Network Security Policy Operator
   block:
+    - name: Create output directory
+      file:
+        path: files/bcgov-networksecuritypolicy-operator/output
+        state: directory
+        recurse: yes
     - name: Generate Aporeto appcred
       shell: > 
         apoctl appcred create bcgov-networksecuritypolicy-operator --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=namespace.editor" | oc apply -f - -n "{{ openshift_project_prefix }}-operator"

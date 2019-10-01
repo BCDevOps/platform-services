@@ -9,6 +9,8 @@ The parent namespace must exist prior to running this playbook. A separate playb
   - apoctl
   - helm
 
+Run `helm init --client-only` to ensure helm is ready to run.
+
 ### Usage
 This playbook can be used to install or uninstall Aporeto in each BCGov OpenShift environment. 
 *Note: Only a single operator and set of enforcers must exist in an OpenShift cluster. Multiple implementations with this playbook will cause failures* 
