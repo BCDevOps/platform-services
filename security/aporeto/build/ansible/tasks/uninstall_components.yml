@@ -13,7 +13,7 @@
       ignore_errors: true
 
     - name: Disable Aporeto operator syncing
-      command: "oc annotate namespace {{ openshift_project_prefix }}-enforcers aporeto.io/disable-aporeto-ctrls='true' "
+      command: "oc annotate namespace {{ openshift_project_prefix }}-enforcers aporeto.io/disable-aporeto-ctrls='true' --overwrite"
       ignore_errors: true
 
 
@@ -40,6 +40,7 @@
       command: "helm fetch aporeto/aporeto-crds"
     - name: Use Helm Template to delete OpenShift Objects
       shell: "helm template aporeto-crds-*.tgz | oc delete -f - "
+      ignore_errors: true
 
     - name: Remove OpenShift Projects
       command: "oc delete project {{ openshift_project_prefix }}-enforcers {{ openshift_project_prefix }}-operator"

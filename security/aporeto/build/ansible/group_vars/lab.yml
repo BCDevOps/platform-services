@@ -10,7 +10,7 @@ openshift_project_editors:
   - sbarre-esit
   - wmhutchison
 aporeto_parent_namespace: /bcgov/test                             #full path for parent namespace
-aporeto_namespace: lab-pathfinder-092319-02                      #single-level value only
+aporeto_namespace: lab-pathfinder-20190930                      #single-level value only
 openshift_cluster_name: kamloops
 cluster_network: 10.131.0.0/16
 host_network: 142.34.217.32/27
