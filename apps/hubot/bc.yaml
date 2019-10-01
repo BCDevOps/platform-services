@@ -96,7 +96,7 @@ parameters:
   displayName: SOURCE_REPOSITORY_REF
   name: SOURCE_REPOSITORY_REF
   required: true
-  value: master
+  value: cailey-hubot
 - description: SOURCE_REPOSITORY_DIR
   displayName: SOURCE_REPOSITORY_DIR
   name: SOURCE_REPOSITORY_DIR
