@@ -4,7 +4,7 @@
     policy_count: "0"
     project_count: "{{ (project_list.stdout_lines | length | int) - (openshift_project_exclusions | length | int) - 2 }}"
 - set_fact: 
-    expected_policy_count: "{{ (project_count|int *2) }}" # this is slightly below the expected count but should work fine. 
+    expected_policy_count: "{{ (project_count|int *3) }}" # this is slightly below the expected count but should work fine. 
 
 - debug: msg="Total project_count = {{ project_count }}. Expected policy_count = {{ expected_policy_count }}"
 - name: Count policies
