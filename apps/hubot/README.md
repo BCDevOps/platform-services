@@ -86,17 +86,11 @@ This is a boilerplate for making your own bots with Hubot and Rocket.Chat.
 
 ### Running Locally
 
-You can run with the shell adapter just to test
-
-1. Run `yarn` or `npm install` to install dependencies
-2. Use the `yarn shell` script to start the bot with shell adaptor
-3. Say `hubot help` to see what it can do
-
 When you're ready to connect the bot to an instance of Rocket.Chat
 
 1. Create a user for the bot, with the role _bot_
 2. Create an `./.env` file with the user and connection settings
-3. Run `yarn local` script to connect to your local Rocket.Chat
+3. Run `bin/hubot` script to connect to your local Rocket.Chat
 
 The `local` npm script will read in the env file, so you can populate and modify
 those settings easily (see [configuration](#configuration)). In production, they
