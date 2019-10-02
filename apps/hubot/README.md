@@ -14,7 +14,7 @@ Create and run a Rocket.Chat bot in under two minutes.
 
 ## Installing on BCGOV Openshift
 
-1. Create a redis deployment from a standard template and save the password as a secret with the name "redis" and the key "database-password" (these are the standard values from the base redis template)
+1. Create a redis deployment from a standard template and save the password as a secret with the name "redis" and the key "database-password" (these are the standard values from the base redis template) - the password must not have symbols!
 2. Create Hubot user on rocket.chat (if one doesn't exist already)
 3. Create a secret containing the password of Hubot's rocket.chat account (if one doesn't exist already) with the name "rocketchat-bot-account-password" and the key "BOT_PASSWORD"
 4. Use bc.yaml to create a build
