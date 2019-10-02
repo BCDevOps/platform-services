@@ -78,7 +78,7 @@ objects:
         - hubot
         from:
           kind: ImageStreamTag
-          namespace: cailey-tools
+          namespace: e5imao-tools
           name: ${NAME}:${VERSION}
       type: ImageChange
 - apiVersion: v1

@@ -20,7 +20,7 @@ objects:
     - annotations: null
       from:
         kind: ImageStreamImage
-        name: nodejs@sha256:ea0c9c67d10b5204d51666d3d34078627f4ef24683ab45e0e6768b0b51b4853d
+        name: nodejs@sha256:91002d434b585df0262f0350fe91dac9adb3e56d6b9ccfea47ac91064f4513b7
         namespace: openshift
       importPolicy: {}
       name: "1"
