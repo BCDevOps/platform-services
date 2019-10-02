@@ -5,10 +5,17 @@ APIVersion: 1
     new objects; if the label matches an existing import it will
     update / replace existing objects.
 #}
-label: custom-extnet-{{ pol_uid }}
+{% set default_import_label = 'custom-extnet-' + pol_uid %}
+label: "{{ import_label | default(default_import_label) }}" 
 data:
   externalnetworks:
-  - name: "custom-extnet-{{ pol_uid }}"
+{# 
+    The ExternalNetwork name is built from a hard-coded prefix
+    combined with the k8s object name derrived from the `metadata.name`
+    field. This allows for operations to quickly correlate the k8s object
+    with the Aporeto policy.
+#}
+  - name: custom-extnet-{{ metadata.name }}
     description: {{ spec.description | replace('\n', ' ') }}
     entries:
 {% for entry in spec.entries %}

@@ -7,7 +7,7 @@
 #   - apo_kind
 # Sets
 #   - policy_id
-#   - policy_uid
+#   - import_label
 - name: Policy Lookup
   when: k8s_uuid is defined and apo_namespace is defined
   shell: |
@@ -15,9 +15,9 @@
     api list "{{ apo_kind }}" \
     --namespace "{{ apo_namespace }}" \
     --filter "associatedTags contains k8s-uuid={{ k8s_uuid }}" \
-    -c ID,name
+    -c ID,associatedTags
   register: output
-- name: Extract policy attributes
+- name: Extract ID and associatedTags
   when:
     - output.rc == 0
     - output.stdout is defined
@@ -25,8 +25,23 @@
     - output.stdout != "[]"
   set_fact:
     policy_id: "{{ (output.stdout | from_json | list | first).ID }}"
-    policy_uid: "{{ ((output.stdout | from_json | list | first).name).split('-')[-1] }}"
+    tags: "{{ (output.stdout | from_json | list | first).associatedTags }}"
 - name: Found policy
   when: policy_id is defined
   debug: 
     msg: "Found policy with ID {{ policy_id }}"
+- name: Extract import label part 1
+  when:
+    - tags is defined
+    - tags | length > 0
+  set_fact: 
+    tmp_label: "{{ (tags | select('match','aporeto:import:label.*') | list | first).split('=') | list | last }}"
+- name: Extract import label part 2
+  when:
+    - tmp_label is defined
+  set_fact:
+    import_label: "{{ tmp_label.split('@') | list | first }}"
+- name: Found import label
+  when: import_label is defined
+  debug: 
+    msg: "Import label {{ import_label }}"
