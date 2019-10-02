@@ -1,9 +1,12 @@
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: ExternalNetwork
 metadata:
-  name: custom-extnet
+  # This metadata field will be what you see with the command
+  # `oc get externalnetwork` or `kubctl get externalnetwork`.
+  name: bla-bla1
 spec:
-  name: bla-bla
+  # This name will be used internally by Aporeto; it should match
+  # the `name` field in metadata above.
   description: |
     specify a custom external network that can be
     referenced by name.
