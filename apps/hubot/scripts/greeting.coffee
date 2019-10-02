@@ -2,7 +2,7 @@
 #   Greetings!
 #
 # Commands:
-#   hello/hi, hubot - responds with a greeting. Comma optional.
+#   hello/hi, bcbot - responds with a greeting. Comma optional.
 
 module.exports = (robot) ->
   robot.hear /(hello,? bcbot|hi,? bcbot)/i, (res) ->
