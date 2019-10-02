@@ -18,7 +18,7 @@
     "npm": ">=5.x"
   },
   "scripts": {
-    "start": "bin/hubot -a rocketchat",
+    "start": "bin/hubot -a rocketchat --name rocketbot",
     "debug": "node --inspect --inspect-brk -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat",
     "shell": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a shell",
     "local": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat"
