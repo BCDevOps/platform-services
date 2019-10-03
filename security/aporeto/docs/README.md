@@ -14,7 +14,9 @@ We've worked hard to keep this as simple as possible by allowing you to incorpor
 
 __Application Identity__
 
-You build application identity by adding labels to the metadata portion of your OCP deployment manifests. For example, in the deployment config excerpt below two additional labels, `role` and `env` have been added to the metadata stanza. The combination of labels builds the application identity which can be referenced in the NAP to permit communication.
+You build application identity by adding labels to the metadata portion of your OCP deployment manifests. For example, in the deployment manifest excerpt below the combination of labels build a unique application identity which can be referenced in the NAP to permit communication.
+
+Its worth noting that each deployment config should have at least one label that uniquely identifies it. in the example below this is accomplished using the `role=api` label; no other deployment will use this specific label.
 
 ```yaml
 - kind: DeploymentConfig
