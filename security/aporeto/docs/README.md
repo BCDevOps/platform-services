@@ -216,6 +216,14 @@ Open your deployment manifest and add labels to your `DeploymentConfig` sections
 
 In this illustration I have a minio deployment that I add the label `role: objstore` to and an API deployment I add `role: api` to.
 
+**Step 2 - Add Policy**
+
+In the same deployment manifest begin adding your NAP:
+
+![Add Labels](add_nap.gif)
+
+In this illustration I copy the NAP directly from this tutorial and modify it so that my API can talk to the minio object store.
+
 ### Deploy It
 
 ### Check it Out
