@@ -1,6 +1,6 @@
 # Introduction
 
-This tutorial will guide you through setting up custom security policy within your OpenShift Container Platform (OCP) namespace, between namespaces, or from your namespace to an external system providid it meets certain criteria.
+This tutorial will guide you through setting up custom security policy within your OpenShift Container Platform (OCP) namespace, between namespaces, or from your namespace to an external system provided it meets certain criteria.
 
 ## Trust No One
 
@@ -46,7 +46,7 @@ Its worth noting that each deployment config should have at least one label that
 
 ## Naming Convention
 
-The naming convention you use for labels that allow you to build your application identity should be no more complicated than nesessary.
+The naming convention you use for labels that allow you to build your application identity should be no more complicated than necessary.
 
 | Label | Values        | Description     |
 | ----- |:-------------:| ---------------:|
