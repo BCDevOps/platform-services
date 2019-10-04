@@ -206,15 +206,29 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
 
 ## Usage
 
+Creating a Zero Trust security model is relatively easy; here's how you'll do it: Create your policy based on the information above; then add it to your OCP deployment manifest; and finally, deploy your application. Lets go over them in more details:
+
+**Step 1 - Add Labels***
+
+Open your deployment manifest and add labels to your `DeploymentConfig` sections to uniquely identify each one:
+
+![Add Labels](add_labels.gif)
+
+In this illustration I have a minio deployment that I add the label `role: objstore` to and an API deployment I add `role: api` to.
+
 ### Deploy It
 
 ### Check it Out
 
 ### Remove It
 
-### Other Projects
+### Advanced
 
-This is a list of projects that have already implemented a Zero Trust security model.
+## Projects
+
+This is a list of some projects that have already implemented a Zero Trust security model:
+
+[Family Protection Order](https://github.com/bcgov/Family-Protection-Order)
 
 ### Troubleshooting
 
