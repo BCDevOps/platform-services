@@ -43,6 +43,7 @@ Please use GitHub issues in this repo with the "security/aporeto".
 
 #### Operational Videos
 - [Aporeto Automation Playbook Walkthrough](https://www.youtube.com/watch?v=yQzJiExljrY)
+- [Aporeto Interfave Q&A](https://youtu.be/Nrf4EtxGXos)
 
 #### Spint Demo Videos
 - [Sprint 2 - Demo 1 - Single Namespace NetworkSecurityPolicy Objects](https://youtu.be/qWt9gtaHFQQ)
