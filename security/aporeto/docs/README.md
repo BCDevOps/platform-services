@@ -161,10 +161,11 @@ The sample below allows the API pod(s) to open connections to any system on the 
 - kind: NetworkSecurityPolicy
   apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
   metadata:
-    name: external-ingress
+    name: internal-egress
   spec:
     description: |
-      Allow the frontend (web) to receive connections from the Internet.
+      Allow the backend (API) to open connections to the
+      Internet.
     source:
       - - app=myapp
       - - role=api
@@ -175,12 +176,47 @@ The sample below allows the API pod(s) to open connections to any system on the 
 
 ### Namespace to Namespace
 
+This sample policy is used to allow pods to communicate accross namespaces; typically use this type of policy to talk to other applications hosted on the OCP. Create a policy similar to this one for each system that needs to **create** connections to another OCP namespace. The owner of the `destination` namespace will need a similar policy to allow incoming connections from the `source` namespace. 
 
+The sample below allows the API pod(s) to open connections to a specific pod(s) in a different namespace.
 
-### Deployment
+```yaml
+- kind: NetworkSecurityPolicy
+  apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+  metadata:
+    name: ns2ns-comms
+  spec:
+    description: |
+      Allow the backend (API) to open connections to backend (API) pod(s)
+      in the handy-dandy-prod namespace.
+    source:
+      - - app=myapp
+      - - role=api
+      - - env=production
+    destination:
+      - - app=theirapp
+      - - role=api
+      - - env=production
+      - - $namespace=handy-dandy-prod
+```
 
-### Removal
+**🤓 ProTip**
+
+* Use enough labels to uniquely identify the target system. Its better to not solely rely on generic tags like `env=production` or `app=theirapp`.
+
+## Usage
+
+### Deploy It
+
+### Check it Out
+
+### Remove It
+
+### Other Projects
+
+This is a list of projects that have already implemented a Zero Trust security model.
 
 ### Troubleshooting
 
+Best to react out to Platform Services on XXXX.
 
