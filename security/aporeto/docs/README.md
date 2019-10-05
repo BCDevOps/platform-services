@@ -6,7 +6,7 @@ This tutorial will guide you through setting up custom security policy within yo
 
 With the addition of new security components Platform Services is able to offer product teams the ability to operate in a Zero Trust model; In a Zero Trust is a security model you don't trust anything outside of your own components (pods).
 
-This is done by way of creating application identities for each component (Web, API, Database, etc) and based on this identity allowing specific components to talk to one another by creating `NetworkAccessPolicy` (NAP) or `ExternalNetworks` (EN).
+This is done by way of creating application identities for each component (Web, API, Database, etc) and based on this identity allowing specific components to talk to one another by creating `NetworkSecurityPolicy` (NSP) or `ExternalNetworks` (EN).
 
 **🤓 ProTip**
 
@@ -14,11 +14,11 @@ This is done by way of creating application identities for each component (Web, 
 
 ## How it Works
 
-We've worked hard to keep this as simple as possible by allowing you to incorporate NAPs in your OpenShift Container Platform (OCP) deployment manifests.
+We've worked hard to keep this as simple as possible by allowing you to incorporate NSPs in your OpenShift Container Platform (OCP) deployment manifests.
 
 __Application Identity__
 
-You build application identity by adding labels to the metadata portion of your OCP deployment manifests. For example, in the deployment manifest excerpt below the combination of labels build a unique application identity which can be referenced in the NAP to permit communication.
+You build application identity by adding labels to the metadata portion of your OCP deployment manifests. For example, in the deployment manifest excerpt below the combination of labels build a unique application identity which can be referenced in the NSP to permit communication.
 
 Its worth noting that each deployment config should have at least one label that uniquely identifies it. In the example below this is accomplished using the `role=api` label; no other deployment will use this specific label. See the **Naming Convention** section below for best practices. 
 
@@ -218,15 +218,34 @@ In this illustration I have a minio deployment that I add the label `role: objst
 
 **Step 2 - Add Policy**
 
-In the same deployment manifest begin adding your NAP:
+In the same deployment manifest begin adding your NSP:
 
-![Add Labels](add_nap.gif)
+![Add Labels](add_nsp.gif)
 
-In this illustration I copy the NAP directly from this tutorial and modify it so that my API can talk to the minio object store.
+In this illustration I copy the NSP directly from this tutorial and modify it so that my API can talk to the minio object store.
 
 ### Deploy It
 
+To deploy your policy just do thinks as you normally would:
+
+```console
+oc process -f deploy.yaml | oc create -f -
+```
+
+**🤓 ProTip**
+
+* You can create manifest files with just your policy in it and deploy them (you still need labels on your pods) with the `oc apply -f myNSP.yaml`.
+
+
 ### Check it Out
+
+There are two ways to explore your NSP:
+
+**CLI - oc**
+
+**Web - console**
+
+
 
 ### Remove It
 
