@@ -23,6 +23,25 @@
           "github_repo": "platform-services",
           "jenkinsFilePath": "apps/documize/.jenkins/Jenkinsfile",
           "uuid": "0d11a9b1-5c83-49be-b6de-7d621ec91a80"
+        },
+        ".": {
+          "name": "documize",
+          "version": "1.0.0",
+          "path": ".",
+          "environments": {
+            "build": {
+              "namespace": "hmg6pw-tools"
+            },
+            "dev": {
+              "namespace": "hmg6pw-dev"
+            },
+            "test": {
+              "namespace": "hmg6pw-test"
+            },
+            "prod": {
+              "namespace": "hmg6pw-prod"
+            }
+          }
         }
       }
     }
