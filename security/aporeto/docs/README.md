@@ -49,8 +49,8 @@ Its worth noting that each deployment config should have at least one label that
 The naming convention you use for labels that allow you to build your application identity should be no more complicated than necessary.
 
 | Label | Values        | Description     |
-| ----- |:-------------:| ---------------:|
-| app  | name          | Use the `app` label to group all your deployment components. This *won't* be unique. |
+| ----- |:-------------:|:---------------|
+| app  | name           | Use the `app` label to group all your deployment components. This *won't* be unique. |
 | role | frontend, backend, database, etc.| Use the `role` label to uniquely identify a pod by its purpose. |
 | env  | dev, test, prod | Use the `env` label to correlate with the namespace the application runs in. |
 
@@ -92,7 +92,7 @@ The policy below will provide most teams enough to get up and running in short o
 In the subsections below we'll use one or more tags to identify the source and destination systems. The relevance if `source` and `destination` is that the application identified in the `source` will be able to open a network connection to the application identified in `destination`; Once a connection is open then data is able to flow bidirectionally.
 
 | Field | Required | Description     |
-| ----------- |:--------:| ---------------:|
+| ----------- |:--------:|:---------------|
 | name        | YES      | Use this field to uniquely identify policy. |
 | description | YES      | A brief description of what the policy does. |
 | source      | YES      | Tags used to identify the application that can initiate a network connection. |
@@ -220,7 +220,6 @@ In this illustration I have a minio deployment that I add the label `role: objst
 
 In the same deployment manifest begin adding your NSP:
 
-![Add Labels](add_nsp.gif)
 
 In this illustration I copy the NSP directly from this tutorial and modify it so that my API can talk to the minio object store.
 
@@ -234,20 +233,91 @@ oc process -f deploy.yaml | oc create -f -
 
 **🤓 ProTip**
 
-* You can create manifest files with just your policy in it and deploy them (you still need labels on your pods) with the `oc apply -f myNSP.yaml`.
+* You can create manifest files with just your policy in it and deploy them (you still need labels on your pods) with the `oc apply -f my-nsp.yaml`.
 
 
 ### Check it Out
 
-There are two ways to explore your NSP:
+There are a few ways you can check out your existing NSP.
 
 **CLI - oc**
 
+The best and most simple way to view your existing NSP is to use the `oc` command line interface. Run the following command to see installed policy:
+
+```console
+oc get networksecuritypolicy
+```
+
+This should produce output similar to the following:
+
+```console
+NAME                                         AGE
+egress-internet-devex-von-tools              5d
+int-cluster-k8s-api-permit-devex-von-tools   5d
+intra-namespace-comms-devex-von-tools        5d
+```
+
+If you want to dig a little deeper you can specify one of the policies to fetch and output it in well formated YAML. Run the following command to fetch a specific policy:
+
+```console
+oc get networksecuritypolicy egress-internet-devex-von-tools -o yaml
+```
+
+This command produces detailed output similar to the following. You only need to focus on the `spec:` stanza to inspect the rules of the NSP. The other information can safely be ignored.
+
+```yaml
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"secops.pathfinder.gov.bc.ca/v1alpha1","kind":"NetworkSecurityPolicy","metadata":{"annotations":{},"name":"egress-internet-devex-von-tools","namespace":"devex-von-tools"},"spec":{"description":"allow devex-von-tools to talk to the internet\n","destination":[["ext:network=any"]],"source":[["$namespace=devex-von-tools"]]}}
+  creationTimestamp: "2019-10-02T15:28:48Z"
+  finalizers:
+  - finalizer.secops.pathfinder.gov.bc.ca
+  generation: 1
+  name: egress-internet-devex-von-tools
+  namespace: devex-von-tools
+  resourceVersion: "397972060"
+  selfLink: /apis/secops.pathfinder.gov.bc.ca/v1alpha1/namespaces/devex-von-tools/networksecuritypolicies/egress-internet-devex-von-tools
+  uid: 54615585-e529-11e9-81f0-00505683b471
+spec:
+  description: |
+    allow devex-von-tools to talk to the internet
+  destination:
+  - - ext:network=any
+  source:
+  - - $namespace=devex-von-tools
+status:
+  conditions:
+  - ansibleResult:
+      changed: 3
+      completion: 2019-10-07T16:55:09.793987
+      failures: 0
+      ok: 11
+      skipped: 0
+    lastTransitionTime: "2019-10-02T16:50:52Z"
+    message: Awaiting next reconciliation
+    reason: Successful
+    status: "True"
+    type: Running
+```
+
 **Web - console**
 
+Open the OCP administration console and navigate to the namespace containing the NSP you want to inspect. Next, go to Resources -> Other Resources and use the dropdown to select 'Network Security Policy'.
 
+![Web View NSP](webview_nsp.gif)
 
 ### Remove It
+
+To remove network policy you can again use the CLI or Web console. For the CLI just use the `delete` verb in the command you used to inspect policy
+
+```console
+oc delete networksecuritypolicy egress-internet-devex-von-tools -o yaml
+```
+
+From the Web, again navigate to the NSP and use the "Actions" drop down to select "Delete".
 
 ### Advanced
 
@@ -259,5 +329,9 @@ This is a list of some projects that have already implemented a Zero Trust secur
 
 ### Troubleshooting
 
-Best to react out to Platform Services on XXXX.
+If things aren't working as you expect and you are stuck reach out for help in these two RocketChat channels:
 
+| Channel         | Description     |
+| --------------- |:----------------|
+| #devops-sos     | Use this channel when things are on fire 🔥 and you need immediate help to resolve a production problem. |
+| #devops-how-to  | Use this channel to tap into the top-notch OCP community for help. |
