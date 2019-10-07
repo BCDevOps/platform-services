@@ -35,7 +35,7 @@ objects:
         memory: 1Gi
     runPolicy: SerialLatestOnly
     source:
-      contextDir: .jenkins/docker
+      contextDir: apps/documize/.jenkins/docker
       git:
         ref: ${SOURCE_REPOSITORY_REF}
         uri: ${SOURCE_REPOSITORY_URL}

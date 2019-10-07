@@ -1,7 +1,7 @@
 {
   "name": "pipeline",
   "version": "1.0.0",
-  "description": "This a pipeliene script",
+  "description": "This a pipeline script",
   "engines": {
     "node": ">=8"
   },

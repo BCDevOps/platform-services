@@ -1,7 +1,7 @@
 #!/bin/sh
 set +x
 type -t nvm && nvm deactivate
-export NVM_DIR="$(git rev-parse --show-toplevel)/.nvm"
+export NVM_DIR="$(git rev-parse --show-toplevel)/apps/documize/.nvm"
 if [ ! -f "$NVM_DIR/nvm.sh" ]; then
   mkdir -p "${NVM_DIR}"
   curl -sSL -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash &>/dev/null
