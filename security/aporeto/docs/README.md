@@ -25,3 +25,9 @@ If things aren't working as you expect and you are stuck reach out for help in t
 | --------------- |:----------------|
 | #devops-sos     | Use this channel when things are on fire 🔥 and you need immediate help to resolve a production problem. |
 | #devops-how-to  | Use this channel to tap into the top-notch OCP community for help. |
+
+## Projects
+
+This is a list of some projects that have already implemented a Zero Trust security model:
+
+[Family Protection Order](https://github.com/bcgov/Family-Protection-Order)

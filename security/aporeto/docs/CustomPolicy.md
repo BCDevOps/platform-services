@@ -343,12 +343,6 @@ oc delete networksecuritypolicy egress-internet-devex-von-tools -o yaml
 
 From the Web, again navigate to the NSP and use the "Actions" drop down to select "Delete".
 
-## Projects
-
-This is a list of some projects that have already implemented a Zero Trust security model:
-
-[Family Protection Order](https://github.com/bcgov/Family-Protection-Order)
-
 ### Troubleshooting
 
 See the `Support` section of the main help document [here](./README.md).
