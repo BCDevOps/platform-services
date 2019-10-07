@@ -11,10 +11,8 @@ module.exports = settings => {
   const templatesLocalBaseUrl = oc.toFileUrl(path.resolve(__dirname, '../../openshift'));
 
   // The building of your cool app goes here ▼▼▼
-  console.log('----------here in build');
-  const test1 = [];
-  test1 = test1.concat(
-    oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/bc.yaml`, {
+  objects = objects.concat(
+    oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/bc.yml`, {
       param: {
         NAME: phases[phase].name,
         SUFFIX: phases[phase].suffix,
@@ -24,8 +22,6 @@ module.exports = settings => {
       },
     }),
   );
-
-  console.log(test1);
 
   oc.applyRecommendedLabels(
     objects,

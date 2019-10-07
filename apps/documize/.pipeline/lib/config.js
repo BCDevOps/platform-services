@@ -24,6 +24,8 @@ const phases = {
     instance: `${name}-dev-${changeId}`,
     version: `${version}-${changeId}`,
     tag: `dev-${version}-${changeId}`,
+    appHost: `docs-dev-${changeId}.pathfinder.gov.bc.ca`,
+    apiHost: `api-documize-dev-${changeId}.pathfinder.gov.bc.ca`,
   },
   test: {
     namespace: 'hmg6pw-test',
@@ -34,6 +36,8 @@ const phases = {
     instance: `${name}-test`,
     version: `${version}`,
     tag: `test-${version}`,
+    appHost: `docs-test-${changeId}.pathfinder.gov.bc.ca`,
+    apiHost: `api-documize-test-${changeId}.pathfinder.gov.bc.ca`,
   },
   prod: {
     namespace: 'hmg6pw-prod',
@@ -44,6 +48,8 @@ const phases = {
     instance: `${name}-prod`,
     version: `${version}`,
     tag: `prod-${version}`,
+    appHost: `docs.pathfinder.gov.bc.ca`,
+    apiHost: `api-documize.pathfinder.gov.bc.ca`,
   },
 };
 

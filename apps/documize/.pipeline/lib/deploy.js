@@ -12,6 +12,30 @@ module.exports = settings => {
   var objects = [];
 
   // The deployment of your cool app goes here ▼▼▼
+  // Conversion - api:
+  objects = objects.concat(
+    oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/conversion-dc.yml`, {
+      param: {
+        NAME: 'documize-conversion',
+        SUFFIX: phases[phase].suffix,
+        HOST_VALUE: phases[phase].apiHost,
+      },
+    }),
+  );
+
+  // Documize app:
+  objects = objects.concat(
+    oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/dc.yml`, {
+      param: {
+        NAME: phases[phase].name,
+        SUFFIX: phases[phase].suffix,
+        VERSION: phases[phase].tag,
+        HOST_VALUE: phases[phase].appHost,
+      },
+    }),
+  );
+
+  // TODO: statefulset
 
   oc.applyRecommendedLabels(
     objects,
