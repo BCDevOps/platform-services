@@ -69,6 +69,8 @@ objects:
             value: ${ROCKETCHAT_ROOM_VALUE}
           - name: REDIS_URL
             value: 'redis://:$(REDIS_PASSWORD)@$(REDIS_SERVICE_HOST)'
+          - name: TZ
+            value: America/Vancouver
     test: false
     triggers:
     - type: ConfigChange
