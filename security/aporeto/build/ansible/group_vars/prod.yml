@@ -1,9 +1,58 @@
-aporeto_release: 3.11.9
+# Aporeto Specific Details
+aporeto_release: 3.11.15
+aporeto_enforcer_memory_limit: '4Gi'
+aporeto_enforcer_cpu_limit: '1'
 openshift_project_prefix: devops-security-aporeto
-aporeto_org: /bcgov-devex
-aporeto_namespace: prod
+openshift_project_editors: 
+  - jleach
+  - sstewart
+  - j-pye
+  - sbarre-esit
+  - wmhutchison
+aporeto_parent_namespace: /bcgov/test       #full path for parent namespace
+aporeto_namespace: lab-pathfinder-20190930  #single-level value only
 openshift_cluster_name: kamloops
-cluster_network: 10.131.0.1/16  # Validate this
-host_network: 142.34.143.128/26 # Validate this
+cluster_network: 172.51.0.0/16
+host_network: 142.34.143.128/26
+external_cluster_api_endpoint: console.pathfinder.gov.bc.ca
+external_cluster_api_port: 8443
+internal_cluster_api_endpoint: 172.50.0.1
+internal_cluster_api_port: 443
 node_list: 
+  - ociopf-d-100.dmz
+  - ociopf-d-101.dmz
+  - ociopf-d-102.dmz
+  - ociopf-p-170.dmz
+  - ociopf-p-171.dmz
+  - ociopf-p-180.dmz
+  - ociopf-p-181.dmz
+  - ociopf-p-182.dmz
+  - ociopf-p-183.dmz
+  - ociopf-p-184.dmz
+  - ociopf-p-185.dmz
+  - ociopf-p-186.dmz
+  - ociopf-p-187.dmz
+  - ociopf-p-188.dmz
+  - ociopf-p-189.dmz
+  - ociopf-p-190.dmz
+  - ociopf-p-191.dmz
+  - ociopf-p-192.dmz
+  - ociopf-p-193.dmz
+  - ociopf-p-194.dmz
+  - ociopf-p-195.dmz
+  - ociopf-p-196.dmz
+  - ociopf-p-197.dmz
+  - ociopf-p-198.dmz
+  - ociopf-p-199.dmz
+  - ociopf-p-200.dmz
+openshift_project_exclusions: 
+- kube-system
+- openshift-sdn
+- openshift-node
+- openshift-monitoring
+- "{{ openshift_project_prefix }}-operator"
+- "{{ openshift_project_prefix }}-enforcers"
 
+
+# BCGov Operator Details
+bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:v0.8.2
