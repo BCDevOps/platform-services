@@ -280,11 +280,43 @@ dashboard:
         - title: Operations Notices
           content: |
 
-              # Notice: 05-31-19-1915.md
+              # Notice: 10-09-19-0900.md
 
-              ## This is a broadcast test.
+              ## 
 
-              ## Testing 1,2,3,4,5,6,7,8,9
+              ## **RFC 186212 - MCS - Install Aporeto Zero Trust Network Security Enforcement in PROD**
+
+              ## 
+
+              ## Wednesday October 9 at 9am
+
+              ## 
+
+              ## AdvSol will be installing a new network security solution [Aporeto](https://github.com/BCDevOps/platform-services/tree/master/security/aporeto) into the production cluster. All existing applications will be assigned default `NetworkSecurityPolicy` objects that will allow the same network traffic as currently supported by the application - between pods in the project, between pods and the API server (for builds), and between pods and the internet. This will ensure that there will be **no impact on the existing projects**.
+
+              ## 
+
+              ## If you have any questions or concerns about the install, please contact the Next Gen Security Project team at <olena.mitovska@gov.bc.ca>
+
+              ## 
+
+              ## [Steps of the install](https://github.com/BCDevOps/platform-services/tree/master/security/aporeto/build/ansible#playbook-flow-install):
+
+              ## - Create CustomResourceDefinitions and Operators
+
+              ## - Create default `NetworkSecurityPolicy` objects for all projects and wait for them to sync with Aporeto. We expect this step will take a while (up to a few hours) as there are over 600 projects.
+
+              ## - Create Enforcer DaemonSet. This is the step where the new policies will actually be enforced. No downtime for applications is expected, but if we do have any issues, this is where it will happen.
+
+              ## 
+
+              ## If you have any connectivity issues once the enforcers are in place please post in #devops-sos for the team to triage.
+
+              # Notice: 08-03-19-1900.md
+
+              ## # This is an official release of the Status Page
+
+              ## Please use the status page to quickly determine if systems are up/down and for any relavent operational notices.
 
 
           type: text
