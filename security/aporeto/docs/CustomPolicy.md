@@ -205,7 +205,7 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
 
 Creating a Zero Trust security model is relatively easy; here's how you'll do it: Create your policy based on the information above; then add it to your OCP deployment manifest; and finally, deploy your application. Lets go over them in more details:
 
-**Step 1 - Add Labels***
+**Step 1 - Add Labels**
 
 Open your deployment manifest and add labels to your `DeploymentConfig` sections to uniquely identify each one:
 
@@ -213,12 +213,39 @@ Open your deployment manifest and add labels to your `DeploymentConfig` sections
 
 In this illustration I have a minio deployment that I add the label `role: objstore` to and an API deployment I add `role: api` to.
 
-**Step 2 - Add Policy**
+**Step 2 - Remove Existing Policy**
+
+If your running in OCP 3.11 then, when we installed the security components, 3 base policies were added to all namespaces to keep all environments running as expected. Before adding any custom policy **you must remove the pre-installed policies**.
+
+To do this see these two sections below:
+
+* [Check it Out](#check-it-out)
+* [Remove It](#remove-it)
+
+**Step 3 - Add Policy**
 
 In the same deployment manifest begin adding your NSP:
 
 
 In this illustration I copy the NSP directly from this tutorial and modify it so that my API can talk to the minio object store.
+
+**Add Step 4 - Test It**
+
+Once you policy is in place you can test it by going to one of the Pods in the deployment:
+
+```console
+oc rsh my-pod-name-here
+```
+
+And running a shell command to test connectivity:
+
+```console
+timeout 5 bash -c "</dev/tcp/google.ca/443"; echo $?
+```
+
+Replace `google.ca` with the service of the pod you wish to connect to and change port `443` to the port your pod exposes for connectivity.
+
+Another way to test your policy is to use [this test script](https://github.com/BCDevOps/openshift-developer-tools/blob/master/bin/testConnection). It will allow you to test connectivity between your pods in a semi-automated way.
 
 ### Deploy It
 
@@ -316,8 +343,6 @@ oc delete networksecuritypolicy egress-internet-devex-von-tools -o yaml
 
 From the Web, again navigate to the NSP and use the "Actions" drop down to select "Delete".
 
-### Advanced
-
 ## Projects
 
 This is a list of some projects that have already implemented a Zero Trust security model:
@@ -326,9 +351,4 @@ This is a list of some projects that have already implemented a Zero Trust secur
 
 ### Troubleshooting
 
-If things aren't working as you expect and you are stuck reach out for help in these two RocketChat channels:
-
-| Channel         | Description     |
-| --------------- |:----------------|
-| #devops-sos     | Use this channel when things are on fire 🔥 and you need immediate help to resolve a production problem. |
-| #devops-how-to  | Use this channel to tap into the top-notch OCP community for help. |
+See the `Support` section of the main help document [here](./README.md).
