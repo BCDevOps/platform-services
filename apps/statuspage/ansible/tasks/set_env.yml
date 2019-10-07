@@ -7,7 +7,7 @@
   when: activity == "uninstall"
 - set_fact: 
     namespace: "{{ hostvars[inventory_hostname].project.tools }}"
-  when:  env  == 'tools'
+  when: env == "tools"
 - set_fact: 
     namespace: "{{ hostvars[inventory_hostname].project.dev }}"
     route: "{{ hostvars[inventory_hostname].route.dev }}"
