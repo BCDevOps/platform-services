@@ -1,0 +1,49 @@
+{
+  "generator-bcdk": {
+    "promptValues": {
+      "modules": {
+        "jenkins": {
+          "path": ".jenkins",
+          "namespace": "e5imao-tools",
+          "name": "jenkins",
+          "version": "1.0.0",
+          "environments": {
+            "build": {
+              "namespace": "e5imao-tools"
+            },
+            "dev": {
+              "namespace": "e5imao-tools"
+            },
+            "prod": {
+              "namespace": "e5imao-tools"
+            }
+          },
+          "jenkinsJobName": "_jenkins",
+          "github_owner": "BCDevOps",
+          "github_repo": "platform-services",
+          "jenkinsFilePath": ".jenkins/Jenkinsfile",
+          "uuid": "106b2823-fa4c-4818-8021-7d437bb02a6b"
+        },
+        ".": {
+          "name": "hubot",
+          "version": "1.0.0",
+          "path": ".",
+          "environments": {
+            "build": {
+              "namespace": "e5imao-tools"
+            },
+            "dev": {
+              "namespace": "e5imao-dev"
+            },
+            "test": {
+              "namespace": "e5imao-test"
+            },
+            "prod": {
+              "namespace": "e5imao-prod"
+            }
+          }
+        }
+      }
+    }
+  }
+}
