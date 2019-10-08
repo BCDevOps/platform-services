@@ -27,7 +27,7 @@
         ".": {
           "name": "hubot",
           "version": "1.0.0",
-          "path": ".",
+          "path": "apps/hubot",
           "environments": {
             "build": {
               "namespace": "e5imao-tools"
