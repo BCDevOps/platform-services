@@ -35,7 +35,19 @@ Go to the [samples](./samples) directory accompanying this document where you'll
 | int-cluster-k8s-api-permit | Allow Pods to communicate to the k8s API; this is needed for deployments.|
 | intra-namespace-comms | Allow Pods to communicate amongst themselves within a namespace.|
 
-Apply the policy to your namespace as follows:
+Edit the YAML file replacing the namespace `devops-platform-security-demo` with the name of the namespace you intend to install the NSP. If you're not sure of the exact name use the `oc project` command to find out what project you're using.
+
+```console
+oc project
+```
+
+Shows a result similar to the following:
+
+```console
+Using project "devex-von-tools" on server "https://console.lab.pathfinder.gov.bc.ca:8443".
+```
+
+Once you have edited the policy replaceing the namespace then apply the policy as follows:
 
 ```console
 oc apply -f samples/quickstart-nsp.yaml
@@ -49,7 +61,9 @@ Again, list your NSP. This time you should see three policies have been added.
 oc get networksecuritypolicy
 ```
 
-Results:
+This command produces the following result:
+
+**NOTE** If you have NSP that was setup to allow backwards compatibility the name may have the namespace postfix appended to it.
 
 ```console
 NAME                                AGE
