@@ -1,5 +1,5 @@
 # Aporeto Specific Details
-aporeto_release: 3.11.15
+aporeto_release: 3.12.3
 aporeto_enforcer_memory_limit: '4Gi'
 aporeto_enforcer_cpu_limit: '1'
 openshift_project_prefix: devops-security-aporeto
@@ -10,7 +10,7 @@ openshift_project_editors:
   - sbarre-esit
   - wmhutchison
 aporeto_parent_namespace: /bcgov/test                             #full path for parent namespace
-aporeto_namespace: lab-pathfinder-20190930                      #single-level value only
+aporeto_namespace: lab-pathfinder-20191001                      #single-level value only
 cluster_network: 10.131.0.0/16
 host_network: 142.34.217.32/27
 external_cluster_api_endpoint: console.lab.pathfinder.gov.bc.ca
