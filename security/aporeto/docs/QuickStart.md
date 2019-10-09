@@ -1,4 +1,6 @@
-# Introduction
+# Quick Start
+
+## Introduction
 
 While it is **strongly advised** to create meaningful bespoke application identities, and accompanying `NetworkSecurityPolicy` (NSP) to secure your project, there are circumstances where a more open policy are desired. For the purpose of this document this will be referred to as an Open Security Model (OSM).
 
