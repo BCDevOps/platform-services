@@ -11,8 +11,8 @@ openshift_project_editors:
   - wmhutchison
 aporeto_parent_namespace: /bcgov/test                             #full path for parent namespace
 aporeto_namespace: lab-pathfinder-20191001                      #single-level value only
-cluster_network: 10.131.0.0/16
-#portal_network: 10.131.0.0/16                                  # need to get this from steven
+cluster_network: 10.131.16.0/20
+portal_network: 10.131.0.0/20                                 # need to get this from steven
 host_network: 142.34.217.32/27
 external_cluster_api_endpoint: console.lab.pathfinder.gov.bc.ca
 external_cluster_api_port: 8443
