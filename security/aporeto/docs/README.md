@@ -1,3 +1,6 @@
+---
+description: Learn how to create a Zero Trust environment and apply network security best practices.
+---
 
 # Trust No One
 

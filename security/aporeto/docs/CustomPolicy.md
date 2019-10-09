@@ -1,3 +1,7 @@
+---
+description: Create bespoke NetworkSecurityPolicy to establish a Zero Trust security model in your environment.
+---
+
 # Custom Policy
 
 ## Introduction
