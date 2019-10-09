@@ -15,7 +15,7 @@ This is done by way of creating application identities for each component (Web, 
 
 [Custom Network Security Policy](./CustomPolicy.md)
 
-[Custom External Networks](./CustomNetworks.md)
+[Custom External Networks](./ExternalNetworks.md)
 
 ## Support
 
