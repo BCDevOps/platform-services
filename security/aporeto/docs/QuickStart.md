@@ -1,5 +1,10 @@
 ---
 description: Quickly apply NetworkSecurityPolicy to get your pods communicating as a first step towards a Zero Trust environment.
+tags:
+- security
+- firewall
+- devsecops
+- networking
 ---
 
 # Quick Start

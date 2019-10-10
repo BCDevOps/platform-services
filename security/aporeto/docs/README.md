@@ -1,5 +1,10 @@
 ---
 description: Learn how to create a Zero Trust environment and apply network security best practices.
+tags:
+- security
+- firewall
+- devsecops
+- networking
 ---
 
 # Trust No One
