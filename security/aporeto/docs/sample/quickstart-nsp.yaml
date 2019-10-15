@@ -26,7 +26,7 @@ spec:
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: intra-namespace-comms
+  name: int-cluster-k8s-api-comms
 spec:
   description: |
     allow devops-platform-security-demo pods to talk to the k8s api
