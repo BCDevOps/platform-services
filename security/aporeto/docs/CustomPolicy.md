@@ -1,4 +1,6 @@
-# Introduction
+# Custom Policy
+
+## Introduction
 
 This tutorial will guide you through creating application identities for each of your deployable components (pods) within your OpenShift Container Platform (OCP) namespaces as well as building custom `NetworkSecurityPolicy` (NSP) based on these identities to secure communications between your components.
 

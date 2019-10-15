@@ -1,4 +1,6 @@
-# Introduction
+# Quick Start
+
+## Introduction
 
 New applications deployed to the Platform after Oct 9, 2019 will automatically have Zero-Trust Security Model enabled which means that **all communications for the application components are disabled by default** and only communications explicitely listed in an access policy are allowed. The access policies are enforced on the Platform via the Network Security Policy objects that are defined as *custom resources* in Openshift.
 
@@ -111,6 +113,8 @@ spec:
   - - $namespace=devex-von-tools
 ```
 
+
 ### Test application connectivity
 
 Once an access policy is enabled, you can use the [TestConnection.sh](https://github.com/BCDevOps/openshift-developer-tools/blob/master/bin/testConnection) script available as part of [BCDevOps/openshift-developer-tools](https://github.com/BCDevOps/openshift-developer-tools) repo to test the connectivity of the pods in your namespace.
+
