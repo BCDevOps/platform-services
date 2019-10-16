@@ -5,9 +5,15 @@ With the addition of new security components Platform Services is able to offer 
 
 This is done by way of creating application identities for each component (Web, API, Database, etc) and based on this identity allowing specific components to talk to one another by creating `NetworkSecurityPolicy` (NSP) and, for more advanced solutions, `ExternalNetworks` (EN).
 
+**:point_up: Note**
+* New namespaces provisioned on the Platform after Oct 9, 2019 come with **Zero-Trust Model enabled by default**. In order to enable application pods to communicate with Internet, with the Platform,  with other namespaces, or among themselves, a `NetworkSecurityPolicy` must be **manually** created in the application is described in the *QuickStart* guide below.
+
 **🤓 ProTip**
 
 * Assume that the network and platform are insecure and built up robust security practices.
+
+If your application was deployed to the Platform prior to the secury model install on Oct 9, 2019, 3 base access policies have been added to all application namespaces - DEV, TEST, TOOLS and PROD - to keep their communications running without any impact. To modify the application's base access policy, see the [Custom Network Security Policy](./CustomPolicy.md) section below.
+
 
 ## Table of Contents
 
@@ -19,7 +25,7 @@ This is done by way of creating application identities for each component (Web, 
 
 ## Support
 
-If things aren't working as you expect and you are stuck reach out for help in these two RocketChat channels:
+If you've followed the steps in the guides listed above and things aren't working as you expect and you are stuck, reach out for help in these two RocketChat channels:
 
 | Channel         | Description     |
 | --------------- |:----------------|
