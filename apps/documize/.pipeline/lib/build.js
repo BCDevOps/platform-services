@@ -23,6 +23,16 @@ module.exports = settings => {
     }),
   );
 
+  objects = objects.concat(
+    oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/conversion-bc.yml`, {
+      param: {
+        NAME: 'documize-conversion',
+        SUFFIX: phases[phase].suffix,
+        VERSION: phases[phase].tag,
+      },
+    }),
+  );
+
   oc.applyRecommendedLabels(
     objects,
     phases[phase].name,

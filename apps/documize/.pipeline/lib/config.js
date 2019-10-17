@@ -36,8 +36,10 @@ const phases = {
     instance: `${name}-test`,
     version: `${version}`,
     tag: `test-${version}`,
-    appHost: `docs-test-${changeId}.pathfinder.gov.bc.ca`,
-    apiHost: `api-documize-test-${changeId}.pathfinder.gov.bc.ca`,
+    appHost: `docs-test.pathfinder.gov.bc.ca`,
+    apiHost: `api-documize-test.pathfinder.gov.bc.ca`,
+    // appHost: `docs-test-${changeId}.pathfinder.gov.bc.ca`,
+    // apiHost: `api-documize-test-${changeId}.pathfinder.gov.bc.ca`,
   },
   prod: {
     namespace: 'hmg6pw-prod',

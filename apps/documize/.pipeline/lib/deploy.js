@@ -12,18 +12,58 @@ module.exports = settings => {
   var objects = [];
 
   // The deployment of your cool app goes here ▼▼▼
+
+  //Secrets for Patroni
+  //First call will create/generate default values and a template
+  oc.createIfMissing(oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/db-secrets.yaml`, {
+    param:{
+      NAME: `template.${phases[phase].name}-patroni`,
+      SUFFIX: '',
+      APP_DB_USERNAME: 'documize',
+      APP_DB_NAME: 'documize'
+    }
+  }))
+
+  //Second call will create the required object using their respective template (default ones generated above)
+  objects = objects.concat(oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/db-secrets.yaml`, {
+    param:{
+      NAME: `${phases[phase].name}-patroni`,
+      SUFFIX: phases[phase].suffix,
+      APP_DB_USERNAME: 'documize',
+      APP_DB_NAME: 'documize'
+    }
+  }))
+
+  /**
+   * Statefulset - patroni pg:
+   */
+  objects = objects.concat(
+    oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/patroni-deployment.yml`, {
+      param: {
+        NAME: `${phases[phase].name}-patroni`,
+        SECRET_NAME: `${phases[phase].name}-patroni`,
+        SUFFIX: phases[phase].suffix,
+      },
+    }),
+  );
+
   // Conversion - api:
   objects = objects.concat(
     oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/conversion-dc.yml`, {
       param: {
-        NAME: 'documize-conversion',
+        NAME: `${phases[phase].name}-conversion`,
         SUFFIX: phases[phase].suffix,
         HOST_VALUE: phases[phase].apiHost,
       },
     }),
   );
 
-  // Documize app:
+  /**
+   * Documize app:
+   * - deployment config
+   * - route
+   * - service
+   */
   objects = objects.concat(
     oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/dc.yml`, {
       param: {
@@ -31,11 +71,11 @@ module.exports = settings => {
         SUFFIX: phases[phase].suffix,
         VERSION: phases[phase].tag,
         HOST_VALUE: phases[phase].appHost,
+        DB_SECRET_NAME: `${phases[phase].name}-patroni`,
+        PATRONI_SERVICE: `${phases[phase].name}-patroni-master`,
       },
     }),
   );
-
-  // TODO: statefulset
 
   oc.applyRecommendedLabels(
     objects,
