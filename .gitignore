@@ -78,3 +78,6 @@ typings/
 *output*
 # artifacts
 *.orig
+
+#secrets
+apps/hubot/scripts/github-secret.yaml
