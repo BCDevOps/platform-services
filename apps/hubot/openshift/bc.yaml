@@ -76,29 +76,23 @@ parameters:
   displayName: Name
   name: NAME
   required: true
-  value: hubot
 - description: A name suffix used for all objects
   displayName: Suffix
   name: SUFFIX
   required: false
-  value: -build
 - description: A version used for the image tags
   displayName: version
   name: VERSION
   required: true
-  value: v1.0.0
 - description: SOURCE_REPOSITORY_URL
   displayName: SOURCE_REPOSITORY_URL
   name: SOURCE_REPOSITORY_URL
   required: true
-  value: https://github.com/BCDevOPS/platform-services
 - description: SOURCE_REPOSITORY_REF
   displayName: SOURCE_REPOSITORY_REF
   name: SOURCE_REPOSITORY_REF
   required: true
-  value: master
 - description: SOURCE_REPOSITORY_DIR
   displayName: SOURCE_REPOSITORY_DIR
   name: SOURCE_REPOSITORY_DIR
   required: true
-  value: apps/hubot

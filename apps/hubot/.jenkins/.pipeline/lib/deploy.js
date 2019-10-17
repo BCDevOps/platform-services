@@ -12,6 +12,8 @@ module.exports = (settings)=>{
 
   const templatesLocalBaseUrl =oc.toFileUrl(path.resolve(__dirname, '../../openshift'))
 
+  console.log("start master deploy")
+
   objects.push(...oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/deploy-master.yaml`, {
     'param':{
       'NAME': phases[phase].name,
@@ -21,6 +23,9 @@ module.exports = (settings)=>{
       'ROUTE_HOST': `${phases[phase].name}${phases[phase].suffix}-${phases[phase].namespace}.pathfinder.gov.bc.ca`
     }
   }))
+
+  console.log("finish master deploy")
+  console.log("start slave deploy")
 
   objects.push(...oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/deploy-slave.yaml`, {
     'param':{
@@ -36,6 +41,8 @@ module.exports = (settings)=>{
       'MEMORY_LIMIT': '2Gi'
     }
   }))
+
+  console.log("finish slave deploy")
 
   oc.applyRecommendedLabels(objects, phases[phase].name, phase, `${changeId}`, phases[phase].instance)
   oc.importImageStreams(objects, phases[phase].tag, phases.build.namespace, phases.build.tag)

@@ -11,6 +11,8 @@ module.exports = (settings)=>{
 
   const templatesLocalBaseUrl =oc.toFileUrl(path.resolve(__dirname, '../../openshift'))
 
+  console.log("start master build")
+
   objects.push(...oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/build-master.yaml`, {
     'param':{
       'NAME': phases[phase].name,
@@ -21,6 +23,9 @@ module.exports = (settings)=>{
     }
   }));
 
+  console.log("finish master build")
+  console.log("start slave build")
+
   objects.push(...oc.processDeploymentTemplate(`${templatesLocalBaseUrl}/build-slave.yaml`, {
     'param':{
       'NAME': phases[phase].name,
@@ -30,6 +35,8 @@ module.exports = (settings)=>{
       'SLAVE_NAME':'main'
     }
   }));
+
+  console.log("finish slave build")
 
   oc.applyRecommendedLabels(objects, phases[phase].name, phase, phases[phase].changeId, phases[phase].instance)
   oc.applyAndBuild(objects)

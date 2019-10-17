@@ -2,7 +2,7 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   creationTimestamp: null
-  name: jenkins
+  name: jenkins-hubot
 objects:
 - apiVersion: v1
   kind: ImageStream
