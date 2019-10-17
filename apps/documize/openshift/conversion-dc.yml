@@ -7,26 +7,27 @@ labels:
   template: ${NAME}
 objects:
 # documize/conversion:
-# - apiVersion: v1
-#   kind: ImageStream
-#   metadata:
-#     creationTimestamp: null
-#     labels:
-#       shared: true
-#     name: ${NAME}
-#   spec:
-#     lookupPolicy:
-#       local: true
-#     tags:
-#     - annotations: null
-#       from:
-#         kind: ImageStreamTag
-#         name: ${NAME}:${CONVERSION_VERSION}
-#         namespace: ${NAMESPACE}
-#       importPolicy: {}
-#       name: ${CONVERSION_VERSION}
-#       referencePolicy:
-#         type: Local
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      shared: true
+    name: ${NAME}
+  spec:
+    lookupPolicy:
+      local: true
+    tags:
+    - annotations: null
+      from:
+        kind: ImageStreamTag
+        name: ${NAME}:${CONVERSION_VERSION}
+        namespace: ${NAMESPACE}
+      importPolicy: {}
+      name: ${CONVERSION_VERSION}
+      referencePolicy:
+        type: Local
+# TODO: add HorizontalPodAutoscaler
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
@@ -144,6 +145,11 @@ parameters:
   name: CONVERSION_VERSION
   required: true
   value: '2.7.0'
+- description: Namespace
+  displayName: namespace
+  name: NAMESPACE
+  required: true
+  value: hmg6pw-tools
 - description: Environment
   displayName: Environment
   name: ENV

@@ -6,7 +6,7 @@ metadata:
 labels:
   template: ${NAME}
 objects:
-# ImageStream:
+# ImageStreams:
 - apiVersion: v1
   kind: ImageStream
   metadata:

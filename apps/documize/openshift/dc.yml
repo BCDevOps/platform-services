@@ -42,7 +42,6 @@ objects:
         containers:
         - command:
           - documize
-          - /conf/doc-pg.conf
           image: ${NAME}${VERSION}
           imagePullPolicy: Always
           name: ${NAME}
@@ -52,20 +51,35 @@ objects:
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: /conf
-            name: ${VOLUME_NAME}
+          env:
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                key: app-db-name
+                name: ${DB_SECRET_NAME}${SUFFIX}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: app-db-username
+                name: ${DB_SECRET_NAME}${SUFFIX}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: app-db-password
+                name: ${DB_SECRET_NAME}${SUFFIX}
+          - name: DOCUMIZEPORT
+            value: '5001'
+          - name: DOCUMIZEDB
+            value: 'host=${PATRONI_SERVICE}${SUFFIX} port=5432 sslmode=disable user=$DB_USERNAME password=$DB_PASSWORD dbname=$DB_NAME'
+          - name: DOCUMIZEDBTYPE
+            value: postgresql
+          - name: DOCUMIZESALT
+            value: tsu3Acndky8cdTNx3
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
-        volumes:
-        - name: ${VOLUME_NAME}
-          secret:
-            defaultMode: 420
-            secretName: ${SECRET_NAME}
-            # TODO: use configmap instead for DB conf
     test: false
     triggers:
     - type: ConfigChange
@@ -125,18 +139,17 @@ parameters:
   name: VERSION
   required: true
   value: v1.0.0
-- description: A volume name
-  displayName: volume
-  name: VOLUME_NAME
-  required: true
-  value: documize-config
-- description: A secret name
-  displayName: secret
-  name: SECRET_NAME
-  required: true
-  value: documize-config
+  value: documize-patroni
 - description: The url of documize app
   displayName: documize app url
   name: HOST_VALUE
   required: false
   value: ''
+- description: The name of the OpenShift Service exposed for the patroni-persistent-master container.
+  displayName: Master service name
+  name: PATRONI_SERVICE
+  value: documize-patroni-master
+- description: The name of the secret
+  displayName: Secret Name
+  name: DB_SECRET_NAME
+  value: patroni
