@@ -20,8 +20,13 @@
       ''oc patch daemonset enforcerd -n {{ openshift_project_prefix }}-enforcers -p '{"spec": {"template": {"spec": {"nodeSelector": {"aporeto-enforcerd":"true"}}}}}' ''
   ignore_errors: true
 
+- pause:
+    prompt: "Do you want to label the nodes (yes/no)?"
+  register: deploy_enforcer_confirmation
+
 - name: Label nodes to activate enforcers
   shell: oc label node {{ item }} aporeto-enforcerd=true --overwrite=true
   with_items: 
     - "{{ node_list }}"
   ignore_errors: true
+  when: deploy_enforcer_confirmation.user_input | bool
