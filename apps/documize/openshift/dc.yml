@@ -40,9 +40,7 @@ objects:
           deploymentconfig: ${NAME}${SUFFIX}
       spec:
         containers:
-        - command:
-          - documize
-          image: ${NAME}${VERSION}
+        - image: ${NAME}${VERSION}
           imagePullPolicy: Always
           name: ${NAME}
           ports:
@@ -52,6 +50,10 @@ objects:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           env:
+          - name: DB_HOST
+            value: ${PATRONI_SERVICE}${SUFFIX}
+          - name: DB_PORT
+            value: '5432'
           - name: DB_NAME
             valueFrom:
               secretKeyRef:
@@ -69,8 +71,6 @@ objects:
                 name: ${DB_SECRET_NAME}${SUFFIX}
           - name: DOCUMIZEPORT
             value: '5001'
-          - name: DOCUMIZEDB
-            value: 'host=${PATRONI_SERVICE}${SUFFIX} port=5432 sslmode=disable user=$DB_USERNAME password=$DB_PASSWORD dbname=$DB_NAME'
           - name: DOCUMIZEDBTYPE
             value: postgresql
           - name: DOCUMIZESALT
