@@ -1,0 +1,354 @@
+curl -X GET -H "Authorization: Bearer ${SYSDIG_TOKEN}" -H "Content-Type: application/json"   https://app.sysdigcloud.com/api/teams | jq
+{
+  "teams": [
+    {
+      "userRoles": [
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 29063,
+          "userName": "dan.deane@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 27889,
+          "userName": "steven.barre@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 27714,
+          "userName": "thomson.p@gmail.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 29853,
+          "userName": "william.hutchison@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 29475,
+          "userName": "shea.stewart+sysdigreader@arctiq.ca",
+          "role": "ROLE_TEAM_READ",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        }
+      ],
+      "version": 17,
+      "description": "Immutable Monitor team with full visibility",
+      "show": "host",
+      "origin": "SYSDIG",
+      "dateCreated": 1545249739000,
+      "entryPoint": {
+        "module": "Explore"
+      },
+      "lastUpdated": 1563398225000,
+      "theme": "#7BB0B2",
+      "products": [
+        "SDC"
+      ],
+      "customerId": 23935,
+      "immutable": true,
+      "canUseSysdigCapture": true,
+      "canUseCustomEvents": true,
+      "canUseAwsMetrics": true,
+      "userCount": 8,
+      "name": "Monitor Operations",
+      "default": false,
+      "properties": {},
+      "id": 20008
+    },
+    {
+      "userRoles": [
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27889,
+          "userName": "steven.barre@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 26462,
+          "userName": "husker@arctiq.ca",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "MOVE_TO_DEFAULT"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27714,
+          "userName": "thomson.p@gmail.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27002,
+          "userName": "boomer@arctiq.ca",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "MOVE_TO_DEFAULT"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 29063,
+          "userName": "dan.deane@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 29475,
+          "userName": "shea.stewart+sysdigreader@arctiq.ca",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 29853,
+          "userName": "william.hutchison@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false,
+          "removalWarning": "NONE"
+        }
+      ],
+      "version": 2,
+      "description": "",
+      "filter": "kubernetes.namespace.name = \"catchall\"",
+      "show": "container",
+      "origin": "SYSDIG",
+      "dateCreated": 1551224225000,
+      "entryPoint": {
+        "module": "Explore"
+      },
+      "lastUpdated": 1551224487000,
+      "theme": "#73A1F7",
+      "products": [
+        "SDC"
+      ],
+      "customerId": 23935,
+      "immutable": false,
+      "canUseSysdigCapture": false,
+      "canUseCustomEvents": false,
+      "canUseAwsMetrics": false,
+      "userCount": 10,
+      "name": "Catchall",
+      "default": true,
+      "properties": {},
+      "id": 20652
+    },
+    {
+      "userRoles": [
+        {
+          "teamId": 21060,
+          "teamName": "Platform Services",
+          "teamTheme": "#73A1F7",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 21060,
+          "teamName": "Platform Services",
+          "teamTheme": "#73A1F7",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 21060,
+          "teamName": "Platform Services",
+          "teamTheme": "#73A1F7",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        }
+      ],
+      "version": 0,
+      "description": "",
+      "show": "host",
+      "origin": "SYSDIG",
+      "dateCreated": 1553723410000,
+      "entryPoint": {
+        "module": "Dashboards"
+      },
+      "lastUpdated": 1553723410000,
+      "theme": "#73A1F7",
+      "products": [
+        "SDC"
+      ],
+      "customerId": 23935,
+      "immutable": false,
+      "canUseSysdigCapture": true,
+      "canUseCustomEvents": true,
+      "canUseAwsMetrics": false,
+      "userCount": 3,
+      "name": "Platform Services",
+      "default": false,
+      "properties": {},
+      "id": 21060
+    },
+    {
+      "userRoles": [
+        {
+          "teamId": 23604,
+          "teamName": "test-team",
+          "teamTheme": "#73A1F7",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 23604,
+          "teamName": "test-team",
+          "teamTheme": "#73A1F7",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        },
+        {
+          "teamId": 23604,
+          "teamName": "test-team",
+          "teamTheme": "#73A1F7",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true,
+          "removalWarning": "NONE"
+        }
+      ],
+      "version": 0,
+      "description": "some silly description here",
+      "show": "container",
+      "origin": "SYSDIG",
+      "dateCreated": 1571621558000,
+      "entryPoint": {
+        "module": "Dashboards"
+      },
+      "lastUpdated": 1571621558000,
+      "theme": "#73A1F7",
+      "products": [
+        "SDC"
+      ],
+      "customerId": 23935,
+      "immutable": false,
+      "canUseSysdigCapture": true,
+      "canUseCustomEvents": true,
+      "canUseAwsMetrics": false,
+      "userCount": 3,
+      "name": "test-team",
+      "default": false,
+      "properties": {},
+      "id": 23604
+    }
+  ]
+}

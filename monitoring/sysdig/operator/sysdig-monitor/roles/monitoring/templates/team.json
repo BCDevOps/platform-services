@@ -1,0 +1,9 @@
+{ 
+    "canUseAwsMetrics": false,
+    "canUseCustomEvents": true,
+    "canUseSysdigCapture": true,
+    "description": "",
+    "name": "dummy",
+    "show": "container",
+    "theme": "#73A1F7"
+  }

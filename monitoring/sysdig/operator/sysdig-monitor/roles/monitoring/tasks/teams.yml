@@ -1,0 +1,72 @@
+---
+# tasks file for monitoring
+
+# Lookup Team
+- debug: msg=" Looking up {{ team.name }}"
+- set_fact: 
+    team_data: "{{ item }}"
+    team_exists: true
+  when: item.name == team.name
+  with_items: 
+    -  "{{ teams_output.json.teams }}"
+
+- name: Test if team exists
+  debug: msg="Team exists"
+  when: team_exists == true
+
+- name: show output
+  debug: msg="{{ team_data }}"
+  when: team_exists == true
+
+# Get List of team names
+# - name: show output
+#   debug: msg="{{ teams_output.json.teams  | map(attribute='name')  | list }}"
+
+# - name: Perform lookup
+#   set_fact: 
+#     team_id: "{{ (current_teams |from json).id }}"
+#   when: (current_teams | from_json).name[item] == 'Platform Services'
+#   with_items: 
+#   - "{{ current_teams }}"
+# - debug: msg="{{ team data }}"
+
+# Create Team if Doesn't Exist
+- name: Create Team
+  block: 
+  - name: Create team
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/teams"
+      method: POST
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body: "{{ lookup('template', 'templates/new_team.json.j2') }}"
+      body_format: json
+      status_code: 201
+    register: team_creation_output
+  when: team_exists == false
+- debug: msg="{{ team_exists }}"
+
+- name: template test
+  template: 
+    src: templates/new_team.json.j2
+    dest: test_output.json
+
+
+# Update Team if Exists Updates
+# - name: Update Team
+#   block: 
+#   - name: Update Team
+#     uri: 
+#       url: "{{ sysdig_api_endpoint }}/api/teams"
+#       method: POST
+#       headers:
+#           Authorization: "Bearer {{ sysdig_token }}"
+#           Content-Type: "application/json"
+#       body: "{{ lookup('template', 'templates/new_team.json.j2') }}"
+#       body_format: json
+#       status_code: 201
+#     register: team_creation_output
+#   when: team_exists == false
+
+# Delete Team if Required

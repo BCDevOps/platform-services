@@ -1,0 +1,7 @@
+apiVersion: ops.gov.bc.ca/v1alpha1
+kind: Monitoring
+metadata:
+  name: example-monitoring
+spec:
+  # Add fields here
+  size: 3

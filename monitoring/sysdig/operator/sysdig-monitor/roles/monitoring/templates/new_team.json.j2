@@ -1,0 +1,23 @@
+
+{   
+    "canUseAwsMetrics": false,
+    "canUseCustomEvents": true,
+    "canUseSysdigCapture": true,
+    "default": false,
+    "description": "{{ team.description }}",
+    "entryPoint": {
+        "module": "Dashboards"
+    },
+    "name": "{{ team.name }}",
+    "show": "container",
+    "theme": "#73A1F7",
+    "userRoles": [
+{% for role in team_users_and_roles  %}
+      {
+        "userID": "{{ role.userID }}",
+        "role": "{{ role.role }}",
+      }
+    {{ "," if not loop.last }}
+{% endfor %}     
+    ]
+}

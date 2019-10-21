@@ -1,0 +1,5 @@
+---
+- version: v1alpha1
+  group: ops.gov.bc.ca
+  kind: Monitoring
+  playbook: /opt/ansible/playbook.yml

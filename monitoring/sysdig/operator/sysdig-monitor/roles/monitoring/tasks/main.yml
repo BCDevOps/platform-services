@@ -1,0 +1,9 @@
+---
+# tasks file for monitoring
+- include_tasks: fetch_data.yml
+- include_tasks: users.yml
+  with_items: 
+    - "{{ team.users }}"
+  loop_control: 
+    loop_var: team_user
+- include_tasks: teams.yml
