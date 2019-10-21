@@ -8,4 +8,6 @@ operator-sdk new sysdig-monitor --type ansible --kind Monitoring --api-version o
 
 ## Development Approach
 There is a python client if desired, found here: https://github.com/draios/python-sdc-client
-We devided to leverage the native API with Ansible for building the Operator functions. 
+
+
+We decided to leverage the native API with Ansible for building the Operator functions. 
