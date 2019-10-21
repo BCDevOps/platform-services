@@ -14,10 +14,12 @@
     "userRoles": [
 {% for role in team_users_and_roles  %}
       {
-        "userID": "{{ role.userID }}",
-        "role": "{{ role.role }}",
+        "userId": "{{ role.userID }}",
+        "role": "{{ role.role }}"
       }
-    {{ "," if not loop.last }}
+  {% if not loop.last %}
+      ,
+  {% endif %}
 {% endfor %}     
     ]
 }

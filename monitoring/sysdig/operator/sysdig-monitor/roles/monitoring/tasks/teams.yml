@@ -30,6 +30,11 @@
 #   - "{{ current_teams }}"
 # - debug: msg="{{ team data }}"
 
+- name: template test
+  template: 
+    src: templates/new_team.json.j2
+    dest: test_output.json
+
 # Create Team if Doesn't Exist
 - name: Create Team
   block: 
@@ -47,10 +52,7 @@
   when: team_exists == false
 - debug: msg="{{ team_exists }}"
 
-- name: template test
-  template: 
-    src: templates/new_team.json.j2
-    dest: test_output.json
+
 
 
 # Update Team if Exists Updates
