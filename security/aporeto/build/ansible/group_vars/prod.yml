@@ -1,7 +1,7 @@
 # Aporeto Specific Details
 aporeto_release: 3.12.3
 aporeto_enforcer_memory_limit: '8Gi'
-aporeto_enforcer_cpu_limit: '1'
+aporeto_enforcer_cpu_limit: '2'
 openshift_project_prefix: devops-security-aporeto
 openshift_project_editors: 
   - jleach
