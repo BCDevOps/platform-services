@@ -40,9 +40,11 @@ data:
       targetNetworks:
        - {{ cluster_network }}
        - {{ host_network }}
+       - {{ service_network }}
       targetUDPNetworks: 
        - {{ cluster_network }}
        - {{ host_network }}
+       - {{ service_network }}
       transmitterNumberOfQueues: 4
       transmitterQueue: 4
       transmitterQueueSize: 500
