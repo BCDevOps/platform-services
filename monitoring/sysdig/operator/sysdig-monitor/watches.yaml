@@ -1,7 +1,8 @@
 ---
 - version: v1alpha1
   group: ops.gov.bc.ca
-  kind: Monitoring
+  kind: SysdigTeam
+  reconcilePeriod: 24h
   playbook: /opt/ansible/configure_teams.yml
   finalizer:
     name: finalizer.ops.gov.bc.ca

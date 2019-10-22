@@ -11,24 +11,30 @@ There is a python client if desired, found here: https://github.com/draios/pytho
 
 We decided to leverage the native API with Ansible for building the Operator functions. The following code can be helful when creating the Ansible URI tasks: https://github.com/draios/python-sdc-client/blob/master/sdcclient/_common.py
 
-## Sample Variables
+## Sample Custom Resource
 The following variables are used to define the Sysdig Team:
 
 ```
-team: 
-  name: test-team
-  description: some silly description here 
-  namespaces: 
-    - usage-cost
-  users:
-   - name: husker@arctiq.ca
-     role: ROLE_TEAM_READ 
-   - name: shea.stewart+bcgov@arctiq.ca
-     role: ROLE_TEAM_MANAGER
-   - name: shea.stewart+tester@arctiq.ca
-     role: ROLE_TEAM_EDIT
-   - name: boomer@arctiq.ca
-     role: ROLE_TEAM_READ 
+apiVersion: ops.gov.bc.ca/v1alpha1
+kind: SysdigTeam
+metadata:
+  name: example-monitoring
+spec:
+  team: 
+    name: test-team
+    description: some silly description here 
+    namespaces: 
+      - usage-cost
+    users:
+    - name: husker@arctiq.ca
+      role: ROLE_TEAM_READ 
+    - name: shea.stewart+bcgov@arctiq.ca
+      role: ROLE_TEAM_MANAGER
+    - name: shea.stewart+tester@arctiq.ca
+      role: ROLE_TEAM_EDIT
+    - name: boomer@arctiq.ca
+      role: ROLE_TEAM_READ 
+
 ```
 ## Sample Payloads
 These sample payloads might be useful when managing the operator templates: 
@@ -75,3 +81,5 @@ These sample payloads might be useful when managing the operator templates:
 
 # TODO
 - assign view? role to user without defnied role? 
+- add in protected teams in validation
+- validate that the user has access to the desired namespaces
