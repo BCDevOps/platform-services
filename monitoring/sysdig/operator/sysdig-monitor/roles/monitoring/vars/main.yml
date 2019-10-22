@@ -5,7 +5,8 @@ sysdig_token: "{{ lookup('env', 'SYSDIG_TOKEN') }}"
 team: 
   name: test-team
   description: some silly description here 
-  namespaces: usage-cost
+  namespaces: 
+    - usage-cost
   users:
    - name: husker@arctiq.ca
      role: ROLE_TEAM_READ 
@@ -13,6 +14,9 @@ team:
      role: ROLE_TEAM_MANAGER
    - name: shea.stewart+tester@arctiq.ca
      role: ROLE_TEAM_EDIT
+   - name: boomer@arctiq.ca
+     role: ROLE_TEAM_READ 
+
 
 
 # Available Roles Mapping
@@ -21,4 +25,6 @@ team:
 # ROLE_TEAM_READ
 # ROLE_TEAM_MANAGER
      
+
+
 

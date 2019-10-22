@@ -1,0 +1,23 @@
+# Lookup Team
+- debug: msg=" Looking up {{ team.name }}"
+- set_fact: 
+    team_data: "{{ item }}"
+    team_exists: true
+  when: item.name == team.name
+  with_items: 
+    -  "{{ teams_output.json.teams }}"
+
+# Delete Team if Required
+- name: Delete Team
+  block: 
+  - name: Delete Team
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_data.id | int }}"
+      method: DELETE
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body_format: json
+      status_code: 200
+    register: team_update_output
+  when: team_exists == true

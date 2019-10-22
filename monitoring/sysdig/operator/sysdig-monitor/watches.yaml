@@ -2,4 +2,7 @@
 - version: v1alpha1
   group: ops.gov.bc.ca
   kind: Monitoring
-  playbook: /opt/ansible/playbook.yml
+  playbook: /opt/ansible/configure_teams.yml
+  finalizer:
+    name: finalizer.ops.gov.bc.ca
+    playbook: /opt/ansible/delete_team.yml

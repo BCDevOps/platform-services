@@ -18,18 +18,6 @@
   debug: msg="{{ team_data }}"
   when: team_exists == true
 
-# Get List of team names
-# - name: show output
-#   debug: msg="{{ teams_output.json.teams  | map(attribute='name')  | list }}"
-
-# - name: Perform lookup
-#   set_fact: 
-#     team_id: "{{ (current_teams |from json).id }}"
-#   when: (current_teams | from_json).name[item] == 'Platform Services'
-#   with_items: 
-#   - "{{ current_teams }}"
-# - debug: msg="{{ team data }}"
-
 - name: template test
   template: 
     src: templates/new_team.json.j2
@@ -53,22 +41,18 @@
 - debug: msg="{{ team_exists }}"
 
 
-
-
 # Update Team if Exists Updates
-# - name: Update Team
-#   block: 
-#   - name: Update Team
-#     uri: 
-#       url: "{{ sysdig_api_endpoint }}/api/teams"
-#       method: POST
-#       headers:
-#           Authorization: "Bearer {{ sysdig_token }}"
-#           Content-Type: "application/json"
-#       body: "{{ lookup('template', 'templates/new_team.json.j2') }}"
-#       body_format: json
-#       status_code: 201
-#     register: team_creation_output
-#   when: team_exists == false
-
-# Delete Team if Required
+- name: Update Team
+  block: 
+  - name: Update Team
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_data.id | int }}"
+      method: PUT
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body: "{{ lookup('template', 'templates/existing_team.json.j2') }}"
+      body_format: json
+      status_code: 200
+    register: team_update_output
+  when: team_exists == true

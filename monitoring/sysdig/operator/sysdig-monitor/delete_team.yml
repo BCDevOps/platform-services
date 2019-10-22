@@ -1,0 +1,7 @@
+- hosts: localhost
+  gather_facts: no
+  vars_files: 
+   - roles/monitoring/vars/main.yml
+  tasks:
+    - include_tasks: roles/monitoring/tasks/fetch_data.yml
+    - include_tasks: roles/monitoring/tasks/delete_team.yml
