@@ -51,6 +51,12 @@ A series of "base" policies exist for the container platform specifically. These
 
 Please refer to the **Playbook Flow** section of the Ansible [Build Docs ](../build/ansible/readme.md) for a list of the base policies and their descriptions. These are created in the `apply_policies.yml` section of the playbook. 
 
+### Policy Naming Conventions
+There are no hard restrictions on what developers will use for naming their policies. Every policy created by an end-user in the platform will be have a name that follows the convention: 
+- `custom-[object-type]-[object-name]`
+
+Developers can use any name that they wish for the object-name, however, it should be easy to determine what the policy does by it's name. This will help other team members when they are reviewing these objects. Some examples are outlined in the [developer guide](../docs/CustomPolicy.md). 
+
 ### Fallback Policies 
 Aporeto has a concept of **Fallback Policies** that can be used to generate a more permissive and forgiving policy that would be used if users have not created any other matching policy. It was determined that with the desire to achieve a Zero Trust network enforcement policy that fallback policies are not leveraged in this deployment. New container-platform teams will start to consider their desired network flow of their applications and will manually create NetworkSecurityPolicy objects to allow network traffic to flow. 
 
@@ -59,13 +65,35 @@ Each OpenShift project/namespace is directly mapped to an Aporeto child namespac
 
 **Please Note:** Child namespace Network Access Policies cannot override policies that are created at a parent or higher level. This is how application teams can create more granular policies for their applications, but security teams within government can apply high-level policies that are propagated to these child namespaces. 
 
+
+
 ### Namespace Automation
+There are two key automations in place for Aporeto Namespace management: 
+- The Aporeto Operator synchronizes OpenShift projects into child namespaces
+- A Namespace Management playbook has been created to codify all higher-level namespaces and access control
+  - Currently resides in the private repo [bcgov-c/platform-services-secops](https://github.com/bcgov-c/platform-services-secops)
+  - This playbook should be used for authorization and namespace management and manual configuration should be avoided
+  - The desire is likely to have this playbook fully integrated into a GitOps approach
 
 
 ## Operations
+This section describes any additional opreational design decisions that apply to this solution. 
 
 ### Backup
+A backup CronJob has been created to backup all configurations and policy within the `/bcgov` namespace on a daily basis. This can be used as secondary audit trail of daily configuration changes and can be leveraged if needed to re-import specific configurations into the Aporeto SaaS console. These backups are stored in the private git repo [bcgov-c/platform-secops-netpol](https://github.com/bcgov-c/platform-secops-netpol). Please refer to that repository for more details if you have the required access. 
 
 
 ## Access Control 
+Access control to namespaces is managed through the Namespace Automation playbook referenced above. In order for users to gain access to their namespace, they must: 
+- have the appropriate authorization policy created by the Namespace Automation playbook
+- have a proper email account tied to their github ID
+- be authorized by Keycloak as the OIDC provider and must have 2FA enabled
+
+### OIDC Configuration: 
+Currently 2 OIDC providers are available: 
+- pathfinder-sso-prod
+- pathfinder-sso-dev
+
+It's likely we will remove the dev OIDC provider option as the solution is more widely used.
+The KeyCloak prod intance uses the following realm for client access: `8gyaubgq`. 
 
