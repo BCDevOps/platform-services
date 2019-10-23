@@ -10,14 +10,7 @@ The [ansible](ansible/readme.md) directory contains a playbook to:
 ## Namespaces 
 Aporeto and OpenShift/Kuberenetes both usee the concept of `namespaces`. This table is used to map an Aporeto `namespace` to an OpenShift `namespace`, as they are not the same thing. 
 
-The following OpenShift namespaces are used for each configured environment: 
-
-| OpenShift Environment Name | OpenShift Project                               | Aporeto Namespace Mapping                                |   |   |
-|----------------------------|-------------------------------------------------|----------------------------------------------------------|---|---|
-| LAB                        | devops-platform-security-[operator / enforcers] | /bcgov/platform-sevices/lab/kamloops/lab                 |   |   |
-| Pathfinder                 | devops-platform-security-[operator / enforcers] | /bcgov/platform-sevices/production/kamloops/pathfinder   |   |   |
-|                            |                                                 |                                                          |   |   |
-
+Please refer to the [Architecture Design Decisions](../architecture/design_decisions.md) for the list of Aporeto namespaces and how they apply to the BCGov .
 
 ## Legacy Docs 
 The following docs were used for initial testing / deployment / playbook creation and are currently kept for historical reasons. 
