@@ -125,3 +125,7 @@ You're done 🙌
 **🤓 ProTip**
 
 - Inspect the YAML manifest to see what parameters you can change on the fly.
+
+# Contact
+
+This component is jointly maintained by OCIO Platform Services and the data center management team DXC. Please contact both teams via RocketChat for more information.
