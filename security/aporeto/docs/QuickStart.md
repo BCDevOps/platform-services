@@ -18,7 +18,7 @@ The sections below will guide you through adding access policies to your applica
 
 These 3 base policies combined allow application deployed to Openshift 3.11 Platform to keep the same communication open as it was prior to the enablement of the Zero-Trust Security Model on the Platform.
 
-Sample configuration to enable the 3 above mentioned policies can be found in the [quickstart-nsp.yaml](./samples/quickstart-nsp.yaml) file in [samples](./samples) directory accompanying this document. Samples of other access policies can be found [here](./CustomPolicy.md).
+Sample configuration to enable the 3 above mentioned policies can be found in the [quickstart-nsp.yaml](./sample/quickstart-nsp.yaml) file in [samples](./sample) directory accompanying this document. Samples of other access policies can be found [here](./CustomPolicy.md).
 
 **🤓 ProTip**
 
@@ -52,7 +52,7 @@ If don't have any existing policy, no results will appear.
 
 ### Add 3 base access policies to an application
 
-To add 3 base policies to your application, download the [quickstart-nsp.yaml](./samples/quickstart-nsp.yaml) sample file. Edit the file replacing the namespace `devops-platform-security-demo` with the name of the namespace where you intend to apply the policies. 
+To add 3 base policies to your application, download the [quickstart-nsp.yaml](./sample/quickstart-nsp.yaml) sample file. Edit the file replacing the namespace `devops-platform-security-demo` with the name of the namespace where you intend to apply the policies. 
 
 **:point_up: Note**
 
