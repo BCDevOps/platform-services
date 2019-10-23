@@ -2,26 +2,26 @@
 # tasks file for monitoring
 
 # Lookup Team
-- debug: msg=" Looking up {{ team.name }}"
+- debug: msg=" Looking up {{ team_name }}"
 - set_fact: 
     team_data: "{{ item }}"
     team_exists: true
-  when: item.name == team.name
+  when: item.name == team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
 
-- name: Test if team exists
-  debug: msg="Team exists"
-  when: team_exists == true
+# - name: Test if team exists
+#   debug: msg="Team exists"
+#   when: team_exists == true
 
-- name: show output
-  debug: msg="{{ team_data }}"
-  when: team_exists == true
+# - name: show output
+#   debug: msg="{{ team_data }}"
+#   when: team_exists == true
 
-- name: template test
-  template: 
-    src: templates/new_team.json.j2
-    dest: test_output.json
+# - name: template test
+#   template: 
+#     src: templates/new_team.json.j2
+#     dest: test_output.json
 
 # Create Team if Doesn't Exist
 - name: Create Team

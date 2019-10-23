@@ -1,5 +1,7 @@
 - hosts: localhost
   gather_facts: no
+  vars: 
+    k8s_message_key: _monitoring_gov_bc_ca_sysdig-team
   tasks:
   - import_role:
       name: "monitoring"

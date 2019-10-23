@@ -11,6 +11,12 @@ There is a python client if desired, found here: https://github.com/draios/pytho
 
 We decided to leverage the native API with Ansible for building the Operator functions. The following code can be helful when creating the Ansible URI tasks: https://github.com/draios/python-sdc-client/blob/master/sdcclient/_common.py
 
+## Usage
+- Custom Resources must be created in the `*-tools` namespace
+- Users need to specify the users (by email address) 
+- The playbook will automatically add all `tools`, `dev`, and `prod` namespaces into the team scope (there is no need to specify this)
+
+
 ## Sample Custom Resource
 The following variables are used to define the Sysdig Team:
 
@@ -21,10 +27,7 @@ metadata:
   name: example-monitoring
 spec:
   team: 
-    name: test-team
     description: some silly description here 
-    namespaces: 
-      - usage-cost
     users:
     - name: husker@arctiq.ca
       role: ROLE_TEAM_READ 
@@ -83,3 +86,5 @@ These sample payloads might be useful when managing the operator templates:
 - assign view? role to user without defnied role? 
 - add in protected teams in validation
 - validate that the user has access to the desired namespaces
+- test and validate that OIDC is the only option? not sure if this will invite regular sysdig users via email. 
+- need to create a bot account

@@ -3,12 +3,12 @@
   "canUseCustomEvents": true,
   "canUseSysdigCapture": true,
   "description": "{{ team.description }}",
-  "name": "{{ team.name }}",
+  "name": "{{ team_name }}",
   "id": {{ team_data.id | int }},
   "version": {{ team_data.version | int }},
   "show": "container",
   "theme": "#73A1F7",
-  "filter": "kubernetes.namespace.name in ({% for namespace in team.namespaces  %}\"{{ namespace }}\"{% if not loop.last %},{% endif %}{% endfor %} )",
+  "filter": "kubernetes.namespace.name in ({% for namespace in namespaces  %}\"{{ namespace }}\"{% if not loop.last %},{% endif %}{% endfor %} )",
   "userRoles": [
 {% for role in team_users_and_roles  %}
     {

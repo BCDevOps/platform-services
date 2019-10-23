@@ -1,5 +1,10 @@
 ---
 # tasks file for monitoring
+- name: Check if this is in the Tools namespace
+  fail: 
+    msg: "Object was not created in the Tools namespace. Please place your sysdig-team object there."
+  when: (meta.namespace.split("-")[1] | lower) != "tools"
+- include_tasks: set_facts.yml
 - include_tasks: fetch_data.yml
 - include_tasks: users.yml
   with_items: 

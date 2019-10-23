@@ -1,9 +1,9 @@
 # Lookup Team
-- debug: msg=" Looking up {{ team.name }}"
+- debug: msg=" Looking up {{ team_name }}"
 - set_fact: 
     team_data: "{{ item }}"
     team_exists: true
-  when: item.name == team.name
+  when: item.name == team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
 

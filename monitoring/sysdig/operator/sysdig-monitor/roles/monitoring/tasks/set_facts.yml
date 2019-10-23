@@ -1,0 +1,7 @@
+- name: Set prefix
+  set_fact: 
+    ns_prefix: "{{ meta.namespace.split('-')[0] | lower }}"
+- name: Create additional variables
+  set_fact: 
+    namespaces: ["{{ ns_prefix}}-tools", "{{ ns_prefix}}-dev","{{ ns_prefix }}-test", "{{ ns_prefix }}-prod"]
+    team_name:  "{{ ns_prefix }}-team"
