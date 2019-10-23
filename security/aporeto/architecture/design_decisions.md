@@ -95,5 +95,5 @@ Currently 2 OIDC providers are available:
 - pathfinder-sso-dev
 
 It's likely we will remove the dev OIDC provider option as the solution is more widely used.
-The KeyCloak prod intance uses the following realm for client access: `8gyaubgq`. 
+The KeyCloak prod intance uses the following realm for client access: `8gyaubgq`. Further details are avilable in the [admin docs](../admin/readme.md). 
 
