@@ -14,8 +14,8 @@
   gather_facts: no
   vars:
     saas_host: github.com
-    saas_org: "BCDevOps"
-    repo_name: "platform-services"
+    saas_org: "bcgov-c"
+    repo_name: "platform-secops-netpol"
     work_dir: "/tmp"
     cur_date: "{{ lookup('pipe', 'date +%Y%m%d') }}"
   tasks:
@@ -54,7 +54,7 @@
         executable: /bin/bash
     - name: Setup git SaaS provider ssh keys
       shell: |
-        ssh-keyscan -t rsa -H "{{ saas_host }}" >> ~/.ssh/known_hosts
+        ssh-keyscan -t rsa -H "{{ saas_host }}" >>$HOME/.ssh/known_hosts
     - name: Create SSH private key
       file:
         path: $HOME/.ssh/id_rsa
@@ -64,7 +64,7 @@
         state: touch
     - name: Add SSH private key contents
       shell: |
-        echo $SSH_DKEY | base64 -d >$HOME/.ssh/id_rsa
+        echo $GITHUB_DKEY | base64 -d >$HOME/.ssh/id_rsa
       args:
         executable: /bin/bash
     - name: Clone repo
@@ -77,7 +77,6 @@
     - name: List all Aporeto namespaces
       shell: |
         apoctl api list namespace -n /bcgov -r -o table -c name | \
-        grep -v '/bcgov/test' | \
         tail -n +4
       register: apoctl_list_ns_cmd
     - name: Extract all Aporeto namespaces
@@ -107,6 +106,8 @@
         executable: /bin/bash
       when: apo_namespaces is defined
     - name: Commit updates to git repo
+      # This will fail if there are no changes to commit and
+      # that's ok.
       ignore_errors: true
       shell: |
         pushd "{{ work_dir }}/{{ repo_name }}" && \
