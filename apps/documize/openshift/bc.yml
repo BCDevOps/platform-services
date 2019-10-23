@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: ${NAME}-bc-template
+labels:
+  template: ${NAME}
+objects:
+# ImageStreams:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      shared: true
+    name: ${NAME}
+  spec:
+    lookupPolicy:
+      local: false
+# buildconfig:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      build: ${NAME}
+    name: ${NAME}
+    namespace: ${NAMESPACE}
+  spec:
+    failedBuildsHistoryLimit: 5
+    successfulBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:${VERSION}
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        uri: ${SOURCE_REPOSITORY_URL}
+        ref: ${SOURCE_REPOSITORY_REF}
+      contextDir: ${SOURCE_REPOSITORY_DIR}
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: alpine:${ALPINE_VERSION}
+          namespace: ${NAMESPACE}
+      type: Source
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+parameters:
+- description: A name used for all objects
+  displayName: Name
+  name: NAME
+  required: true
+  value: documize-k8s
+- description: A name suffix used for all objects
+  displayName: Suffix
+  name: SUFFIX
+  required: false
+  value: -dev
+- description: A version used for the image tags
+  displayName: version
+  name: VERSION
+  required: true
+  value: v1.0.0
+- description: Namespace
+  displayName: namespace
+  name: NAMESPACE
+  required: true
+  value: hmg6pw-tools
+- description: SOURCE_REPOSITORY_URL
+  displayName: SOURCE_REPOSITORY_URL
+  name: SOURCE_REPOSITORY_URL
+  required: true
+  value: https://github.com/BCDevOps/platform-services.git
+- description: SOURCE_REPOSITORY_REF
+  displayName: SOURCE_REPOSITORY_REF
+  name: SOURCE_REPOSITORY_REF
+  required: true
+  value: ''
+- description: SOURCE_REPOSITORY_DIR
+  displayName: SOURCE_REPOSITORY_DIR
+  name: SOURCE_REPOSITORY_DIR
+  required: true
+  value: apps/documize
+- description: ALPINE_VERSION
+  displayName: ALPINE_VERSION
+  name: ALPINE_VERSION
+  required: true
+  value: '3.10'

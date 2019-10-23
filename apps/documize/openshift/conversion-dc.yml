@@ -1,0 +1,162 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: ${NAME}-dc-template
+labels:
+  template: ${NAME}
+objects:
+# documize/conversion:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      shared: true
+    name: ${NAME}
+  spec:
+    lookupPolicy:
+      local: true
+    tags:
+    - annotations: null
+      from:
+        kind: ImageStreamTag
+        name: ${NAME}:${CONVERSION_VERSION}
+        namespace: ${NAMESPACE}
+      importPolicy: {}
+      name: ${CONVERSION_VERSION}
+      referencePolicy:
+        type: Local
+# TODO: add HorizontalPodAutoscaler
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}${SUFFIX}
+  spec:
+    replicas: 2
+    selector:
+      deploymentconfig: ${NAME}${SUFFIX}
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: ${NAME}${SUFFIX}
+      spec:
+        containers:
+        - command:
+          - /documize/api-linux
+          - -port
+          - "8080"
+          env:
+          - name: env
+            value: ${ENV}
+          image: ${NAME}:${CONVERSION_VERSION}
+          imagePullPolicy: IfNotPresent
+          name: ${NAME}
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: 2Gi
+            requests:
+              cpu: 100m
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${NAME}:${CONVERSION_VERSION}
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}${SUFFIX}
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: https
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    selector:
+      deploymentconfig: ${NAME}${SUFFIX}
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}${SUFFIX}
+  spec:
+    host: ${HOST_VALUE}
+    port:
+      targetPort: http
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${NAME}${SUFFIX}
+      weight: 100
+    wildcardPolicy: None
+parameters:
+- description: A name used for all objects
+  displayName: Name
+  name: NAME
+  required: true
+  value: documize-conversion
+- description: A name suffix used for all objects
+  displayName: Suffix
+  name: SUFFIX
+  required: false
+  value: -dev
+- description: A version used for the documize/conversion image tags
+  displayName: version
+  name: CONVERSION_VERSION
+  required: true
+  value: '2.7.0'
+- description: Namespace
+  displayName: namespace
+  name: NAMESPACE
+  required: true
+  value: hmg6pw-tools
+- description: Environment
+  displayName: Environment
+  name: ENV
+  required: false
+  value: PRODUCTION
+- description: The url of the conversion (api)
+  displayName: Documize conversion url
+  name: HOST_VALUE
+  required: false
+  value: ''
