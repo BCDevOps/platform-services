@@ -84,3 +84,12 @@ The following Authorization Policies were created in the UI:
   ```
 
 **Please note that all namespace authoriztion should be managed by a custom operator or the Namespace Automation Playbook referenced [here](../architecture/design_decisions.md#namespace-automation)**
+
+
+## App Credentials
+App Credentials are created for our operators to interact with the Aporeto control plane. These are generated upon installation of an enforcer or operator and are crypotgraphically signed. 
+Each app credential is created with an expiry date (typically 10 years from the creation date), and each operator / enforcer stores this app credential in a kubernetes secret. This credential is used to obtain a shorter lived JWT token and the `apoctl` binary refreshes this token as required. 
+
+App credentials can be revoked and refreshed as required. Policies should be put into place around refreshing these credentials more frequently, and these policies should be aligned with the government standard for SSL key rotation. 
+
+![](assets/app_credential_sample.png)
