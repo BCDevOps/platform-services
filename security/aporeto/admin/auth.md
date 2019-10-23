@@ -83,4 +83,4 @@ The following Authorization Policies were created in the UI:
   label: Shriekseed Iguana
   ```
 
-** Please note that all namespace authoriztion should be managed by a custom operator or the Namespace Automation Playbook referenced [here](../architecture/design_decisions.md#namespace-automation)**
+**Please note that all namespace authoriztion should be managed by a custom operator or the Namespace Automation Playbook referenced [here](../architecture/design_decisions.md#namespace-automation)**
