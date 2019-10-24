@@ -21,12 +21,17 @@ Currently these steps have been manually configured.
   - Apply licenses (1 for each node)
 - Configuration / General Configuration
   - Server Name: artifactory
-  - Custom Base URL: https://artifactory-devops-artifactory.pathfinder.gov.bc.ca/artifactory
-- Security / General Security Configuration
+  - Custom Base URL: https://artifacts.pathfinder.gov.bc.ca/artifactory
+- Security / Security Configuration
   - [ ] Allow Anonymous Access (disable this)
   - [*] Hide Existence of Unauthorized Resources
-- Advanced / Maintenance Configuration
+- Advanced / Maintenance
   - Storage Quota: [*] Enable Quota Control
+- Permissions for authenticated_users
+  - Go to the Any Remote permission and add the authenticated_users group with read and deploy permissions
+  - Note: this must be done *after* the [creation of the proxy repos](#standard-proxy-repos) - you can't give the Any Remote permission to a user or group until remote repositories exist.
+- Permissions for readers
+  - [ ] Automatically Join New Users to this Group (disable this)
 
 ### SSO Configuration
 
@@ -65,3 +70,22 @@ Enable the new provider by checking the following General OAuth options:
 - Enable OAuth
 - Auto Create Artifactory Users
 - Allow Created Users Access To Profile Page
+
+## Standard Proxy Repos
+
+Set env variables:
+``` bash
+export ARTIFACTORY_ADMIN=<admin password>
+export ARTIFACTORY_URL=<ARTIFACTORY_DNS_NAME>
+```
+
+To create the list of remote repos:
+``` bash
+ansible-playbook proxyrepo-provisioning.yaml -e action=create
+```
+
+To delete the list of remote repos:
+``` bash
+ansible-playbook proxyrepo-provisioning.yaml -e action=delete
+```
+

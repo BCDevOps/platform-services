@@ -42,6 +42,8 @@ Additional storage is required to store the actual binaries/artifacts.
 | artifactory-data | ReadWriteMany | Shared Data file storage (Binary data) |
 | artifactory-backup | ReadWriteMany | Shared backup file storage (Pre-built?) |
 
+Note that 00-artifactory-prereq.yaml and 00-patroni-pgsql.yaml create the necessary PVCs, so you need not make them manually.
+
 Outstanding:
 Add an object store for eventual storage of binary data.  This will allow local node storage to be used for staging and caching.  This can be added to the storage chain later.
 
@@ -90,7 +92,7 @@ Set parameters for artifactory under artifactory-parameters.env.
 
 ### 3) Deploy the template
 
-Before Deploying the templates, create your backup pvc target and ensure the ARTIFACTORY_BACKUP_PVC_NAME is set appropriately before continuing.
+Before Deploying the templates, create your backup pvc target and ensure the ARTIFACTORY_BACKUP_PVC_NAME is set appropriately before continuing. This is done by running the two 00 yaml files.
 
 The following steps will deploy artifactory:
 

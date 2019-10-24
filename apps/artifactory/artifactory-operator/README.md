@@ -63,16 +63,12 @@ $pwd
 
 ``` bash
 oc apply -f deploy/crds/artifactoryrepo_v1alpha1_artifactoryrepo_crd.yaml
-```
-##### Give the service account for the Artifactory Operator deployment required permissions
-
-``` bash
-oc apply -f deploy/service_account.yaml
 oc apply -f deploy/role.yaml
-oc apply -f deploy/role_binding.yaml
 ```
-Adding a cluster-rolebinding for the artifactory-admin role is not covered by this installation, but will be required for any accounts that will be managing the lifecycle of the CRs.
+
 A separate PR to add a cluster CR role to the bcdevex-admin team has been created in the devops-platform-operations-docs repo (PR-13)
+
+Adding a cluster-rolebinding for the artifactory-admin role is not covered by this installation, but will be required for any accounts that will be managing the lifecycle of the CRs.
 
 example command to add this cluster-role to an account:
 
@@ -174,6 +170,13 @@ In the project, confirm that the secret `artifactory-admin` exists with a passwo
 
 ![](images/admin-secret.png)
 
+#### Give Artifactory service account permissions
+
+``` bash
+oc apply -f deploy/service_account.yaml
+oc apply -f deploy/role_binding.yaml
+```
+
 #### Deploy Artifactory Operator
 
 ``` bash
@@ -187,7 +190,6 @@ oc apply -f deploy/operator.yaml
 An example Artifactory CR (Custom Resource) exists under `deploy/crds/artifactory-cr-template.yaml`:
 
 ```yaml
----
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:

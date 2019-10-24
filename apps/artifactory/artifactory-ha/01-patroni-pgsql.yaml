@@ -81,8 +81,7 @@ objects:
             "parameters":{
               "max_prepared_transactions":0,
               "max_connections":100,
-              "max_locks_per_transaction":64,
-              "synchronous_commit":"remote_apply"
+              "max_locks_per_transaction":64
             },
             "use_pg_rewind":true,
             "use_slots":true

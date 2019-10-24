@@ -47,3 +47,19 @@
         stringData:
           password: "{{ newPass }}"
 
+  - name: Create authenticated_users group
+    uri:
+      url: "{{ artifactory_url }}/artifactory/api/security/groups/authenticated_users"
+      user: "admin"
+      password: "{{ newPass }}"
+      method: PUT
+      body_format: json
+      headers:
+        Content-type: "application/json"
+      body: '{ "name": "authenticated_users", "description" : "All newly authenticated users are added to this group", "autoJoin" : true }'
+      force_basic_auth: yes
+      status_code: 201
+    ignore_errors: yes
+
+
+

@@ -110,11 +110,11 @@ objects:
                 name: ${DATABASE_NAME}
           - name: EXTRA_JAVA_OPTIONS
             value: ${ARTIFACTORY_EXTRA_JAVA_OPTIONS}
-#          - name: ARTIFACTORY_MASTER_KEY
-#            valueFrom:
-#              secretKeyRef:
-#                key: master-key
-#                name: ${ARTIFACTORY_NAME}
+          - name: ARTIFACTORY_MASTER_KEY
+            valueFrom:
+              secretKeyRef:
+                key: master-key
+                name: ${ARTIFACTORY_NAME}
           - name: HA_IS_PRIMARY
             value: "true"
           - name: HA_MEMBERSHIP_PORT
@@ -289,11 +289,11 @@ objects:
                 name: ${DATABASE_NAME}
           - name: EXTRA_JAVA_OPTIONS
             value: ${ARTIFACTORY_EXTRA_JAVA_OPTIONS}
-#          - name: ARTIFACTORY_MASTER_KEY
-#            valueFrom:
-#              secretKeyRef:
-#                key: master-key
-#                name: ${ARTIFACTORY_NAME}
+          - name: ARTIFACTORY_MASTER_KEY
+            valueFrom:
+              secretKeyRef:
+                key: master-key
+                name: ${ARTIFACTORY_NAME}
           - name: HA_IS_PRIMARY
             value: "false"
           - name: HA_MEMBERSHIP_PORT
