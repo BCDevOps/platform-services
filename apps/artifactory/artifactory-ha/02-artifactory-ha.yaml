@@ -1,0 +1,544 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: ${ARTIFACTORY_NAME}-template
+  annotations:
+    description: "Template to create Artifactory HA"
+objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+    name: ${ARTIFACTORY_NAME}
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+    name: ${ARTIFACTORY_NAME}-bs
+  data:
+    binarystore.xml: |-
+      <!-- File system replication -->
+      <config version="2">
+          <chain template="file-system"/>
+      </config>
+
+- apiVersion: v1
+  data:
+    installer-info.json: |
+      {
+        "productId": "JFrogInstaller_Helm_${ARTIFACTORY_NAME}-0.12.22",
+        "features": [
+        {
+          "featureId": "AppVersion/${ARTIFACTORY_VERSION}"
+        },
+        {
+          "featureId": "Installer/helm"
+        },
+        {
+          "featureId": "Platform/kubernetes"
+        }
+        ]
+      }
+  kind: ConfigMap
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+    name: ${ARTIFACTORY_NAME}-installer-info
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: ${ARTIFACTORY_NAME}
+    labels:
+      app: ${ARTIFACTORY_NAME}
+  type: Opaque
+  stringData:
+    master-key: ${ARTIFACTORY_MASTER_KEY}
+- apiVersion: v1
+  stringData:
+    bootstrap.creds: ${ARTIFACTORY_ACCESS_ADMIN}${ARTIFACTORY_BOOTSTRAP_CREDS}
+  kind: Secret
+  metadata:
+    name: ${ARTIFACTORY_NAME}-bootstrap-creds
+    labels:
+      app: ${ARTIFACTORY_NAME}
+  type: Opaque
+
+### Artifactory Primary SS
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+      role: ${ARTIFACTORY_NAME}-primary
+      component: artifactory-ha
+    name: ${ARTIFACTORY_NAME}-primary
+  spec:
+    selector:
+      matchLabels:
+        app: ${ARTIFACTORY_NAME}
+        role: ${ARTIFACTORY_NAME}-primary
+        component: artifactory-ha
+    serviceName: ${ARTIFACTORY_NAME}-primary
+    template:
+      metadata:
+        labels:
+          app: ${ARTIFACTORY_NAME}
+          role: ${ARTIFACTORY_NAME}-primary
+          component: artifactory-ha
+      spec:
+        containers:
+        - command:
+          - /bin/sh
+          - -c
+          - |
+            mkdir -p /var/opt/jfrog/artifactory/access/etc; cp -Lrf /tmp/access/bootstrap.creds /var/opt/jfrog/artifactory/access/etc/bootstrap.creds; chmod 600 /var/opt/jfrog/artifactory/access/etc/bootstrap.creds; /entrypoint-artifactory.sh
+          env:
+          - name: DB_TYPE
+            value: postgresql
+          - name: DB_HOST
+            value: ${DATABASE_NAME}-master
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: ${APP_DB_USERNAME}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: app-db-password 
+                name: ${DATABASE_NAME}
+          - name: EXTRA_JAVA_OPTIONS
+            value: ${ARTIFACTORY_EXTRA_JAVA_OPTIONS}
+#          - name: ARTIFACTORY_MASTER_KEY
+#            valueFrom:
+#              secretKeyRef:
+#                key: master-key
+#                name: ${ARTIFACTORY_NAME}
+          - name: HA_IS_PRIMARY
+            value: "true"
+          - name: HA_MEMBERSHIP_PORT
+            value: "10017"
+          - name: HA_NODE_ID
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: HA_DATA_DIR
+            value: "/var/opt/jfrog/artifactory-ha"
+          - name: HA_BACKUP_DIR
+            value: "/var/opt/jfrog/artifactory-backup"
+          image: ${ARTIFACTORY_IMAGE_REGISTRY}:${ARTIFACTORY_VERSION}
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /artifactory/webapp/#/login
+              port: 8040
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: ${ARTIFACTORY_NAME}
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /artifactory/webapp/#/login
+              port: 8040
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources: 
+             requests:
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
+             limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
+          securityContext:
+            allowPrivilegeEscalation: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - name: volume
+            mountPath: /var/opt/jfrog/artifactory
+          - name: artifactory-ha-data
+            mountPath: "/var/opt/jfrog/artifactory-ha"
+          - name: artifactory-ha-backup
+            mountPath: "/var/opt/jfrog/artifactory-backup"
+          - name: binarystore-xml
+            mountPath: /artifactory_extra_conf/binarystore.xml
+            subPath: binarystore.xml
+          - name: access-bootstrap-creds
+            mountPath: /tmp/access/bootstrap.creds
+            subPath: bootstrap.creds
+          - name: installer-info
+            mountPath: /artifactory_extra_conf/info/installer-info.json
+            subPath: installer-info.json
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            if [ -d /var/opt/jfrog/artifactory/lost+found ]; then
+              rm -rfv /var/opt/jfrog/artifactory/lost+found
+            fi
+          image: alpine:3.8
+          imagePullPolicy: IfNotPresent
+          name: remove-lost-found
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/opt/jfrog/artifactory
+            name: volume
+        - command:
+          - sh
+          - -c
+          - |
+            until nc -z -w 2 ${DATABASE_NAME}-master 5432 && echo database ok; do
+              sleep 2;
+            done;
+          image: alpine:3.8
+          imagePullPolicy: IfNotPresent
+          name: wait-for-db
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: ${ARTIFACTORY_NAME}
+        serviceAccountName: ${ARTIFACTORY_NAME}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: binarystore-xml
+          configMap:
+            defaultMode: 420
+            name: ${ARTIFACTORY_NAME}-bs
+        - name: installer-info
+          configMap:
+            defaultMode: 420
+            name: ${ARTIFACTORY_NAME}-installer-info
+        - name: access-bootstrap-creds
+          secret:
+            defaultMode: 420
+            secretName: ${ARTIFACTORY_NAME}-bootstrap-creds
+        - name: artifactory-ha-data
+          persistentVolumeClaim:
+            claimName: ${ARTIFACTORY_NAME}-artifactory-ha-data-pvc-0
+        - name: artifactory-ha-backup
+          persistentVolumeClaim:
+            claimName: ${ARTIFACTORY_NAME}-artifactory-ha-backup-pvc
+    updateStrategy:
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - metadata:
+        name: volume
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: ${ARTIFACTORY_PVC_SIZE}
+### Artifactory Member StatefulSet
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+      role: ${ARTIFACTORY_NAME}-member
+      component: artifactory-ha
+    name: ${ARTIFACTORY_NAME}-member
+  spec:
+    replicas: ${{NUM_OF_MEMBERS}}
+    selector:
+      matchLabels:
+        app: ${ARTIFACTORY_NAME}
+        role: ${ARTIFACTORY_NAME}-member
+        component: artifactory-ha
+    serviceName: ${ARTIFACTORY_NAME}-member
+    template:
+      metadata:
+        labels:
+          app: ${ARTIFACTORY_NAME}
+          role: ${ARTIFACTORY_NAME}-member
+          component: artifactory-ha
+      spec:
+        containers:
+        - env:
+          - name: DB_TYPE
+            value: postgresql
+          - name: DB_HOST
+            value: ${DATABASE_NAME}-master
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: ${APP_DB_USERNAME}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: app-db-password
+                name: ${DATABASE_NAME}
+          - name: EXTRA_JAVA_OPTIONS
+            value: ${ARTIFACTORY_EXTRA_JAVA_OPTIONS}
+#          - name: ARTIFACTORY_MASTER_KEY
+#            valueFrom:
+#              secretKeyRef:
+#                key: master-key
+#                name: ${ARTIFACTORY_NAME}
+          - name: HA_IS_PRIMARY
+            value: "false"
+          - name: HA_MEMBERSHIP_PORT
+            value: "10017"
+          - name: HA_NODE_ID
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          - name: ART_PRIMARY_BASE_URL
+            value: http://${ARTIFACTORY_NAME}-primary:8081/artifactory
+          - name: HA_DATA_DIR
+            value: "/var/opt/jfrog/artifactory-ha"
+          - name: HA_BACKUP_DIR
+            value: "/var/opt/jfrog/artifactory-backup"
+          image: ${ARTIFACTORY_IMAGE_REGISTRY}:${ARTIFACTORY_VERSION}
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /artifactory/webapp/#/login
+              port: 8040
+              scheme: HTTP
+            initialDelaySeconds: 180
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: ${ARTIFACTORY_NAME}
+          ports:
+          - containerPort: 8081
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /artifactory/webapp/#/login
+              port: 8040
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          resources:
+             requests:
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
+             limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
+          securityContext:
+            allowPrivilegeEscalation: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - name: volume
+            mountPath: /var/opt/jfrog/artifactory
+          - name: artifactory-ha-data
+            mountPath: /var/opt/jfrog/artifactory-ha
+          - name: artifactory-ha-backup
+            mountPath: /var/opt/jfrog/artifactory-backup
+          - name: binarystore-xml
+            mountPath: /artifactory_extra_conf/binarystore.xml
+            subPath: binarystore.xml
+          - name: installer-info
+            mountPath: "/artifactory_extra_conf/info/installer-info.json"
+            subPath: installer-info.json
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            if [ -d /var/opt/jfrog/artifactory/lost+found ]; then
+              rm -rfv /var/opt/jfrog/artifactory/lost+found
+            fi
+          image: alpine:3.8
+          imagePullPolicy: IfNotPresent
+          name: remove-lost-found
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/opt/jfrog/artifactory
+            name: volume
+        - command:
+          - sh
+          - -c
+          - |
+            until nc -z -w 2 ${DATABASE_NAME}-master 5432 && echo database ok; do
+              sleep 2;
+            done;
+          image: alpine:3.8
+          imagePullPolicy: IfNotPresent
+          name: wait-for-db
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: ${ARTIFACTORY_NAME}
+        serviceAccountName: ${ARTIFACTORY_NAME}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: binarystore-xml
+          configMap:
+            defaultMode: 420
+            name: ${ARTIFACTORY_NAME}-bs
+        - name: installer-info
+          configMap:
+            defaultMode: 420
+            name: ${ARTIFACTORY_NAME}-installer-info
+        - name: artifactory-ha-data
+          persistentVolumeClaim:
+            claimName: ${ARTIFACTORY_NAME}-artifactory-ha-data-pvc-0
+        - name: artifactory-ha-backup
+          persistentVolumeClaim:
+            claimName: ${ARTIFACTORY_NAME}-artifactory-ha-backup-pvc
+    updateStrategy:
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - metadata:
+        creationTimestamp: null
+        name: volume
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: ${ARTIFACTORY_PVC_SIZE}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+      component: artifactory-ha
+    name: artifactory
+  spec:
+    host: ${ARTIFACTORY_DNS_NAME}
+    port:
+        targetPort: http
+    tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Redirect
+    to:
+      kind: Service
+      name: ${ARTIFACTORY_NAME}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+    name: ${ARTIFACTORY_NAME}
+  spec:
+    ports:
+    - name: http
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      app: ${ARTIFACTORY_NAME}
+      component: artifactory-ha
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${ARTIFACTORY_NAME}
+      role: ${ARTIFACTORY_NAME}-primary
+      component: artifactory-ha
+    name: ${ARTIFACTORY_NAME}-primary
+  spec:
+    ports:
+    - name: http
+      port: 8081
+      protocol: TCP
+      targetPort: 8081
+    selector:
+      app: ${ARTIFACTORY_NAME}
+      role: ${ARTIFACTORY_NAME}-primary
+      component: artifactory-ha
+    sessionAffinity: None
+    type: ClusterIP
+parameters:
+- description: Artifactory name
+  name: ARTIFACTORY_NAME
+  value: "artifactory"
+  required: true
+- description: Artifactory DNS Suffix
+  name: ARTIFACTORY_DNS_NAME
+  value: "artifacts.pathfinder.gov.bc.ca"
+  required: true
+- description: Artifactory version
+  name: ARTIFACTORY_VERSION
+  value: "6.9.1"
+  required: true
+- description: Location for registry where Artifactory image exists
+  name: ARTIFACTORY_IMAGE_REGISTRY
+  value: docker.bintray.io/jfrog/artifactory-pro
+  required: true
+- description: Artifactory volume size
+  name: ARTIFACTORY_PVC_SIZE
+  value: 25Gi
+  required: true
+- description: Database host
+  name: DATABASE_NAME
+  value: postgresql-95-rhel7
+  required: true
+- description: Number of member nodes in addition to the primary node
+  name: NUM_OF_MEMBERS
+  required: true
+- description: Database username
+  name: APP_DB_USERNAME
+- name: ARTIFACTORY_EXTRA_JAVA_OPTIONS
+  description: Artifactory Extra Java Options
+  displayName: Artifactory Extra Java Options
+  value: "-Xms1g -Xmx2g"
+- name: CPU_LIMIT
+  description: Artifactory CPU Limit
+  displayName: Artifactory CPU Limit
+  value: "1"
+  required: true
+- name: MEMORY_REQUEST
+  description: Artifactory Memory Request
+  displayName: Artifactory Memory Request
+  value: "2Gi"
+  required: true
+- name: MEMORY_LIMIT
+  description: Artifactory Memory Limit
+  displayName: Artifactory Memory Limit
+  value: "3Gi"
+  required: true
+- name: CPU_REQUEST
+  description: Artifactory CPU Request
+  displayName: Artifactory CPU Request
+  value: "500m"
+  required: true
+- name: ARTIFACTORY_MASTER_KEY
+  description: Artifactory master key
+  required: false
+- name: ARTIFACTORY_ACCESS_ADMIN
+  description: Artifactory access admin
+  value: "access-admin@127.0.0.1="
+  required: true
+- name: ARTIFACTORY_BOOTSTRAP_CREDS
+  description: Artifactory bootstrap creds
+  generate: expression
+  from: '[a-zA-Z0-9]{8}'
