@@ -1,0 +1,153 @@
+---
+# tasks file for artifactory
+- name: Create artifactory group
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_group_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" 
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json" 
+    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","description" : "{{ repository_description }}","autoJoin" : false,"adminPrivileges" : false}'
+    force_basic_auth: yes
+    status_code: 201
+
+- name: Create artifactory user
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_user_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" 
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json" 
+    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","email" : "artifactory-ci-{{ team_name }}-{{ repository_type }}-{{ repository_locator }}@pathfinder.gov.bc.ca","password": "{{ lookup("password", "/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation") }}","admin": false,"profileUpdatable": false,"disableUIAccess" : true,"internalPasswordDisabled": false,"realm": "Internal","groups" : [ "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" ]}'
+    force_basic_auth: yes
+    status_code: 201
+
+- name: Split virtual repo list
+  set_fact:
+     split_virtual_repos: "{{ list_virtual_repositories.split(',') }}"
+  when: repository_locator == "virtual"  
+
+- name: Create local artifactory repo
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_repo_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" 
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json" 
+    body: '{"key":"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","rclass":"local","packageType":"{{ repository_type }}","description":"{{ repository_description }}"}'
+    force_basic_auth: yes
+  when: repository_locator == "local"
+
+- name: Create virtual artifactory repo
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_repo_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" 
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json"
+    body: '{"key":"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","rclass":"virtual","packageType":"{{ repository_type }}","description":"{{ repository_description }}","repositories":{{ split_virtual_repos }}}'
+    force_basic_auth: yes
+  when: repository_locator == "virtual"
+
+- name: Add permission for repository
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_permission_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json"
+    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","repo":{"include-patterns": ["**"],"exclude-patterns": [""],"repositories": ["{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"],"actions": {"groups" : {"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" : ["manage","read","write","annotate","delete","manage"]}}}}'
+    force_basic_auth: yes
+
+- name: Create route for docker registry
+  k8s:
+    state: present
+    definition:
+      apiVersion: route.openshift.io/v1
+      kind: Route
+      metadata:
+        labels:
+          app: artifactory
+        name: "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
+        namespace: "{{ meta.namespace }}"
+      spec:
+        host: "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}.pathfinder.gov.bc.ca"
+        port:
+          targetPort: http
+        tls:
+          insecureEdgeTerminationPolicy: Redirect
+          termination: edge
+        to:
+          kind: Service
+          name: artifactory
+          weight: 100
+        wildcardPolicy: None
+  when: repository_type == "docker" and console == "prod"
+
+- name: Create route for docker registry
+  k8s:
+    state: present
+    definition:
+      apiVersion: route.openshift.io/v1
+      kind: Route
+      metadata:
+        labels:
+          app: artifactory
+        name: "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
+        namespace: "{{ meta.namespace }}"
+      spec:
+        host: "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}.lab.pathfinder.gov.bc.ca"
+        port:
+          targetPort: http
+        tls:
+          insecureEdgeTerminationPolicy: Redirect
+          termination: edge
+        to:
+          kind: Service
+          name: artifactory
+          weight: 100
+        wildcardPolicy: None
+  when: repository_type == "docker" and console == "lab"
+
+- name: Generate token for repo
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_token_endpoint }}" 
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: POST
+    headers:
+      Content-type: "application/x-www-form-urlencoded" 
+    body_format: form-urlencoded
+    body: '{"username":"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}", "expires_in":"0", "scope":"member-of-groups:{{ team_name }}-{{ repository_type }}-{{ repository_locator }}", "token_type":"Bearer"}'
+    force_basic_auth: yes
+    #status_code: 200
+  register: token_gen
+
+- debug:
+    msg: "{{ token_gen.json.access_token }}"
+
+- set_fact:
+    token: "{{ token_gen.json.access_token | b64encode }}"
+
+- name: Create secret for token
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
+        namespace: "{{ meta.namespace }}"
+      type: Opaque
+      data:
+        password: "{{ token }}"
