@@ -63,12 +63,16 @@ $pwd
 
 ``` bash
 oc apply -f deploy/crds/artifactoryrepo_v1alpha1_artifactoryrepo_crd.yaml
-oc apply -f deploy/role.yaml
 ```
+##### Give the service account for the Artifactory Operator deployment required permissions
 
-A separate PR to add a cluster CR role to the bcdevex-admin team has been created in the devops-platform-operations-docs repo (PR-13)
-
+``` bash
+oc apply -f deploy/service_account.yaml
+oc apply -f deploy/role.yaml
+oc apply -f deploy/role_binding.yaml
+```
 Adding a cluster-rolebinding for the artifactory-admin role is not covered by this installation, but will be required for any accounts that will be managing the lifecycle of the CRs.
+A separate PR to add a cluster CR role to the bcdevex-admin team has been created in the devops-platform-operations-docs repo (PR-13)
 
 example command to add this cluster-role to an account:
 
@@ -169,13 +173,6 @@ oc project <artifactory-project>
 In the project, confirm that the secret `artifactory-admin` exists with a password for Artifactory. Leave Username blank.
 
 ![](images/admin-secret.png)
-
-#### Give Artifactory service account permissions
-
-``` bash
-oc apply -f deploy/service_account.yaml
-oc apply -f deploy/role_binding.yaml
-```
 
 #### Deploy Artifactory Operator
 
