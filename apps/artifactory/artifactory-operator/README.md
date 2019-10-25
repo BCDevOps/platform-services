@@ -270,5 +270,5 @@ LIST_REPOS_VIRTUAL="ops-docker-local,dev-docker-local"
 Create the Custom Resource:
 
 ``` bash
- oc process -f artifactory-cr-template.yaml --param-file=team-type-locator.env --ignore-unknown-parameters=true  | oc create -f -
+ oc --as=system:serviceaccount:openshift:bcdevops-admin process -f artifactory-cr-template.yaml --param-file=team-type-locator.env --ignore-unknown-parameters=true | oc --as=system:serviceaccount:openshift:bcdevops-admin create -f -
 ```

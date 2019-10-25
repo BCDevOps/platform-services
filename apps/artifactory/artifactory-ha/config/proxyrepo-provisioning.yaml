@@ -26,6 +26,7 @@
       - { repo_key: 'maven-remote', repo_desc: 'Remote Maven Repository', remote_url: 'https://repo1.maven.org/maven2', pkg_type: 'maven' }
       - { repo_key: 'vivid-maven-remote', repo_desc: 'Remote Vivid Maven Repository', remote_url: 'http://mvn.vividsolutions.com/artifactory/repo', pkg_type: 'maven' }
       - { repo_key: 'windward-maven-remote', repo_desc: 'Remote Windward Maven Repository', remote_url: 'http://maven-repository.windward.net/artifactory/libs-release', pkg_type: 'maven' }
+      - { repo_key: 'pypi-remote', repo_desc: 'Remote PyPi Repository', remote_url: 'https://pypi.org/', pkg_type: 'pypi' }
 
   tasks:
   - name: Create Remote Repos
