@@ -100,6 +100,24 @@ In the subsections below we'll use one or more tags to identify the source and d
 
 See the `samples` folder accompanying these instructions for more information.
 
+### Namespace to OCP API
+
+The OCP has an internal API that your environment needs to communicate with to run deployments and for other internal mechanics to work. Change the source namespace in the sample below and apply it.
+
+```yaml
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: pods-to-api
+spec:
+  description: |
+    Allow pods to talk to the internal OCP api 
+  source:
+    - - $namespace=handy-dandy-prod
+  destination:
+    - - int:network=internal-cluster-api-endpoint
+```
+
 ### Intra-namespace
 
 This sample policy is used to allow pods to communicate within a given namespace; there is no need to supply the name of the namespace for this policy by default as it is implied. Create a policy similar to this one for each system that needs to open a network connection to another system. In a simple application this would typically include:
@@ -176,7 +194,7 @@ The sample below allows the API pod(s) to open connections to any system on the 
 
 ### Namespace to Namespace
 
-This sample policy is used to allow pods to communicate accross namespaces; typically use this type of policy to talk to other applications hosted on the OCP. Create a policy similar to this one for each system that needs to **create** connections to another OCP namespace. The owner of the `destination` namespace will need a similar policy to allow incoming connections from the `source` namespace. 
+This sample policy is used to allow pods to communicate across namespaces; typically use this type of policy to talk to other applications hosted on the OCP. Create a policy similar to this one for each system that needs to **create** connections to another OCP namespace. The owner of the `destination` namespace will need a similar policy to allow incoming connections from the `source` namespace. 
 
 The sample below allows the API pod(s) to open connections to a specific pod(s) in a different namespace.
 
@@ -204,8 +222,6 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
 
 * Use enough labels to uniquely identify the target system. Its better to not solely rely on generic tags like `env=production` or `app=theirapp`.
 
-**🤓 ProTip**
-
 * Use YAML syntax for the AND and OR logical operators in the NSP. `- -` in front of a label, means `OR`, `-` - means `AND`.Example:
 ```
   destination:
@@ -220,6 +236,7 @@ This access policy will apply to a pod that is part of the fpo namespace, is mar
   - - role=web
 ```
 This policy will apply to all pods that are either API or WEB pods.
+
 
 ## Usage
 

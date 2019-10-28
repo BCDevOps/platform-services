@@ -18,6 +18,7 @@ data:
       hostModeEnabled: false
       hostServices: []
       ignoreExpression:
+        - - '@app:k8s:hostnetwork=true'
 {% for ns in openshift_project_exclusions %}
         - - '@app:k8s:namespace={{ ns }}'
 {% endfor %}
@@ -39,9 +40,11 @@ data:
       targetNetworks:
        - {{ cluster_network }}
        - {{ host_network }}
+       - {{ service_network }}
       targetUDPNetworks: 
        - {{ cluster_network }}
        - {{ host_network }}
+       - {{ service_network }}
       transmitterNumberOfQueues: 4
       transmitterQueue: 4
       transmitterQueueSize: 500

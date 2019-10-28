@@ -1,0 +1,29 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: artifactoryrepos.artifactoryrepo.operators.bcgov
+spec:
+  group: artifactoryrepo.operators.bcgov
+  names:
+    kind: ArtifactoryRepo
+    listKind: ArtifactoryRepoList
+    plural: artifactoryrepos
+    singular: artifactoryrepo
+  scope: Namespaced
+  subresources:
+    status: {}
+  version: v1alpha1
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+
+# Moved to platform ops repository to better track all cluster role creation.
+#apiVersion: v1
+#kind: ClusterRole
+#metadata:
+#  name: artifactory-admin
+#rules:
+#- apiGroups: ["artifactoryrepo.operators.bcgov"]
+#  resources: ["artifactoryrepos"]
+#  verbs: ["*"]

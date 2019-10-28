@@ -1,0 +1,65 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    artifactory_url: "{{ lookup('env', 'ARTIFACTORY_URL') }}"
+    newPass: "{{ lookup('env', 'ARTIFACTORY_ADMIN') }}"
+    security_endpoint: "artifactory/api/security/users/authorization/changePassword"
+    installAdmin: password
+
+  tasks:
+  - name: Set Artifactory Admin pass
+    uri: 
+      url: "{{ artifactory_url }}/{{ security_endpoint }}"
+      user: "admin"
+      password: "{{ installAdmin }}"
+      method: POST
+      body_format: json
+      headers:
+        Content-type: "application/json"
+      body: '{"userName": "admin", "oldPassword": "{{ installAdmin }}", "newPassword1": "{{ newPass }}", "newPassword2": "{{ newPass }}"}'
+      force_basic_auth: yes
+    ignore_errors: yes
+
+  - name: Set Artifactory Custom URL Base
+    uri: 
+      url: "{{ artifactory_url }}/artifactory/api/system/configuration/baseUrl"
+      user: "admin"
+      password: "{{ newPass }}"
+      method: PUT
+      headers:
+        Content-type: "text/plain"
+      body: "{{ artifactory_url }}/artifactory"
+      force_basic_auth: yes
+
+  - name: Create Admin pass secret
+    k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: "artifactory-admin"
+          namespace: "devops-artifactory"
+        type: kubernetes.io/basic-auth
+        stringData:
+          password: "{{ newPass }}"
+
+  - name: Create authenticated_users group
+    uri:
+      url: "{{ artifactory_url }}/artifactory/api/security/groups/authenticated_users"
+      user: "admin"
+      password: "{{ newPass }}"
+      method: PUT
+      body_format: json
+      headers:
+        Content-type: "application/json"
+      body: '{ "name": "authenticated_users", "description" : "All newly authenticated users are added to this group", "autoJoin" : true }'
+      force_basic_auth: yes
+      status_code: 201
+    ignore_errors: yes
+
+
+

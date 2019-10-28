@@ -1,2 +1,3 @@
 #!/bin/sh
-documize -dbtype=mysql -port=5001 -db='root:documize@tcp(documize:3306)/documize'
+export DOCUMIZEDB="host=$DB_HOST port=$DB_PORT sslmode=disable user=$DB_USERNAME password=$DB_PASSWORD dbname=$DB_NAME"
+documize
