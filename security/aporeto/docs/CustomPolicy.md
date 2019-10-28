@@ -199,6 +199,16 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
       - - $namespace=handy-dandy-prod
 ```
 
+spec:
+  description: |
+    allow hak2zo-dev to talk to gl2uos-dev
+  destination:
+    - - $namespace=hak2zo-dev
+    - - $namespace=gl2uos-dev
+  source:
+    - - $namespace=gl2uos-dev
+    - - $namespace=hak2zo-dev
+
 **🤓 ProTip**
 
 * Use enough labels to uniquely identify the target system. Its better to not solely rely on generic tags like `env=production` or `app=theirapp`.
