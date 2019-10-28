@@ -11,12 +11,26 @@ tags:
 
 # Trust No One
 
-With the addition of new security components Platform Services is able to offer product teams the ability to operate in a Zero Trust model; Zero Trust is a security model you don't trust anything outside of your own components (pods).
+With the addition of new security components BCDevExchange's Platform Services is able to offer product teams the ability to operate in a Zero Trust security model; Zero Trust is a security model where you don't trust anything outside of your own components (pods), even pods don't trust each other!
 
-This is done by way of creating application identities for each component (Web, API, Database, etc) and based on this identity allowing specific components to talk to one another by creating `NetworkSecurityPolicy` (NSP) and, for more advanced solutions, `ExternalNetworks` (EN).
+The model works by using application identities created for each component/Processing Unit/pod (Web, API, Database, etc) of an application and custom network security policies that are added to an application as `NetworkSecurityPolicy` (NSP) custom resource objects (for more advanced solutions, `ExternalNetworks` (EN) objects), to explicity allow communication between the components.  
 
 **:point_up: Note**
-* New namespaces provisioned on the Platform after Oct 9, 2019 come with **Zero-Trust Model enabled by default**. In order to enable application pods to communicate with Internet, with the Platform,  with other namespaces, or among themselves, a `NetworkSecurityPolicy` must be **manually** created in the application is described in the *QuickStart* guide below.
+* New namespaces provisioned on the Platform after Oct 9, 2019 come with **Zero-Trust Model enabled by default**. In order to enable application pods to communicate with Internet, with the Platform,  with other namespaces, or among themselves, a `NetworkSecurityPolicy` must be **manually** created in the application as described in the *QuickStart* guide below.
+
+* Communication rules defined in the custom network security policy described in the `NetworkSecurityPolicy` object must be created for **both direction** in order to enable the communication, e.g. namespace A is allowed talk to namespace B AND namespace B is allowed to talk to namespace A. 
+
+```
+spec:
+  description: |
+    allow nmspc1-dev to talk to nmspc2-dev
+  destination:
+    - - $namespace=nmspcA-dev
+    - - $namespace=nmspcB-dev
+  source:
+    - - $namespace=nmspcB-dev
+    - - $namespace=nmspcA-dev
+``` 
 
 **🤓 ProTip**
 
@@ -46,4 +60,6 @@ If you've followed the steps in the guides listed above and things aren't workin
 
 This is a list of some projects that have already implemented a Zero Trust security model:
 
-[Family Protection Order](https://github.com/bcgov/Family-Protection-Order)
+* [Family Protection Order (FPO)](https://github.com/bcgov/Family-Protection-Order) application - [search](https://github.com/bcgov/Family-Protection-Order/search?q=NetworkSecurityPolicy&unscoped_q=NetworkSecurityPolicy) for "networksecuritypolicy" in the repo to see how FPO implemented their network security policies.
+
+* [Court Administration Scheduling API (FPO)](https://github.com/bcgov/cass-api) application

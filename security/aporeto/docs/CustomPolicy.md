@@ -7,6 +7,7 @@ This tutorial will guide you through creating application identities for each of
 By the end of the document you will be able to create policy to manage:
 
 * External network ingress and egress;
+* Namespace to the platform API (for builds)
 * Namespace to namespace communication; and
 * Pod to pod communication.
 
@@ -198,16 +199,6 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
       - - env=production
       - - $namespace=handy-dandy-prod
 ```
-
-spec:
-  description: |
-    allow hak2zo-dev to talk to gl2uos-dev
-  destination:
-    - - $namespace=hak2zo-dev
-    - - $namespace=gl2uos-dev
-  source:
-    - - $namespace=gl2uos-dev
-    - - $namespace=hak2zo-dev
 
 **🤓 ProTip**
 
