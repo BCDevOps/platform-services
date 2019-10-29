@@ -222,19 +222,20 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
 
 * Use enough labels to uniquely identify the target system. Its better to not solely rely on generic tags like `env=production` or `app=theirapp`.
 
-* Use YAML syntax for the AND and OR logical operators in the NSP. `- -` in front of a label, means `OR`, `-` - means `AND`.Example:
-```
-  destination:
-  - - role=api
-    - app=fpo
-    - env=dev
-```
-This access policy will apply to a pod that is part of the fpo namespace, is marked with the role=api and runs in a dev environment.
-```
-  destination:
-  - - role=api
-  - - role=web
-```
+* Use YAML syntax for the **AND and OR** logical operators in the NSP; 
+  - using the **AND** operand is shown below, ensuring that the destination PU **must match all 3 specified labels**
+    ```
+      destination:
+      - - role=api
+        - app=fpo
+        - env=dev
+    ```
+  - using the **OR** operand is shown below, ensuring that the destination PU **must match at least 1** of the defined labels
+    ```
+      destination:
+      - - role=api
+      - - role=web
+    ```
 This policy will apply to all pods that are either API or WEB pods.
 
 
