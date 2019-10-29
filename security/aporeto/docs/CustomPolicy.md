@@ -236,7 +236,6 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
       - - role=api
       - - role=web
     ```
-This policy will apply to all pods that are either API or WEB pods.
 
 
 ## Usage
