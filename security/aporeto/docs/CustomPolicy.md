@@ -150,19 +150,19 @@ This sample policy is used to allow external networks to communicate with pods; 
 The sample below allows the Web pod(s) to accept connections to from the Internet.
 
 ```yaml
-- kind: NetworkSecurityPolicy
-  apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-  metadata:
-    name: external-ingress
-  spec:
-    description: |
-      Allow the frontend (web) to receive connections from the Internet.
-    source:
-      - - ext:network=any
-    destination:
-      - - app=myapp
-        - role=web
-        - env=production
+kind: NetworkSecurityPolicy
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+metadata:
+  name: external-ingress
+spec:
+  description: |
+    Allow the frontend (web) to receive connections from the Internet.
+  source:
+    - - ext:network=any
+  destination:
+    - - app=myapp
+      - role=web
+      - env=production
 ```
 
 **🤓 ProTip**
@@ -176,20 +176,20 @@ This sample policy is used to allow pods to communicate with an external network
 The sample below allows the API pod(s) to open connections to any system on the Internet.
 
 ```yaml
-- kind: NetworkSecurityPolicy
-  apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-  metadata:
-    name: internal-egress
-  spec:
-    description: |
-      Allow the backend (API) to open connections to the
-      Internet.
-    source:
-      - - app=myapp
-        - role=api
-        - env=production
-    destination:
-      - - ext:network=any
+kind: NetworkSecurityPolicy
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+metadata:
+  name: internal-egress
+spec:
+  description: |
+    Allow the backend (API) to open connections to the
+    Internet.
+  source:
+    - - app=myapp
+      - role=api
+      - env=production
+  destination:
+    - - ext:network=any
 ```
 
 ### Namespace to Namespace
@@ -199,23 +199,23 @@ This sample policy is used to allow pods to communicate across namespaces; typic
 The sample below allows the API pod(s) to open connections to a specific pod(s) in a different namespace.
 
 ```yaml
-- kind: NetworkSecurityPolicy
-  apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
-  metadata:
-    name: ns2ns-comms
-  spec:
-    description: |
-      Allow the backend (API) to open connections to backend (API) pod(s)
-      in the handy-dandy-prod namespace.
-    source:
-      - - app=myapp
-        - role=api
-        - env=production
-    destination:
-      - - app=theirapp
-        - role=api
-        - env=production
-        - $namespace=handy-dandy-prod
+kind: NetworkSecurityPolicy
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+metadata:
+  name: ns2ns-comms
+spec:
+  description: |
+    Allow the backend (API) to open connections to backend (API) pod(s)
+    in the handy-dandy-prod namespace.
+  source:
+    - - app=myapp
+      - role=api
+      - env=production
+  destination:
+    - - app=theirapp
+      - role=api
+      - env=production
+      - $namespace=handy-dandy-prod
 ```
 
 **🤓 ProTip**
