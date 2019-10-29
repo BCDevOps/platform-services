@@ -22,12 +22,12 @@ Sample configuration to enable the 3 above mentioned policies can be found in th
 
 **🤓 ProTip**
 
-* 🚫 It is **strongly advised** to create robust and meaninful access policies that match specific requirements of each application. The sample policies are provided for guidance only and should NOT be assumed to be the best practices recommended for all applications.  
+* 🚫 It is **strongly advised** to create robust and meaninful access policies that match specific requirements of each application. The sample policies are provided for guidance only and should NOT be assumed to be the best practices recommended for all applications.  Refer to [Custom Policy Development Guide](./CustomPolicy.md) for step-by-step instructions for developing custom network security policies for an application.
 
 
 ## Usage
 
-Check to see if you have any existing NSP. The best and most simple way to view your existing NSP is to use the `oc` command line interface. Run the following command to see installed policy:
+Check to see if you have any existing NSPs. The best and most simple way to view your existing NSPs is to use the `oc` command line interface. Run the following command to see installed policy:
 
 ```console
 oc get networksecuritypolicy
@@ -56,7 +56,7 @@ To add 3 base policies to your application, download the [quickstart-nsp.yaml](.
 
 **:point_up: Note**
 
-> The access policies defined in the NSP will apply to all pods within the namespace.
+> The namespace-level access policies defined in the NSP will apply to all pods within that namespace.
 
 If you're not sure of the exact name use the `oc project` command to find out what project you're using.
 
@@ -116,5 +116,12 @@ spec:
 
 ### Test application connectivity
 
-Once an access policy is enabled, you can use the [TestConnection.sh](https://github.com/BCDevOps/openshift-developer-tools/blob/master/bin/testConnection) script available as part of [BCDevOps/openshift-developer-tools](https://github.com/BCDevOps/openshift-developer-tools) repo to test the connectivity of the pods in your namespace.
+Once an access policy is enabled, you can use the [TestConnection](https://github.com/BCDevOps/openshift-developer-tools/blob/master/bin/testConnection) script available as part of [BCDevOps/openshift-developer-tools](https://github.com/BCDevOps/openshift-developer-tools) repo to test the connectivity of the pods in your namespace.
 
+### Add Network Security Policy code to your repo
+
+It is recommended to use the `oc apply` command only while designing a network security policy. Once the policy is finalized, store it to the application's repo together with the rest of the OCP templates for the application component that the policy applies to and where it can be included in the deployment pipeline for your application. (See [BC Gov's Openshift Developer Tools](https://github.com/BCDevOps/openshift-developer-tools) and [BC Developer Kit](https://github.com/BCDevOps/bcdk) repos that include a variety of deployment automation scripts for developers). 
+
+**🤓 ProTip**
+
+* See [Family Protection Order (FPO)](https://github.com/bcgov/Family-Protection-Order) and [Court Administration Scheduling API](https://github.com/bcgov/cass-api) repos and search for "networksecuritypolicy" to see where the security policies are stored within the repo structure.

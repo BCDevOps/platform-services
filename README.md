@@ -9,6 +9,7 @@ This repository holds all code required to deploy and maintain applications that
 - Security 
   - Aporeto:  Any Aporeto related documentation and deployment artifacts
       - [Docs](security/aporeto/readme.md)
+      - [Developer Quickstart](security/aporeto/docs/QuickStart.md)
 - Tools
     - OpenShift Jenkins version audit script
       - [Docs](tools/audit/jenkins_versions/readme.md)
