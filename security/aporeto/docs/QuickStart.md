@@ -116,7 +116,7 @@ spec:
 
 ### Test application connectivity
 
-Once an access policy is enabled, you can use the [TestConnection.sh](https://github.com/BCDevOps/openshift-developer-tools/blob/master/bin/testConnection) script available as part of [BCDevOps/openshift-developer-tools](https://github.com/BCDevOps/openshift-developer-tools) repo to test the connectivity of the pods in your namespace.
+Once an access policy is enabled, you can use the [TestConnection](https://github.com/BCDevOps/openshift-developer-tools/blob/master/bin/testConnection) script available as part of [BCDevOps/openshift-developer-tools](https://github.com/BCDevOps/openshift-developer-tools) repo to test the connectivity of the pods in your namespace.
 
 ### Add Network Security Policy code to your repo
 
