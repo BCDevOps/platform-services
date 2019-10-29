@@ -2,6 +2,7 @@
 - version: v1alpha1
   group: secops.pathfinder.gov.bc.ca
   kind: NetworkSecurityPolicy
+  maxRunnerArtifacts: 3
   reconcilePeriod: 24h
 #  maxWorkers: 10
   playbook: /opt/ansible/netsecpol-main.yaml
