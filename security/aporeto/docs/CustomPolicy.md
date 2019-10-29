@@ -218,9 +218,40 @@ spec:
       - $namespace=handy-dandy-prod
 ```
 
+#### Bidirectional Namespace to Namespace Communication
+When starting out with communication between namespaces you may need to start with a more permissive policy. For bidirectional namespace communication there are 2 flows of traffic to consider: 
+1. Communication to and from **Project Alpha** 
+  - Pods from project **Alpha** initiating an **egress connection** to pods in project **Bravo** 
+  - Pods from project **Alpha** accepting an **ingress connection** from pods in project **Bravo**
+2. Communication to and from **Project Bravo**
+  - Pods from project **Bravo** initiating an **egress connection** to pods in project **Alpha** 
+  - Pods from project **Bravo** accepting an **igress connection** from pods in project **Alpha** 
+
+
+![Bidirectional Namespace to Namespace Flow](assets/namespace-namespace-bidirectional.png)
+
+This can be configured in a single NetworkSecurityPolicy object. Apply the following yaml to each namespace: 
+
+```yaml
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: allow-alpha-and-bravo-to-talk
+spec:
+  description: |
+    Allow all pods in alpha and bravo to communicate
+  source:
+    - - $namespace=bravo
+    - - $namespace=alpha
+  destination:
+    - - $namespace=alpha
+    - - $namespace=bravo
+```
+:exclamation: The above policy is very permissive. Once your application flow patterns have been created, adjust the NetworkSecurityPolicy objects for a more specific and restrictive communcation policy as suggested in the beginning of this section. 
+
 **🤓 ProTip**
 
-* Use enough labels to uniquely identify the target system. Its better to not solely rely on generic tags like `env=production` or `app=theirapp`.
+* Use enough labels to uniquely identify the source and destination pods or processing units. Try not to rely solely on generic labels like `env=production` or `app=theirapp`.
 
 * Use YAML syntax for the **AND and OR** logical operators in the NSP; 
   - using the **AND** operand is shown below, ensuring that the destination PU **must match all 3 specified labels**
@@ -246,7 +277,7 @@ Creating a Zero Trust security model is relatively easy; here's how you'll do it
 
 Open your deployment manifest and add labels to your `DeploymentConfig` sections to uniquely identify each one:
 
-![Add Labels](add_labels.gif)
+![Add Labels](assets/add_labels.gif)
 
 In this illustration I have a minio deployment that I add the label `role: objstore` to and an API deployment I add `role: api` to.
 
@@ -368,7 +399,7 @@ status:
 
 Open the OCP administration console and navigate to the namespace containing the NSP you want to inspect. Next, go to Resources -> Other Resources and use the dropdown to select 'Network Security Policy'.
 
-![Web View NSP](webview_nsp.gif)
+![Web View NSP](assets/webview_nsp.gif)
 
 ### Remove It
 
