@@ -1,0 +1,33 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: |-
+      Template for creating custom resource for Artifactory Service Accounts
+  name: artifactory-sa-cr-template
+objects:
+- apiVersion: artifactorysa.operators.bcgov/v1alpha1
+  kind: ArtifactorySA
+  metadata:
+    name: ${LICENSE_PLATE}-${DESCRIPTOR}
+  spec:
+    console: ${CONSOLE_NAME}
+    sa_descriptor: ${DESCRIPTOR}
+    project_lp: ${LICENSE_PLATE}
+parameters:
+- description: Cluster where the CR is being created (choose between "lab" or "prod"
+  displayName: Console Name
+  name: CONSOLE_NAME
+  value: lab
+- description: Project license plate
+  displayName: license_plate
+  name: LICENSE_PLATE
+  value: devops-artifactory
+- description: Unique name for the service account, indicating the account's purpose
+  displayName: descriptor
+  name: DESCRIPTOR
+  value: test-account
+- description: User to run the ansible operator as
+  displayName: Operator User
+  name: USER
+  value: admin

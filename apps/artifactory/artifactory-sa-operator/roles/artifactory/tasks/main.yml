@@ -1,0 +1,58 @@
+---
+# tasks file for artifactory
+- name: Create artifactory group
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_group_endpoint }}/{{ license_plate }}-{{ descriptor }}"
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json" 
+    body: '{"name": "{{ license_plate }}-{{ descriptor }}","description" : "group for {{ license_plate }}-{{ descriptor }}","autoJoin" : false,"adminPrivileges" : false}'
+    force_basic_auth: yes
+    status_code: 201
+
+- name: Create artifactory user
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_user_endpoint }}/{{ license_plate }}-{{ descriptor }}"
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json" 
+    body: '{"name": "{{ license_plate }}-{{ descriptor }}","email" : "artifactory-ci-{{ license_plate }}-{{ descriptor }}@pathfinder.gov.bc.ca","password": "{{ lookup("password", "/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation") }}","admin": false,"profileUpdatable": false,"disableUIAccess" : true,"internalPasswordDisabled": false,"realm": "Internal","groups" : [ "{{ license_plate }}-{{ descriptor }}" ]}'
+    force_basic_auth: yes
+    status_code: 201
+
+- name: Add permission for repository
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_permission_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json"
+    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","repo":{"include-patterns": ["**"],"exclude-patterns": [""],"repositories": ["{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"],"actions": {"groups" : {"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" : ["manage","read","write","annotate","delete","manage"]}}}}'
+    force_basic_auth: yes
+
+- debug:
+    msg: "{{ token_gen.json.access_token }}"
+
+- set_fact:
+    token: "{{ token_gen.json.access_token | b64encode }}"
+
+- name: Create secret for token
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: "{{ license_plate }}-{{ descriptor }}"
+        namespace: "{{ meta.namespace }}"
+      type: Opaque
+      data:
+        password: "{{ token }}"
