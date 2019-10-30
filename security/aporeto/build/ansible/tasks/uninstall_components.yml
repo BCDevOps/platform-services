@@ -1,6 +1,11 @@
 ---
 - name: Remove components with Helm Template
   block: 
+    - name: Label nodes to disable enforcers
+      shell: oc label node {{ item }} aporeto-enforcerd=false --overwrite=true
+      with_items: 
+        - "{{ node_list }}"
+      ignore_errors: true
     - name: Add the helm repo
       command: "helm repo add {{ helm_repo_name }} {{ aporeto_repo }}"
 
@@ -23,8 +28,21 @@
     - name: Validate that no resources are left 
       shell: "for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc get $crd --all-namespaces -o name; done"
 
-    # - name: Remove all BCGov SecOps custom resources 
-    #   shell: "for ns in $(oc get secopspolicies.secops.pathfinder.gov.bc.ca --all-namespaces | awk '{print $1}'); do oc delete secopspolicies.secops.pathfinder.gov.bc.ca --all -n $ns; done"
+    - name: get list of projects and custom resources 
+      shell: "for crd in $(oc api-resources --api-group=secops.pathfinder.gov.bc.ca -o name); do oc get $crd --all-namespaces -o custom-columns=KIND:.kind,NAME:.metadata.name,NAMESPACE:.metadata.namespace --no-headers; done "
+      register: crd_output
+
+    - name: patch crds and remove object
+      shell: "oc patch {{ item.split()[0] | lower }}/{{ item.split()[1] }} -p '{\"metadata\":{\"finalizers\":[]}}' --type=merge -n {{ item.split()[2] }} && oc delete {{ item.split()[0] | lower }}/{{ item.split()[1] }} -n {{ item.split()[2] }}"
+      with_items: 
+       - "{{ crd_output.stdout_lines }}"
+
+    - name: Validate that no resources are left 
+      shell: "for cr in $(oc api-resources --api-group=secops.pathfinder.gov.bc.ca -o name); do oc get $cr --all-namespaces -o name; done"
+
+    - name: Remove all BCGov SecOps CRDs
+      shell: "kubectl delete -f files/bcgov-networksecuritypolicy-operator/crds/definition.yaml"
+      ignore_errors: true         #errors show up even though the resources are removed successfully
 
     - name: Fetch helm charts for aporeto-operator
       command: "helm fetch aporeto/aporeto-operator"
@@ -45,8 +63,3 @@
     - name: Remove OpenShift Projects
       command: "oc delete project {{ openshift_project_prefix }}-enforcers {{ openshift_project_prefix }}-operator"
 
-    - name: Label nodes to remove enforcers
-      shell: oc label node {{ item }} aporeto-enforcerd=false --overwrite=true
-      with_items: 
-        - "{{ node_list }}"
-      ignore_errors: true

@@ -3,7 +3,7 @@
 # Aporeto Deployment Docs (Manual)
 This document outlines the manual steps used for deploying and configuring the environment. This will be converted to an Ansible playbook for consistency. 
 
-**Please note, this documentation is kept for reference but is not used for the deployment of Aporeto in the BCGov. This is automated with Ansible**
+**Please note, this documentation  is deprecated and is kept for reference but is not used for the deployment of Aporeto in the BCGov. This is automated with Ansible**
 
 # Deployment Steps
 
