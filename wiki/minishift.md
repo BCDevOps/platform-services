@@ -204,6 +204,9 @@ $ minishift version
 minishift v1.34.1+21103616
 CDK v3.10.0-1
 
+$ minishift config get vm-driver
+xhyve
+
 $ docker --version
 Docker version 19.03.4, build 9013bf5
 
