@@ -204,6 +204,15 @@ $ minishift version
 minishift v1.34.1+21103616
 CDK v3.10.0-1
 
+$ docker --version
+Docker version 19.03.4, build 9013bf5
+
+$ docker-compose --version
+docker-compose version 1.24.1, build 4667896b
+
+$ docker-machine --version
+docker-machine version 0.16.2, build bd45ab13
+
 $ docker version
 Client: Docker Engine - Community
  Version:           19.03.2
@@ -232,6 +241,7 @@ Server: Docker Engine - Community
  docker-init:
   Version:          0.18.0
   GitCommit:        fec3683
+
 ```
 
 # References
