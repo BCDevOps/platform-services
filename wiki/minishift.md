@@ -1,4 +1,12 @@
 
+# Dependencies
+- docker-machine-driver-xhyve
+  - Using homebrew
+    ```
+    brew install docker-machine-driver-xhyve
+    ```
+  - manually install from [CDK docs](https://access.redhat.com/documentation/en-us/red_hat_container_development_kit/3.7/html-single/getting_started_guide/index#setting-up-xhyve-driver)
+
 # Setup Red Hat Container Development Kit (for MacOS)
 
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/)
