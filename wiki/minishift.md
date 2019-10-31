@@ -1,3 +1,4 @@
+
 # Setup Red Hat Container Development Kit (for MacOS)
 
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/)
@@ -192,6 +193,45 @@ oc policy who-can get imagestreams/layers
 minishift delete
 rm -rf ~/.minishift
 rm -rf ~/.kube
+```
+
+# Tested environemnt
+```
+$ uname -a
+Darwin ***** 18.7.0 Darwin Kernel Version 18.7.0: Tue Aug 20 16:57:14 PDT 2019; root:xnu-4903.271.2~2/RELEASE_X86_64 x86_64
+
+$ minishift version
+minishift v1.34.1+21103616
+CDK v3.10.0-1
+
+$ docker version
+Client: Docker Engine - Community
+ Version:           19.03.2
+ API version:       1.40
+ Go version:        go1.12.8
+ Git commit:        6a30dfc
+ Built:             Thu Aug 29 05:26:49 2019
+ OS/Arch:           darwin/amd64
+ Experimental:      false
+
+Server: Docker Engine - Community
+ Engine:
+  Version:          19.03.2
+  API version:      1.40 (minimum version 1.12)
+  Go version:       go1.12.8
+  Git commit:       6a30dfc
+  Built:            Thu Aug 29 05:32:21 2019
+  OS/Arch:          linux/amd64
+  Experimental:     true
+ containerd:
+  Version:          v1.2.6
+  GitCommit:        894b81a4b802e4eb2a91d1ce216b8817763c29fb
+ runc:
+  Version:          1.0.0-rc8
+  GitCommit:        425e105d5a03fabd737a126ad93d62a9eeede87f
+ docker-init:
+  Version:          0.18.0
+  GitCommit:        fec3683
 ```
 
 # References
