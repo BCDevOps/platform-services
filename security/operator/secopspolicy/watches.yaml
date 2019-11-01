@@ -16,3 +16,11 @@
   finalizer:
     name: finalizer.secops.pathfinder.gov.bc.ca
     playbook: /opt/ansible/extnet-destroy.yaml
+- version: v1alpha1
+  group: secops.pathfinder.gov.bc.ca
+  kind: AporetoConsoleAccess
+  # reconcilePeriod: 24h
+  playbook: /opt/ansible/apoacl-main.yaml
+  # finalizer:
+  #   name: finalizer.secops.pathfinder.gov.bc.ca
+  #   playbook: /opt/ansible/extnet-destroy.yaml
