@@ -35,6 +35,9 @@ Is an option to build a REST API in front of NATS. Haven't spent much more time 
 #### JS Wehbook
 We've used a javascript based wehbook server to kick off ansible jobs (the status page uses this). It's really lightweight and simple (ie. receive webhook, run script). I suspect that any additional feature requests down the road may limit the functionality of this. 
 
+- [webhook code](https://github.com/adnanh/webhook)
+- [status page example](https://github.com/BCDevOps/platform-services/tree/master/apps/statuspage/.pipeline/ansible-webhook)
+
 ### Messaging
 
 #### NATS
