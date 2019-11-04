@@ -3,7 +3,7 @@ Is to be chnaged down the road.
 
 
 # Diagrams / Assets
-![Draw.io Initial Architecture Diagram](https://drive.google.com/file/d/1tMS2AXWfBy4oQ6eWhOS7ByuPrN2LJznF/view?usp=sharing)
+[Draw.io Initial Architecture Diagram](https://drive.google.com/file/d/1tMS2AXWfBy4oQ6eWhOS7ByuPrN2LJznF/view?usp=sharing)
 
 
 # Technical Pre-Analysis Notes
