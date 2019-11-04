@@ -60,12 +60,12 @@ There are two key automations in place for Aporeto Namespace management:
 
 
 ## Base Policies 
-A series of ["base" policies](../build/ansible/templates/network_access_policies) exist for the container platform specifically. These base policies are applied relative to the namespaces they need to be enforced upon; for example, the lab base policies are maintained in `/bcgov/platform-services/non-production/kamloops/lab/ocp311` while the production pathfinder base policies are maintained in `/bcgov/platform-services/production/kamloops/pathfinder`. These base policies are used to ensure that the OpenShift platform operates correctly with Aporeto deployed and are configured during the installation of Aporeto into the platform. They do not leverage the [**BCGov NetworkSecurityPolicy Operator**](../architecture/high_level_design.md#the-bcgov-networksecuritypolicy-operator) that is used for managing application specific access policies, and as a result, these policies can only be managed by the Aporeto ansible playbook or through the Aporeto CLU/UI with the appropriate permissions. The playbook is the preferred method for updating base policies and ensuring all changes are captured in code. 
+A series of ["base" policies](https://github.com/BCDevOps/platform-services/tree/master/security/aporeto/build/ansible/templates/network_access_policies) exist for the Platform specifically. These platform-level base policies are applied relative to the namespaces they need to be enforced upon; for example, the lab base policies are maintained in `/bcgov/platform-services/non-production/kamloops/lab/ocp311` while the production pathfinder base policies are maintained in `/bcgov/platform-services/production/kamloops/pathfinder`. These base policies are used to ensure that the OpenShift platform operates correctly with Aporeto deployed and are configured during the installation of Aporeto into the platform. They do not leverage the [**BCGov NetworkSecurityPolicy Operator**](../architecture/high_level_design.md#the-bcgov-networksecuritypolicy-operator) that is used for managing application specific policies, and as a result, the platform-level base policies can only be managed by the Aporeto ansible playbook or through the Aporeto CLU/UI with the appropriate permissions by the users with the admin access to the Platform. The playbook is the preferred method for updating base policies and ensuring all changes are captured in code. 
 
 Please refer to the **Playbook Flow** section of the Ansible [Build Docs ](../build/ansible/readme.md#playbook-flow-install) for a list of the base policies and their descriptions. These are created in the `apply_policies.yml` section of the playbook. 
 
 ### Policy Naming Conventions
-There are no hard restrictions on what developers will use for naming their policies. Every policy created by an end-user in the platform will be have a name that follows the convention: 
+There are no hard restrictions on what developers will use for naming their policies. Every policy created by an end-user in the platform should have a name that follows the convention: 
 - `custom-[object-type]-[object-name]`
 
 Developers can use any name that they wish for the `object-name`, however, it should be easy to determine what the policy does by it's name. This will help other team members when they are reviewing these objects. Some examples are outlined in the [developer guide](../docs/CustomPolicy.md). 
@@ -77,7 +77,7 @@ Aporeto has a concept of **Fallback Policies** that can be used to generate a mo
 Each OpenShift project/namespace is directly mapped to an Aporeto child namespace and developers are enabled to create/read/edit/delete Network Access Policies for their applications. This is achieved through the **BCGov NetworkSecurityPolicy Operator** and `NetworkSecurityPolicy` custom resources. Please refer to the [Developer Docs](../docs/README.md) for additional details and instructions. 
 
 **:point_up: Note**
-> Child namespace Network Access Policies cannot override policies that are created at a parent or higher level. This permites teams to create more granular policies for their applications, but security teams within government can apply high-level policies that are propagated to these child namespaces. 
+> Network security policies in a child namespace **cannot** override policies that are created at a parent or higher level. This permites teams to create more granular policies for their applications, but security teams within government can apply high-level policies that are propagated to these child namespaces. 
 
 ## Operations
 This section describes any additional operational design decisions that apply to this solution. 
@@ -89,8 +89,8 @@ The [Aporeto Console SaaS](../readme.md#accessing-the-console) solution provides
 A backup CronJob has been created to backup all configurations and policy within the `/bcgov` namespace on a daily basis. This can be used as secondary audit trail of daily configuration changes and can be leveraged if needed to re-import specific configurations into the Aporeto SaaS console. These backups are stored in the private git repo [bcgov-c/platform-secops-netpol](https://github.com/bcgov-c/platform-secops-netpol). Please refer to that repository for more details if you have the required access. 
 
 
-## Access Control 
-Access control to namespaces is managed through the Namespace Automation playbook referenced above. In order for users to gain access to their namespace, they must: 
+## Access to Aporeto Console 
+Access control to Aporeto namespaces is managed through the Namespace Automation playbook referenced above. In order for users to gain access to their namespace, they must: 
 - have the appropriate authorization policy created by the Namespace Automation playbook
 - have a proper email account tied to their github id
 - be authorized by Keycloak as the OIDC provider and must have 2FA enabled
