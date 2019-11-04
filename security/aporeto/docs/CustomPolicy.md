@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This tutorial will guide you through creating application identities for each of your deployable components (pods) within your OpenShift Container Platform (OCP) namespaces as well as building custom `NetworkSecurityPolicy` (NSP) based on these identities to secure communications between your components.
+This tutorial will guide you through creating application identities for each of your deployable components (pods) within your OpenShift Container Platform (OCP) namespaces as well as building custom application network security/access policy via `NetworkSecurityPolicy` (NSP) objects based on these identities to secure communications between your components.
 
 By the end of the document you will be able to create policy to manage:
 
@@ -20,7 +20,7 @@ __Application Identity__
 
 You build application identity by adding labels to the metadata portion of your OCP deployment manifests. For example, in the deployment manifest excerpt below the combination of labels build a unique application identity which can be referenced in the NSP to permit communication.
 
-Its worth noting that each deployment config should have at least one label that uniquely identifies it. In the example below this is accomplished using the `role=api` label; no other deployment will use this specific label. See the **Naming Convention** section below for best practices. 
+Its worth noting that each deployment config should have at least one label that uniquely identifies it. In the example below this is accomplished using the `role=api` label; no other deployment will use this specific label. See the **Application Identity Naming Convention** section below for best practices. 
 
 ```yaml
 - kind: DeploymentConfig
@@ -44,7 +44,7 @@ Its worth noting that each deployment config should have at least one label that
 * Add the `role=` label to each deployment config of your manifest to uniquely identify the pods.
 
 
-## Naming Convention
+## Application Identity Naming Convention
 
 The naming convention you use for labels that allow you to build your application identity should be no more complicated than necessary.
 
@@ -85,20 +85,20 @@ The `env` label will change based on the namespace the deployment targets and th
 * K.I.S - Keep It (your labels) Simple; don't try and outsmart yourself.
 * Where possible use the naming convention proposed here for uniformity across projects.
 
-## Policy
+## Custom Access Policies
 
-The policy below will provide most teams enough to get up and running in short order; Customize them with labels or template parameters as needed. If you find the sample policy below does not suite your needs contact platform services to help create more advanced policy.
+The access policies below will provide most teams enough to get up and running in short order. Customize them with labels or template parameters as needed. If you find the sample policy below does not suite your needs contact platform services to help create more advanced access policy.
 
 In the subsections below we'll use one or more tags to identify the source and destination systems. The relevance if `source` and `destination` is that the application identified in the `source` will be able to open a network connection to the application identified in `destination`; Once a connection is open then data is able to flow bidirectionally.
 
 | Field | Required | Description     |
 | ----------- |:--------:|:---------------|
-| name        | YES      | Use this field to uniquely identify policy. |
+| name        | YES      | Use this field to uniquely identify policy. Check out the [naming conventions](../architecture/design_decisions.md#policy-naming-conventions)  for custom network security policies. |
 | description | YES      | A brief description of what the policy does. |
 | source      | YES      | Tags used to identify the application that can initiate a network connection. |
 | destination | YES      | Tags used to identify the application that receives the network connection.
 
-See the `samples` folder accompanying these instructions for more information.
+See the [`samples` file](./sample/quickstart-nsp.yaml) accompanying these instructions for more information.
 
 ### Namespace to OCP API
 
@@ -108,7 +108,7 @@ The OCP has an internal API that your environment needs to communicate with to r
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: pods-to-api
+  name: custom-pods-to-api-[APP_NAME]
 spec:
   description: |
     Allow pods to talk to the internal OCP api 
@@ -129,7 +129,7 @@ This sample policy is used to allow pods to communicate within a given namespace
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: web2api-permit
+  name: custom-web2api-permit-[APP_NAME]
 spec:
   description: |
     allow the Web pod(s) to communicate to the API pod(s).
@@ -153,7 +153,7 @@ The sample below allows the Web pod(s) to accept connections to from the Interne
 kind: NetworkSecurityPolicy
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 metadata:
-  name: external-ingress
+  name: custom-external-ingress-[APP_NAME]
 spec:
   description: |
     Allow the frontend (web) to receive connections from the Internet.
@@ -179,7 +179,7 @@ The sample below allows the API pod(s) to open connections to any system on the 
 kind: NetworkSecurityPolicy
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 metadata:
-  name: internal-egress
+  name: custom-internal-egress-[APP_NAME]
 spec:
   description: |
     Allow the backend (API) to open connections to the
@@ -202,7 +202,7 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
 kind: NetworkSecurityPolicy
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 metadata:
-  name: ns2ns-comms
+  name: custom-ns2ns-comms-[APP_NAME]
 spec:
   description: |
     Allow the backend (API) to open connections to backend (API) pod(s)
@@ -236,7 +236,7 @@ This can be configured in a single NetworkSecurityPolicy object. Apply the follo
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: allow-alpha-and-bravo-to-talk
+  name: custom-allow-alpha-and-bravo-to-talk-[APP_NAME]
 spec:
   description: |
     Allow all pods in alpha and bravo to communicate
