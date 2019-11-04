@@ -12,6 +12,11 @@ Components are not yet fully assessed. This is a rough page of notes for differe
 ### Webhook / API Front End
 We need a Webhook receiver that can take the payload from multiple sources and translate them into NATS messages to be picked up by the business logic function. 
 
+For webhook receiver security, we likely need a function to automate the webhook creation: 
+- generage a unique webhook url endpoint
+- create / build the argo webhook CR 
+- generate SSL certs for security
+
 #### Gloo
 Looked at Gloo and it's pretty heavyweight for what we need... challenges to get it running on OCP **easily** makes me think it might not be the right fit for a mock-up. It does, however, promise a method of connecting to NATS.
 
@@ -22,6 +27,7 @@ Argo events has an interesting kube-native way of building a webhook listener an
   - Many different event sources (ie. schedules), not just wehbooks
 - Ties into NATS 
 - Can also be a subscriber to NATS and can run jobs based on events in the message queue
+
 
 #### Resgate
 Is an option to build a REST API in front of NATS. Haven't spent much more time looking into this. 
