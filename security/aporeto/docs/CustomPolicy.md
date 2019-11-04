@@ -1,5 +1,5 @@
 ---
-description: A how-to guide for developing custom network security policies for applications on the BC Gov's Openshift platform.
+description: How-to tutorial for adding custom network security policies to applications hosted on the Openshift platform to allow product teams to take advantage of the new security model that is now available on the platform through the use of the Aporeto software.
 tags:
 - next gen security
 - custom network policy
@@ -12,7 +12,8 @@ tags:
 - security policy sample example
 ---
 
-# Custom Policy
+# NetworkSecurityPolicy: Custom Policy Development
+
 
 ## Introduction
 
