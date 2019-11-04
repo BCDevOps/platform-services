@@ -1,4 +1,16 @@
-# Custom Policy
+---
+description: How-to tutorial for adding custom network security policies to applications hosted on the Openshift platform to allow product teams to take advantage of the new security model that is now available on the platform through the use of the Aporeto software.
+tags:
+- next gen security
+- custom network policy
+- Aporeto
+- zero trust
+- openshift security
+- platform security
+- networksecuritypolicy
+---
+
+# NetworkSecurityPolicy: Custom Policy
 
 ## Introduction
 
