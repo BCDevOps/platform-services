@@ -3,7 +3,7 @@ Is to be chnaged down the road.
 
 
 # Diagrams / Assets
-![Draw.io Initial Architecture Diagram](https://www.draw.io/?state=%7B%22ids%22:%5B%221tMS2AXWfBy4oQ6eWhOS7ByuPrN2LJznF%22%5D,%22action%22:%22open%22,%22userId%22:%22110874538951021374500%22%7D#G1tMS2AXWfBy4oQ6eWhOS7ByuPrN2LJznF)
+![Draw.io Initial Architecture Diagram](https://drive.google.com/file/d/1tMS2AXWfBy4oQ6eWhOS7ByuPrN2LJznF/view?usp=sharing)
 
 
 # Technical Pre-Analysis Notes
@@ -19,8 +19,12 @@ Looked at Gloo and it's pretty heavyweight for what we need... challenges to get
 Argo events has an interesting kube-native way of building a webhook listener and passing those events into sensors, also ensuring that dependencies are met. 
 - Pretty easy to get going for testing
 - It likely "too" feature filled, but this may help down the road with new unknown feature requests
+  - Many different event sources (ie. schedules), not just wehbooks
 - Ties into NATS 
 - Can also be a subscriber to NATS and can run jobs based on events in the message queue
+
+#### Resgate
+Is an option to build a REST API in front of NATS. Haven't spent much more time looking into this. 
 
 #### JS Wehbook
 We've used a javascript based wehbook server to kick off ansible jobs (the status page uses this). It's really lightweight and simple (ie. receive webhook, run script). I suspect that any additional feature requests down the road may limit the functionality of this. 
