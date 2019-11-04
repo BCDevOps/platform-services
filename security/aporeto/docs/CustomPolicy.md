@@ -1,3 +1,17 @@
+---
+description: A how-to guide for developing custom network security policies for applications on the BC Gov's Openshift platform.
+tags:
+- next gen security
+- custom network policy
+- Aporeto
+- zero trust
+- networksecuritypolicy
+- openshift security
+- platform security
+- application identity
+- security policy sample example
+---
+
 # Custom Policy
 
 ## Introduction

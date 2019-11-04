@@ -1,3 +1,19 @@
+---
+description: An overview of some of the design decisions made as part of the Aporeto implementation on the BC Gov's Openshift platform.
+tags:
+- next gen security
+- custom network policy
+- Aporeto
+- networksecuritypolicy
+- zero trust
+- openshift security
+- platform security
+- application identity
+- policy backup
+- policy change audit
+- namespace hierarchy and ownership
+---
+
 # Zero Trust Model Implementation Design Decisions
 
 ## Technology behind Zero Trust Model
@@ -89,14 +105,14 @@ The [Aporeto Console SaaS](../readme.md#accessing-the-console) solution provides
 A backup CronJob has been created to backup all configurations and policy within the `/bcgov` namespace on a daily basis. This can be used as secondary audit trail of daily configuration changes and can be leveraged if needed to re-import specific configurations into the Aporeto SaaS console. These backups are stored in the private git repo [bcgov-c/platform-secops-netpol](https://github.com/bcgov-c/platform-secops-netpol). Please refer to that repository for more details if you have the required access. 
 
 
-## Access to Aporeto Console 
-Access control to Aporeto namespaces is managed through the Namespace Automation playbook referenced above. In order for users to gain access to their namespace, they must: 
-- have the appropriate authorization policy created by the Namespace Automation playbook
-- have a proper email account tied to their github id
-- be authorized by Keycloak as the OIDC provider and must have 2FA enabled
+## Access to Aporeto Console (Coming soon...)
+Access control to Aporeto namespaces in Aporeto Console (https://console.aporeto.com) is managed through the Namespace Automation playbook referenced above. In order for users to gain access to their namespace, they must: 
+- have the appropriate authorization policy created by the Namespace Automation playbook (work in progress)
+- have a proper email account tied to their GitHub ID
+- have their GitHub ID added to BCDevOps organization in GitHub (requires the 2FA enabled)
 
-### OIDC Configuration: 
-Currently 2 OIDC providers are available: 
+### KeyCloak OIDC Configuration: 
+KeCloak SSO - prod and dev - instances have been configured as OIDC providers for access to the Aporeto Console.   
 - pathfinder-sso-prod
 - pathfinder-sso-dev
 

@@ -1,3 +1,20 @@
+---
+description: An overview of the implementation plan for enabling Zero-Trust security mode on the BC Gov's Openshift platform.
+tags:
+- next gen security
+- custom network policy
+- networksecuritypolicu
+- Aporeto
+- production go-live plan
+- zero trust
+- openshift security
+- platform security
+- application identity
+- policy backup
+- policy change audit
+- namespace hierarchy and ownership
+---
+
 # Production Rollout Plan
 
 ## Overview
@@ -33,25 +50,12 @@ In the outlined process above, all policies that allow the correct communication
 Once deployed, new projects that are created within OpenShift will not have **egress inernet** or **intra-namespace** communcation capabilities. This can either be automated (if desired) or development teams will need to create the desired policy when they are deploying their applications. 
 
 ## Roll-Out Timing
-The Production rollout is currently slated for Sprint #3; some time between **October 2 and October 15**.
+The Production rollout took place on **Oct 22, 2019**.
 
 The specific day and time has not yet been determined, but it would be ideal to make this change at the beginning of a regular working day such that app teams can help report any issues or affects this has on their applications. Based on experience in the lab, the playbook **may** take up to 45 minutes to complete due to the # of policies that need to be created.
 
 ## Communication Plan
-The production rollout plan has not yet been communicated to the end-user community. 
+The production rollout plan been communicated to the end-user community through Rocketchat devops-alert channel and as part of the platform's status page. 
 
-## Troubleshooting
-Basic troubleshooting steps can be found [here](admin/troubleshooting.md). 
 
-# Once Complete
-Remember to celebrate and find your favorite Giphy! 
 
-![](https://media.giphy.com/media/XreQmk7ETCak0/giphy.gif)
-
-![](https://media.giphy.com/media/xNBcChLQt7s9a/giphy.gif)
-
-![](https://media.giphy.com/media/vtVpHbnPi9TLa/giphy.gif)
-
-![](https://media.giphy.com/media/nXxOjZrbnbRxS/giphy.gif)
-
-All gifs via [giphy.com](https://giphy.com)
