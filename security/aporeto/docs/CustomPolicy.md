@@ -5,12 +5,15 @@ tags:
 - custom network policy
 - Aporeto
 - zero trust
+- networksecuritypolicy
 - openshift security
 - platform security
-- networksecuritypolicy
+- application identity
+- security policy sample example
 ---
 
-# NetworkSecurityPolicy: Custom Policy
+# NetworkSecurityPolicy: Custom Policy Development
+
 
 ## Introduction
 
