@@ -44,4 +44,11 @@ We've used a javascript based wehbook server to kick off ansible jobs (the statu
 So far we are looking at NATS. Easy to start with in a single image, also has an **operator to easily manage clusters**. The thought is that it would be the persistence and scale layer to help handle the amount of security events that may get pumped into the system. 
 
 
+### Data Storage
+Some form of data storage will be required in order to hold records that identify: 
+  - repo-name
+  - team-name
+  - security score
+  - items that affect the security score (ie. github notifications, aqua vulnerabilities, permissive network flows)
 
+Currently we can look at MongoDB for this as a starting point. It has a flexible approach that allows us to start without a defined schema as our needs evolve. 
