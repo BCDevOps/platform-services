@@ -1,6 +1,6 @@
 ## Overview
 
-This Ansible Operator has been written for Artifactory to handle multi-tenancy, repo creation and user permissions.
+This Ansible Operator has been written for Artifactory to handle service account creation.
 
 ## High-level architecture
 
@@ -60,28 +60,31 @@ Cluster admin will be required to create the cluster wide CRD and associated rol
 $pwd
 /artifactory/artifactory-sa-operator
 ```
-
-``` bash
-oc apply -f deploy/crds/artifactorysa_v1alpha1_artifactorysa_crd.yaml
-```
-
 ##### Give the service account for the Artifactory Operator deployment required permissions
 
-``` bash
-oc apply -f deploy/service_account.yaml
-```
-Adding a cluster-rolebinding for the artifactory-admin and artifactory-sa-operator roles is not covered by this installation, but will be required for any accounts that will be managing the lifecycle of the CRs.
+
+Adding a cluster-rolebinding for the artifactory-admin role is not covered by this installation, but will be required for any accounts that will be managing the lifecycle of the CRs.
 A separate PR to add a cluster CR role to the bcdevex-admin team has been created in the devops-platform-operations-docs repo (PR-13)
+
+Admins must run the following:
+```
+crds/crd-artifactorysa.yaml
+rbac/clusterrole-artifactory-sa-operator.yaml
+rbac/clusterrole-artifactory-sa-aggregate.yaml
+rbac/clusterole-artifactory-sa-admin.yaml
+rbac/clusterrolebinding-artifactory-sa-operator.yaml
+rbac/clusterrolebinding-artifactory-sa-admins.yaml
+```
 
 example command to add this cluster-role to an account:
 
 ``` bash
-oc adm policy add-cluster-role-to-user artifactory-admin <username>
+oc adm policy add-cluster-role-to-user artifactory-sa-admin <username>
 ```
 
 #### Build Operator Image:
 
-``` bash
+``` bash    
 $pwd
 /artifactory/artifactory-sa-operator
 ```
@@ -98,65 +101,7 @@ $ oc -n <namespace> tag <image-name>:latest <image-name>:v1-stable
 Replace the image name in the Operator deployment:
 
 ``` bash
-$ cat deploy/operator.yaml
-```
-
-``` yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: artifactory-operator
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      name: artifactory-operator
-  template:
-    metadata:
-      labels:
-        name: artifactory-operator
-    spec:
-      serviceAccountName: artifactory-operator
-      containers:
-        - name: ansible
-          command:
-          - /usr/local/bin/ao-logs
-          - /tmp/ansible-operator/runner
-          - stdout
-          # Replace this with the built image name
-          image: "<REPLACE-ME>" <<<REPLACE IMAGE>>>
-          imagePullPolicy: "Always"
-          volumeMounts:
-          - mountPath: /tmp/ansible-operator/runner
-            name: runner
-            readOnly: true
-        - name: operator
-          # Replace this with the built image name
-          image: "<REPLACE-ME>" <<<REPLACE IMAGE>>>
-          imagePullPolicy: "Always"
-          volumeMounts:
-          - mountPath: /tmp/ansible-operator/runner
-            name: runner
-          - mountPath: /tmp/ansible-operator/
-            name: artifactory-secret
-            readOnly: true
-          env:
-            - name: WATCH_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
-            - name: POD_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-            - name: OPERATOR_NAME
-              value: "artifactory-operator"
-      volumes:
-        - name: runner
-          emptyDir: {}
-        - name: artifactory-secret
-          secret:
-            secretName: artifactory-admin
+$ deploy/operator.yaml
 ```
 
 ## How to run
@@ -183,88 +128,12 @@ oc apply -f deploy/operator.yaml
 
 > Must have cluster-role artifactory-admin
 
-An example Artifactory CR (Custom Resource) exists under `deploy/crds/artifactory-cr-template.yaml`:
+An example Artifactory CR (Custom Resource) exists under `deploy/crds/artifactory-sa-cr-template.yaml`
 
-```yaml
-apiVersion: template.openshift.io/v1
-kind: Template
-metadata:
-  annotations:
-    description: |-
-      Template for creating custom resource for Artifactory
-  name: artifactory-cr-template
-objects:
-- apiVersion: artifacts.pathfinder.gov.bc.ca/v1alpha1
-  kind: Artifactory
-  metadata:
-    name: ${TEAM_NAME}-${REPO_TYPE}-${REPO_LOCATOR}
-  spec:
-    # Add fields here: team-type-environment-locator
-    console: ${CONSOLE_NAME}
-    team_name: ${TEAM_NAME}
-    repository_type: ${REPO_TYPE}
-    repository_locator: ${REPO_LOCATOR}
-    repository_description: ${REPO_DESCRIPTION}
-    list_virtual_repositories: ${LIST_REPOS_VIRTUAL}
-    user: ${USER}
-parameters:
-- description: Cluster where the CR is being created (choose between "lab" or "prod"
-  displayName: Console Name
-  name: CONSOLE_NAME
-  value: lab
-- description: Team name for the repository
-  displayName: Team name
-  name: TEAM_NAME
-  value: qa
-- description: Type of repository (choose between docker, maven etc)
-  displayName: Team name
-  name: REPO_TYPE
-  value: docker
-- description: Repository locator (choose between local or virtual)
-  displayName: Repository locator
-  name: REPO_LOCATOR
-  value: local
-- description: Description of the repo
-  displayName: Repository description
-  name: REPO_DESCRIPTION
-  value: "this is a description"
-- description: Description of the repo
-  displayName: Repository description
-  name: REPO_DESCRIPTION
-  value: "this is a description"
-- description: List of local repos to be added to the virtual repo. Only valid when the repository locator is virtual
-  displayName: List local repos in a virtual repo
-  name: LIST_REPOS_VIRTUAL
-  value: "ops-docker-local,dev-docker-local"
-- description: User to run the ansible operator as
-  displayName: Operator User
-  name: USER
-  value: admin
-
-```
-
-An example env file also exists under `deploy/crds/team-type-locator.env`:
-
-``` yaml
-CONSOLE_NAME=lab
-TEAM_NAME=qa
-REPO_TYPE=docker
-REPO_LOCATOR=local
-REPO_DESCRIPTION="this is a description"
-LIST_REPOS_VIRTUAL="ops-docker-local,dev-docker-local"
-```
-
-| Parameter                 | Comments                                                 | 
-|---------------------------|----------------------------------------------------------|
-| CONSOLE_NAME              | Name of the environment (prod or lab)                    |
-| TEAM_NAME                 | Name of the repository                                   |
-| REPO_TYPE                 | Type: docker, maven etc                                  |
-| REPO_LOCATOR              | local or virtual                                         |
-| REPO_DESCRIPTION          | Description of the repo                                  |
-| LIST_REPOS_VIRTUAL        | If type virtual, list local repos to add to virtual repo |
+An example env file also exists under `deploy/crds/serviceaccount.env`
 
 Create the Custom Resource:
 
 ``` bash
- oc process -f artifactory-sa-cr-template.yaml --param-file=team-type-locator.env --ignore-unknown-parameters=true | oc create -f -
+ oc process -f artifactory-sa-cr-template.yaml --param-file=serviceaccount.env --ignore-unknown-parameters=true | oc create -f -
 ```

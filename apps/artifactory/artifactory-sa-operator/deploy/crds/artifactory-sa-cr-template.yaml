@@ -9,24 +9,25 @@ objects:
 - apiVersion: artifactorysa.operators.bcgov/v1alpha1
   kind: ArtifactorySA
   metadata:
-    name: ${LICENSE_PLATE}-${DESCRIPTOR}
+    name: ${CR_NAME}
   spec:
     console: ${CONSOLE_NAME}
-    descriptor: ${DESCRIPTOR}
-    license_plate: ${LICENSE_PLATE}
+    cr_name: ${CR_NAME}
+    sa_name: ""
+    descriptor: "${DESCRIPTOR}"
 parameters:
+- description: Name for the ArtifactorySA custom resource
+  displayName: CR Name
+  name: CR_NAME
+  value: blank
 - description: Cluster where the CR is being created (choose between "lab" or "prod"
   displayName: Console Name
   name: CONSOLE_NAME
   value: lab
-- description: Project license plate
-  displayName: license_plate
-  name: LICENSE_PLATE
-  value: devops-artifactory
-- description: Unique name for the service account, indicating the account's purpose
+- description: Description of the service account, indicating the account's purpose
   displayName: descriptor
   name: DESCRIPTOR
-  value: test-account
+  value: blank
 - description: User to run the ansible operator as
   displayName: Operator User
   name: USER
