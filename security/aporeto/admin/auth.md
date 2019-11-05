@@ -1,14 +1,31 @@
-# Aporeto Authentication and Authorization
-Aporeto can use many different types of authentication sources in order to provide access to the platform. These could be standard Aporeto-managed accounts, or through an enterprise provider via OIDC or LDAP.
+---
+description: .
+tags:
+- next gen security
+- custom network policy
+- Aporeto
+- networksecuritypolicy
+- zero trust
+- openshift security
+- platform security
+- application identity
+- policy backup
+- policy change audit
+- namespace hierarchy and ownership
+- Aporeto console
+---
+
+# Aporeto Console Authentication and Authorization
+Aporeto can use many different types of authentication sources in order to provide access to the Console at https://console.aporeto.com. These could be standard Aporeto-managed accounts, or through a federated identity provider via OIDC or LDAP.
 
 ## OIDC
-Aporeto is currently linked to the **sso-dev** and **sso-prod** with the Devhub realm. 
+Aporeto is currently integrated with KeyCloak dev and prod instances. 
 - When logging into the console, specify the OIDC account and provider information
-  - **sso-dev**
+  - **pathfinder-sso-dev**
 
 ![](assets/oidc_signin_dev.png)  
 
-  - **sso-prod**
+  - **pathfinder-sso-prod**
   
 ![](assets/oidc_signin_prod.png) 
 
@@ -47,47 +64,13 @@ The following OIDC configurations are in place:
   ```
 
 ## Authorizing Users
-Each user that needs access to the platform must be added to the appropriate Authorization policy at the right level within Aporeto. 
+Each user that needs access to the platform must be added to the appropriate Authorization policy at the right level within Aporeto (coming soon). 
 
-The following Authorization Policies were created in the UI:
-- admin-users
-  ![](assets/aporeto_authorizations.png)  
-  Or the same configuration as code (exported from the **Data Explorer**)
-  ```
-  APIVersion: 0
-  data:
-    apiauthorizationpolicies:
-      - authorizedIdentities:
-          - '@auth:role=enforcer'
-        authorizedNamespace: /bcgov-devex
-        description: Policy to grant needed access to your Enforcers.
-        name: '[auto] Enforcers authorization policy'
-        propagate: true
-        propagationHidden: true
-        protected: true
-        subject:
-          - - '@auth:organization=bcgov-devex'
-            - '@auth:ou:aporeto-enforcerd=true'
-            - '@auth:realm=certificate'
-      - authorizedIdentities:
-          - '@auth:role=namespace.editor'
-        authorizedNamespace: /bcgov-devex
-        name: admin-users
-        propagate: true
-        subject:
-          - - '@auth:email=husker@arctiq.ca'
-          - - '@auth:email=jason.leach@fullboar.ca'
-          - - '@auth:email=jeff.kelly@arctiq.ca'
-  identities:
-    - apiauthorizationpolicy
-  label: Shriekseed Iguana
-  ```
-
-**Please note that all namespace authoriztion should be managed by a custom operator or the Namespace Automation Playbook referenced [here](../architecture/design_decisions.md#namespace-automation)**
+**Please note that all namespace authoriztion will be managed by a Custom Operator referenced [here](../architecture/design_decisions.md#namespace-automation)**
 
 
-## App Credentials
-App Credentials are created for our operators to interact with the Aporeto control plane. These are generated upon installation of an enforcer or operator and are crypotgraphically signed. 
+## App Credentials for Automation Components
+App Credentials are created for our automation Operators to interact with the Aporeto control plane. These are generated upon installation of an enforcer or operator and are cryptographically signed. 
 Each app credential is created with an expiry date (typically 10 years from the creation date), and each operator / enforcer stores this app credential in a kubernetes secret. This credential is used to obtain a shorter lived JWT token and the `apoctl` binary refreshes this token as required. 
 
 App credentials can be revoked and refreshed as required. Policies should be put into place around refreshing these credentials more frequently, and these policies should be aligned with the government standard for SSL key rotation. 
