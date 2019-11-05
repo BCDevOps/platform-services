@@ -9,7 +9,7 @@ spec:
     listKind: ArtifactorySAList
     plural: artifactorysas
     singular: artifactorysa
-  scope: Cluster
+  scope: Namespaced
   subresources:
     status: {}
   version: v1alpha1

@@ -79,8 +79,6 @@ example command to add this cluster-role to an account:
 oc adm policy add-cluster-role-to-user artifactory-admin <username>
 ```
 
-#this is where i have gotten to
-
 #### Build Operator Image:
 
 ``` bash
@@ -268,5 +266,5 @@ LIST_REPOS_VIRTUAL="ops-docker-local,dev-docker-local"
 Create the Custom Resource:
 
 ``` bash
- oc --as=system:serviceaccount:openshift:bcdevops-admin process -f artifactory-cr-template.yaml --param-file=team-type-locator.env --ignore-unknown-parameters=true | oc --as=system:serviceaccount:openshift:bcdevops-admin create -f -
+ oc process -f artifactory-sa-cr-template.yaml --param-file=team-type-locator.env --ignore-unknown-parameters=true | oc create -f -
 ```

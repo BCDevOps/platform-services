@@ -26,17 +26,19 @@
     force_basic_auth: yes
     status_code: 201
 
-- name: Add permission for repository
+- name: Generate token for service account
   uri:
-    url: "{{ artifactory_url }}/{{ artifactory_permission_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
+    url: "{{ artifactory_url }}/{{ artifactory_token_endpoint }}"
     user: "{{ user }}"
     password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
-    method: PUT
-    body_format: json
+    method: POST
     headers:
-      Content-type: "application/json"
-    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","repo":{"include-patterns": ["**"],"exclude-patterns": [""],"repositories": ["{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"],"actions": {"groups" : {"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" : ["manage","read","write","annotate","delete","manage"]}}}}'
+      Content-type: "application/x-www-form-urlencoded"
+    body_format: form-urlencoded
+    body: '{"username":"{{ license_plate }}-{{ descriptor }}", "expires_in":"0", "scope":"member-of-groups:{{ license_plate }}-{{ descriptor }}", "token_type":"Bearer"}'
     force_basic_auth: yes
+    #status_code: 200
+  register: token_gen
 
 - debug:
     msg: "{{ token_gen.json.access_token }}"

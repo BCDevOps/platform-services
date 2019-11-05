@@ -12,8 +12,8 @@ objects:
     name: ${LICENSE_PLATE}-${DESCRIPTOR}
   spec:
     console: ${CONSOLE_NAME}
-    sa_descriptor: ${DESCRIPTOR}
-    project_lp: ${LICENSE_PLATE}
+    descriptor: ${DESCRIPTOR}
+    license_plate: ${LICENSE_PLATE}
 parameters:
 - description: Cluster where the CR is being created (choose between "lab" or "prod"
   displayName: Console Name
