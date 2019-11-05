@@ -14,7 +14,7 @@ tags:
 - namespace hierarchy and ownership
 ---
 
-# High Level Architecture
+# Zero Trust Network Model - High Level Architecture
 This deployment focuses on the following key components: 
 - Aporeto Enforcer Daemonset
 - Aporeto Kubernetes Operator

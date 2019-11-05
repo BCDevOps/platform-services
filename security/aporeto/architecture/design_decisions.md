@@ -14,7 +14,7 @@ tags:
 - namespace hierarchy and ownership
 ---
 
-# Zero Trust Model Implementation Design Decisions
+# Zero Trust Network Model - Implementation Design Decisions
 
 ## Technology behind Zero Trust Model
 Aporeto cloud-native security solution was selected to implement the Zero-Trust Network security model on the BCDevExchange's Openshift Platform.
