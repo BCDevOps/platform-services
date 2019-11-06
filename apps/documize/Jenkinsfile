@@ -8,14 +8,14 @@ pipeline {
             agent { label 'build' }
             steps {
                 script {
-                    def filesInThisCommitAsString = sh(script:"git diff --name-only HEAD~1..HEAD | grep '^apps/documize/' | grep -v -e '^apps/documize/.jenkins/' -e 'apps/documize/README.md' || echo -n ''", returnStatus: false, returnStdout: true).trim()
+                    def filesInThisCommitAsString = sh(script:"git diff --name-only HEAD~1..HEAD | grep '^apps/documize/' | grep -v -e '^apps/documize/.jenkins/' -e 'apps/documize/README.md' -e 'apps/documize/Jenkinsfile' || echo -n ''", returnStatus: false, returnStdout: true).trim()
                     def hasChangesInPath = (filesInThisCommitAsString.length() > 0)
                     echo "${filesInThisCommitAsString}"
                     if (!currentBuild.rawBuild.getCauses()[0].toString().contains('UserIdCause') && !hasChangesInPath){
                         currentBuild.rawBuild.delete()
-                        echo "No changes detected in the path ('^apps/documize/' other than .jenkins and docs)"
+                        echo "No changes detected in the path (apps/documize/ other than jenkins and docs)"
                         return
-                        // error("No changes detected in the path ('^apps/documize/' other than .jenkins and docs)")
+                        // error("No changes detected in the path ('^apps/documize/' other than jenkins and docs)")
                     }
                 }
                 echo "Aborting all running jobs ..."
