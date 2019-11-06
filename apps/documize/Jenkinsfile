@@ -13,7 +13,9 @@ pipeline {
                     echo "${filesInThisCommitAsString}"
                     if (!currentBuild.rawBuild.getCauses()[0].toString().contains('UserIdCause') && !hasChangesInPath){
                         currentBuild.rawBuild.delete()
-                        error("No changes detected in the path ('^apps/documize/' other than .jenkins and docs)")
+                        echo "No changes detected in the path ('^apps/documize/' other than .jenkins and docs)"
+                        return
+                        // error("No changes detected in the path ('^apps/documize/' other than .jenkins and docs)")
                     }
                 }
                 echo "Aborting all running jobs ..."
