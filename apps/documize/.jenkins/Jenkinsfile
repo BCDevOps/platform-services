@@ -15,7 +15,6 @@ pipeline {
                         currentBuild.rawBuild.delete()
                         echo "No changes detected in the path ('^apps/documize/.jenkins/')"
                         return
-                        // error("No changes detected in the path ('^apps/documize/.jenkins/')")
                     }
                 }
                 echo "Aborting all running jobs ..."
