@@ -92,7 +92,7 @@ $pwd
 $ operator-sdk build <image-name>
 $ docker push <image-name>
 # alt push method:
-# oc-push-image.sh -i <image-name> -n <namespace> -r docker-registry.pathfinder.gov.bc.ca
+# ../oc-push-image.sh -i <image-name> -n <namespace> -r docker-registry.pathfinder.gov.bc.ca
 
 $ oc -n <namespace> tag <image-name>:latest <image-name>:v1-stable
 ```
