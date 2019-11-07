@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: infra-storage-quota
+spec:
+  hard:
+    persistentvolumeclaims: "100"
+    requests.storage: 2Ti
+    gluster-block.storageclass.storage.k8s.io/persistentvolumeclaims: "100"
+    gluster-block.storageclass.storage.k8s.io/requests.storage: 2Ti
+    gluster-file-db.storageclass.storage.k8s.io/persistentvolumeclaims: "100"
+    gluster-file-db.storageclass.storage.k8s.io/requests.storage: 2Ti
+    gluster-file.storageclass.storage.k8s.io/persistentvolumeclaims: "100"
+    gluster-file.storageclass.storage.k8s.io/requests.storage: 2Ti
+    nfs-backup.storageclass.storage.k8s.io/persistentvolumeclaims: "100"
+    nfs-backup.storageclass.storage.k8s.io/requests.storage: 2Ti

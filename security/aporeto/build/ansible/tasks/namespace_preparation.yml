@@ -7,6 +7,35 @@
   command: 
     "oc new-project {{ openshift_project_prefix }}-operator"
   ignore_errors: true
+
+- name: Overwrite Namespace Label (project_type)
+  command:
+    "oc label namespace {{ openshift_project_prefix }}-{{ item }} project_type=infra --overwrite"
+  loop:
+    - operator
+    - enforcers
+
+- name: Remove All Limits from Aporeto (OCP) Namespace
+  command:
+    "oc -n {{ openshift_project_prefix }}-{{ item }} delete limits --all"
+  loop:
+    - operator
+    - enforcers
+
+- name: Remove All Quota from Aporeto (OCP) Namespace
+  command:
+    "oc -n {{ openshift_project_prefix }}-{{ item }} delete quota --all"
+  loop:
+    - operator
+    - enforcers
+
+- name: Apply Infra-Quota to Aporeto (OCP) Namespace
+  command:
+    "oc -n {{ openshift_project_prefix }}-{{ item }} apply -f files/openshift-quotas/infra-storage-quota.yml"
+  loop:
+    - operator
+    - enforcers
+
 - name: Add OpenShift editor roles to operator namespace
   command: 
     "oc policy add-role-to-user edit {{ item }} -n {{ openshift_project_prefix }}-operator"
