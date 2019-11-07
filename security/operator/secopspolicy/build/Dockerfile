@@ -2,6 +2,7 @@ FROM quay.io/operator-framework/ansible-operator:v0.8.2
 
 USER 0
 
+ARG GITHUB_ORG=BCDevOps
 ARG OPERATOR_SDK_VERSION=0.8.1
 ARG ANSIBLE_VERSION=2.7.10
 ARG APORETO_CLI_VERSION=3.9.2
@@ -22,6 +23,7 @@ ENV PATH=$HOME/.local/bin/:$PATH \
     LANG=en_US.UTF-8 
 
 RUN yes | yum update && \
+    yes | yum install git && \
     yum clean all -y && \
     rm -rf /var/cache/yum
 
@@ -33,9 +35,27 @@ RUN curl -sL https://get.aquasec.com/aquactl/stable/aquactl \
     -o /usr/local/bin/aquactl && \
     chmod 755 /usr/local/bin/aquactl
 
-USER 1001
+# Fetch playbook(s)
 
-COPY watches.yaml ${HOME}/watches.yaml
-COPY templates/ ${HOME}/templates/
-COPY roles/ ${HOME}/roles/
-COPY *.yaml ${HOME}/
+RUN git clone https://github.com/${GITHUB_ORG}/platform-services.git \
+    --depth 1 \
+    --branch master \
+    --single-branch /tmp/platform-services && \
+    cp /tmp/platform-services/security/operator/secopspolicy/*.yaml ${HOME}/ && \
+    cp -R /tmp/platform-services/security/operator/secopspolicy/templates ${HOME}/ && \
+    cp -R /tmp/platform-services/security/operator/secopspolicy/roles ${HOME}/ && \
+    rm -rf /tmp/platform-services
+
+# In a `dev` environment the playbook resources can be copied
+# directly into the image.
+
+# COPY watches.yaml ${HOME}/watches.yaml
+# COPY templates/ ${HOME}/templates/
+# COPY roles/ ${HOME}/roles/
+# COPY *.yaml ${HOME}/
+
+RUN chmod -R 755 ${HOME} 
+
+# Container Init
+
+USER 1001
