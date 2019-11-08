@@ -66,7 +66,7 @@
         executable: /bin/bash
       when: github_key_exists.result == False
     - name: Add SSH private key file 
-        shell: |
+      shell: |
         cat /opt/github/githubDeploymentKey >$HOME/.ssh/aporeto_backup_key
       args:
         executable: /bin/bash
