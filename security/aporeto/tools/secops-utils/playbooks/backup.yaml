@@ -20,10 +20,9 @@
     cur_date: "{{ lookup('pipe', 'date +%Y%m%d') }}"
   tasks:
     - fail:
-        msg: You must set APOCTL_TOKEN and SSH_DKEY environment variables.
+        msg: You must set SSH_DKEY environment variables.
       when:
         - lookup('env', 'SSH_DKEY') is not defined
-        - lookup('env', 'APOCTL_TOKEN') is not defined
     - name: Setup git identity
       shell: |
         git config --global user.email "nobody@gov.bc.ca" && \

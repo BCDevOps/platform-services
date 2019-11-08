@@ -1,76 +1,84 @@
 ---
-kind: 'Template'
-apiVersion: 'v1'
-metadata:
-  name: 'cronjob-{{ job_name }}'
-  annotations:
-    description: 'Cronjob to run maintenance scripts.'
-    iconClass: 'icon-shadowman'
-    tags: 'management,cronjob,aporeto,backup'
-objects:
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      labels:
-        app: "{{ job_name }}"
-      name: "{{ secret_name }}"
-    stringData:
-      apoctlToken: "{{ aporeto_temp_token }}"
-      githubDeploymentKey: "{{ github_deployment_key }}"
-    type: Opaque
-  - kind: 'CronJob'
-    apiVersion: 'batch/v1beta1'
-    metadata:
-      name: "{{ job_name }}"
-      labels:
-        template: 'secops-cronjob'
-        cronjob: "{{ job_name }}"
-    spec:
-      schedule: "{{ schedule }}"
-      concurrencyPolicy: 'Forbid'
-      successfulJobsHistoryLimit: "{{ success_job_history }}"
-      failedJobsHistoryLimit: "{{ failed_job_history_limit }}"
-      jobTemplate:
-        metadata:
-          labels:
-            template: 'secops-cronjob'
-            cronjob: "{{ job_name }}"
-        spec:
-          backoffLimit: "{{ job_backoff_limit }}"
-          template:
-            spec:
-              containers:
-                - name: "{{ job_name }}"
-                  image: 'docker-registry.default.svc:5000/{{ secops_utils_image_namespace }}/{{ secops_utils_image_name }}'
-                  command:
-                    - '/usr/local/bin/entrypoint.sh'
-                    - 'ansible-playbook'
-                    - '-i' 
-                    - 'local,'
-                    - '/runner/backup.yaml'
-                  env:
-                    - name: PATH
-                      value: /ansible:/opt/rh/python27/root/usr/bin:/opt/rh/rh-git29/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-                    - name: APOCTL_TOKEN
-                      valueFrom:
-                        secretKeyRef:
-                          name: "{{ secret_name }}"
-                          key: apoctlToken
-                    - name: GITHUB_DKEY
-                      valueFrom:
-                        secretKeyRef:
-                          name: "{{ secret_name }}"
-                          key: githubDeploymentKey
-                  resources:
-                    limits:
-                      cpu: 900m
-                      memory: 192Mi
-                    requests:
-                      cpu: 500m
-                      memory: 128Mi
-              restartPolicy: 'Never'
-              terminationGracePeriodSeconds: 300
-              activeDeadlineSeconds: 3600
-              dnsPolicy: 'ClusterFirst'
-              # serviceAccountName: '${job_service_account}'
-              # serviceAccount: '${job_service_account}'
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  data:
+    default.yaml: |-
+      api: https://api.console.aporeto.com 
+      namespace: /bcgov
+      creds: /opt/creds/aporeto.creds 
+      output: json
+  kind: ConfigMap
+  metadata:
+    name: apoctl-configmap
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      app: "{{ job_name }}"
+    name: "{{ secops_utils_secret_name }}"
+  stringData:
+    githubDeploymentKey: "{{ github_deployment_key }}"
+  type: Opaque
+- kind: 'CronJob'
+  apiVersion: 'batch/v1beta1'
+  metadata:
+    name: "{{ job_name }}"
+    labels:
+      template: 'secops-cronjob'
+      cronjob: "{{ job_name }}"
+  spec:
+    schedule: "{{ schedule }}"
+    concurrencyPolicy: 'Forbid'
+    successfulJobsHistoryLimit: "{{ success_job_history }}"
+    failedJobsHistoryLimit: "{{ failed_job_history_limit }}"
+    jobTemplate:
+      metadata:
+        labels:
+          template: 'secops-cronjob'
+          cronjob: "{{ job_name }}"
+      spec:
+        backoffLimit: "{{ job_backoff_limit }}"
+        template:
+          spec:
+            containers:
+              - name: "{{ job_name }}"
+                image: 'docker-registry.default.svc:5000/{{ secops_utils_image_namespace }}/{{ secops_utils_image_name }}'
+                command:
+                  - '/usr/local/bin/entrypoint.sh'
+                  - 'ansible-playbook'
+                  - '-i' 
+                  - 'local,'
+                  - '/runner/backup.yaml'
+                env:
+                  - name: PATH
+                    value: /ansible:/opt/rh/python27/root/usr/bin:/opt/rh/rh-git29/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                  - name: GITHUB_DKEY
+                    valueFrom:
+                      secretKeyRef:
+                        name: "{{ secops_utils_secret_name }}"
+                        key: githubDeploymentKey
+                volumeMounts:
+                - mountPath: /opt/creds
+                  name: creds
+                - mountPath: /opt/ansible/.apoctl
+                  name: config
+                resources:
+                  limits:
+                    cpu: 900m
+                    memory: 192Mi
+                  requests:
+                    cpu: 500m
+                    memory: 128Mi
+            volumes:
+              - name: creds
+                secret:
+                  secretName: secops-backup
+              - name: config
+                configMap: 
+                  name: apoctl-configmap
+            restartPolicy: 'Never'
+            terminationGracePeriodSeconds: 300
+            activeDeadlineSeconds: 3600
+            dnsPolicy: 'ClusterFirst'

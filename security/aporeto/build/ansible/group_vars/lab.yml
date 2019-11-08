@@ -48,4 +48,4 @@ schedule: '20 13 * * *' # 3:20 AM (Pacific Time) daily
 success_job_history: '3'
 failed_job_history_limit: '3'
 job_backoff_limit: '4'
-secret_name: backup-cronjob-creds
+secops_utils_secret_name: backup-cronjob-creds

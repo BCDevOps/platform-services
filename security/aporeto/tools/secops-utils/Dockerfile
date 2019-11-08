@@ -79,7 +79,7 @@ RUN curl -sL https://get.aquasec.com/aquactl/stable/aquactl \
 # Fetch playbook(s)
 
 COPY . /
-RUN cp /playbooks/*.yaml /runner
+RUN cp playbooks/*.yaml /runner
 
 
 
