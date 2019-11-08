@@ -1,7 +1,10 @@
 ---
 - name: Create openshift project
 
-- name: Create secops-utils Build Config
+- name: Create NetworkSecurityPolicies 
 
+- name: Create secops-utils Build Config
+  command: > 
+    "oc process -f build.yaml -p SOURCE_REPOSITORY_REF=feature/cronjob-to-play   | oc apply -f -"
 
 - name: Deploy secops-utils BronJob

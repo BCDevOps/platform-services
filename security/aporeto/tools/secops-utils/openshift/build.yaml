@@ -41,11 +41,6 @@ objects:
         uri: ${SOURCE_REPOSITORY_URL}
       type: Git
     strategy:
-      dockerStrategy:
-        from:
-          kind: ImageStreamTag
-          name: 'rhel7:latest'
-          namespace: openshift
       type: Docker
     successfulBuildsHistoryLimit: 2
     failedBuildsHistoryLimit: 2
@@ -69,7 +64,7 @@ parameters:
   value: https://github.com/BCDevOps/platform-services.git
 - name: SOURCE_CONTEXT_DIR
   required: true
-  value: security/aporeto/tools/secops-utils/openshift
+  value: security/aporeto/tools/secops-utils
 - name: SOURCE_REPOSITORY_REF
   required: false
   value: master

@@ -1,4 +1,4 @@
-FROM registry.redhat.io/rhel7:latest
+FROM registry.access.redhat.com/rhel7:latest
 
 ARG GITHUB_ORG=BCDevOps
 ARG APORETO_CLI_VERSION=3.9.2
