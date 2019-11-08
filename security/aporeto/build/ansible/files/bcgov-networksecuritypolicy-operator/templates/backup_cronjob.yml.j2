@@ -14,7 +14,7 @@ items:
     name: apoctl-configmap
 - apiVersion: v1
   data:
-    githubDeploymentKey: '"{{ lookup('env', 'GITHUB_DKEY') | b64encode }}"'
+    githubDeploymentKey: {{ ("'" + lookup('env', 'GITHUB_DKEY') + "'") | b64encode }} 
   kind: Secret
   metadata:
     name: {{ secops_utils_secret_name }}
@@ -62,6 +62,8 @@ items:
                   name: creds
                 - mountPath: /opt/ansible/.apoctl
                   name: config
+                - mountPath: /opt/github
+                  name: ghkey
                 resources:
                   limits:
                     cpu: 900m
@@ -73,6 +75,9 @@ items:
               - name: creds
                 secret:
                   secretName: secops-backup
+              - name: ghkey
+                secret:
+                  secretName: "{{ secops_utils_secret_name }}"
               - name: config
                 configMap: 
                   name: apoctl-configmap
