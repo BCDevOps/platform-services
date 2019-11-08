@@ -14,7 +14,7 @@ items:
     name: apoctl-configmap
 - apiVersion: v1
   data:
-    githubDeploymentKey: '{{ lookup('env', 'GITHUB_DKEY') | b64encode }}'
+    githubDeploymentKey: '"{{ lookup('env', 'GITHUB_DKEY') | b64encode }}"'
   kind: Secret
   metadata:
     name: {{ secops_utils_secret_name }}
