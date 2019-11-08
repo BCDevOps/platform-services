@@ -63,7 +63,7 @@
         state: touch
     - name: Add SSH private key contents
       shell: |
-        echo $GITHUB_DKEY | base64 -d >$HOME/.ssh/id_rsa
+        echo $GITHUB_DKEY >$HOME/.ssh/id_rsa
       args:
         executable: /bin/bash
     - name: Clone repo

@@ -46,7 +46,7 @@ items:
               - name: "{{ job_name }}"
                 image: 'docker-registry.default.svc:5000/{{ secops_utils_image_namespace }}/{{ secops_utils_image_name }}'
                 command:
-                  - '/usr/local/bin/entrypoint.sh'
+                  - '/entrypoint.sh'
                   - 'ansible-playbook'
                   - '-i' 
                   - 'local,'
