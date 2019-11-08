@@ -56,7 +56,7 @@
         ssh-keyscan -t rsa -H "{{ saas_host }}" >>$HOME/.ssh/known_hosts
     - name: Create SSH private key
       file:
-        path: $HOME/.ssh/id_rsa
+        path: $HOME/.ssh/aporeto_backup_key
         owner: "{{ lookup('pipe', 'id -u') }}"
         group: "{{ lookup('pipe', 'id -g') }}"
         mode: '0600'
