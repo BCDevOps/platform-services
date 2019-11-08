@@ -93,7 +93,7 @@ $pwd
 $ operator-sdk build <image-name>
 $ docker push <image-name>
 # alt push method:
-# oc-push-image.sh -i <image-name> -n <namespace> -r docker-registry.pathfinder.gov.bc.ca
+# ../oc-push-image.sh -i <image-name> -n <namespace> -r docker-registry.pathfinder.gov.bc.ca
 
 $ oc -n <namespace> tag <image-name>:latest <image-name>:v1-stable
 ```
@@ -126,7 +126,7 @@ oc apply -f deploy/operator.yaml
 
 ## Creating Artifactory Custom Resources and Objects
 
-> Must have cluster-role artifactory-admin
+> Must have project admin or edit role
 
 An example Artifactory CR (Custom Resource) exists under `deploy/crds/artifactory-sa-cr-template.yaml`
 
