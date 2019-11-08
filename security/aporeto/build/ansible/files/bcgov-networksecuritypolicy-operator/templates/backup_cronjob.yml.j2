@@ -13,13 +13,11 @@ items:
   metadata:
     name: apoctl-configmap
 - apiVersion: v1
+  data:
+    githubDeploymentKey: '{{ lookup('env', 'GITHUB_DKEY') | b64encode }}'
   kind: Secret
   metadata:
-    labels:
-      app: "{{ job_name }}"
-    name: "{{ secops_utils_secret_name }}"
-  stringData:
-    githubDeploymentKey: "{{ github_deployment_key }}"
+    name: {{ secops_utils_secret_name }}
   type: Opaque
 - kind: 'CronJob'
   apiVersion: 'batch/v1beta1'
