@@ -57,8 +57,10 @@
 
     - name: Check for SSH Key File
       stat: 
-        path: /opt/github
+        path: /opt/github/githubDeploymentKey
       register: github_key_exists
+    - name: debug key path
+      debug: msg="{{ github_key_exists }}"
     - name: Add SSH private key contents
       shell: |
         echo $GITHUB_DKEY >$HOME/.ssh/aporeto_backup_key
