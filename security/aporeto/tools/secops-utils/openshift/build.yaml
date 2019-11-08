@@ -69,7 +69,7 @@ parameters:
   value: https://github.com/BCDevOps/platform-services.git
 - name: SOURCE_CONTEXT_DIR
   required: true
-  value: security/aporeto/tools/openshift
+  value: security/aporeto/tools/secops-utils/openshift
 - name: SOURCE_REPOSITORY_REF
   required: false
   value: master
