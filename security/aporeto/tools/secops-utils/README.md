@@ -68,13 +68,13 @@ To run this playbook locally or otherwise you need the bespoke Ansible Runner im
 oc process -f openshift/build.yaml | oc create -f -
 ```
 
-This build template will create a `build` in OCP named `platsvc-secops`. If an initial build is not automatically triggered you can create one by running the following command:
+This build template will create a `build` in OCP named `secops-utils`. If an initial build is not automatically triggered you can create one by running the following command:
 
 ```console
-oc start-build platsvc-secops
+oc start-build secops-utils
 ```
 
-When the build completes a newly minted image can be found in the image stream `platsvc-secops`. You can pull this image to run locally or run it on the OCP as needed.
+When the build completes a newly minted image can be found in the image stream `secops-utils`. You can pull this image to run locally or run it on the OCP as needed.
 
 **🤓 ProTip**
 
@@ -85,7 +85,7 @@ When the build completes a newly minted image can be found in the image stream `
 You can run the playbook on the OCP for testing purposes with the command below. You'll need to have both `GITHUB_DKEY` and `APOCTL_TOKEN` environment variables set so the values can be passed on to the running container. Replace the faux namespace `blabla-tools` in the command below with your working namespace.
 
 ```console
-oc run apoexpt --image=docker-registry.default.svc:5000/blabla-tools/platsvc-secops:latest --replicas=1 --restart=Never --requests="cpu=1,memory=1Gi" --limits="cpu=1,memory=1Gi" --restart=Never --image-pull-policy=Always --env="GITHUB_DKEY=$GITHUB_DKEY" --env="APOCTL_TOKEN=$APOCTL_TOKEN"
+oc run apoexpt --image=docker-registry.default.svc:5000/blabla-tools/secops-utils:latest --replicas=1 --restart=Never --requests="cpu=1,memory=1Gi" --limits="cpu=1,memory=1Gi" --restart=Never --image-pull-policy=Always --env="GITHUB_DKEY=$GITHUB_DKEY" --env="APOCTL_TOKEN=$APOCTL_TOKEN"
 ```
 
 When the playbook completes you will see a commit containing all the exported policy.

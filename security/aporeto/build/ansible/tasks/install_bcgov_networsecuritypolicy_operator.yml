@@ -30,5 +30,3 @@
         - files/bcgov-networksecuritypolicy-operator/output/role_binding.yml
         - files/bcgov-networksecuritypolicy-operator/output/operator.yml
         - files/bcgov-networksecuritypolicy-operator/output/apoctl_configmap.yml
-
-

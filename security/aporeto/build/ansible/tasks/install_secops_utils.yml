@@ -1,0 +1,7 @@
+---
+- name: Create openshift project
+
+- name: Create secops-utils Build Config
+
+
+- name: Deploy secops-utils BronJob

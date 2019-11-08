@@ -25,6 +25,8 @@
       when: activity == "install" or activity == "apply_basic_user_policies"
     - include_tasks: tasks/install_bcgov_networsecuritypolicy_operator.yml
       when: activity == "bcgov-operator-install" or activity == "install"
+    - include_tasks: tasks/install_secops_utils.yml
+      when: activity == "bcgov-operator-install" or activity == "install" or activity == "secops-utils-install"
     - include_tasks: tasks/create_basic_policies.yml
       when: 
       - activity == "install" or activity == "apply_basic_user_policies"
