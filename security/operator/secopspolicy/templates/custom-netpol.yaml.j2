@@ -51,9 +51,9 @@ data:
     a logical AND.
 #}
 {% if loop.index == 1 %}
-    - - {{ i }}
+    - - "{{ i }}"
 {% else %}
-      - {{ i }}
+      - "{{ i }}"
 {% endif %}
 {% endfor %}
 {% endfor %}
@@ -84,9 +84,9 @@ data:
     a logical AND.
 #}
 {% if loop.index == 1 %}
-    - - {{ j }}
+    - - "{{ j }}"
 {% else %}
-      - {{ j }}
+      - "{{ j }}"
 {% endif %}
 {% endfor %}
 {% endfor %}
