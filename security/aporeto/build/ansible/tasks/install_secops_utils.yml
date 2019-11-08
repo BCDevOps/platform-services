@@ -1,8 +1,14 @@
 ---
 - name: Create openshift project
-
+  k8s_raw: 
+    name: "{{ secops_utils_image_namespace }}"
+    kind: Namespace 
+    state: present
+  
 - name: Create NetworkSecurityPolicies 
-
+  k8s_raw: 
+    src: ../../tools/secops-utils/openshift/tools-nsp.yml
+    namespace: "{{ secops_utils_image_namespace }}"
 - name: Create secops-utils Build Config
   command: > 
     "oc process -f build.yaml -p SOURCE_REPOSITORY_REF=feature/cronjob-to-play   | oc apply -f -"

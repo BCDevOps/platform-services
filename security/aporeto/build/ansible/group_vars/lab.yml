@@ -42,8 +42,8 @@ bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:v0.8.2
 
 # Aporeto Policy Backup CronJob
 job_name: secops-apobak
-image_namespace: devops-security-tools
-image_name: secops-utils:latest
+secops_utils_image_namespace: devops-security-tools
+secops_utils_image_name: secops-utils:latest
 schedule: '20 13 * * *' # 3:20 AM (Pacific Time) daily
 success_job_history: '3'
 failed_job_history_limit: '3'

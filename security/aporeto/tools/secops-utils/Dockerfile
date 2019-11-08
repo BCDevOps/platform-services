@@ -80,7 +80,7 @@ RUN curl -sL https://get.aquasec.com/aquactl/stable/aquactl \
 
 ADD entrypoint.sh .
 ADD playbooks/ .
-RUN cp playbooks/*.yml /runner
+RUN cp /playbooks/*.yaml /runner
 
 
 
