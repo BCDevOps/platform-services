@@ -66,13 +66,13 @@
         echo $GITHUB_DKEY >$HOME/.ssh/aporeto_backup_key
       args:
         executable: /bin/bash
-      when: github_key_exists.result == False
+      when: github_key_exists.stat.exists == false
     - name: Add SSH private key file 
       shell: |
         cat /opt/github/githubDeploymentKey >$HOME/.ssh/aporeto_backup_key
       args:
         executable: /bin/bash
-      when: github_key_exists.result == True 
+      when: github_key_exists.stat.exists == true 
     - name: Create SSH private key
       file:
         path: $HOME/.ssh/aporeto_backup_key
