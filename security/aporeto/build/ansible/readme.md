@@ -84,6 +84,12 @@ The Ansible playbook accepts a few switches:
     - does not currently remove the rolebindings/clusterrolebindings for the operator
     - does not remove the bcgov networksecuritypolicy operator
 
+- **secops_utils_install=true**
+    - Creates the `devops-security-tools` namespace
+    - Creates the build job for the secops utility container (includes apoctl, aquactl, etc)
+    - Configures a CronJob that exports all network security policy and external network objects and commits them to a private repo
+        - [Export CronJob Details](../../tools/secops-utils/README.md )
+
 ### High Level Architecture
 Architecture & design details are documented in the [architecture](../../architecture/readme.md) directory. 
 

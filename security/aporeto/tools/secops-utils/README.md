@@ -2,6 +2,10 @@
 
 This is a DevSecOps service that exports Aporeto policy for audit purposes periodically based on an OpenShift Container Platform (OCP) CronJob.
 
+**Implementation Notes**
+- The ansible playbook that is responsible for installing Aporeto also provides a method for implementing this CronJob within OpenShift. The instructions below can be used for manual installation if necessary. 
+- Only one deployed instance of this is required since it backs up the entire Aporeto set of namespaces. There is no need to configure this within each cluster. 
+
 # How it Works
 
 To record nightly exports of Aporeto policy this service has three components:
