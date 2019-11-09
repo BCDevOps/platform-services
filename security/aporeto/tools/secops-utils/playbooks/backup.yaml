@@ -20,9 +20,9 @@
     cur_date: "{{ lookup('pipe', 'date +%Y%m%d') }}"
   tasks:
     - fail:
-        msg: You must set SSH_DKEY environment variables.
+        msg: You must set GITHUB_DKEY environment variables.
       when:
-        - lookup('env', 'SSH_DKEY') is not defined
+        - lookup('env', 'GITHUB_DKEY') is not defined
     - name: Setup git identity
       shell: |
         git config --global user.email "nobody@gov.bc.ca" && \
@@ -59,8 +59,7 @@
       stat: 
         path: /opt/github/githubDeploymentKey
       register: github_key_exists
-    - name: debug key path
-      debug: msg="{{ github_key_exists }}"
+
     - name: Add SSH private key contents
       shell: |
         echo $GITHUB_DKEY >$HOME/.ssh/aporeto_backup_key
@@ -118,6 +117,7 @@
       args:
         executable: /bin/bash
       when: apo_namespaces is defined
+
     - name: Commit updates to git repo
       # This will fail if there are no changes to commit and
       # that's ok.

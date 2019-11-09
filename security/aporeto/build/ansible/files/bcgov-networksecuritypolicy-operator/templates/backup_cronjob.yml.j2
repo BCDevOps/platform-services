@@ -8,13 +8,13 @@ items:
       api: https://api.console.aporeto.com 
       namespace: /bcgov
       creds: /opt/creds/aporeto.creds 
-      output: json
+      output: yaml
   kind: ConfigMap
   metadata:
     name: apoctl-configmap
 - apiVersion: v1
   data:
-    githubDeploymentKey: {{ ("'" + lookup('env', 'GITHUB_DKEY') + "'") | b64encode }} 
+    githubDeploymentKey: {{ (lookup('env', 'GITHUB_DKEY') | b64encode ) }} 
   kind: Secret
   metadata:
     name: {{ secops_utils_secret_name }}
@@ -60,7 +60,7 @@ items:
                 volumeMounts:
                 - mountPath: /opt/creds
                   name: creds
-                - mountPath: /opt/ansible/.apoctl
+                - mountPath: /runner/.apoctl
                   name: config
                 - mountPath: /opt/github
                   name: ghkey
