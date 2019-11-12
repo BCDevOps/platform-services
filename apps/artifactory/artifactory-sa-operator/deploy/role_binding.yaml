@@ -1,13 +1,12 @@
-# Moved to platform ops repository to better track all cluster role creation.
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: artifactory-operator
+  name: artifactory-sa-operator
   namespace: devops-artifactory
 subjects:
 - kind: ServiceAccount
-  name: artifactory-operator
+  name: artifactory-sa-operator
 roleRef:
   kind: Role
-  name: artifactory-operator
+  name: artifactory-sa-operator
   apiGroup: rbac.authorization.k8s.io

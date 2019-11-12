@@ -1,0 +1,85 @@
+---
+# tasks file for artifactory
+- set_fact:
+    license_plate: "{{ lookup('password', '/dev/null length=6 chars=ascii_letters') | lower }}"
+
+- name: Create artifactory group
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_group_endpoint }}/{{ license_plate }}"
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json" 
+    body: '{"name": "{{ license_plate }}","description" : "group for {{ license_plate }} - {{ descriptor }}","autoJoin" : false,"adminPrivileges" : false}'
+    force_basic_auth: yes
+    status_code: 201
+  when: sa_name == ""
+
+- name: Create artifactory user
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_user_endpoint }}/{{ license_plate }}"
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: PUT
+    body_format: json
+    headers:
+      Content-type: "application/json" 
+    body: '{"name": "{{ license_plate }}","email" : "{{ meta.namespace }}-{{ license_plate }}@bcgov-artifactory.internal","password": "{{ lookup("password", "/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation") }}","admin": false,"profileUpdatable": false,"disableUIAccess" : true,"internalPasswordDisabled": false,"realm": "Internal","groups" : [ "{{ license_plate }}" ]}'
+    force_basic_auth: yes
+    status_code: 201
+  when: sa_name == ""
+
+- name: Generate token for service account
+  uri:
+    url: "{{ artifactory_url }}/{{ artifactory_token_endpoint }}"
+    user: "{{ user }}"
+    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
+    method: POST
+    headers:
+      Content-type: "application/x-www-form-urlencoded"
+    body_format: form-urlencoded
+    body: '{"username":"{{ license_plate }}", "expires_in":"0", "scope":"member-of-groups:{{ license_plate }}", "token_type":"Bearer"}'
+    force_basic_auth: yes
+    #status_code: 200
+  register: token_gen
+  when: sa_name == ""
+
+- debug:
+    msg: "{{ token_gen.json.access_token }}"
+  when: sa_name == ""
+
+- set_fact:
+    token: "{{ token_gen.json.access_token | b64encode }}"
+  when: sa_name == ""
+
+- name: Create secret for token
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: "{{ license_plate }}-artifactorysa"
+        namespace: "{{ meta.namespace }}"
+      type: Opaque
+      data:
+        password: "{{ token }}"
+  when: sa_name == ""
+
+- name: Update sa_name
+  k8s:
+    state: present
+    definition:
+      apiVersion: artifactorysa.operators.bcgov/v1alpha1
+      kind: ArtifactorySA
+      metadata:
+        name: "{{ cr_name }}"
+        namespace: "{{ meta.namespace }}"
+      spec:
+        cr_name: "{{ cr_name }}"
+        sa_name: "{{ license_plate }}"
+        descriptor: "{{ descriptor }}"
+  when: sa_name == ""
+

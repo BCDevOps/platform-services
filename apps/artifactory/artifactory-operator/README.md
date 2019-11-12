@@ -60,19 +60,20 @@ Cluster admin will be required to create the cluster wide CRD and associated rol
 $pwd
 /artifactory/artifactory-operator
 ```
-
-``` bash
-oc apply -f deploy/crds/artifactoryrepo_v1alpha1_artifactoryrepo_crd.yaml
-```
 ##### Give the service account for the Artifactory Operator deployment required permissions
 
-``` bash
-oc apply -f deploy/service_account.yaml
-oc apply -f deploy/role.yaml
-oc apply -f deploy/role_binding.yaml
-```
+
 Adding a cluster-rolebinding for the artifactory-admin role is not covered by this installation, but will be required for any accounts that will be managing the lifecycle of the CRs.
 A separate PR to add a cluster CR role to the bcdevex-admin team has been created in the devops-platform-operations-docs repo (PR-13)
+
+Admins must run the following:
+```
+crds/crd-artifactoryrepo.yaml
+rbac/clusterrole-artifactory-operator.yaml
+rbac/clusterrole-artifactory-admin.yaml
+rbac/clusterrolebinding-artifactory-operator.yaml
+rbac/clusterrolebinding-artifactory-admins.yaml
+```
 
 example command to add this cluster-role to an account:
 
@@ -82,7 +83,7 @@ oc adm policy add-cluster-role-to-user artifactory-admin <username>
 
 #### Build Operator Image:
 
-``` bash
+``` bash    
 $pwd
 /artifactory/artifactory-operator
 ```
@@ -91,7 +92,7 @@ $pwd
 $ operator-sdk build <image-name>
 $ docker push <image-name>
 # alt push method:
-# oc-push-image.sh -i <image-name> -n <namespace> -r docker-registry.pathfinder.gov.bc.ca
+# ../oc-push-image.sh -i <image-name> -n <namespace> -r docker-registry.pathfinder.gov.bc.ca
 
 $ oc -n <namespace> tag <image-name>:latest <image-name>:v1-stable
 ```
@@ -184,76 +185,9 @@ oc apply -f deploy/operator.yaml
 
 > Must have cluster-role artifactory-admin
 
-An example Artifactory CR (Custom Resource) exists under `deploy/crds/artifactory-cr-template.yaml`:
+An example Artifactory CR (Custom Resource) exists under `deploy/crds/artifactory-cr-template.yaml`
 
-```yaml
-apiVersion: template.openshift.io/v1
-kind: Template
-metadata:
-  annotations:
-    description: |-
-      Template for creating custom resource for Artifactory
-  name: artifactory-cr-template
-objects:
-- apiVersion: artifacts.pathfinder.gov.bc.ca/v1alpha1
-  kind: Artifactory
-  metadata:
-    name: ${TEAM_NAME}-${REPO_TYPE}-${REPO_LOCATOR}
-  spec:
-    # Add fields here: team-type-environment-locator
-    console: ${CONSOLE_NAME}
-    team_name: ${TEAM_NAME}
-    repository_type: ${REPO_TYPE}
-    repository_locator: ${REPO_LOCATOR}
-    repository_description: ${REPO_DESCRIPTION}
-    list_virtual_repositories: ${LIST_REPOS_VIRTUAL}
-    user: ${USER}
-parameters:
-- description: Cluster where the CR is being created (choose between "lab" or "prod"
-  displayName: Console Name
-  name: CONSOLE_NAME
-  value: lab
-- description: Team name for the repository
-  displayName: Team name
-  name: TEAM_NAME
-  value: qa
-- description: Type of repository (choose between docker, maven etc)
-  displayName: Team name
-  name: REPO_TYPE
-  value: docker
-- description: Repository locator (choose between local or virtual)
-  displayName: Repository locator
-  name: REPO_LOCATOR
-  value: local
-- description: Description of the repo
-  displayName: Repository description
-  name: REPO_DESCRIPTION
-  value: "this is a description"
-- description: Description of the repo
-  displayName: Repository description
-  name: REPO_DESCRIPTION
-  value: "this is a description"
-- description: List of local repos to be added to the virtual repo. Only valid when the repository locator is virtual
-  displayName: List local repos in a virtual repo
-  name: LIST_REPOS_VIRTUAL
-  value: "ops-docker-local,dev-docker-local"
-- description: User to run the ansible operator as
-  displayName: Operator User
-  name: USER
-  value: admin
-
-```
-
-An example env file also exists under `deploy/crds/team-type-locator.env`:
-
-``` yaml
-CONSOLE_NAME=lab
-TEAM_NAME=qa
-REPO_TYPE=docker
-REPO_LOCATOR=local
-REPO_DESCRIPTION="this is a description"
-LIST_REPOS_VIRTUAL="ops-docker-local,dev-docker-local"
-```
+An example env file also exists under `deploy/crds/team-type-locator.env`
 
 | Parameter                 | Comments                                                 | 
 |---------------------------|----------------------------------------------------------|

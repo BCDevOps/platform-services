@@ -1,0 +1,5 @@
+{
+  "rclass" : "local",
+  "packageType": "docker",
+  "description": "Testing api for creating docker repo"
+}

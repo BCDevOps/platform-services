@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: artifactory-operator
+  name: artifactory-sa-operator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      name: artifactory-operator
+      name: artifactory-sa-operator
   template:
     metadata:
       labels:
-        name: artifactory-operator
+        name: artifactory-sa-operator
     spec:
-      serviceAccountName: artifactory-operator
+      serviceAccountName: artifactory-sa-operator
       containers:
         - name: ansible
           command:
@@ -20,7 +20,7 @@ spec:
           - /tmp/ansible-operator/runner
           - stdout
           # Replace this with the built image name
-          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-operator:v2-stable"
+          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-sa-operator:v2-stable"
           imagePullPolicy: "Always"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner
@@ -31,7 +31,7 @@ spec:
 #            readOnly: true
         - name: operator
           # Replace this with the built image name
-          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-operator:v2-stable"
+          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-sa-operator:v2-stable"
           imagePullPolicy: "Always"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner
@@ -46,7 +46,7 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "artifactory-operator"
+              value: "artifactory-sa-operator"
       volumes:
         - name: runner
           emptyDir: {}
