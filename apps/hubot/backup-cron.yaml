@@ -16,7 +16,7 @@ spec:
           - name: backup
             image: redis:3.2
             command: ["/bin/bash"]
-            args: ["-c", "cp /var/lib/redis/data/dump.rdb /var/lib/redis/data/dump.rdb.$(date +%F)"]
+            args: ["-c", "cp /var/lib/redis/data/dump.rdb /var/lib/redis/data/dump.rdb.$(date +%F)", "find /var/lib/redis/data -name '*.rdb.*' -type f -mtime +30 -exec rm -f {} \;"]
             volumeMounts:
               - mountPath: /var/lib/redis/data
                 name: redis-backup-data
