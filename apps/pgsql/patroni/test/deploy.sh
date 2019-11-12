@@ -6,7 +6,7 @@ set -Eeu
 cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ..
 
 source test/_functions.sh
-check_minishift
+#check_minishift
 
 echo "Deleting deploy objects ..."
 # set -x

@@ -6,7 +6,7 @@ set -Eeu
 cd "$( dirname "${BASH_SOURCE[0]}" )" && cd ..
 
 source test/_functions.sh
-check_minishift
+#check_minishift
 
 #pods="$(oc get pod -l 'statefulset=patroni-001,statefulset.kubernetes.io/pod-name' -o custom-columns=name:.metadata.name --no-headers=true)"
 
