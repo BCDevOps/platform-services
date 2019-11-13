@@ -2,6 +2,7 @@
 # tasks file for artifactory
 - set_fact:
     license_plate: "{{ lookup('password', '/dev/null length=6 chars=ascii_letters') | lower }}"
+    sa_password: "{{ lookup('password', '/dev/null length=12 chars=ascii_letters,digits,hexdigits,punctuation') }}"
 
 - name: Create artifactory group
   uri:
@@ -26,7 +27,7 @@
     body_format: json
     headers:
       Content-type: "application/json" 
-    body: '{"name": "{{ license_plate }}","email" : "{{ meta.namespace }}-{{ license_plate }}@bcgov-artifactory.internal","password": "{{ lookup("password", "/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation") }}","admin": false,"profileUpdatable": false,"disableUIAccess" : true,"internalPasswordDisabled": false,"realm": "Internal","groups" : [ "{{ license_plate }}" ]}'
+    body: '{"name": "{{ license_plate }}","email" : "{{ meta.namespace }}-{{ license_plate }}@bcgov-artifactory.internal","password": "{{ sa_password }}","admin": false,"profileUpdatable": false,"disableUIAccess" : true,"internalPasswordDisabled": false,"realm": "Internal","groups" : [ "{{ license_plate }}" ]}'
     force_basic_auth: yes
     status_code: 201
   when: sa_name == ""
@@ -54,6 +55,10 @@
     token: "{{ token_gen.json.access_token | b64encode }}"
   when: sa_name == ""
 
+- set_fact:
+    sa_password: "{{ sa_password | b64encode }}"
+  when: sa_name == ""
+
 - name: Create secret for token
   k8s:
     state: present
@@ -65,7 +70,8 @@
         namespace: "{{ meta.namespace }}"
       type: Opaque
       data:
-        password: "{{ token }}"
+        password: "{{ sa_password }}"
+        token: "{{ token }}"
   when: sa_name == ""
 
 - name: Update sa_name
