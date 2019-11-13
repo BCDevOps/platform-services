@@ -9,7 +9,7 @@ spec:
     spec:
       template:
         metadata:
-          labels:o
+          labels:
             parent: "redis-backup-cron"
         spec:
           containers:
