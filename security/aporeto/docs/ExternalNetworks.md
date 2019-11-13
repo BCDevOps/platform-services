@@ -4,7 +4,7 @@ tags:
 - next gen security
 - custom network policy
 - Aporeto
-
+---
 ## Zero-Trust Model for External Networks
 
 This document is under construction.
