@@ -1,5 +1,5 @@
 ---
-description: An overview of the Aporeto software used on the Openshift platform to implement the Zero-Trust security model including the implementation details.
+description: An overview of the Aporeto solution used  to implement the Zero-Trust security model on the Openshift platform.
 tags:
 - next gen security
 - custom network policy

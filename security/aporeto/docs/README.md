@@ -12,7 +12,7 @@ tags:
 - networksecuritypolicy
 ---
 
-# NetworkSecurityPolicy: Zero Trust Security Model on the Platform: Trust No One
+# Developer Guide to Zero Trust Security Model on the Platform
 
 With the addition of new [security components](../readme.md) BCDevExchange's Platform Services is able to offer product teams the ability to operate in a Zero Trust security model; Zero Trust is a security model where you don't trust anything outside of your own components (pods), even pods don't trust each other!
 

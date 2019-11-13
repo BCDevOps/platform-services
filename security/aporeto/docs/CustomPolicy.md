@@ -12,12 +12,12 @@ tags:
 - security policy sample example
 ---
 
-# NetworkSecurityPolicy: Custom Policy Development
 
+# Custom Network Security Policy Development
 
 ## Introduction
 
-This tutorial will guide you through creating application identities for each of your deployable components (pods) within your OpenShift Container Platform (OCP) namespaces as well as building custom application network security/access policy via `NetworkSecurityPolicy` (NSP) objects based on these identities to secure communications between your components.
+This tutorial is part of the [Developer Guide for Zero Trust Security Model](./README.md) and will guide you through creating application identities for each of your deployable components (pods) within your OpenShift Container Platform (OCP) namespaces as well as building custom application network security policy via `NetworkSecurityPolicy` (NSP) objects based on these identities to secure communications within the namespace and between the namespace and external components. 
 
 By the end of the document you will be able to create policy to manage:
 
@@ -100,9 +100,9 @@ The `env` label will change based on the namespace the deployment targets and th
 * K.I.S - Keep It (your labels) Simple; don't try and outsmart yourself.
 * Where possible use the naming convention proposed here for uniformity across projects.
 
-## Custom Access Policies
+## Custom Network Security Policies
 
-The access policies below will provide most teams enough to get up and running in short order. Customize them with labels or template parameters as needed. If you find the sample policy below does not suite your needs contact platform services to help create more advanced access policy.
+The network security policies below will provide most teams enough to get up and running in short order. Customize them with labels or template parameters as needed. If you find the sample policy below does not suite your needs contact platform services to help create more advanced access policy.
 
 In the subsections below we'll use one or more tags to identify the source and destination systems. The relevance if `source` and `destination` is that the application identified in the `source` will be able to open a network connection to the application identified in `destination`; Once a connection is open then data is able to flow bidirectionally.
 
@@ -160,7 +160,7 @@ spec:
 
 ### External Network to Namespace 
 
-This sample policy is used to allow external networks to communicate with pods; typically use this type of policy to accept connections from the the Interweb 🧐. Create a policy similar to this one for each system that needs to **receive** connections from the Internet.
+This sample policy is used to allow external networks to communicate with pods; typically use this type of policy to accept connections from the the Interweb 🧐. Create a policy similar to this one for each component that needs to **receive** connections from the Internet.
 
 The sample below allows the Web pod(s) to accept connections to from the Internet.
 
@@ -182,11 +182,11 @@ spec:
 
 **🤓 ProTip**
 
-* You can define your own external networks using an `ExternalNetwork` described later in this document.
+* If some of your application components are hosted outside of Opehsift, check the `ExternalNetwork` [here](./ExternalNetwork.md) for sample policies (coming soon).
 
 ### Namespace to External Network 
 
-This sample policy is used to allow pods to communicate with an external network; typically use this type of policy to talk to the Interweb 🧐. Create a policy similar to this one for each system that needs to **create** connections to the Internet or other parts of the BCGov (SPANBC) network.
+This sample policy is used to allow pods to communicate with an external network; typically use this type of policy to talk to the Interweb 🧐. Create a policy similar to this one for each system that needs to **initiate** connections to the Internet or other parts of the BCGov (SPANBC) network.
 
 The sample below allows the API pod(s) to open connections to any system on the Internet.
 
@@ -209,7 +209,10 @@ spec:
 
 ### Namespace to Namespace
 
-This sample policy is used to allow pods to communicate across namespaces; typically use this type of policy to talk to other applications hosted on the OCP. Create a policy similar to this one for each system that needs to **create** connections to another OCP namespace. The owner of the `destination` namespace will need a similar policy to allow incoming connections from the `source` namespace. 
+This sample policy is used to allow pods to communicate across namespaces; typically use this type of policy to talk to other applications hosted on the OCP. Create a policy similar to this one for each system that needs to **initiate** connections to another OCP namespace. The owner of the `destination` namespace will need a similar policy to allow incoming connections from the `source` namespace. 
+
+**:point_up: Note**
+> The prerequisite for the namespace to namespace network security policy is for the connecting namespaces to either have API endpoints exposed as routes in Openshift or to have a network join created to enable communication between the namespaces on the network level (Openshift 3.11 only).
 
 The sample below allows the API pod(s) to open connections to a specific pod(s) in a different namespace.
 
