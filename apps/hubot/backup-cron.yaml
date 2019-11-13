@@ -3,13 +3,13 @@ kind: CronJob
 metadata:
   name: redis-backup-cron
 spec:
-  schedule: "00 8 * * *"
+  schedule: "00 1 * * *"
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
         metadata:
-          labels:
+          labels:o
             parent: "redis-backup-cron"
         spec:
           containers:
