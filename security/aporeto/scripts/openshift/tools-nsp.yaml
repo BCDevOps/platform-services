@@ -1,0 +1,24 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: egress-internet
+spec:
+  description: |
+    allow the devops-security-tools namespace to talk to the internet.
+  source:
+    - - $namespace=devops-security-tools
+  destination:
+    - - ext:network=any
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: int-cluster-k8s-api-comms
+spec:
+  description: |
+    allow devops-security-tools pods to talk to the k8s api
+  destination:
+  - - int:network=internal-cluster-api-endpoint
+  source:
+  - - $namespace=devops-security-tools

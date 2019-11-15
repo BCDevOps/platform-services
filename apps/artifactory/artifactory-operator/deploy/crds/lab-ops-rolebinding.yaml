@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ClusterRoleBinding
+metadata:
+  name: artifactory-admins
+roleRef:
+  name: artifactory-admin
+subjects:
+- kind: User
+  name: daniyalj
+- kind: User
+  name: jefkel
+userNames:
+- daniyalj
+- jefkel
+groupNames: null

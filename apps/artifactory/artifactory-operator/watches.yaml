@@ -1,0 +1,7 @@
+---
+- version: v1alpha1
+  group: artifactoryrepo.operators.bcgov
+  kind: ArtifactoryRepo
+  role: /opt/ansible/roles/artifactory
+  playbook: /opt/ansible/roles/main.yml
+  reconcilePeriod: 0

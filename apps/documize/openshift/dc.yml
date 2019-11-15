@@ -1,0 +1,155 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: ${NAME}-dc-template
+labels:
+  template: ${NAME}
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}
+  spec:
+    lookupPolicy:
+      local: false
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}${SUFFIX}
+  spec:
+    replicas: 2
+    selector:
+      deploymentconfig: ${NAME}${SUFFIX}
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: ${NAME}${SUFFIX}
+      spec:
+        containers:
+        - image: ${NAME}${VERSION}
+          imagePullPolicy: Always
+          name: ${NAME}
+          ports:
+          - containerPort: 5001
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          env:
+          - name: DB_HOST
+            value: ${PATRONI_SERVICE}${SUFFIX}
+          - name: DB_PORT
+            value: '5432'
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                key: app-db-name
+                name: ${DB_SECRET_NAME}${SUFFIX}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key: app-db-username
+                name: ${DB_SECRET_NAME}${SUFFIX}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: app-db-password
+                name: ${DB_SECRET_NAME}${SUFFIX}
+          - name: DOCUMIZEPORT
+            value: '5001'
+          - name: DOCUMIZEDBTYPE
+            value: postgresql
+          - name: DOCUMIZESALT
+            value: tsu3Acndky8cdTNx3
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${NAME}:${VERSION}
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}${SUFFIX}
+  spec:
+    ports:
+    - name: 5001-tcp
+      port: 5001
+      protocol: TCP
+      targetPort: 5001
+    selector:
+      deploymentconfig: ${NAME}${SUFFIX}
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}${SUFFIX}
+  spec:
+    host: ${HOST_VALUE}
+    port:
+      targetPort: 5001-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${NAME}${SUFFIX}
+      weight: 100
+    wildcardPolicy: None
+parameters:
+- description: A name used for all objects
+  displayName: Name
+  name: NAME
+  required: true
+  value: documize
+- description: A name suffix used for all objects
+  displayName: Suffix
+  name: SUFFIX
+  required: false
+  value: -dev
+- description: A version used for the image tags
+  displayName: version
+  name: VERSION
+  required: true
+  value: v1.0.0
+  value: documize-patroni
+- description: The url of documize app
+  displayName: documize app url
+  name: HOST_VALUE
+  required: false
+  value: ''
+- description: The name of the OpenShift Service exposed for the patroni-persistent-master container.
+  displayName: Master service name
+  name: PATRONI_SERVICE
+  value: documize-patroni-master
+- description: The name of the secret
+  displayName: Secret Name
+  name: DB_SECRET_NAME
+  value: patroni

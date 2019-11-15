@@ -1,0 +1,129 @@
+---
+# Copyright © 2019 Province of British Columbia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# This Ansible playbook will backup Aporeto policy
+# to a git repository and push the changes to
+# a remote repo.
+- hosts: localhost
+  gather_facts: no
+  vars:
+    saas_host: github.com
+    saas_org: "bcgov-c"
+    repo_name: "platform-secops-netpol"
+    work_dir: "/tmp"
+    cur_date: "{{ lookup('pipe', 'date +%Y%m%d') }}"
+  tasks:
+    - fail:
+        msg: You must set APOCTL_TOKEN and SSH_DKEY environment variables.
+      when:
+        - lookup('env', 'SSH_DKEY') is not defined
+        - lookup('env', 'APOCTL_TOKEN') is not defined
+    - name: Setup git identity
+      shell: |
+        git config --global user.email "nobody@gov.bc.ca" && \
+        git config --global user.name "Backup CronJob"
+    - name: Create SSH directory
+      file:
+        path: $HOME/.ssh
+        owner: "{{ lookup('pipe', 'id -u') }}"
+        group: "{{ lookup('pipe', 'id -g') }}"
+        mode: '0700'
+        state: directory
+    - name: Create SSH config
+      file:
+        path: $HOME/.ssh/config
+        owner: "{{ lookup('pipe', 'id -u') }}"
+        group: "{{ lookup('pipe', 'id -g') }}"
+        mode: '0644'
+        state: touch
+    - name: Setup SSH identity for GitHub access
+      # EOF will be added automatically.
+      shell: |
+        cat <<EOF > $HOME/.ssh/config
+        Host "{{ saas_host }}"
+          HostName "{{ saas_host }}"
+          PreferredAuthentications publickey
+          IdentityFile $HOME/.ssh/id_rsa
+      args:
+        executable: /bin/bash
+    - name: Setup git SaaS provider ssh keys
+      shell: |
+        ssh-keyscan -t rsa -H "{{ saas_host }}" >>$HOME/.ssh/known_hosts
+    - name: Create SSH private key
+      file:
+        path: $HOME/.ssh/id_rsa
+        owner: "{{ lookup('pipe', 'id -u') }}"
+        group: "{{ lookup('pipe', 'id -g') }}"
+        mode: '0600'
+        state: touch
+    - name: Add SSH private key contents
+      shell: |
+        echo $GITHUB_DKEY | base64 -d >$HOME/.ssh/id_rsa
+      args:
+        executable: /bin/bash
+    - name: Clone repo
+      git:
+        repo: "git@{{ saas_host }}:{{ saas_org }}/{{ repo_name }}"
+        dest: "{{ work_dir }}/{{ repo_name }}"
+        refspec: master
+    # This task current omits the DevOps LAB and focuses on
+    # backing up production policy only.
+    - name: List all Aporeto namespaces
+      shell: |
+        apoctl api list namespace -n /bcgov -r -o table -c name | \
+        tail -n +4
+      register: apoctl_list_ns_cmd
+    - name: Extract all Aporeto namespaces
+      set_fact: 
+        apo_namespaces: "{{ apoctl_list_ns_cmd.stdout.split('\n') | map('trim') | list }}"
+      when:
+        - apoctl_list_ns_cmd.rc == 0
+        - apoctl_list_ns_cmd.stdout is defined
+        - apoctl_list_ns_cmd.stdout != ""
+        - apoctl_list_ns_cmd.stdout != "[]"
+    - name: Create directory structure
+      loop: "{{ apo_namespaces }}"
+      file:
+        path: "{{ work_dir }}/{{ repo_name }}{{ item }}"
+        state: directory
+      when: apo_namespaces is defined
+    # This is a fairly time consuming task. Test runs in a container on a
+    # MBP about 15 to 25 minutes. 
+    - name: Export Aporeto policy
+      loop: "{{ apo_namespaces }}"
+      shell: |
+        pushd "{{ work_dir }}/{{ repo_name }}{{ item }}" && \
+        apoctl api export netpol extnet \
+        -n "{{ item }}" -l backup > "export.yaml" && \
+        popd
+      args:
+        executable: /bin/bash
+      when: apo_namespaces is defined
+    - name: Commit updates to git repo
+      # This will fail if there are no changes to commit and
+      # that's ok.
+      ignore_errors: true
+      shell: |
+        pushd "{{ work_dir }}/{{ repo_name }}" && \
+        git add . && \
+        git commit -am "Aporeto policy export for {{ lookup('pipe', 'date') }}" && \
+        popd
+      args:
+        executable: /bin/bash
+      register: commit_result
+    - name: Push changes
+      shell: |
+        pushd "{{ work_dir }}/{{ repo_name }}" && \
+        git push origin master
+        popd
+      args:
+        executable: /bin/bash
+      when: commit_result is not failed
+    - name: Finished
+      meta: end_play

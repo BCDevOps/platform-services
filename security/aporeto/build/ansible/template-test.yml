@@ -1,13 +1,13 @@
 # This is just a sample file used for quick tests
-# ---
-# - hosts: localhost
-#   connection: local
-#   become: false
-#   gather_facts: no
-#   vars_files: 
-#     - vars.yml
-#   tasks: 
-#     - include_tasks: tasks/set_env.yml
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks: 
+    - include_tasks: tasks/set_env.yml
 #     - name: Set fact for current policy count
 #       command: 
 #         "apoctl api count  networkaccesspolicies --namespace={{ aporeto_parent_namespace }}/{{ aporeto_namespace }}"
@@ -17,4 +17,18 @@
 #     #     src: templates/profiles/openshift-default-profile.yml.j2
 #     #     dest: output/test.yml
 #     - include_tasks: tasks/monitor_policy_creation.yml
-      
+    - name: get list of projects and custom resources 
+      shell: "for crd in $(oc api-resources --api-group=secops.pathfinder.gov.bc.ca -o name); do oc get $crd --all-namespaces -o custom-columns=KIND:.kind,NAMESPACE:.metadata.namespace,NAME:.metadata.name --no-headers; done "
+      register: crd_output
+
+    - name: debug
+      debug: msg="{{ item.split()[0] | lower }} {{ item.split()[1] }} {{ item.split()[2] }}"
+      with_items: 
+       - "{{ crd_output.stdout_lines }}"
+
+
+    # - name: Remove finalizer from BCGov CRs and delete ## this should be rewritten to get the specific objects, not going namespace by namespace
+    #   shell: "for crd in $(oc api-resources --api-group=secops.pathfinder.gov.bc.ca -o name); do for cr in $(oc get $crd -n {{ item }} -o name);do oc patch $cr -p '{\"metadata\":{\"finalizers\":[]}}' --type=merge -n {{ item }} && oc delete $cr -n {{ item }}; done; done"
+    #   with_items: 
+    #     - "{{ project_list.stdout_lines }}"
+    #   ignore_errors: true         #errors show up even though the resources are removed successfully
