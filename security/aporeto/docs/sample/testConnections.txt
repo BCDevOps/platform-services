@@ -1,0 +1,15 @@
+# Uses the 'testConnection' script from https://github.com/BCDevOps/openshift-developer-tools
+# Example:
+# echo -e "angular-on-nginx\n django\n postgresql\n weasyprint\n schema-spy" | xargs -I {} testConnection -n jag-csb-jes-family-protection-order-dev -f TestConnections.txt -p {}
+
+#Test external connectivity
+google.com:80
+
+#Test the connectivity within the namespace. REPLACE with your deployments
+angular-on-nginx-2:8080	
+test-python-app:8080
+#postgres:5432
+
+#Test the connectivity with the K8S internal API (needed for builds, deployments, etc)
+# PROD Cluster  172.50.0.1
+172.50.0.1:443
