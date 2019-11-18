@@ -5,6 +5,8 @@
     ```
     brew install docker-machine-driver-xhyve
     ```
+    NOTE: Don't forget to manually run sudo commands (`sudo chown root:wheel ...` and `sudo chmod u+s ...`) shown after installation is finished.
+    
   - manually install from [CDK docs](https://access.redhat.com/documentation/en-us/red_hat_container_development_kit/3.7/html-single/getting_started_guide/index#setting-up-xhyve-driver)
 
 # Setup Red Hat Container Development Kit (for MacOS)
