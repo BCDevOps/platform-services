@@ -37,11 +37,6 @@ $ echo export MINISHIFT_USERNAME=$MINISHIFT_USERNAME >> ~/.bash_profile
 minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8
 
 
-
-oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts
-# TODO: try changing workaround for allow default namespace:
-# oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts:default
-
 minishift timezone --set America/Vancouver
 
 # Fixing problems with pulling images from "docker-registry.default.svc"
@@ -52,6 +47,11 @@ minishift ssh -- 'sudo bash -c "echo 172.30.1.1 docker-registry.default.svc >> /
 oc login -u admin -p system
 
 oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-registry.default.svc:5000
+
+oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts
+# TODO: try changing workaround for allow default namespace:
+# oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts:default
+
 ```
 
 # Attach RHEL subscription (enables Red Hat Software Collections)
