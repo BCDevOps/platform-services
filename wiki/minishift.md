@@ -1,5 +1,5 @@
 
-# Dependencies
+# 1 - Dependencies
 - docker-machine-driver-xhyve
   - Using homebrew
     ```
@@ -9,10 +9,11 @@
     
   - manually install from [CDK docs](https://access.redhat.com/documentation/en-us/red_hat_container_development_kit/3.7/html-single/getting_started_guide/index#setting-up-xhyve-driver)
 
-# Setup Red Hat Container Development Kit
-## For MacOS
+# 2 - Setup Red Hat Container Development Kit
 
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/) - Instructions based on 3.10.0
+
+## 2.1 - For MacOS
 ```
 minishift setup-cdk --force
 minishift addons enable registry-route
@@ -39,7 +40,7 @@ minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8
 
 ```
 
-# for Win10 with HyperV
+# 2.2 - for Win10 with HyperV
 
 minishift is avaliable as Chocolatey package, or download 'cdk-3.8.0-2-minishift-windows-amd64.exe' for Windows from RedHat web site, then rename to 'minishift.exe'
 
@@ -62,7 +63,7 @@ minishift setup
 minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8 --hyperv-virtual-switch=minishift-external
 ```
 
-# Configuring Minishift
+# 3 - Configuring Minishift
 
 ```
 
@@ -83,7 +84,7 @@ oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts
 
 ```
 
-# Attach RHEL subscription (enables Red Hat Software Collections)
+# 4 - Attach RHEL subscription (enables Red Hat Software Collections)
 When you setup minishift, and correctly configure your developer subscription, there will be a subscription pool available, however it will not be _attached_.  This describes how to find the `Pool ID` and attach it.  If you get an error in a build from `microdnf`: `repo rhel-7-server-rpms not found`, you have not correctly setup your subscription in minishift; follow the instructions below.
 
 ## Attach "Red Hat Developer Subscription" subscription
@@ -105,7 +106,7 @@ minishift ssh -- 'yum repolist all -y' | grep "rhel-server-rhscl" | wc -l
 Note: You should see around 9 repositories. Any output grater than 0 should be good.
 
 
-# Setting up shared namespaces/resources
+# 5 - Setting up shared namespaces/resources
 ```
 oc new-project bcgov
 oc new-project bcgov-tools
@@ -116,7 +117,7 @@ oc policy add-role-to-group system:image-puller 'system:serviceaccounts' -n bcgo
 
 ```
 
-# Import shared images from Pathfinder Openshift
+# 6 - Import shared images from Pathfinder Openshift
 ```
 # Create a secret using the username/token from https://console.pathfinder.gov.bc.ca:8443/console/command-line
 oc -n bcgov create secret docker-registry pathfinder \
@@ -140,7 +141,7 @@ oc -n bcgov import-image postgis-96:v1-latest --from=docker-registry.pathfinder.
 
 ```
 
-# Setting up PV
+# 7 - Setting up PV
 ```
 # Fix/Patch PV directory
 minishift ssh -- "sudo chmod -R a+rwx /var/lib/minishift/base/openshift.local.pv*"
@@ -166,7 +167,7 @@ minishift ssh -- bash <<< 'seq 20 29 | xargs -t -I {} bash -c "sudo rm -rf /var/
 
 ```
 
-# Create a privileged service account
+# 8 - Create a privileged service account
 This account will have `anyuid` privilege so you can run as root and for instance iteratively figure out how to create an image
 ```
 oc -n myproject create sa privileged
@@ -175,7 +176,7 @@ oc -n myproject run rhel7-tools --serviceaccount=privileged --image=registry.acc
 
 ```
 
-# Testing
+# 9 - Testing
 ```
 oc import-image helloworld-http:latest --from=registry.hub.docker.com/strm/helloworld-http:latest --confirm
 oc new-app --image-stream=helloworld-http:latest --name=helloworld-http
@@ -192,26 +193,26 @@ oc run oc --image=registry.access.redhat.com/openshift3/ose-cli:v3.11 -it --rm=t
 
 ```
 
-# Restarting
+# 10 - Restarting
 
 A restart script can be found here:
 
 [restart-minishift.sh](https://raw.githubusercontent.com/BCDevOps/platform-services/cvarjao-cdk-minishift/wiki/assets/restart-minishift.sh)
 
-# Troubleshooting
+# 11 - Troubleshooting
 ```
 # Who can PULL images
 oc policy who-can get imagestreams/layers
 ```
 
-# Uninstall
+# 12 - Uninstall
 ```
 minishift delete
 rm -rf ~/.minishift
 rm -rf ~/.kube
 ```
 
-# Tested Environment
+# 13 - Tested Environment
 ```
 $ uname -a
 Darwin ***** 18.7.0 Darwin Kernel Version 18.7.0: Tue Aug 20 16:57:14 PDT 2019; root:xnu-4903.271.2~2/RELEASE_X86_64 x86_64
