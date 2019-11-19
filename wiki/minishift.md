@@ -40,7 +40,7 @@ minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8
 
 ```
 
-# 2.2 - for Win10 with HyperV
+## 2.2 - for Win10 with HyperV
 
 minishift is avaliable as Chocolatey package, or download 'cdk-3.8.0-2-minishift-windows-amd64.exe' for Windows from RedHat web site, then rename to 'minishift.exe'
 
