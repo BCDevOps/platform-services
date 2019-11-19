@@ -9,7 +9,8 @@
     
   - manually install from [CDK docs](https://access.redhat.com/documentation/en-us/red_hat_container_development_kit/3.7/html-single/getting_started_guide/index#setting-up-xhyve-driver)
 
-# Setup Red Hat Container Development Kit (for MacOS)
+# Setup Red Hat Container Development Kit
+## For MacOS
 
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/) - Instructions based on 3.10.0
 ```
@@ -36,6 +37,34 @@ $ echo export MINISHIFT_USERNAME=$MINISHIFT_USERNAME >> ~/.bash_profile
 
 minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8
 
+```
+
+# for Win10 with HyperV
+
+minishift is avaliable as Chocolatey package, or download 'cdk-3.8.0-2-minishift-windows-amd64.exe' for Windows from RedHat web site, then rename to 'minishift.exe'
+
+```
+cinst minishift -y
+```
+
+The steps are the same as above with the following differences:
+
+```
+//Check number of logical CPUs in the machine (PS)
+$env:NUMBER_OF_PROCESSORS
+//Check number of logical CPUs in the machine (cmd)
+echo %NUMBER_OF_PROCESSORS%
+
+//configure HyperV before running start
+minishift setup
+
+//set the HyperV switch
+minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8 --hyperv-virtual-switch=minishift-external
+```
+
+# Configuring Minishift
+
+```
 
 minishift timezone --set America/Vancouver
 
@@ -69,35 +98,12 @@ This step is only informational in case you need to remove/release subscription
 minishift ssh -- 'sudo subscription-manager list --consumed "--matches=Red Hat Developer Subscription" --pool-only | xargs -t -I {} sudo subscription-manager remove "--pool={}"'
 ```
 
-## Assert that the rhscl repos are registerred
+## Assert that the rhscl repos are registered
 ```
-minishift ssh -- 'yum repolist all' | grep "rhel-server-rhscl" | wc -l'
+minishift ssh -- 'yum repolist all -y' | grep "rhel-server-rhscl" | wc -l
 ```
 Note: You should see around 9 repositories. Any output grater than 0 should be good.
 
-
-# Setup Red Hat Container Development Kit (for Win10 with HyperV)
-
-minishift is avaliable as Chocolatey package, or download 'cdk-3.8.0-2-minishift-windows-amd64.exe' for Windows from RedHat web site, then rename to 'minishift.exe'
-
-```
-cinst minishift -y
-```
-
-The steps are the same as above with the following differences:
-
-```
-//Check number of logical CPUs in the machine (PS)
-$env:NUMBER_OF_PROCESSORS
-//Check number of logical CPUs in the machine (cmd)
-echo %NUMBER_OF_PROCESSORS%
-
-//configure HyperV before running start
-minishift setup
-
-//set the HyperV switch
-minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8 --hyperv-virtual-switch=minishift-external
-```
 
 # Setting up shared namespaces/resources
 ```
