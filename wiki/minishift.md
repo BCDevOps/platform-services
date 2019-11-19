@@ -65,12 +65,12 @@ minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8 --hyperv-virtu
 
 # 3 - Configuring Minishift
 
+NOTE: You may need to run this whole section every time you run `minishift start`.
 ```
 
 minishift timezone --set America/Vancouver
 
 # Fixing problems with pulling images from "docker-registry.default.svc"
-# This does NOT persist on mnishift stop/start
 minishift ssh -- 'sudo bash -c "echo 172.30.1.1 docker-registry.default.svc >> /etc/hosts"'
 
 # for the following command to work, you must be logged into minishift as admin
