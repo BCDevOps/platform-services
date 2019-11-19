@@ -59,6 +59,14 @@ Install the custom resource definition (CRD) on the k8s (OpenShift) cluster:
 kubectl apply -f deploy/crds/defenition.yaml
 ```
 
+The operator needs two environment variables set so it can access Aporeto using the correct base (root) namespace. The k8s namespace where you load the CR (for example `default`) must exists below the base namespace. For development, you can use your own access token providing you have sufficient access; for production you'll need a long-lived application token.
+
+| Name  | Type        | Description    |
+| ----- |:-----------:|:---------------|
+| APOCTL_BASE_NAMESPACE  | string | The base (root) namespace. |
+| APOCTL_TOKEN | string | A valid Aporeto authenticaiton token (JWT) |
+
+
 Bring the operator on-line. The `config.yaml` is your k8s config file with credentials to access the cluster. The flag `zap-encoder` is used to make the logging slightly more readable; if you don't use `console` you'll get fairly unreadable `JSON`. The argumentd `--namespace` needs to be a specific namespace or an empty string to monitor __all__ namespaces.
 
 ```console
