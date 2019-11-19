@@ -13,14 +13,20 @@
 
 Download [Red Hat Container Development Kit](https://developers.redhat.com/products/cdk/download/) - Instructions based on 3.10.0
 
-## 2.1 - For MacOS
+
+## 2.1 - MacOS with xhyve
 ```
+sudo minishift setup
 minishift setup-cdk --force
-minishift addons enable registry-route
-minishift addons disable anyuid
 
 # Check number of logical CPUs in the machine
 sysctl -n hw.ncpu
+
+# adjust to match amount of available  memory (minimun 8GB)
+minishift config set memory '8GB'
+
+# adjust to match number of CPUs available
+minishift config set cpus '8'
 
 # Note: Before starting your cluster for the very first time, you will be prompt for a
 #       Redhat Developer Login/password.
@@ -34,13 +40,11 @@ $ export MINISHIFT_USERNAME='<RED_HAT_USERNAME>'
 
 $ echo export MINISHIFT_USERNAME=$MINISHIFT_USERNAME >> ~/.bash_profile
 
-# start your cluster: (watch for the prompt to login to your redhat account)
-
-minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8
-
+# check setup-cdk has set vm-driver to 'xhyve'
+minishift config view
 ```
 
-## 2.2 - for Win10 with HyperV
+## 2.2 - Windows 10 with HyperV
 
 minishift is avaliable as Chocolatey package, or download 'cdk-3.8.0-2-minishift-windows-amd64.exe' for Windows from RedHat web site, then rename to 'minishift.exe'
 
@@ -57,16 +61,32 @@ $env:NUMBER_OF_PROCESSORS
 echo %NUMBER_OF_PROCESSORS%
 
 //configure HyperV before running start
-minishift setup
+
 
 //set the HyperV switch
-minishift start --openshift-version=3.11.59 --memory=8GB --cpus=8 --hyperv-virtual-switch=minishift-external
+minishift config set hyperv-virtual-switch minishift-external
+# adjust to match amount of available  memory (minimum 8GB)
+minishift config set memory '8GB'
+# adjust to match number of CPUs available
+minishift config set cpus '8'
 ```
 
-# 3 - Configuring Minishift
+# 3 - Starting Minishift
 
 NOTE: You may need to run this whole section every time you run `minishift start`.
 ```
+minishift addons enable registry-route
+minishift addons disable anyuid
+minishift config set timezone 'America/Vancouver'
+minishift config set openshift-version 3.11.59
+minishift config set disk-size 40g
+
+# start your cluster: (watch for the prompt to login to your redhat account)
+minishift start
+
+# workaround for "The root filesystem of the Minishift VM exceeds overlay size"
+# https://docs.okd.io/latest/minishift/troubleshooting/troubleshooting-misc.html#root-filesystem-exceeds-overlay-size
+minishift ssh -- 'sudo mkdir -p /mnt/vda1/var/cache/yum && sudo rm -rf /var/cache/yum && sudo ln -sf /mnt/vda1/var/cache/yum /var/cache/yum'
 
 minishift timezone --set America/Vancouver
 
@@ -81,6 +101,9 @@ oc -n default set env dc/docker-registry REGISTRY_OPENSHIFT_SERVER_ADDR=docker-r
 oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts
 # TODO: try changing workaround for allow default namespace:
 # oc adm policy add-scc-to-group hostmount-anyuid system:serviceaccounts:default
+
+
+
 
 ```
 
