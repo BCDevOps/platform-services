@@ -4,7 +4,10 @@
     name: "{{ secops_utils_image_namespace }}"
     kind: Namespace 
     state: present
-  
+
+- name: Add image-puller permissions
+  shell: > 
+    ''oc policy add-role-to-user system:image-puller  system:serviceaccount:"{{ openshift_project_prefix }}-operator":networksecuritypolicy-operator -n "{{ secops_utils_image_namespace }}"''
 - name: Create NetworkSecurityPolicies 
   k8s_raw: 
     src: ../../tools/secops-utils/openshift/tools-nsp.yaml
