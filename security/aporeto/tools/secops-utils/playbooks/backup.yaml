@@ -20,10 +20,9 @@
     cur_date: "{{ lookup('pipe', 'date +%Y%m%d') }}"
   tasks:
     - fail:
-        msg: You must set APOCTL_TOKEN and SSH_DKEY environment variables.
+        msg: You must set GITHUB_DKEY environment variables.
       when:
-        - lookup('env', 'SSH_DKEY') is not defined
-        - lookup('env', 'APOCTL_TOKEN') is not defined
+        - lookup('env', 'GITHUB_DKEY') is not defined
     - name: Setup git identity
       shell: |
         git config --global user.email "nobody@gov.bc.ca" && \
@@ -49,24 +48,37 @@
         Host "{{ saas_host }}"
           HostName "{{ saas_host }}"
           PreferredAuthentications publickey
-          IdentityFile $HOME/.ssh/id_rsa
+          IdentityFile $HOME/.ssh/aporeto_backup_key
       args:
         executable: /bin/bash
     - name: Setup git SaaS provider ssh keys
       shell: |
         ssh-keyscan -t rsa -H "{{ saas_host }}" >>$HOME/.ssh/known_hosts
+
+    - name: Check for SSH Key File
+      stat: 
+        path: /opt/github/githubDeploymentKey
+      register: github_key_exists
+
+    - name: Add SSH private key contents
+      shell: |
+        echo $GITHUB_DKEY >$HOME/.ssh/aporeto_backup_key
+      args:
+        executable: /bin/bash
+      when: github_key_exists.stat.exists == false
+    - name: Add SSH private key file 
+      shell: |
+        cat /opt/github/githubDeploymentKey >$HOME/.ssh/aporeto_backup_key
+      args:
+        executable: /bin/bash
+      when: github_key_exists.stat.exists == true 
     - name: Create SSH private key
       file:
-        path: $HOME/.ssh/id_rsa
+        path: $HOME/.ssh/aporeto_backup_key
         owner: "{{ lookup('pipe', 'id -u') }}"
         group: "{{ lookup('pipe', 'id -g') }}"
         mode: '0600'
-        state: touch
-    - name: Add SSH private key contents
-      shell: |
-        echo $GITHUB_DKEY | base64 -d >$HOME/.ssh/id_rsa
-      args:
-        executable: /bin/bash
+        state: touch 
     - name: Clone repo
       git:
         repo: "git@{{ saas_host }}:{{ saas_org }}/{{ repo_name }}"
@@ -105,6 +117,7 @@
       args:
         executable: /bin/bash
       when: apo_namespaces is defined
+
     - name: Commit updates to git repo
       # This will fail if there are no changes to commit and
       # that's ok.

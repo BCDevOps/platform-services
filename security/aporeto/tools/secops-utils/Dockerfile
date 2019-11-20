@@ -1,12 +1,12 @@
-FROM registry.access.redhat.com/openshift3/rhel7:latest
+FROM registry.access.redhat.com/rhel7:latest
 
-ARG GITHUB_ORG=jleach
+ARG GITHUB_ORG=BCDevOps
 ARG APORETO_CLI_VERSION=3.9.2
 ARG AQUA_CLI_VERSION=1.0.b119
 ARG ANSIBLE_VERSION=2.6.0
 ARG ANSIBLE_RUNNER_VERSION=1.1.0
 ARG ANSIBLE_RUNNER_HTTP_VERSION=1.0.0
-ENV SUMMARY="Ansible DevSecOps Image"  \
+ENV SUMMARY="Ansible DevSecOps Utility Image"  \
     DESCRIPTION="Ansible DevSecOps image with Aporeto CLI v${APORETO_CLI_VERSION}, Aqua CLI v${AQUA_CLI_VERSION}, Ansible v${ANSIBLE_VERSION}"
 
 LABEL summary="$SUMMARY" \
@@ -51,7 +51,7 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib:/opt/rh/httpd24/root/usr/lib
 RUN mkdir -p /runner/inventory /runner/project /runner/artifacts \
     /runner/.ansible/tmp /etc/ansible && \
 	chmod -R g+w /runner && \
-    chgrp -R root /runner && \
+  chgrp -R root /runner && \
 	chmod g+w /etc/passwd
 
 # Install 3rd-party tools
@@ -78,13 +78,18 @@ RUN curl -sL https://get.aquasec.com/aquactl/stable/aquactl \
 
 # Fetch playbook(s)
 
-RUN git clone https://github.com/${GITHUB_ORG}/platform-services.git \
-    --depth 1 \
-    --branch master \
-    --single-branch /tmp/platform-services && \
-    cp /tmp/platform-services/security/aporeto/scripts/*.yaml /runner && \
-    cp /tmp/platform-services/security/aporeto/scripts/openshift/entrypoint.sh /usr/local/bin/entrypoint.sh && \
-    rm -rf /tmp/platform-services
+COPY . /
+RUN cp playbooks/*.yaml /runner
+
+
+
+# RUN git clone https://github.com/${GITHUB_ORG}/platform-services.git \
+#     --depth 1 \
+#     --branch master \
+#     --single-branch /tmp/platform-services && \
+#     cp /tmp/platform-services/security/aporeto/scripts/*.yaml /runner && \
+#     cp /tmp/platform-services/security/aporeto/scripts/openshift/entrypoint.sh /usr/local/bin/entrypoint.sh && \
+#     rm -rf /tmp/platform-services
 
 # Container Init
 
@@ -92,4 +97,4 @@ WORKDIR /runner
 
 USER 1001
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]

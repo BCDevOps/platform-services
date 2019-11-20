@@ -1,0 +1,87 @@
+---
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  data:
+    default.yaml: |-
+      api: https://api.console.aporeto.com 
+      namespace: /bcgov
+      creds: /opt/creds/aporeto.creds 
+      output: yaml
+  kind: ConfigMap
+  metadata:
+    name: apoctl-configmap
+- apiVersion: v1
+  data:
+    githubDeploymentKey: {{ (lookup('env', 'GITHUB_DKEY') | b64encode ) }} 
+  kind: Secret
+  metadata:
+    name: {{ secops_utils_secret_name }}
+  type: Opaque
+- kind: 'CronJob'
+  apiVersion: 'batch/v1beta1'
+  metadata:
+    name: "{{ job_name }}"
+    labels:
+      template: 'secops-cronjob'
+      cronjob: "{{ job_name }}"
+  spec:
+    schedule: "{{ schedule }}"
+    concurrencyPolicy: 'Forbid'
+    successfulJobsHistoryLimit: "{{ success_job_history }}"
+    failedJobsHistoryLimit: "{{ failed_job_history_limit }}"
+    jobTemplate:
+      metadata:
+        labels:
+          template: 'secops-cronjob'
+          cronjob: "{{ job_name }}"
+      spec:
+        backoffLimit: "{{ job_backoff_limit }}"
+        template:
+          spec:
+            containers:
+              - name: "{{ job_name }}"
+                image: 'docker-registry.default.svc:5000/{{ secops_utils_image_namespace }}/{{ secops_utils_image_name }}'
+                command:
+                  - '/entrypoint.sh'
+                  - 'ansible-playbook'
+                  - '-i' 
+                  - 'local,'
+                  - '/runner/backup.yaml'
+                env:
+                  - name: PATH
+                    value: /ansible:/opt/rh/python27/root/usr/bin:/opt/rh/rh-git29/root/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+                  - name: GITHUB_DKEY
+                    valueFrom:
+                      secretKeyRef:
+                        name: "{{ secops_utils_secret_name }}"
+                        key: githubDeploymentKey
+                volumeMounts:
+                - mountPath: /opt/creds
+                  name: creds
+                - mountPath: /runner/.apoctl
+                  name: config
+                - mountPath: /opt/github
+                  name: ghkey
+                resources:
+                  limits:
+                    cpu: 900m
+                    memory: 192Mi
+                  requests:
+                    cpu: 500m
+                    memory: 128Mi
+            volumes:
+              - name: creds
+                secret:
+                  secretName: secops-backup
+              - name: ghkey
+                secret:
+                  secretName: "{{ secops_utils_secret_name }}"
+              - name: config
+                configMap: 
+                  name: apoctl-configmap
+            restartPolicy: 'Never'
+            terminationGracePeriodSeconds: 300
+            activeDeadlineSeconds: 4500
+            dnsPolicy: 'ClusterFirst'

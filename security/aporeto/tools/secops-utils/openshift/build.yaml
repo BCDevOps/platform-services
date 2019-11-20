@@ -3,7 +3,7 @@ apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   creationTimestamp: null
-  name: platsvc-secops
+  name: secops-utils
 objects:
 - apiVersion: v1
   kind: ImageStream
@@ -41,11 +41,6 @@ objects:
         uri: ${SOURCE_REPOSITORY_URL}
       type: Git
     strategy:
-      dockerStrategy:
-        from:
-          kind: ImageStreamTag
-          name: 'rhel7:latest'
-          namespace: openshift
       type: Docker
     successfulBuildsHistoryLimit: 2
     failedBuildsHistoryLimit: 2
@@ -58,7 +53,7 @@ parameters:
   displayName: Name
   name: NAME
   required: true
-  value: platsvc-secops
+  value: secops-utils
 - description: A name suffix used for all objects
   displayName: Suffix
   name: SUFFIX
@@ -69,7 +64,7 @@ parameters:
   value: https://github.com/BCDevOps/platform-services.git
 - name: SOURCE_CONTEXT_DIR
   required: true
-  value: security/aporeto/scripts/openshift
+  value: security/aporeto/tools/secops-utils
 - name: SOURCE_REPOSITORY_REF
   required: false
   value: master
