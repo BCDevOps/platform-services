@@ -1,5 +1,5 @@
 activity: "do-nothing"
-secops-utils-install: "false"
+secops_utils_install: "false"
 helm_repo_name: aporeto
 helm_repo_address: "https://charts.aporeto.com"
 aporeto_user_account: "{{ lookup('env', 'APOCTL_USER')}}"

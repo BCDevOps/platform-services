@@ -37,7 +37,7 @@ openshift_project_exclusions:
 - "{{ openshift_project_prefix }}-enforcers"
 
 # BCGov Operator Details
-bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:v0.8.2
+bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"
 
 
 # Aporeto Policy Backup CronJob
