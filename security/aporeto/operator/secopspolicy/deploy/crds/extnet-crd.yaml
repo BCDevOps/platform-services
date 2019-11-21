@@ -9,6 +9,8 @@ spec:
     listKind: ExternalNetworkList
     plural: externalnetworks
     singular: externalnetwork
+    shortNames:
+    - en
   scope: Namespaced
   subresources:
     status: {}

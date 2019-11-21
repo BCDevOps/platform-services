@@ -9,6 +9,8 @@ spec:
     listKind: NetworkSecurityPolicyList
     plural: networksecuritypolicies
     singular: networksecuritypolicy
+    shortNames:
+    - nsp
   scope: Namespaced
   subresources:
     status: {}
