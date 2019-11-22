@@ -25,7 +25,7 @@ RUN yes | yum update && \
     yum clean all -y && \
     rm -rf /var/cache/yum
 
-RUN curl -sL curl -sL https://download.aporeto.com/apoctl/linux/apoctl \
+RUN curl -sL https://download.aporeto.com/apoctl/linux/apoctl \
     -o /usr/local/bin/apoctl && \
     chmod 755 /usr/local/bin/apoctl
 
