@@ -2,8 +2,8 @@
 - version: v1alpha1
   group: secops.pathfinder.gov.bc.ca
   kind: NetworkSecurityPolicy
-  reconcilePeriod: 24h
-#  maxWorkers: 10
+  reconcilePeriod: 0s
+  watchDependentResources: False
   playbook: /opt/ansible/netsecpol-main.yaml
   finalizer:
     name: finalizer.secops.pathfinder.gov.bc.ca
@@ -11,7 +11,8 @@
 - version: v1alpha1
   group: secops.pathfinder.gov.bc.ca
   kind: ExternalNetwork
-  reconcilePeriod: 24h
+  reconcilePeriod: 0s
+  watchDependentResources: False
   playbook: /opt/ansible/extnet-main.yaml
   finalizer:
     name: finalizer.secops.pathfinder.gov.bc.ca

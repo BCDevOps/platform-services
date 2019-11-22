@@ -1,12 +1,10 @@
-FROM quay.io/operator-framework/ansible-operator:v0.8.2
+FROM quay.io/operator-framework/ansible-operator:v0.10.1
 
 USER 0
 
 ARG GITHUB_ORG=BCDevOps
-ARG OPERATOR_SDK_VERSION=0.8.1
+ARG OPERATOR_SDK_VERSION=0.10.1
 ARG ANSIBLE_VERSION=2.7.10
-ARG APORETO_CLI_VERSION=3.9.2
-ARG AQUA_CLI_VERSION=1.0.b119
 ENV SUMMARY="Operator Controller v${OPERATOR_VERSION}"  \
     DESCRIPTION="Operator Controller SDK v${OPERATOR_SDK_VERSION}, Ansible v${ANSIBLE_VERSION}"
 
@@ -27,7 +25,7 @@ RUN yes | yum update && \
     yum clean all -y && \
     rm -rf /var/cache/yum
 
-RUN curl -sL https://download.aporeto.com/releases/release-${APORETO_CLI_VERSION}/apoctl/linux/apoctl \
+RUN curl -sL https://download.aporeto.com/apoctl/linux/apoctl \
     -o /usr/local/bin/apoctl && \
     chmod 755 /usr/local/bin/apoctl
 
