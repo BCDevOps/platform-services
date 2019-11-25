@@ -34,13 +34,9 @@ RUN curl -sL https://get.aquasec.com/aquactl/stable/aquactl \
     chmod 755 /usr/local/bin/aquactl
 
 
-# RUN chmod -R 755 ${HOME} 
-
-
 RUN chgrp -R 0 /opt/ansible && \
     chmod -R g=u /opt/ansible
 
-# Container Init
 
 USER 1001
 
