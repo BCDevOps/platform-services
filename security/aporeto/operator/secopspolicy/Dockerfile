@@ -1,6 +1,6 @@
 FROM quay.io/operator-framework/ansible-operator:v0.10.1
 
-USER 0
+# USER 0
 
 ARG GITHUB_ORG=BCDevOps
 ARG OPERATOR_SDK_VERSION=0.10.1
@@ -43,4 +43,4 @@ RUN chmod -R 755 ${HOME}
 
 # Container Init
 
-USER 1001
+# USER 1001
