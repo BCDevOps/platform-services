@@ -20,10 +20,10 @@ ENV PATH=$HOME/.local/bin/:$PATH \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 
 
-RUN yes | yum update && \
-    yes | yum install git && \
-    yum clean all -y && \
-    rm -rf /var/cache/yum
+# RUN yes | yum update && \
+#     yes | yum install git && \
+#     yum clean all -y && \
+#     rm -rf /var/cache/yum
 
 RUN curl -sL https://download.aporeto.com/apoctl/linux/apoctl \
     -o /usr/local/bin/apoctl && \
@@ -34,16 +34,13 @@ RUN curl -sL https://get.aquasec.com/aquactl/stable/aquactl \
     chmod 755 /usr/local/bin/aquactl
 
 
-COPY watches.yaml ${HOME}/watches.yaml
-COPY templates/ ${HOME}/templates/
-COPY roles/ ${HOME}/roles/
-COPY *.yaml ${HOME}/
-
 RUN chmod -R 755 ${HOME} 
-
-RUN chgrp -R 0 /opt/ansible && \
-    chmod -R g=u /opt/ansible
 
 # Container Init
 
 USER 1001
+
+COPY watches.yaml ${HOME}/watches.yaml
+COPY templates/ ${HOME}/templates/
+COPY roles/ ${HOME}/roles/
+COPY *.yaml ${HOME}/
