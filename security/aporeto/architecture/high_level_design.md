@@ -1,5 +1,5 @@
 ---
-description: An overview of the high level components installed on the BC Gov's Openshift platform as part of the Zero-Trust Security Model implementation.
+description: An overview of the high level automation components installed on the BC Gov's Openshift platform as part of the Zero-Trust Security Model implementation.
 tags:
 - next gen security
 - custom network policy
@@ -14,7 +14,7 @@ tags:
 - namespace hierarchy and ownership
 ---
 
-# Zero Trust Network Model - High Level Architecture
+# Zero Trust Network Model - Automation Components
 This deployment focuses on the following key components: 
 - Aporeto Enforcer Daemonset
 - Aporeto Kubernetes Operator
