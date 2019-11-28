@@ -70,7 +70,7 @@ Each user that needs access to the platform must be added to the appropriate Aut
 
 
 ## App Credentials for Automation Components
-App Credentials are created for our automation Operators to interact with the Aporeto control plane. These are generated upon installation of an enforcer or operator and are cryptographically signed. 
+App Credentials are created for our [automation Operators](../architecture/high_level_design.md) to interact with the Aporeto control plane. These are generated upon installation of an enforcer or operator and are cryptographically signed. 
 Each app credential is created with an expiry date (typically 10 years from the creation date), and each operator / enforcer stores this app credential in a kubernetes secret. This credential is used to obtain a shorter lived JWT token and the `apoctl` binary refreshes this token as required. 
 
 App credentials can be revoked and refreshed as required. Policies should be put into place around refreshing these credentials more frequently, and these policies should be aligned with the government standard for SSL key rotation. 
