@@ -11,5 +11,5 @@ test-python-app:8080
 #postgres:5432
 
 #Test the connectivity with the K8S internal API (needed for builds, deployments, etc)
-# PROD Cluster  172.50.0.1
-172.50.0.1:443
+# PROD Cluster 
+kubernetes.default.svc.cluster.local:443
