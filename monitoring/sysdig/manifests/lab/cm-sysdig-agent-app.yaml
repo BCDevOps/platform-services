@@ -108,7 +108,7 @@ data:
                 auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
                 host: localhost
                 tags: 
-                  kubernetes.namespace.name: "{namespace}"
+                  kubernetes.process: kubelet
         #- include:
         #    kubernetes.pod.label.app: "node-exporter"
         #    conf:
