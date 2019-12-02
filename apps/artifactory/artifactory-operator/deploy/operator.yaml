@@ -20,7 +20,7 @@ spec:
           - /tmp/ansible-operator/runner
           - stdout
           # Replace this with the built image name
-          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-operator:v2-stable"
+          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-operator:v3-stable"
           imagePullPolicy: "Always"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner
@@ -31,7 +31,7 @@ spec:
 #            readOnly: true
         - name: operator
           # Replace this with the built image name
-          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-operator:v2-stable"
+          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-operator:v3-stable"
           imagePullPolicy: "Always"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner

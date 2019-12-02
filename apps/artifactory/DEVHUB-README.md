@@ -61,6 +61,7 @@ Please group your requests together - if you want to request both a local and vi
 
 The following information is necessary for creating a repo:
 
+* Requester: this is your **Personal Artifactory Username** (`@github` or `@idir`)
 * Team Name: this is the name of the team requesting the repo. 
 * Repo Type: the type of artifacts that belong in the repo (ex: maven, docker, etc)
 * Repo Location: local or virtual.
@@ -76,26 +77,21 @@ This will result in the creation of your repo, an admin account through which yo
 ### Step 4: Granting Access to your Private Repo
 
 Once you have followed the previous steps, you're likely going to want to grant read and/or write access to any new local repos to personal or service accounts.
-There is an ansible playbook available to help this process.
+To do so, log into the Artifactory GUI (at https://artifacts.developer.gov.bc.ca) and login with your personal credentials. 
+You will only be able to do that if you were the requester indicated in Step 3. If not, please have them perform this task.
 
-Find the playbook at `artifactory-sa-operator/serviceaccount-permissions.yaml`
+Once you are logged in, you will be able to click on the "admin" panel (on the left side menu, it looks like a small bust of a person). From there, click "Permissions".
+On the Permissions screen, you will be able to see all of the repos whose access you can control. Click on any of them.
+Once you've opened the Permission screen for that repository, click Users, and drag any username from the available list into the "Included Users" list to provide access. Use the filter to search for specific names.
+Highlight the user you've added to the "Included Users" list and select any of the appropriate repository actions that you wish them to be able to perform.
+Mouse over the ? next to "Repository Actions" to find out more about what each privilege does. **Avoid providing the Manage privilege to many users.**
 
-Download an open the playbook, and edit the following vars:
-* `service_account` is the randomized name of the service account to be given the permissions.
-* `repo_name` is the name of the repository that you're granting permissions to.
-* `admin_token` is the access token for the admin account associated with the repo - this can be found in a secret with the same name as the repo, in your project.
-* `privileges` are the list of privileges you mean to give the service account - the list provided includes everything you should want to use, so delete any you don't want.
-   * `read` allows the account to see the artifacts.
-   * `write` allows the account to change/upload artifacts.
-   * `annotate` allows the account to create artifact metadata.
-   * `delete` allows the account to delete or overwrite artifacts.
-   * there is an additional privilege called `manage` which permits the account to control access to the repository. It is not in the list because we do not recommend granting this privilege to any account but the repo admin account.
+Here are some likely privileges that you'll want to provide:
+* Give read, annotate, deploy/cache to other members of your team so that they can read and deploy objects to the repo.
+* Give read, annotate, deploy/cache to any service accounts which should be able to deploy objects to the repo.
+* Give read to service accounts which should be able to build from the local repo.
 
-Once your edits are complete, use the following command to run the playbook.
-
-```bash
-ansible-playbook serviceaccount-permissions.yaml
-```
+Do not forget to click "Save and Finish" in the bottom right corner once you've added the appropriate permissions.
 
 ## Notes About Logging in from the CLI/API
 
