@@ -1,0 +1,27 @@
+---
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  vars: 
+    ansible_command_timeout: 10
+  tasks: 
+    - name: set oc token
+      command: oc whoami -t 
+      register: oc_token  
+    # - name: get list of projects 
+    #   set_fact:
+    #     projects: "{{ lookup('k8s', api_version='v1', kind='Project') }}"
+    # - debug: "msg={{ item.metadata.name }}"
+    #   with_items: 
+    #     - "{{ projects }}"
+    - name: Get list of build configs
+      set_fact:
+        build_configs: "{{ lookup('k8s', api_version='v1', kind='BuildConfig') }}" 
+    - debug:
+        msg: "{{ build_configs[0] }}"
+    - name: Create map
+      include_tasks: tasks/create_map.yml
+      with_items: 
+        - "{{ build_configs }}"
+
+          
