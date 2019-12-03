@@ -5,11 +5,18 @@
 #Test external connectivity
 google.com:80
 
-#Test the connectivity within the namespace. REPLACE with your deployments
-angular-on-nginx-2:8080	
-test-python-app:8080
-#postgres:5432
+#Test the connectivity within the namespace , pod-to-pod communications.
+# REPLACE with your own deployment/pods names!!!!!!
+#___________________________________________________________________________________________	
+#MAKE SURE YOUR PODS HAVE THE "NAME" LABEL ATTACHED AND USER THE VALUE OF THE "NAME" LABEL HERE
+#OTHERWISE THE SCRIPT MIGHT NOT BE ABLE TO FIND A POD AND CANNOT rsh to it
+#___________________________________________________________________________________________
+angular-on-nginx:8080
+django:8080
+postgresql:5432
+schema-spy:8080
+weasyprint:8080
 
 #Test the connectivity with the K8S internal API (needed for builds, deployments, etc)
-# PROD Cluster  172.50.0.1
-172.50.0.1:443
+# PROD Cluster internal Kubernetes API
+kubernetes.default.svc.cluster.local:443
