@@ -78,3 +78,6 @@ typings/
 *output*
 # artifacts
 *.orig
+
+# sensitive csv output
+tools/audit/repo-mapper/*.csv 
