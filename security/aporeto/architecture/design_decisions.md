@@ -82,9 +82,9 @@ Please refer to the **Playbook Flow** section of the Ansible [Build Docs ](../bu
 
 ### Policy Naming Conventions
 There are no hard restrictions on what developers will use for naming their policies. Every policy created by an end-user in the platform should have a name that follows the convention: 
-- `custom-[object-type]-[object-name]`
+- `[policy-description]-[namespace-name]`
 
-Developers can use any name that they wish for the `object-name`, however, it should be easy to determine what the policy does by it's name. This will help other team members when they are reviewing these objects. Some examples are outlined in the [developer guide](../docs/CustomPolicy.md). 
+Developers can use any name that they wish for the `policy-description`, however, it should be easy to determine what the policy does by it's name. This will help other team members when they are reviewing these objects. Some examples are outlined in the [developer guide](../docs/CustomPolicy.md). 
 
 ### Fallback Policies 
 Aporeto has a concept of **Fallback Policies** that can be used to generate a more permissive and forgiving policy that would be used if users have not created any other matching policy. It was determined that with the desire to achieve a Zero Trust network enforcement policy that fallback policies are not leveraged in this deployment. New container-platform teams will need to consider the desired network flow of their applications as early as the design phase and will **manually create NetworkSecurityPolicy objects** at the first deployment to allow network traffic to flow. 
