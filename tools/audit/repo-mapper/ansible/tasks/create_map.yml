@@ -1,25 +1,21 @@
 ---
-- name: Get project data
+- name: Get Project data
   set_fact:
-    project_details: "{{ lookup('k8s', api_version='v1', kind='Project', resource_name=item.metadata.namespace ) }}"
-# - debug: 
-#     msg: "{{ project_details }}"
-### Stuck here needing to define a value if the dict object doesn't exist
-- name: set undefined variables
+    project_details: "{{ lookup('k8s', api_version='v1', kind='Project', resource_name=item.metadata.namespace ) }}" 
+- name: Create dictionary of BuildConfig and Project Details
   set_fact: 
-    product_lead: "no-data"
-  when: project_details|selectattr("metadata.annotations.product-lead", "defined")|list|length == 0
-- name: set undefined variables
+    current_dict: 
+      - Project: "{{ item.metadata.namespace }}"
+        BuildConfigName: "{{ item.metadata.name }}"
+        GitHubOrg: "{{ item.spec.source.git.uri.split('/')[3] }}"
+        GitHubRepo: "{{ item.spec.source.git.uri.split('/')[4] }}"
+        ProductLead: "{{ project_details | json_query(product_lead_query) }}"
+        MinistryLead: "{{ project_details | json_query(ministry_lead_query) }}"
+        MinistryOrg: "{{ project_details | json_query(org_query) }}"
+- name: Add individual dictionary to full dictionary list
   set_fact: 
-    ministry: "no-data"
-  when: project_details|selectattr("metadata.labels.bus_org_code", "defined")|list|length == 0
-- name: set undefined variables
-  set_fact: 
-    org: "no-data"
-  when: project_details|selectattr("metadata.labels.bus_org_unit_code", "defined")|list|length == 0
-- name: Send some output
-  debug: 
-    msg: "Project {{ item.metadata.namespace }} has BuildConfig {{ item.metadata.name }} with Git Org {{ item.spec.source.git.uri.split('/')[3] }} and repository {{ item.spec.source.git.uri.split('/')[4] }} and product_lead  is {{ product_lead }} with ministry {{ ministry }} and org {{ org }}"
+    map: "{{ map|default([]) + current_dict  }}"
   when: 
     - item.spec.source.type == "Git"
     - item.spec.source.git.uri.find('BCDevOps') != -1 or item.spec.source.git.uri.find('bcgov-c') != -1
+
