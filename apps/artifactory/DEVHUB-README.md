@@ -32,21 +32,42 @@ See Step 4 below to learn how to gain access to private local and virtual repos.
 
 When connecting to Artifactory for the purposes of pulling artifacts for your application to use, you should not use your personal credentials. Instead, use an artifactory service account.
 
-There is an operator running on the cluster which watches for the creation of ArtifactorySA objects in any project on the cluster. 
-When one is created, it automatically acts to create a matching service account in artifactory. This service account will have a "license-plate" style name, and the ArtifactorySA object will be updated to include this name once the operator has created the account.
-It will also create a secret in the same project with both the name of the service account and a token for accessing the account.
+There is an operator running on the cluster that watches for the creation of `ArtifactorySA` objects in any project on the cluster. When one is created, it automatically acts to create service account; a related account in artifactory; and a secret in with the related artifactory account credentials. Use the credentials stored in the secret in your pipeline (for example, in `npm`). 
+
+☝️Note: The the newly minted secret will have a "license-plate" style prefix followed by "artifactorysa". The licensplate prefix is the `username` and the password (or token) is encoded in the secret. 
+
+Here is an example:
+
+```console
+➜  oc get secrets | grep artifactory
+krmjzf-artifactorysa       Opaque            2      1h
+➜ 
+```
+
+Here is the handy command you can use to fetch the password:
+
+```console
+oc get secrets/krmjzf-artifactorysa -o template --template="{{.data.password}}" | base64 --decode
+```
 
 Find a template for creating an ArtifactorySA object at `artifactory-sa-operator/deploy/crds/artifactory-sa-cr-template.yaml`
 
 Find the variable definition file at `artifactory-sa-operator/deploy/crds/serviceaccount.env`
 
 Download both to your local machine and update the serviceaccount.env file to reflect the information you require. 
-Note that CR_NAME will be the name of the custom resource in your project for ease of searching, not the name of the service account itself.
+
+☝️Note: That CR_NAME will be the name of the custom resource in your project for ease of searching, not the name of the service account itself.
 
 Log into OpenShift with your personal credentials. Switch to your project, then run the following command:
 
 ```
 oc process -f artifactory-sa-cr-template.yaml --param-file=serviceaccount.env --ignore-unknown-parameters=true | oc create -f -`
+```
+
+If you want to do this without downloading the files you can use this shortcut command:
+
+```console
+oc process -f https://raw.githubusercontent.com/BCDevOps/platform-services/master/apps/artifactory/artifactory-sa-operator/deploy/crds/artifactory-sa-cr-template.yaml -p CONSOLE_NAME=prod -p CR_NAME=testaccount -p DESCRIPTOR="this is a test service account" | oc create -f -
 ```
 
 You will require admin or edit privileges on the project to create the service account custom resource object.
@@ -100,12 +121,33 @@ You must go to your user profile and generate an API key to use. Your idir/githu
 
 ### NPM
 
-You cannot login to Artifactory with
-``` npm login ```
-due to the use of the @ sign in usernames assigned by Keycloak.
+You cannot login to Artifactory with the `npm login` due to the use of the @ sign in usernames assigned by Keycloak.
 
 As such, in order to use NPM, you must run the following command:
-``` bash
+
+```console
 curl --user <username>:<api_key> https://artifacts.pathfinder.gov.bc.ca/artifactory/api/npm/auth
 ```
+
 Your username should be of the form user@idir or user@github. It will return three lines of information which you can then paste into your ~/.npmrc file to use instead of basic authentication.
+
+If you're using the service account / secret mentioned above in your pipeline use something similar to the following process by adding these commands to your Jenkinsfile:
+
+Tell NPM to use Artifactory: 
+```console
+npm config set registry https://artifacts.developer.gov.bc.ca/artifactory/api/npm/npm-remote/
+```
+
+Prep your username and password for easy access:
+```console
+export AF_USER=$(oc get secrets | grep artifactorysa | awk -F- '{ print $1 }')
+export AF_PASSWD=$(oc get secrets/$AF_USER-artifactorysa -o template --template="{{.data.password}}" | base64 --decode)
+```
+
+As mentioned above you can't use `npm logon` so you need to fetch the auth credentials and put them in `.npmrc`:
+
+```console
+curl -u $AF_USER:$AF_PASSWD https://artifacts.developer.gov.bc.ca/artifactory/api/npm/auth >> ~/.npmrc
+```
+
+You should be able to run `npm i` or `npm i -S blarb` and utilize artifactory for lightning fast builds.
