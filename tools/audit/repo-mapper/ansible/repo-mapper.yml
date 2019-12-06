@@ -15,6 +15,7 @@
       include_tasks: tasks/create_map.yml
       with_items: 
         - "{{ build_configs }}"
+
     - name: Create CSV output
       template: 
         src: templates/csv_output.csv.j2

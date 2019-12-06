@@ -2,13 +2,29 @@
 - name: Get Project data
   set_fact:
     project_details: "{{ lookup('k8s', api_version='v1', kind='Project', resource_name=item.metadata.namespace ) }}" 
+
+- name: Evaluate and set git url when http
+  set_fact: 
+    gh_org: "{{ item.spec.source.git.uri.split('/')[3] }}"
+    gh_repo: "{{ item.spec.source.git.uri.split('/')[4] }}"
+  when: item.spec.source.git.uri is match ("http*")
+  ignore_errors: true
+
+- name: Evaluate and set git url when ssh
+  set_fact: 
+    gh_org: "{{ item.spec.source.git.uri.split(':')[1].split('/')[0] }}"
+    gh_repo: "{{ item.spec.source.git.uri.split('/')[1] }}"
+  when: item.spec.source.git.uri is match ("git@*")
+  ignore_errors: true
+
+
 - name: Create dictionary of BuildConfig and Project Details
   set_fact: 
     current_dict: 
       - Project: "{{ item.metadata.namespace }}"
         BuildConfigName: "{{ item.metadata.name }}"
-        GitHubOrg: "{{ item.spec.source.git.uri.split('/')[3] }}"
-        GitHubRepo: "{{ item.spec.source.git.uri.split('/')[4] }}"
+        GitHubOrg: "{{ gh_org }}"
+        GitHubRepo: "{{ gh_repo }}"
         ProductLead: "{{ project_details | json_query(product_lead_query) }}"
         MinistryLead: "{{ project_details | json_query(ministry_lead_query) }}"
         MinistryOrg: "{{ project_details | json_query(org_query) }}"
@@ -17,5 +33,5 @@
     map: "{{ map|default([]) + current_dict  }}"
   when: 
     - item.spec.source.type == "Git"
-    - item.spec.source.git.uri.find('BCDevOps') != -1 or item.spec.source.git.uri.find('bcgov-c') != -1
+#    - item.spec.source.git.uri.find('BCDevOps') != -1 or item.spec.source.git.uri.find('bcgov-c') != -1
 
