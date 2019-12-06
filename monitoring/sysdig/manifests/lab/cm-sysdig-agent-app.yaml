@@ -9,7 +9,7 @@ data:
     # Agent Log priority
     log:
        #file_priority: info
-       console_priority: debug
+       console_priority: info
 
     # Sysdig collector address
     collector: collector-static.sysdigcloud.com
