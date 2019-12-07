@@ -3,8 +3,6 @@
 ## Purpose
 This ansible utility will query all build configs with an OpenShift environment and map out the associated git repos details and metadata that is tied to an OpenShift project. 
 
-### Filters
-This utility specifically looks for anything in the `BCDevOps` and `bcgov-c` GitHub Orgs. This filtering can be extended in the `tasks/create_map.yml` file. 
 
 ### Usage
 
@@ -13,6 +11,8 @@ Run the following playbook while logged into an OpenShift cluster with `cluster-
 ```
 ansible-playbook  repo-mapper.yml
 ```
+### Duration
+The current run time against the prod Pathfinder cluster is about 35mins. 
 
 ### Objects
 All data is collected into a dictionary object and can be used to create an export file or to push data into an external system. The object structure looks as follows: 
@@ -37,7 +37,7 @@ This utility currently generates a CSV output file. This can be extended as need
 The template `templates/csv_output.csv.j2` can be modified to include additional fields. 
 
 ### Possible Improvements
-We could likely load in all project data in a single API call to speed this up. 
+~~We could likely load in all project data in a single API call to speed this up.~~
 
 ## JSON Lookup Reference
 
