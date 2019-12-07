@@ -1,0 +1,14 @@
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: colon-testing
+spec:
+  description: |
+    test with an object such as a service account source
+  source:
+    - - "$namespace=ws-test"
+      - "@app:k8s:serviceaccountname=builder"
+    - - "$namespace=ws-test"
+      - "@app:k8s:serviceaccountname=deployer"
+  destination:
+    - - "int:network=internal-cluster-api-endpoint"

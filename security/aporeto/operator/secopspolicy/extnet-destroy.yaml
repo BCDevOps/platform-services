@@ -20,7 +20,7 @@
         k8s_uuid: "{{  metadata.uid  }}"
         apo_kind: externalnetworks
         apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
-    - name: Exist if no policy exists
+    - name: Exit if no policy exists
       when: policy_id is not defined
       meta: end_play
     - name: Delete Policy
