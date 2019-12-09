@@ -35,6 +35,7 @@ openshift_project_exclusions:
 - openshift-monitoring
 - "{{ openshift_project_prefix }}-operator"
 - "{{ openshift_project_prefix }}-enforcers"
+apb_external_nfs_host: ociopf-t-350.dmz
 
 # BCGov Operator Details
 bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"
