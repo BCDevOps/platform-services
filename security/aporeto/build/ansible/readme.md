@@ -67,6 +67,10 @@ The Ansible playbook accepts a few switches:
 
 - **activity=apply_policies**
     - applies all base policies that are required for OpenShift components to function
+
+- **activity == update_enforcer_profile**
+    - renders the templates again and only applies the enforcer profile
+
 - **activity=bcgov-operator-install**
     - only installs the bcgov networksecuritypolicy operator
 
