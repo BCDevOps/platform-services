@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    gateway-name: webhook-gateway
+    gateways.argoproj.io/gateway-controller-instanceid: argo-events
+  name: webhook-gateway-service
+spec:
+  host: ''
+  to:
+    kind: Service
+    name: webhook-gateway-svc
+    weight: 100
+  wildcardPolicy: None
