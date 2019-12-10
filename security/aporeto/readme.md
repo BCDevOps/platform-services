@@ -1,17 +1,32 @@
+---
+description: An overview of the Aporeto solution used  to implement the Zero-Trust security model on the Openshift platform.
+tags:
+- next gen security
+- custom network policy
+- Aporeto
+- zero trust
+- openshift security
+- platform security
+- application identity
+---
 # Aporeto Zero Trust Network Security Enforcement
 The Aporeto solution is a multi-cluster multi-cloud zero trust network solution that will deny all traffic from all processing units until expliticly allowed. For the purpose of the OpenShift environment, a "Pod" is considered a "Processing Unit". This solution creates an "identity" for each processing unit that allows for much more granular access control policies beyond a simple network address. 
 
-## Accessing the Console
-Users can sign into the Aporeto Console with the following details below: 
+## Accessing the Aporeto Console (...Coming soon)
+Users with [appropriate permissions](./architecture/design_decisions.md#access-to-aporeto-console) can sign into the Aporeto Console UI with the following details below: 
 - URL: https://console.aporeto.com
 - Select the sign in options (three dots) and select *Sign in with OIDC*
   - Namespace: /bcgov
   - Provider: pathfinder-sso-prod
 
+**:point_up: Note**
+
+> DevOps Security team is currently working on enabling access to the Aporeto Console UI for the platform applications. Stay tuned.
+
 ## Resources
 - Aporeto Links
   - [Console](https://console.aporeto.com/app/)
-  - [Documentation](https://docs.aporeto.com/docs)
+  - [Documentation](https://docs.aporeto.com)
 
 - People
   - BCDevOps Security Team
@@ -48,8 +63,11 @@ Please use GitHub issues in this repo with the "security/aporeto".
 
 #### Operational Videos
 - [Aporeto Automation Playbook Walkthrough](https://www.youtube.com/watch?v=yQzJiExljrY)
-- [Aporeto Interfave Q&A](https://youtu.be/Nrf4EtxGXos)
+- [Aporeto Interface Q&A](https://youtu.be/Nrf4EtxGXos)
 
 #### Spint Demo Videos
 - [Sprint 2 - Demo 1 - Single Namespace NetworkSecurityPolicy Objects](https://youtu.be/qWt9gtaHFQQ)
 - [Sprint 2 - Demo 2 - Securing the Family Protection Order Project Namespace](https://www.youtube.com/watch?v=v2I0HCKRrgk)
+
+#### Developer Videos
+- [Quick Walkthrough - Aporeto User Interface](https://youtu.be/eirVDyPMTwM) 

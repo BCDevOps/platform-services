@@ -1,8 +1,24 @@
-# Custom Policy
+---
+description: How-to tutorial for adding custom network security policies to applications hosted on the Openshift platform to allow product teams to take advantage of the new security model that is now available on the platform through the use of the Aporeto software.
+tags:
+- next gen security
+- custom network policy
+- Aporeto
+- zero trust
+- networksecuritypolicy
+- openshift security
+- platform security
+- application identity
+- security policy sample example
+title: Custom Network Security Policy Development
+---
+
+
+# Custom Network Security Policy Development
 
 ## Introduction
 
-This tutorial will guide you through creating application identities for each of your deployable components (pods) within your OpenShift Container Platform (OCP) namespaces as well as building custom `NetworkSecurityPolicy` (NSP) based on these identities to secure communications between your components.
+This tutorial is part of the [Developer Guide for Zero Trust Security Model](./README.md) and will guide you through creating application identities for each of your deployable components (pods) within your OpenShift Container Platform (OCP) namespaces as well as building custom application network security policy via `NetworkSecurityPolicy` (NSP) objects based on these identities to secure communications within the namespace and between the namespace and external components. 
 
 By the end of the document you will be able to create policy to manage:
 
@@ -20,7 +36,7 @@ __Application Identity__
 
 You build application identity by adding labels to the metadata portion of your OCP deployment manifests. For example, in the deployment manifest excerpt below the combination of labels build a unique application identity which can be referenced in the NSP to permit communication.
 
-Its worth noting that each deployment config should have at least one label that uniquely identifies it. In the example below this is accomplished using the `role=api` label; no other deployment will use this specific label. See the **Naming Convention** section below for best practices. 
+Its worth noting that each deployment config should have at least one label that uniquely identifies it. In the example below this is accomplished using the `role=api` label; no other deployment will use this specific label. See the **Application Identity Naming Convention** section below for best practices. 
 
 ```yaml
 - kind: DeploymentConfig
@@ -44,7 +60,7 @@ Its worth noting that each deployment config should have at least one label that
 * Add the `role=` label to each deployment config of your manifest to uniquely identify the pods.
 
 
-## Naming Convention
+## Application Identity Naming Convention
 
 The naming convention you use for labels that allow you to build your application identity should be no more complicated than necessary.
 
@@ -85,33 +101,33 @@ The `env` label will change based on the namespace the deployment targets and th
 * K.I.S - Keep It (your labels) Simple; don't try and outsmart yourself.
 * Where possible use the naming convention proposed here for uniformity across projects.
 
-## Policy
+## Custom Network Security Policies
 
-The policy below will provide most teams enough to get up and running in short order; Customize them with labels or template parameters as needed. If you find the sample policy below does not suite your needs contact platform services to help create more advanced policy.
+The network security policies below will provide most teams enough to get up and running in short order. Customize them with labels or template parameters as needed. If you find the sample policy below does not suite your needs contact platform services to help create more advanced access policy.
 
 In the subsections below we'll use one or more tags to identify the source and destination systems. The relevance if `source` and `destination` is that the application identified in the `source` will be able to open a network connection to the application identified in `destination`; Once a connection is open then data is able to flow bidirectionally.
 
 | Field | Required | Description     |
 | ----------- |:--------:|:---------------|
-| name        | YES      | Use this field to uniquely identify policy. |
+| name        | YES      | Use this field to uniquely identify policy. Check out the [naming conventions](../architecture/design_decisions.md#policy-naming-conventions)  for custom network security policies. |
 | description | YES      | A brief description of what the policy does. |
 | source      | YES      | Tags used to identify the application that can initiate a network connection. |
 | destination | YES      | Tags used to identify the application that receives the network connection.
 
-See the `samples` folder accompanying these instructions for more information.
+See the [`samples` file](./sample/quickstart-nsp.yaml) accompanying these instructions for more information.
 
-### Namespace to OCP API
+### Namespace to Kubernetes Internal Cluster API
 
-The OCP has an internal API that your environment needs to communicate with to run deployments and for other internal mechanics to work. Change the source namespace in the sample below and apply it.
+The Kubernetes has an internal API that your environment needs to communicate with to run deployments and for other internal mechanics to work. Change the source namespace in the sample below and apply it.
 
 ```yaml
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: pods-to-api
+  name: custom-pods-to-k8s-api-[APP_NAME]
 spec:
   description: |
-    Allow pods to talk to the internal OCP api 
+    Allow pods to talk to the internal K8S api 
   source:
     - - $namespace=handy-dandy-prod
   destination:
@@ -129,7 +145,7 @@ This sample policy is used to allow pods to communicate within a given namespace
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: web2api-permit
+  name: custom-web2api-permit-[APP_NAME]
 spec:
   description: |
     allow the Web pod(s) to communicate to the API pod(s).
@@ -145,7 +161,7 @@ spec:
 
 ### External Network to Namespace 
 
-This sample policy is used to allow external networks to communicate with pods; typically use this type of policy to accept connections from the the Interweb 🧐. Create a policy similar to this one for each system that needs to **receive** connections from the Internet.
+This sample policy is used to allow external networks to communicate with pods; typically use this type of policy to accept connections from the the Interweb 🧐. Create a policy similar to this one for each component that needs to **receive** connections from the Internet.
 
 The sample below allows the Web pod(s) to accept connections to from the Internet.
 
@@ -153,7 +169,7 @@ The sample below allows the Web pod(s) to accept connections to from the Interne
 kind: NetworkSecurityPolicy
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 metadata:
-  name: external-ingress
+  name: custom-external-ingress-[APP_NAME]
 spec:
   description: |
     Allow the frontend (web) to receive connections from the Internet.
@@ -167,11 +183,11 @@ spec:
 
 **🤓 ProTip**
 
-* You can define your own external networks using an `ExternalNetwork` described later in this document.
+* If some of your application components are hosted outside of Opehsift, check the `ExternalNetwork` [here](./ExternalNetwork.md) for sample policies (coming soon).
 
 ### Namespace to External Network 
 
-This sample policy is used to allow pods to communicate with an external network; typically use this type of policy to talk to the Interweb 🧐. Create a policy similar to this one for each system that needs to **create** connections to the Internet or other parts of the BCGov (SPANBC) network.
+This sample policy is used to allow pods to communicate with an external network; typically use this type of policy to talk to the Interweb 🧐. Create a policy similar to this one for each system that needs to **initiate** connections to the Internet or other parts of the BCGov (SPANBC) network.
 
 The sample below allows the API pod(s) to open connections to any system on the Internet.
 
@@ -179,7 +195,7 @@ The sample below allows the API pod(s) to open connections to any system on the 
 kind: NetworkSecurityPolicy
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 metadata:
-  name: internal-egress
+  name: custom-internal-egress-[APP_NAME]
 spec:
   description: |
     Allow the backend (API) to open connections to the
@@ -194,7 +210,10 @@ spec:
 
 ### Namespace to Namespace
 
-This sample policy is used to allow pods to communicate across namespaces; typically use this type of policy to talk to other applications hosted on the OCP. Create a policy similar to this one for each system that needs to **create** connections to another OCP namespace. The owner of the `destination` namespace will need a similar policy to allow incoming connections from the `source` namespace. 
+This sample policy is used to allow pods to communicate across namespaces; typically use this type of policy to talk to other applications hosted on the OCP. Create a policy similar to this one for each system that needs to **initiate** connections to another OCP namespace. The owner of the `destination` namespace will need a similar policy to allow incoming connections from the `source` namespace. 
+
+**:point_up: Note**
+> The prerequisite for the namespace to namespace network security policy is for the connecting namespaces to either have API endpoints exposed as routes in Openshift or to have a network join created to enable communication between the namespaces on the network level (Openshift 3.11 only).
 
 The sample below allows the API pod(s) to open connections to a specific pod(s) in a different namespace.
 
@@ -202,7 +221,7 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
 kind: NetworkSecurityPolicy
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 metadata:
-  name: ns2ns-comms
+  name: custom-ns2ns-comms-[APP_NAME]
 spec:
   description: |
     Allow the backend (API) to open connections to backend (API) pod(s)
@@ -236,7 +255,7 @@ This can be configured in a single NetworkSecurityPolicy object. Apply the follo
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: allow-alpha-and-bravo-to-talk
+  name: custom-allow-alpha-and-bravo-to-talk-[APP_NAME]
 spec:
   description: |
     Allow all pods in alpha and bravo to communicate
@@ -268,7 +287,26 @@ spec:
       - - role=web
     ```
 
+### Service Account to Kubernetes Cluster API
 
+This sample policy allows specific service accounts within a namespace to communicate with the Kubernetes internal API in order to run builds and deployments.
+This is a more restrictive policy as compared to Namespsace to Kubernetes Cluster API, which translates to -> **better security**.
+
+```
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: allow-builds-internet-access
+spec:
+  description: allow service accounts to run builds/deployments
+  source:
+    - - $namespace=jjrkby-tools
+      - "@app:k8s:serviceaccountname=jjrkby-tools/builder"
+    - - $namespace=jjrkby-tools
+      - "@app:k8s:serviceaccountname=jjrkby-tools/deployer"
+  destination:
+    - - int:network=internal-cluster-api-endpoint
+```
 ## Usage
 
 Creating a Zero Trust security model is relatively easy; here's how you'll do it: Create your policy based on the information above; then add it to your OCP deployment manifest; and finally, deploy your application. Lets go over them in more details:
@@ -290,12 +328,17 @@ To do this see these two sections below:
 * [Check it Out](#check-it-out)
 * [Remove It](#remove-it)
 
-**Step 3 - Add Policy**
+**Step 3 - Add a Policy**
 
-In the same deployment manifest begin adding your NSP:
+```
+  oc apply -f <PATH_TO_LOCAL_POLICY_YAML_FILE>
+```
+Check the result of the policy creation as describe [here](CustomPolicy.md#troubleshooting) to make sure it was created successfully.
 
 
-In this illustration I copy the NSP directly from this tutorial and modify it so that my API can talk to the minio object store.
+**🤓 ProTip**
+
+* If your policy uses $namespace as a source, make sure the `oc` command is pointing to that namespace, otherwise the policy might fail.
 
 **Add Step 4 - Test It**
 
@@ -334,7 +377,7 @@ There are a few ways you can check out your existing NSP.
 
 **CLI - oc**
 
-The best and most simple way to view your existing NSP is to use the `oc` command line interface. Run the following command to see installed policy:
+The best and most simple way to view your existing NSP is to use the `oc` command line interface. Run the following command to see installed policies:
 
 ```console
 oc get networksecuritypolicy
@@ -412,5 +455,21 @@ oc delete networksecuritypolicy egress-internet-devex-von-tools -o yaml
 From the Web, again navigate to the NSP and use the "Actions" drop down to select "Delete".
 
 ### Troubleshooting
+
+Check the status of the policy once it was created:
+```
+  oc describe networksecuritypolicy custom-allow-service-accounts-k8s-api-comms-jjrkby-tools
+```
+If the policy was created successfully, the output should look like this:
+```
+Status:
+  Conditions:
+    Last Transition Time:  2019-12-05T18:36:45Z
+    Message:               Running reconciliation
+    Reason:                Running
+    Status:                True
+    Type:                  Running
+Events:                    <none>
+```
 
 See the `Support` section of the main help document [here](./README.md).

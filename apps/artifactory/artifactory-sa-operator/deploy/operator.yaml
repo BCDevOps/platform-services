@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artifactory-sa-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: artifactory-sa-operator
+  template:
+    metadata:
+      labels:
+        name: artifactory-sa-operator
+    spec:
+      serviceAccountName: artifactory-sa-operator
+      containers:
+        - name: ansible
+          command:
+          - /usr/local/bin/ao-logs
+          - /tmp/ansible-operator/runner
+          - stdout
+          # Replace this with the built image name
+          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-sa-operator:v2-stable"
+          imagePullPolicy: "Always"
+          volumeMounts:
+          - mountPath: /tmp/ansible-operator/runner
+            name: runner
+            readOnly: true
+#          - mountPath: /tmp/ansible-operator/
+#            name: artifactory-secret
+#            readOnly: true
+        - name: operator
+          # Replace this with the built image name
+          image: "docker-registry.default.svc:5000/devops-artifactory/artifactory-sa-operator:v2-stable"
+          imagePullPolicy: "Always"
+          volumeMounts:
+          - mountPath: /tmp/ansible-operator/runner
+            name: runner
+          - mountPath: /tmp/ansible-operator/
+            name: artifactory-secret
+            readOnly: true
+          env:
+            - name: WATCH_NAMESPACE
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "artifactory-sa-operator"
+      volumes:
+        - name: runner
+          emptyDir: {}
+        - name: artifactory-secret
+          secret:
+            secretName: artifactory-admin

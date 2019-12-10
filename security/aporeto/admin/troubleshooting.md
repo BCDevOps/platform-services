@@ -1,6 +1,25 @@
-# Troubleshooting
+---
+description: An overview of the high level components installed on the BC Gov's Openshift platform as part of the Zero-Trust Security Model implementation.
+tags:
+- next gen security
+- custom network policy
+- Aporeto
+- networksecuritypolicy
+- zero trust
+- openshift security
+- platform security
+- application identity
+- policy backup
+- policy change audit
+- namespace hierarchy and ownership
+- Aporeto console
+---
+# Custom Network Security Policy Troubleshooting in Aporeto Console
 
-**Note: The word "namespace" can apply either to an Aporeto Namespace or an OpenShift Project/Namespace. In Aporeto, there is a namespace hierarchy. The initial Aporeto namespaces are created to manage different "environments", with OpenShift Project/Namespaces mapped as child namespaces of a specific cluster.**
+**Access to Aporeto Console for developers is not available at this moment but is coming soon, however, only read-only access will be available initially. Check out the access requirements [here](../architecture/design_decisions.md#access-to-aporeto-console-coming-soon). In order to perform the steps outlined below, admin access to a namespace in the Aporeto console is required.** 
+
+**:point_up: Note**
+> The word "namespace" can apply either to an Aporeto Namespace or an OpenShift Project/Namespace. In Aporeto, there is a namespace hierarchy. The initial Aporeto namespaces are created to manage different "environments", with OpenShift Project/Namespaces mapped as child namespaces of a specific cluster. Read more about Aporeto namespace hierarchy [here](../architecture/design_decisions.md#aporeto-namespaces).**
 
 
 ### Purpose
@@ -8,7 +27,8 @@ This document should cover standard steps used for troubleshooting connectivity 
 
 ## Basic Troubleshooting
 
-#### Using "Design Mode" for Debugging Connectivity
+#### Using "Design Mode" for Debugging Connectivity in Aporeto Console
+
 Design Mode can be used to allow all traffic in a specific namespace or across a namespace and all child namespaces. This can be useful while troubleshootingn connectivity issues. 
 
 In order to enable design mode in the UI: 
@@ -27,7 +47,7 @@ In order to enable design mode in the UI:
 
   ![](assets/aporeto_troubleshooting_dm_002.png)
 
-  - Select the magic want to compute some policy suggestions
+  - Select the magic wand to compute some policy suggestions
     - It's not recommended to use the computed suggestion. Ideally you can limit the labels to use (to keep policies simpler) and use the computed suggestion to craft the appropriate policy. 
  
   ![](assets/aporeto_troubleshooting_dm_002.png)

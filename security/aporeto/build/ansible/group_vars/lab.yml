@@ -35,7 +35,18 @@ openshift_project_exclusions:
 - openshift-monitoring
 - "{{ openshift_project_prefix }}-operator"
 - "{{ openshift_project_prefix }}-enforcers"
-
+apb_external_nfs_host: ociopf-t-350.dmz
 
 # BCGov Operator Details
-bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:v0.8.2
+bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"
+
+
+# Aporeto Policy Backup CronJob
+job_name: secops-apobak
+secops_utils_image_namespace: devops-security-tools
+secops_utils_image_name: secops-utils:latest
+schedule: '08 13 * * *' # 1:13 AM (Pacific Time) daily
+success_job_history: '3'
+failed_job_history_limit: '3'
+job_backoff_limit: '4'
+secops_utils_secret_name: backup-cronjob-creds

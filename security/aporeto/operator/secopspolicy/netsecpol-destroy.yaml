@@ -1,0 +1,35 @@
+# This collection of tasks will lookup an Aporeto
+# `networkaccesspolicies` policy by filtering for a
+# known tag.
+# Variables
+#   - apo_namespace
+- hosts: localhost
+  gather_facts: no
+  vars:
+    k8s_message_key: _secops_pathfinder_gov_bc_ca_networksecuritypolicy
+  tasks:
+    - import_role:
+        name: "networksecuritypolicy"
+    - name: Extract k8s UID
+      set_fact:
+        metadata: "{{ hostvars[inventory_hostname][k8s_message_key].metadata }}"
+    # Lookup the policy and fetch its uid; if a policy is found
+    # `policy_id` will be defined.
+    - import_tasks: apo_lookup.yaml
+      vars:
+        k8s_uuid: "{{  metadata.uid  }}"
+        apo_kind: networkaccesspolicies
+        apo_namespace: "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}"
+    - name: Exit if no policy exists
+      when: policy_id is not defined
+      meta: end_play
+    - name: Delete Policy
+      when: policy_id is defined
+      shell: |
+        /usr/local/bin/apoctl \
+        api delete networkaccesspolicies \
+        --namespace "{{ lookup('env', 'APOCTL_BASE_NAMESPACE') }}/{{ metadata.namespace }}" \
+        "{{ policy_id }}"
+    - name: Finished
+      debug:
+        msg: "Removed policy {{ policy_id }} for k8s object {{ metadata.uid }}"

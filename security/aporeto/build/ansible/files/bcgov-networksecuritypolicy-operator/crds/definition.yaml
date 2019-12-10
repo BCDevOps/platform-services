@@ -12,6 +12,8 @@ items:
       listKind: NetworkSecurityPolicyList
       plural: networksecuritypolicies
       singular: networksecuritypolicy
+      shortNames:
+      - nsp
     scope: Namespaced
     subresources:
       status: {}
@@ -31,6 +33,8 @@ items:
       listKind: ExternalNetworkList
       plural: externalnetworks
       singular: externalnetwork
+      shortNames:
+      - en
     scope: Namespaced
     subresources:
       status: {}

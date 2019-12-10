@@ -30,6 +30,12 @@ This playbook can be used to install or uninstall Aporeto in each BCGov OpenShif
   - For the Lab environment edit the [group_vars](group_vars/lab.yml)
   - For the Prod environment edit the [group_vars](group_vars/prod.yml)
 
+- If deploying the Aporeto Backup CronJob, create a GitHub SSH keypair with write access to the repo: 
+
+```
+export GIHUB_DKEY=[private key details]
+```
+
 - Review/modify the general [vars.yml](vars.yml) file for accuracy
 
 - Ensure the system running this playbook is **already logged in to OpenShift** with appropriate credentials to OpenShift
@@ -77,6 +83,12 @@ The Ansible playbook accepts a few switches:
     - removes all aporeto components including the CRD 
     - does not currently remove the rolebindings/clusterrolebindings for the operator
     - does not remove the bcgov networksecuritypolicy operator
+
+- **secops_utils_install=true**
+    - Creates the `devops-security-tools` namespace
+    - Creates the build job for the secops utility container (includes apoctl, aquactl, etc)
+    - Configures a CronJob that exports all network security policy and external network objects and commits them to a private repo
+        - [Export CronJob Details](../../tools/secops-utils/README.md )
 
 ### High Level Architecture
 Architecture & design details are documented in the [architecture](../../architecture/readme.md) directory. 
