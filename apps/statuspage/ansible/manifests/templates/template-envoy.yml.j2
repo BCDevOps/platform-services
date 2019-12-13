@@ -112,6 +112,9 @@ items:
     host: {{ route }}
     port:
       targetPort: 10000-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
     to:
       kind: Service
       name: {{ envoy_service_name  }}
