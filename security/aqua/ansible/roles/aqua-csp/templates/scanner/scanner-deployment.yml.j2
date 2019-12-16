@@ -1,0 +1,83 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aqua-scanner
+  labels:
+    app: aqua-scanner
+spec:
+  replicas: '{{ aqua_scanner_replicas }}'
+  selector:
+    matchLabels:
+      app: aqua-scanner
+  template:
+    metadata:
+      labels:
+        app: aqua-scanner
+      name: aqua-scanner
+    spec:
+      restartPolicy: Always
+      serviceAccount: '{{ aqua_scanner_service_account }}'
+      serviceAccountName: '{{ aqua_scanner_service_account }}'
+      containers:
+      - env:
+        - name: SCANNER_USER
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: aqua-scanner
+        - name: SCANNER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: aqua-scanner
+        - name: CONSOLE_HOST
+          valueFrom:
+            secretKeyRef:
+              key: console_host
+              name: aqua-scanner
+        name: aqua-scanner
+        image: registry.aquasec.com/scanner:4.5
+        imagePullPolicy: IfNotPresent
+        args:
+        - "daemon"
+        - "--user"
+        - "$(SCANNER_USER)"
+        - "--password"
+        - "$(SCANNER_PASSWORD)"
+        - "--host"
+        - "$(CONSOLE_HOST)"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        volumeMounts:
+        # - mountPath: /opt/aquascans
+        #   name: scan-data
+{% if aqua_scanner_docker_sock_access %}
+        - mountPath: /var/run/docker.sock
+          name: docker-socket-mount
+{% endif %}
+{% if aqua_use_infra_nodes %}
+      nodeSelector: 
+        region: infra
+{% endif %}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values: 
+                  - 'aqua-scanner'
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      # - name: scan-data
+      #   emptydir: {}
+{% if aqua_scanner_docker_sock_access %}
+      - name: docker-socket-mount
+        hostPath:
+          path: /var/run/docker.sock
+{% endif %}

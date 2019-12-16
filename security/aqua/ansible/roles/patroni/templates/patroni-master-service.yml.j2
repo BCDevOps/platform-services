@@ -1,0 +1,29 @@
+# Patroni Master Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  # TODO: Look into necessary changes to change name to  (patroni_name + patroni_suffix)-master
+  name: '{{ patroni_name }}-master{{ patroni_suffix }}'
+  labels:
+    cluster-name: '{{ patroni_name }}{{ patroni_suffix }}'
+    app: '{{ patroni_name }}{{ patroni_suffix }}'
+    app.kubernetes.io/instance: '{{ patroni_name }}{{ patroni_suffix }}'
+    app.kubernetes.io/component: database
+    app.kubernetes.io/name: patroni  
+    app.kubernetes.io/managed-by: ansible-role-patroni
+    app.kubernetes.io/version: "10"
+spec:
+  ports:
+  - port: 5432
+    name: postgres
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    cluster-name: '{{ patroni_name }}{{ patroni_suffix }}'
+    role: master
+    app.kubernetes.io/name: patroni
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

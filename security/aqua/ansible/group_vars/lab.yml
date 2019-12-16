@@ -1,0 +1,12 @@
+openshift_master_default_subdomain: lab.pathfinder.gov.bc.ca
+aqua_common_namespace: devops-security-aqua
+aqua_agent_namespace: devops-security-aqua-agent
+node_list: 
+  - ociopf-t-301.dmz
+  - ociopf-t-302.dmz
+  - ociopf-t-303.dmz
+  - ociopf-t-311.dmz 
+  - ociopf-t-312.dmz 
+  - ociopf-t-313.dmz 
+  - ociopf-t-321.dmz 
+  - ociopf-t-322.dmz

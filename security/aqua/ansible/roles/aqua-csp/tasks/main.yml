@@ -1,0 +1,45 @@
+---
+# tasks file for aqua-csp
+- include_tasks: facts.yml
+  tags:
+    - facts
+    - always
+
+- include_tasks: namespace-preparation.yml
+  vars:
+    namespace: '{{ aqua_common_namespace }}'
+    manage_namespace: '{{ aqua_manage_common_namespace }}'
+    service_account: '{{ aqua_service_account }}'
+    aqua_privileged: '{{ aqua_common_privileged }}'
+  tags: 
+    - common-ns
+
+- include_tasks: database.yml
+  tags: database
+
+- include_tasks: console.yml
+  tags: console
+
+- include_tasks: gateway.yml
+  tags: gateway
+
+- include_tasks: generate-auth-token.yml
+  tags: 
+    - agent
+    - scanner
+    - token
+
+- include_tasks: scanner.yml
+  tags: scanner
+
+# - include_tasks: namespace-preparation.yml
+#   vars:
+#     namespace: '{{ aqua_agent_namespace }}'
+#     manage_namespace: '{{ aqua_manage_agent_namespace }}'
+#     service_account: '{{ aqua_service_account }}'
+#     aqua_privileged: '{{ aqua_agent_privileged }}'
+#   tags: 
+#     - agent-ns
+
+# - include_tasks: agent.yml
+#   tags: agent

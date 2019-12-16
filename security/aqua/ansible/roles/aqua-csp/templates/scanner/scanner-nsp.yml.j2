@@ -1,0 +1,28 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-pods-to-pods-aqua-scanner-to-console
+spec:
+  description: |
+    Allow {{ aqua_common_namespace }} Aqua Scanner pods to talk to Console
+  destination:
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-console
+  source:
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-scanner
+
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-egress-internet-aqua-scanner-to-world
+spec:
+  description: |
+    allow aqua-console to talk to the internet
+  source:
+    - - $namespace={{ aqua_common_namespace }}
+      - app=aqua-scanner
+  destination:
+    - - ext:network=any

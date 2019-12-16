@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks:
+    - include_role:
+        name: aqua-csp
+      tags: always

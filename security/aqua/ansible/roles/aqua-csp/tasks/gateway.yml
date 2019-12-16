@@ -1,0 +1,40 @@
+---
+- block:
+  - name: 'aqua-gateway Network Policies - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'gateway/gateway-nsp.yml.j2') | from_yaml_all | list }}"
+      state: '{{ aqua_state }}'
+    when: aqua_aporeto_enabled | bool
+
+  - name: 'Service=aqua-gateway - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'gateway/gateway-service.yml.j2') | from_yaml_all | list }}"
+      state: '{{ aqua_state }}'
+
+  - name: 'StatefulSet=aqua-gateway - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'gateway/gateway-deployment.yml.j2') | from_yaml_all | list }}"
+      state: '{{ aqua_state }}'
+  
+  - name: 'Wait for aqua-gateway StatefulSet readyReplicas={{ aqua_gateway_replicas }}'
+    k8s_facts:
+      kind: StatefulSet
+      name: aqua-gateway
+      namespace: '{{ aqua_common_namespace }}'
+    register: k8s_fact
+    until: k8s_fact | json_query('resources[].status.readyReplicas') == [aqua_gateway_replicas]
+    delay: 5
+    retries: 60
+    when: aqua_state == 'present'
+  
+  - name: 'Route=aqua-gateway - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'gateway/gateway-route.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+    when: aqua_gateway_external_host_enabled | bool
+  tags:
+    - gateway

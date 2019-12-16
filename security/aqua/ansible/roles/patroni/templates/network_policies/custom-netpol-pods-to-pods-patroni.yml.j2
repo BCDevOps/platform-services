@@ -1,0 +1,15 @@
+# Patroni NetworkSecurityPolicy (nsp) - patroni-cluster-to-patroni-cluster
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-pods-to-pods-{{ patroni_name }}{{ patroni_suffix }}
+spec:
+  description: |
+    Allow {{ patroni_name }}{{ patroni_suffix }} Intra Cluster Communication
+  destination:
+  - - $namespace={{ patroni_namespace }}
+    - cluster-name={{ patroni_name }}{{ patroni_suffix }}
+  source:
+  - - $namespace={{ patroni_namespace }}
+    - cluster-name={{ patroni_name }}{{ patroni_suffix }}

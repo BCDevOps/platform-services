@@ -1,0 +1,153 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: aqua-console
+  name: aqua-console
+  namespace: '{{ aqua_common_namespace }}'
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: '{{ aqua_console_replicas }}'
+  selector:
+    matchLabels:
+      app: aqua-console
+  template:
+    metadata:
+      labels:
+        app: aqua-console
+      name: aqua-console
+      namespace: '{{ aqua_common_namespace }}'
+    spec:
+      serviceAccount: '{{ aqua_service_account }}'
+      serviceAccountName: '{{ aqua_service_account }}'
+{% if aqua_use_infra_nodes %}
+      nodeSelector: 
+        region: infra
+{% endif %}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: name
+                operator: In
+                values: 
+                - aqua-console
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: aqua-console
+        image: registry.aquasec.com/console:4.5
+        imagePullPolicy: IfNotPresent
+        restartPolicy: Always
+{% if aqua_console_privledged %}
+        securityContext:
+          privileged: true
+{% endif %}
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+{% if aqua_license is defined and aqua_license is not none %}
+        - name: LICENSE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: license
+              name: aqua-console
+{% endif %}
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: administrator_password
+              name: aqua-console
+        - name: CYBERCENTER_ADDR
+          value: https://cybercenter.aquasec.com
+        - name: SCALOCK_DBNAME
+          valueFrom:
+            secretKeyRef:
+              key: app-db-name
+              name: '{{ aqua_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_DBHOST
+          value: '{{ aqua_patroni_name }}-master{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_DBPORT
+          value: '5432'
+        - name: SCALOCK_DBUSER
+          valueFrom:
+            secretKeyRef:
+              key: app-db-username
+              name: '{{ aqua_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_DBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: app-db-password
+              name: '{{ aqua_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBNAME
+          valueFrom:
+            secretKeyRef:
+              key: app-db-name
+              name: '{{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBHOST
+          value: '{{ aqua_audit_patroni_name }}-master{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBPORT
+          value: '5432'
+        - name: SCALOCK_AUDIT_DBUSER
+          valueFrom:
+            secretKeyRef:
+              key: app-db-username
+              name: '{{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: app-db-password
+              name: '{{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}'
+{% if aqua_console_dockerless_scanning %}
+        - name: AQUA_DOCKERLESS_SCANNING
+          value: "1"
+        - name: AQUA_PPROF_ENABLED
+          value: "1"
+        - name: DISABLE_IP_BAN
+          value: "1"
+{% else %}
+        - name: AQUA_DOCKERLESS_SCANNING
+          value: "0"
+        - name: AQUA_PPROF_ENABLED
+          value: "0"
+        - name: DISABLE_IP_BAN
+          value: "0"
+{% endif %}
+        - name: AQUA_GRPC_MODE
+          value: "1"
+{% if aqua_console_cluster_mode_enabled %}
+        - name: CLUSTER_MODE
+          value: 'I_WILL_BE_BACK'
+{% endif %}
+        - name: AQUA_CONSOLE_RAW_SCAN_RESULTS_STORAGE_SIZE
+          value: '{{ aqua_console_pvc_size }}'
+        volumeMounts:
+        - mountPath: /opt/aquasec/raw-scan-results
+          name: aqua-console-raw-scan-results
+#        - mountPath: /opt/aquasec
+#          name: aqua-console-opt
+{% if aqua_console_docker_sock_access %}
+        - mountPath: /var/run/docker.sock
+          name: docker-socket-mount
+{% endif %}
+      volumes:
+      - name: aqua-console-raw-scan-results
+        persistentVolumeClaim:
+          claimName: aqua-console
+#      - name: aqua-console-opt
+#        emptyDir: {}
+{% if aqua_console_docker_sock_access %}
+      - name: docker-socket-mount
+        hostPath:
+          path: /var/run/docker.sock
+{% endif %}

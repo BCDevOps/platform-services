@@ -1,0 +1,51 @@
+---
+- block:
+  - name: 'aqua-console Network Policies - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'console/console-nsp.yml.j2') | from_yaml_all | list }}"
+      state: '{{ aqua_state }}'
+    when: aqua_aporeto_enabled | bool
+
+  - name: 'Secret=aqua-console - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'console/console-secret.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+
+  - name: 'Service=aqua-console - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'console/console-service.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+
+  - name: 'SharedPVC=aqua-console - state={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'console/console-pvc.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+
+  - name: 'Deployment=aqua-console - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'console/console-deployment.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+      wait: "{{ 'no' if aqua_console_cluster_mode_enabled else 'yes' }}"
+
+  - name: 'Route=aqua-console - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'console/console-route.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+  
+  - name: "Wait for console route to be accessible"
+    uri:
+      url: "https://{{ aqua_console_external_host }}"
+      status_code: 200
+    register: _response
+    until: _response.status == 200
+    retries: 60
+    delay: 3
+    when: aqua_state == 'present'
+  tags:
+    - console

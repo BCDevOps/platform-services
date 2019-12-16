@@ -1,0 +1,34 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-pods-to-pods-aqua-gateway-to-console-and-database
+spec:
+  description: |
+    Allow {{ aqua_common_namespace }} Aqua Gateway pods to talk to Console and Database
+  destination:
+  - - $namespace={{ aqua_common_namespace }}
+    - cluster-name={{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}
+  - - $namespace={{ aqua_common_namespace }}
+    - cluster-name={{ aqua_patroni_name }}{{ aqua_patroni_suffix }}
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-console
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-gateway
+  source:
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-gateway
+
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-egress-internet-aqua-gateway-to-world
+spec:
+  description: |
+    allow aqua-gateway to talk to the internet
+  source:
+    - - $namespace={{ aqua_common_namespace }}
+      - app=aqua-gateway
+  destination:
+    - - ext:network=any

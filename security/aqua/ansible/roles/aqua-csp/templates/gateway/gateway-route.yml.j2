@@ -1,0 +1,19 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: aqua-gateway
+  name: aqua-gateway
+spec:
+  host: '{{ aqua_gateway_external_host }}'
+  port:
+    targetPort: aqua-gateway
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: aqua-gateway
+    weight: 100
+  wildcardPolicy: None

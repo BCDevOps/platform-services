@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    volume.beta.kubernetes.io/storage-class: '{{ aqua_console_pvc_storage_class }}'
+  labels:
+    app: aqua-console
+  name: aqua-console
+spec:
+  storageClassName: '{{ aqua_console_pvc_storage_class }}'
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: '{{ aqua_console_pvc_size }}Gi'

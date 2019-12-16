@@ -1,0 +1,68 @@
+---
+- name: 'Setup {{ namespace }} - State={{ aqua_state }}'
+  block:
+  - name: 'Namespace={{ namespace }} - State={{ aqua_state }}'
+    k8s:
+      api_version: v1
+      kind: Namespace
+      name: '{{ namespace }}'
+      state: '{{ aqua_state }}'
+    when:
+      - manage_namespace | bool
+
+  - name: 'Verify {{ namespace }} namespace exists'
+    assert:
+      that:
+        - 'lookup("k8s", kind="Namespace", resource_name=namespace) is defined'
+      msg: The {{ namespace }} namespace must exist
+    when: 
+      - aqua_state == 'present'
+      - not manage_namespace | bool
+  
+  - name: 'Patch {{ namespace }} node-selector - region=infra'
+    command: |
+      oc patch namespace '{{ namespace }}' -p '{"metadata":{"annotations":{"openshift.io/node-selector":""}}}'
+    register: patch_result
+    changed_when: "'no change' not in patch_result.stdout"
+    when: 
+      - manage_namespace | bool
+      - aqua_use_infra_nodes | bool
+      - aqua_state == 'present'
+      - namespace == aqua_common_namespace
+
+  - name: 'ClusterRole=aqua-discovery-cluster-role - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ namespace }}'
+      definition: "{{ lookup('template', 'common/aqua-discovery-cluster-role.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+
+  - name: 'CluserRoleBinding=aqua-discovery-cluster-role-binding - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ namespace }}'
+      definition: "{{ lookup('template', 'common/aqua-discovery-cluster-role-binding.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+
+  - name: 'ServiceAccount={{ service_account }} - State={{ aqua_state }}'
+    k8s:
+      kind: ServiceAccount
+      name: '{{ service_account }}'
+      namespace: '{{ namespace }}'
+      state: '{{ aqua_state }}'
+
+  - name: Create aqua-registry Secret
+    command: "oc create secret docker-registry aqua-registry --docker-server={{ aqua_registry_host }} --docker-username={{ aqua_registry_user }} --docker-password={{ aqua_registry_password }} --docker-email={{ aqua_registry_user }} -n {{ namespace }}"
+    when: 
+      - aqua_state == 'present'
+      - not (lookup('k8s', kind='Secret', namespace=namespace ,resource_name='aqua-registry') | length > 0)
+
+  - name: "Add SecurityContextContstraint {{ 'privileged' if aqua_privileged else 'anyuid' }} to {{ service_account }}"
+    command: "oc adm policy add-scc-to-user {{ 'privileged' if aqua_privileged else 'anyuid' }} -z {{ service_account }} -n {{ namespace }}"
+    when: aqua_state == 'present'
+
+  - name: 'Add Registry Secret for Pull Access to {{ service_account }}'
+    command: 'oc secrets add serviceaccount/{{ service_account }} secrets/aqua-registry --for=pull -n {{ namespace }}'
+    when: aqua_state == 'present'
+
+  tags:
+    - common-ns
+    - agent-ns

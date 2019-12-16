@@ -1,0 +1,67 @@
+---
+- block:
+  - name: 'aqua-scanner Network Policies - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'scanner/scanner-nsp.yml.j2') | from_yaml_all | list }}"
+      state: '{{ aqua_state }}'
+    when: aqua_aporeto_enabled | bool
+
+  - name: Set scanner_secret_exists
+    set_fact:
+      scanner_secret_exists: "{{ (lookup('k8s', kind='Secret', namespace=aqua_common_namespace , resource_name='aqua-scanner') | length > 0 | bool) }}"
+
+  - block:
+    - name: Generate Scanner User Password
+      command: 'openssl rand -base64 12'
+      register: scanner_password
+      changed_when: not scanner_secret_exists
+      when: aqua_scanner_password is not defined
+
+    - name: Set aqua_scanner_password (generated)
+      set_fact:
+        aqua_scanner_password: '{{ scanner_password.stdout }}'
+      when: aqua_scanner_password is not defined
+
+    - name: Create Scanner User
+      uri:
+        url: 'https://{{ aqua_console_external_host }}/api/v1/users'
+        method: POST
+        headers:
+          Authorization: "Bearer {{ aqua_console_auth_token }}"
+        body: 
+          id: '{{ aqua_scanner_user }}'
+          password: '{{ aqua_scanner_password }}'
+          role: Scanner
+          name: '{{ aqua_scanner_display_name }}'
+        body_format: json
+        status_code: 204
+      when: aqua_state == 'present'
+
+    - name: Remove Scanner User
+      uri:
+        url: 'https://{{ aqua_console_external_host }}/api/v1/users/{{ aqua_scanner_user }}'
+        method: DELETE
+        headers:
+          Authorization: "Bearer {{ aqua_console_auth_token }}"
+        status_code: 204
+      when: 
+        - aqua_state == 'absent'
+        - aqua_console_auth_token is defined
+
+    - name: 'Secret=aqua-scanner - State={{ aqua_state }}'
+      k8s:
+        namespace: '{{ aqua_common_namespace }}'
+        definition: "{{ lookup('template', 'scanner/scanner-secret.yml.j2') | from_yaml_all | list }}"
+        state: '{{ aqua_state }}'
+    when: not scanner_secret_exists or aqua_state == 'absent'
+
+  - name: 'Deployment=aqua-scanner - state={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_common_namespace }}'
+      definition: "{{ lookup('template', 'scanner/scanner-deployment.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+      wait: yes
+
+  tags:
+    - scanner

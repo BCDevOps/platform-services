@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: aqua-gateway
+  name: aqua-gateway
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: '{{ aqua_gateway_replicas }}'
+  selector:
+    matchLabels:
+      app: aqua-gateway
+  template:
+    metadata:
+      labels:
+        app: aqua-gateway
+      name: aqua-gateway
+      namespace: '{{ aqua_common_namespace }}'
+    spec:
+{% if aqua_use_infra_nodes %}
+      nodeSelector: 
+        region: infra
+{% endif %}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values: 
+                  - 'aqua-gateway'
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+      - env:
+        - name: AQUA_CONSOLE_SECURE_ADDRESS
+          value: aqua-console:443
+        - name: HEALTH_MONITOR
+          value: '0.0.0.0:8080'
+        - name: SCALOCK_GATEWAY_LOGICAL_NAME
+          value: '{{ aqua_gateway_logical_group_name }}'
+        - name: SCALOCK_DBUSER
+          valueFrom:
+            secretKeyRef:
+              key: app-db-username
+              name: '{{ aqua_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_DBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: app-db-password
+              name: '{{ aqua_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_DBNAME
+          valueFrom:
+            secretKeyRef:
+              key: app-db-name
+              name: '{{ aqua_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_DBHOST
+          value: '{{ aqua_patroni_name }}-master{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_DBPORT
+          value: '5432'
+        - name: SCALOCK_AUDIT_DBUSER
+          valueFrom:
+            secretKeyRef:
+              key: app-db-username
+              name: '{{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: app-db-password
+              name: '{{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBNAME
+          valueFrom:
+            secretKeyRef:
+              key: app-db-name
+              name: '{{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBHOST
+          value: '{{ aqua_audit_patroni_name }}-master{{ aqua_patroni_suffix }}'
+        - name: SCALOCK_AUDIT_DBPORT
+          value: '5432'
+        image: registry.aquasec.com/gateway:4.5
+        imagePullPolicy: IfNotPresent
+        name: aqua-gateway
+        ports:
+        - containerPort: 3622
+          protocol: TCP
+        - containerPort: 8443
+          protocol: TCP
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 20
+{% if aqua_gateway_privledged %}
+        securityContext:
+          privileged: true
+{% endif %}
+      restartPolicy: Always
+      serviceAccount: '{{ aqua_service_account }}'
+      serviceAccountName: '{{ aqua_service_account }}'

@@ -1,0 +1,25 @@
+---
+- block:
+  - include_role: 
+      name: patroni
+    vars:
+      patroni_namespace: '{{ aqua_common_namespace }}'
+      patroni_use_infra_nodes: '{{ aqua_use_infra_nodes }}'
+      patroni_state: '{{ aqua_state }}'
+      patroni_name: '{{ item.name }}'
+      patroni_suffix: '{{ aqua_patroni_suffix }}'
+      patroni_app_db_name: '{{ item.db_name }}'
+      patroni_cpu_request: '{{ aqua_patroni_cpu_request }}'
+      patroni_cpu_limit: '{{ aqua_patroni_cpu_limit }}'
+      patroni_memory_request: '{{ aqua_patroni_memory_request }}'
+      patroni_memory_limit: '{{ aqua_patroni_memory_limit }}'
+      patroni_pvc_size: '{{ item.pvc_size }}'
+    loop:
+      - name: '{{ aqua_patroni_name }}'
+        db_name: '{{ aqua_patroni_db_name }}'
+        pvc_size: '{{ aqua_patroni_pvc_size }}'
+      - name: '{{ aqua_audit_patroni_name }}'
+        db_name: '{{ aqua_audit_patroni_db_name }}'
+        pvc_size: '{{ aqua_audit_patroni_pvc_size }}'
+  tags:
+    - database

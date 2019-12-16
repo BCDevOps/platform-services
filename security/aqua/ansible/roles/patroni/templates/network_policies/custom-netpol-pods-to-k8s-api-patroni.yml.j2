@@ -1,0 +1,14 @@
+# Patroni NetworkSecurityPolicy (nsp)
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-pods-to-k8s-api-{{ patroni_name }}{{ patroni_suffix }}
+spec:
+  description: |
+    Allow {{ patroni_name }}{{ patroni_suffix }} pods to talk to the k8s api
+  destination:
+  - - int:network=internal-cluster-api-endpoint
+  source:
+  - - $namespace={{ patroni_namespace }}
+    - cluster-name={{ patroni_name }}{{ patroni_suffix }}

@@ -1,0 +1,107 @@
+---
+# Patroni Post-Build & Deployment
+
+# Patroni Pre-requestites
+- name: Verify required variables are set
+  assert:
+    that:
+      - patroni_namespace is defined
+      - patroni_namespace != ''
+      - patroni_state == 'absent' or patroni_state == 'present'
+    msg: 'The patron_namespace and patroni_state variables must be set'
+  
+- name: 'Namespace={{ patroni_namespace }} - State={{ patroni_state }}'
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ patroni_namespace }}'
+    state: '{{ patroni_state }}'
+  when: patroni_manage_namespace | bool
+
+- name: 'Verify {{ patroni_namespace }} namespace exists'
+  assert:
+    that:
+      - 'lookup("k8s", kind="Namespace", resource_name=patroni_namespace) is defined'
+    msg: The {{ patroni_namespace }} namespace must exist
+  when: 
+    - patroni_state == 'present'
+    - not patroni_manage_namespace | bool
+
+- name: 'Patch namespace node-selector - region=infra'
+  command: |
+    oc patch namespace '{{ patroni_namespace }}' -p '{"metadata":{"annotations":{"openshift.io/node-selector":""}}}'
+  register: patch_result
+  changed_when: "'no change' not in patch_result.stdout"
+  when: 
+    - patroni_manage_namespace | bool
+    - patroni_use_infra_nodes | bool
+    - patroni_state == 'present'
+
+- name: '{{ patroni_name }}{{ patroni_suffix }} Network Policies - State={{ patroni_state }}'
+  k8s:
+    namespace: '{{ patroni_namespace }}'
+    definition: "{{ lookup('template', 'network_policies/' + policy_template) | from_yaml }}"
+    state: '{{ patroni_state }}'
+  loop:
+    - custom-netpol-pods-to-k8s-api-patroni.yml.j2
+    - custom-netpol-pods-to-pods-patroni.yml.j2
+  loop_control:
+    loop_var: policy_template
+  when: ('secops.pathfinder.gov.bc.ca' in lookup('k8s', cluster_info='api_groups')) | bool
+
+- name: 'Role={{ patroni_name }}{{ patroni_suffix }} - State={{ patroni_state }}'
+  k8s:
+    namespace: '{{ patroni_namespace }}'
+    definition: "{{ lookup('template', 'patroni-role.yml.j2') | from_yaml }}"
+    state: '{{ patroni_state }}'
+
+- name: 'RoleBinding={{ patroni_name }}{{ patroni_suffix }} - State={{ patroni_state }}'
+  k8s:
+    namespace: '{{ patroni_namespace }}'
+    definition: "{{ lookup('template', 'patroni-role-binding.yml.j2') | from_yaml }}"
+    state: '{{ patroni_state }}'
+
+- name: 'ServiceAccount={{ patroni_name }}{{ patroni_suffix }} - state={{ patroni_state }}'
+  k8s:
+    namespace: '{{ patroni_namespace }}'
+    definition: "{{ lookup('template', 'patroni-service-account.yml.j2') | from_yaml }}"
+    state: '{{ patroni_state }}'
+
+- name: 'Secret={{ patroni_name }}{{ patroni_suffix }} - State={{ patroni_state }}'
+  k8s:
+    namespace: '{{ patroni_namespace }}'
+    definition: "{{ lookup('template', 'patroni-secret.yml.j2') | from_yaml }}"
+    state: '{{ patroni_state }}'
+  when: not (lookup('k8s', kind='Secret', namespace=patroni_namespace , resource_name=patroni_name + patroni_suffix) | length > 0) or patroni_state == 'absent'
+
+- name: Verify {{ patroni_name }}{{ patroni_suffix }} Secret Exists
+  assert:
+    that:
+      - "{{ (lookup('k8s', kind='Secret', namespace=patroni_namespace , resource_name=patroni_name + patroni_suffix) | length > 0) }}"
+    msg: 'The {{ patroni_name }}{{ patroni_suffix }} secret must exist'
+  when: patroni_state == 'present'
+
+- name: 'Service={{ patroni_name }}{{ patroni_suffix }}-master - State={{ patroni_state }}'
+  k8s:
+    namespace: '{{ patroni_namespace }}'
+    definition: "{{ lookup('template', 'patroni-master-service.yml.j2') | from_yaml }}"
+    state: '{{ patroni_state }}'
+
+- name: 'StatefulSet={{ patroni_name }}{{ patroni_suffix }} - State={{ patroni_state }}'
+  k8s:
+    namespace: '{{ patroni_namespace }}'
+    definition: "{{ lookup('template', 'patroni-statefulset.yml.j2') | from_yaml }}"
+    state: '{{ patroni_state }}'
+
+- name: Wait for {{ patroni_name }}{{ patroni_suffix }} StatefulSet readyReplicas={{ patroni_replicas }}
+  k8s_facts:
+    kind: StatefulSet
+    name: '{{ patroni_name }}{{ patroni_suffix }}'
+    namespace: '{{ patroni_namespace }}'
+  register: k8s_fact
+  until: k8s_fact | json_query('resources[].status.readyReplicas') == [patroni_replicas]
+  delay: 5
+  retries: 60
+  when:
+    - patroni_wait_until_ready | bool
+    - patroni_state == 'present'

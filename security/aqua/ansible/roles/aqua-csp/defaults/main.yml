@@ -1,0 +1,66 @@
+---
+# defaults file for aqua-csp
+# --- Aqua Common ---
+aqua_common_namespace: devops-security-aqua
+aqua_manage_common_namespace: true
+aqua_common_privileged: false
+aqua_service_account: aqua-sa
+aqua_state: present
+aqua_registry_host: registry.aquasec.com
+aqua_registry_user: "{{ lookup('env', 'AQUA_REG_USER') }}"
+aqua_registry_password: "{{ lookup('env', 'AQUA_REG_PASSWORD') }}"
+aqua_administrator_password: "{{ lookup('env', 'AQUA_ADMIN_PASSWORD') }}"
+aqua_license: "{{ lookup('env', 'AQUA_LICENSE') }}"
+aqua_use_infra_nodes: true
+
+# --- Aqua Database ---
+## Patroni Common
+aqua_patroni_suffix: ''
+aqua_patroni_cpu_request: 250m
+aqua_patroni_cpu_limit: 1000m
+aqua_patroni_memory_request: 512Mi
+aqua_patroni_memory_limit: 1024Mi
+aqua_patroni_storage_class: gluster-file
+
+## Patroni - Aqua Database
+aqua_patroni_name: aqua-patroni
+aqua_patroni_db_name: scalock
+aqua_patroni_db_password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') + '' }}"
+aqua_patroni_pvc_size: 10Gi
+
+## Patroni - Aqua Audit Database
+aqua_audit_patroni_name: aqua-audit-patroni
+aqua_audit_patroni_db_name: slk_audit
+aqua_audit_patroni_db_password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') + '' }}"
+aqua_audit_patroni_pvc_size: 2Gi
+
+# --- Aqua Server ---
+aqua_console_replicas: 2
+aqua_console_cluster_mode_enabled: false
+aqua_console_privledged: false
+aqua_console_docker_sock_access: false
+aqua_console_dockerless_scanning: true
+aqua_console_external_subdomain: aqua-console
+aqua_console_pvc_size: 5 # Size in Gi (int)
+aqua_console_pvc_storage_class: gluster-file
+
+# --- Aqua Gateway ---
+aqua_gateway_replicas: 3
+aqua_gateway_external_host_enabled: false
+aqua_gateway_external_subdomain: aqua-gateway
+aqua_gateway_privledged: false
+aqua_gateway_logical_group_name: aqua-gateway
+
+# --- Aqua Scanner ---
+aqua_scanner_replicas: 5
+aqua_scanner_service_account: aqua-sa
+aqua_scanner_docker_sock_access: false
+aqua_scanner_display_name: Default-Scanner
+aqua_scanner_user: sirscanalot
+
+# --- Aqua Agent (Enforcer)
+aqua_agent_logical_group_name: aqua-agent
+aqua_agent_description: 'OpenShift Agent Group'
+aqua_agent_service_account: aqua-agent
+aqua_manage_agent_namespace: false
+aqua_agent_privileged: true

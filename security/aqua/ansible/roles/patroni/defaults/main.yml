@@ -1,0 +1,30 @@
+---
+# defaults file for patroni role
+## Patroni Common
+patroni_image_registry: docker-registry.default.svc:5000
+patroni_image_stream_namespace: bcgov
+patroni_image_stream_tag: patroni:v10-stable
+patroni_manage_namespace: false
+patroni_name: patroni
+patroni_suffix: ''
+patroni_state: present
+
+## Patroni StatefulSet
+patroni_replicas: 2
+patroni_cpu_request: 250m
+patroni_cpu_limit: 500m
+patroni_memory_request: 512Mi
+patroni_memory_limit: 512Mi
+patroni_storage_class: gluster-file
+patroni_pvc_size: 2Gi
+patroni_use_infra_nodes: false
+patroni_wait_until_ready: true
+
+## Patroni Secrets
+patroni_replication_username: replication
+patroni_replication_password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') + '' }}"
+patroni_superuser_username: postgres
+patroni_superuser_password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') }}"
+patroni_app_db_name: app
+patroni_app_db_username: app
+patroni_app_db_password: "{{ lookup('password', '/dev/null chars=ascii_letters,digits') + '' + '' }}"

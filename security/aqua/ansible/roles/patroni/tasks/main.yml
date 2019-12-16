@@ -1,0 +1,11 @@
+---
+# tasks file for patroni - {build,deploy,test}
+
+# Build Patroni Image in Specified Namespace
+# - include_tasks: patroni_build.yml
+
+# Deploy To Test Namespace Test Various Modes and Settings
+# - include_tasks: patroni_test.yml
+
+# Deploy Patroni To Specified Namespace
+- include_tasks: patroni.yml

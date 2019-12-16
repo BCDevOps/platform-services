@@ -1,0 +1,19 @@
+---
+- block:
+  - name: Set aqua_console_external_host
+    set_fact:
+      aqua_console_external_host: '{{ aqua_console_external_subdomain }}.{{ openshift_master_default_subdomain }}'
+  - debug: var=aqua_console_external_host
+
+  - name: Set aqua_gateway_external_host
+    set_fact: 
+      aqua_gateway_external_host: '{{ aqua_gateway_external_subdomain }}.{{ openshift_master_default_subdomain }}'
+    when: aqua_gateway_external_host_enabled | bool
+
+  - name: Set aqua_aporeto_enabled
+    set_fact:
+      aqua_aporeto_enabled: "{{ ('secops.pathfinder.gov.bc.ca' in lookup('k8s', cluster_info='api_groups')) | bool }}"
+  - debug: var=aqua_aporeto_enabled
+
+  tags:
+    - always
