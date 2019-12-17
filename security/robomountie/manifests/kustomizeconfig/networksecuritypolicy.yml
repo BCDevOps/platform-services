@@ -1,0 +1,24 @@
+
+# commonLabels:
+# - path: metadata/labels
+#   create: true
+#   kind: NetworkSecurityPolicy
+
+
+# nameReference:
+# - kind: NetworkSecurityPolicy
+#   version: v1
+#   # fieldSpecs:
+#   # - path: metadata/name
+#   #   version: secops.pathfinder.gov.bc.ca/v1alpha1
+#   #   kind: NetworkSecurityPolicy
+
+# varReference:
+# - path: spec/description
+#   kind: NetworkSecurityPolicy
+
+# - path: spec/destination
+#   kind: NetworkSecurityPolicy
+
+# - path: spec/source
+#   kind: NetworkSecurityPolicy

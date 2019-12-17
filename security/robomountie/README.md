@@ -43,6 +43,8 @@ We've used a javascript based wehbook server to kick off ansible jobs (the statu
 #### NATS
 So far we are looking at NATS. Easy to start with in a single image, also has an **operator to easily manage clusters**. The thought is that it would be the persistence and scale layer to help handle the amount of security events that may get pumped into the system. 
 
+* note: configuration reload isn't supported on kube 1.11. [link](https://github.com/nats-io/nats-operator#configuration-reload)
+
 
 ### Data Storage
 Some form of data storage will be required in order to hold records that identify: 
