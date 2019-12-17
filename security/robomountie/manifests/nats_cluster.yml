@@ -13,9 +13,9 @@ data:
       port: 6222
 
       routes [
-        nats://nats-0.:6222
-        nats://nats-1:6222
-        nats://nats-2:6222
+        nats://nats-0.nats.rmountie-03.svc.cluster.local:6222
+        nats://nats-1.nats.rmountie-03.svc.cluster.local:6222
+        nats://nats-2.nats.rmountie-03.svc.cluster.local:6222
       ]
 
       cluster_advertise: $CLUSTER_ADVERTISE

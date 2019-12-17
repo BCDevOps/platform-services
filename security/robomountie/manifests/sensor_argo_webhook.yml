@@ -22,28 +22,31 @@ spec:
   triggers:
     - template:
         name: webhook-pod-trigger
-        group: ""
+        group: "batch"
         version: v1
-        resource: pods
+        resource: jobs
         source:
           resource:
-            apiVersion: v1
-            kind: Pod
+            apiVersion: batch/v1
+            kind: Job
             metadata:
               generateName: hello-world-
-            spec:              
-              containers:
-                - name: hello-container
-                  command:
-                    - cowsay
-                  image: "docker/whalesay:latest"
-                  args: ["AHAH"]
+            spec:
+              template:
+                spec:                
+                  containers:
+                    - name: hello-container
+                      command:
+                        - cowsay
+                      image: "docker/whalesay:latest"
+                      args: ["AHAH"]
+                  restartPolicy: Never
       templateParameters:
         - src:
             event: "webhook-gateway-with-standard-nats:example"
-            value: "hell-yeah"
-            path: body.message
-          dest: source.resource.spec.containers.command
+            value: "message"
+            path: message.body
+          dest: source.resource.spec.template.spec.0.containers.command
           # - src:
           #     event: "webhook-gateway-with-standard-nats:example"
           #     path: message
