@@ -27,7 +27,7 @@ The model works by using application identities created for each component/Proce
 
 **🤓 ProTip**
 
-> * Assume that the network and platform are insecure and built up robust security practices.
+> * Assume that the network and platform are insecure and build up robust security practices.
 
 ## Table of Contents
 
