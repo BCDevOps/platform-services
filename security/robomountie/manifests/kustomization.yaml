@@ -2,9 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: rmountie-03
 resources:
- - argo_events.yml
- - argo_workflows.yml
- - nats_cluster.yml
+- prometheus.yml
+- nats_cluster.yml
+- prometheus.yml
+- argo_workflows.yml
+- argo_events.yml
 
 
 vars: 
@@ -13,6 +15,14 @@ vars:
 #     kind: NetworkSecurityPolicy
 #     name: egress-internet
 #     apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+- name: NAMESPACE
+  objref:
+    kind: Deployment 
+    name: prometheus
+    apiVersion: extensions/v1beta1
+  fieldref: 
+    fieldpath: metadata.namespace
+    
 
 images: 
   - name: argoproj/gateway-controller
@@ -30,5 +40,5 @@ images:
 # - kustomizeconfig/crd/networksecuritypolicy.json
 
 configurations:
-- kustomizeconfig/argo_cm.yml
+- kustomizeconfig/configmap.yml
 # - kustomizeconfig/networksecuritypolicy.yml

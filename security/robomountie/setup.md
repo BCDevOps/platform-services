@@ -40,19 +40,18 @@ oc new-project $OCP_PROJECT
 ## Note: Kustomize doesn't like the way we've formatted the spec, so we will use sed instead. 
 sed "s/ocp-project/$OCP_PROJECT/g" manifests/nsp.yml | oc apply -f -
 
-## Deploy Argo workflows (IF YOU WANT TO USE THEM)
+<!-- ## Deploy Argo workflows (IF YOU WANT TO USE THEM)
 curl  https://raw.githubusercontent.com/argoproj/argo/master/manifests/namespace-install.yaml -o manifests/argo_workflows.yml
-sed -i "s/    namespace: argo/    namespace: $OCP_PROJECT/g" manifests/argo_workflows.yml
+sed -i "s/    namespace: argo/    namespace: $OCP_PROJECT/g" manifests/argo_workflows.yml -->
 
 
 ## Deploy Argo events controllers
 curl https://raw.githubusercontent.com/argoproj/argo-events/master/hack/k8s/manifests/installation.yaml -o manifests/argo_events.yml
 
-## Update the configMap variable
+## Update the configMap variable (singe we don't control this)
 sed -i "s/    namespace: argo-events/    namespace: $OCP_PROJECT/g" manifests/argo_events.yml
 
 kubectl kustomize manifests/ | oc apply -f -
- 
 ```
 
 - Deploy sample sensor, route, and webhook gateway
