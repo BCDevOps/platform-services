@@ -1,13 +1,20 @@
 # The Name
-Is to be chnaged down the road. 
+Is to be changed down the road. 
 
+# Quickstart for Developers
+The below content provides some detail regarding the original review of tools and someof the ones we are continuing to invest time into. 
+Please refer to [setup.md](setup.md) to set up a full stack for testing, which includes: 
+- Argo-Events
+- NATS Messaging Cluster
+- Prometheus / Grafana for NATS Monitoring
+- Optional Argo-Workflows
 
 # Diagrams / Assets
 [Draw.io Initial Architecture Diagram](https://drive.google.com/file/d/1tMS2AXWfBy4oQ6eWhOS7ByuPrN2LJznF/view?usp=sharing)
 
 
 # Technical Pre-Analysis Notes
-Components are not yet fully assessed. This is a rough page of notes for different tools to consider; 
+Components are not yet fully assessed. This is a rough page of notes for different tools/functions to consider; 
 
 ### Webhook / API Front End
 We need a Webhook receiver that can take the payload from multiple sources and translate them into NATS messages to be picked up by the business logic function. 
@@ -17,8 +24,8 @@ For webhook receiver security, we likely need a function to automate the webhook
 - create / build the argo webhook CR 
 - generate SSL certs for security
 
-#### Gloo
-Looked at Gloo and it's pretty heavyweight for what we need... challenges to get it running on OCP **easily** makes me think it might not be the right fit for a mock-up. It does, however, promise a method of connecting to NATS.
+<!-- #### Gloo
+Looked at Gloo and it's pretty heavyweight for what we need... challenges to get it running on OCP **easily** makes me think it might not be the right fit for a mock-up. It does, however, promise a method of connecting to NATS. -->
 
 #### Argo-Events
 Argo events has an interesting kube-native way of building a webhook listener and passing those events into sensors, also ensuring that dependencies are met. 
@@ -28,15 +35,15 @@ Argo events has an interesting kube-native way of building a webhook listener an
 - Ties into NATS 
 - Can also be a subscriber to NATS and can run jobs based on events in the message queue
 
-
+<!-- 
 #### Resgate
-Is an option to build a REST API in front of NATS. Haven't spent much more time looking into this. 
+Is an option to build a REST API in front of NATS. Haven't spent much more time looking into this.  -->
 
-#### JS Wehbook
+<!-- #### JS Wehbook
 We've used a javascript based wehbook server to kick off ansible jobs (the status page uses this). It's really lightweight and simple (ie. receive webhook, run script). I suspect that any additional feature requests down the road may limit the functionality of this. 
 
 - [webhook code](https://github.com/adnanh/webhook)
-- [status page example](https://github.com/BCDevOps/platform-services/tree/master/apps/statuspage/.pipeline/ansible-webhook)
+- [status page example](https://github.com/BCDevOps/platform-services/tree/master/apps/statuspage/.pipeline/ansible-webhook) -->
 
 ### Messaging
 

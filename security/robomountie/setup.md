@@ -121,7 +121,9 @@ $ oc logs -f $(oc get po | grep hello-world | awk 'NR==1{print $1}')
 
 ## Known Issues
 - Wehbook Gateway Reboot
+  
   Sometimes the webhook-gateway pod has needed a restart before it was actually publishing the event to nats. 
 
 - Parameterization doesn't work
+  
   Parameterization doesn't work in 0.12-rc for argo-events; waiting on a fix and ultimately a full payload can be passed through (slated for 0.13)
