@@ -1,20 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: rmountie-03
+namespace: rmountie-04
 resources:
-- prometheus.yml
 - nats_cluster.yml
 - prometheus.yml
-- argo_workflows.yml
+- grafana.yml
+# - argo_workflows.yml
 - argo_events.yml
 
 
 vars: 
-# - name: OCP_PROJECT
-#   objref:
-#     kind: NetworkSecurityPolicy
-#     name: egress-internet
-#     apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 - name: NAMESPACE
   objref:
     kind: Deployment 
@@ -36,9 +31,6 @@ images:
   - name: grafana/grafana
     newTag: 6.5.2
 
-# crds: 
-# - kustomizeconfig/crd/networksecuritypolicy.json
-
 configurations:
 - kustomizeconfig/configmap.yml
-# - kustomizeconfig/networksecuritypolicy.yml
+

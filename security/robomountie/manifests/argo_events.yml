@@ -68,7 +68,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: argo-events-sa
-    namespace: rmountie-03
+    namespace: rmountie-04
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -147,7 +147,7 @@ metadata:
 data:
   config: |
     instanceID: argo-events
-    namespace: rmountie-03
+    namespace: rmountie-04
 ---
 # The gateway-controller listens for changes on the gateway CRD and creates gateway
 apiVersion: apps/v1
@@ -187,7 +187,7 @@ metadata:
 data:
   config: |
     instanceID: argo-events
-    namespace: rmountie-03
+    namespace: rmountie-04
 ---
 apiVersion: apps/v1
 kind: Deployment
