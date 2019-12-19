@@ -8,11 +8,13 @@
   tasks: 
     - include_tasks: tasks/set_env.yml
     - include_tasks: tasks/process_templates.yml
-      when: activity == "apply_policies" or activity == "install"
+      when: activity == "apply_policies" or activity == "install" or activity == 'update_enforcer_profile'
     - include_tasks: tasks/namespace_preparation.yml
       when: activity == 'install'
     - include_tasks: tasks/install_aporeto_operator.yml
       when: activity == 'install' or activity == 'upgrade'
+    - include_tasks: tasks/apply_enforcer_policy.yml
+      when: activity == 'update_enforcer_profile'
     - include_tasks: tasks/apply_policies.yml
       when: activity == "apply_policies" or activity == "install"
       with_items: 
