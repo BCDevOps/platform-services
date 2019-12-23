@@ -20,7 +20,7 @@
         - "{{ build_configs }}"
     - name: Create CSV output
       template: 
-        src: templates/csv_output.csv.j2
+        src: templates/csv_export.csv.j2
         dest: csv_output.csv
 
           

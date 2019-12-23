@@ -76,8 +76,7 @@ typings/
 
 # Rendered Output Files
 *output*
+
 # artifacts
 *.orig
 
-# sensitive csv output
-*.csv
