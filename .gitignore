@@ -80,4 +80,4 @@ typings/
 *.orig
 
 # sensitive csv output
-#tools/audit/repo-mapper/csv_output.csv
+*.csv
