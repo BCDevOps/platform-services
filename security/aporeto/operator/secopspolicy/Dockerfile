@@ -1,4 +1,4 @@
-FROM quay.io/operator-framework/ansible-operator:v0.10.1
+FROM quay.io/operator-framework/ansible-operator:v0.13
 
 USER 0
 
