@@ -3,6 +3,8 @@ FROM quay.io/operator-framework/ansible-operator:v0.13.0
 USER 0
 
 ARG GITHUB_ORG=BCDevOps
+ENV ENV LC_ALL=
+
 # ARG OPERATOR_SDK_VERSION=0.13.1
 # ARG ANSIBLE_VERSION=2.7.10
 # ENV SUMMARY="Operator Controller v${OPERATOR_VERSION}"  \
@@ -16,11 +18,11 @@ ARG GITHUB_ORG=BCDevOps
 #       io.openshift.tags="operator,ansible,aporeto,aqua,secops,operator-sdk-v${OPERATOR_SDK_VERSION}" \
 #       release="1"
 
-ENV PATH=$HOME/.local/bin/:$PATH \
-    LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8 
+# ENV PATH=$HOME/.local/bin/:$PATH \
+#     LC_ALL=en_US.UTF-8 \
+#     LANG=en_US.UTF-8 
 
-RUN localedef -i en_US -f UTF-8 en_US.UTF-8 
+# RUN localedef -i en_US -f UTF-8 en_US.UTF-8 
 
 # RUN yes | yum update && \
 #     yes | yum install git && \
