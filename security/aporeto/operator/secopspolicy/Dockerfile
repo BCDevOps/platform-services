@@ -3,7 +3,7 @@ FROM quay.io/operator-framework/ansible-operator:v0.13.0
 USER 0
 
 ARG GITHUB_ORG=BCDevOps
-ENV ENV LC_ALL=
+ENV LC_ALL=
 
 # ARG OPERATOR_SDK_VERSION=0.13.1
 # ARG ANSIBLE_VERSION=2.7.10
