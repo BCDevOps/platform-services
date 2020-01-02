@@ -29,6 +29,8 @@ ENV LC_ALL=
 #     yum clean all -y && \
 #     rm -rf /var/cache/yum
 
+RUN yum install -i openssl-devel
+
 RUN curl -sL https://download.aporeto.com/apoctl/linux/apoctl \
     -o /usr/local/bin/apoctl && \
     chmod 755 /usr/local/bin/apoctl
