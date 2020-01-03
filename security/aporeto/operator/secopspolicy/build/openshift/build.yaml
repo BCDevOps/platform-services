@@ -6,6 +6,15 @@ metadata:
   name: ${NAME}
 objects:
 - apiVersion: v1
+  kind: Secret
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}-github
+  stringData:
+    WebHookSecretKey: ${GITHUB_SECRET}
+  type: Opaque
+- apiVersion: v1
   kind: ImageStream
   metadata:
     creationTimestamp: null
@@ -48,12 +57,56 @@ objects:
     - type: ConfigChange
     - imageChange: {}
       type: ImageChange
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      app: ${NAME}-${GIT_REF}-pipeline
+      name: ${NAME}-${GIT_REF}-pipeline
+      template: ${NAME}-${GIT_REF}-pipeline
+    name: ${NAME}-${GIT_REF}-pipeline
+  spec:
+    nodeSelector: null
+    output: {}
+    postCommit: {}
+    resources: {}
+    runPolicy: Parallel
+    source:
+      git:
+        ref: ${GIT_REF}
+        uri: ${GIT_REPO_URL}
+      type: Git
+      contextDir: ${SOURCE_CONTEXT_DIR}/build
+    strategy:
+      jenkinsPipelineStrategy:
+        jenkinsfilePath: Jenkinsfile
+      type: JenkinsPipeline
+    triggers:
+    - github:
+        secretReference:
+          name: ${NAME}-github
+      type: GitHub
+  status:
+    lastVersion: 0
 parameters:
 - description: A name used for all objects
   displayName: Name
   name: NAME
   required: true
   value: secops-operator
+- description: |
+    The URL to your GIT repo, don't use the this default
+    unless your just experimenting.
+  displayName: Git Repo URL
+  name: GIT_REPO_URL
+  required: true
+  value: https://github.com/BCDevOps/platform-services.git
+- description: The git reference or branch.
+  displayName: Git Reference
+  name: GIT_REF
+  required: true
+  value: master
 - description: A name suffix used for all objects
   displayName: Suffix
   name: SUFFIX
@@ -64,7 +117,12 @@ parameters:
   value: https://github.com/BCDevOps/platform-services.git
 - name: SOURCE_CONTEXT_DIR
   required: true
-  value: security/operator/secopspolicy/build
+  value: security/aporeto/operator/secopspolicy
 - name: SOURCE_REPOSITORY_REF
   required: false
   value: master
+- displayName: GitHub web hook secret
+  from: '[a-zA-Z0-9]{16}'
+  generate: expression
+  name: GITHUB_SECRET
+  required: true
