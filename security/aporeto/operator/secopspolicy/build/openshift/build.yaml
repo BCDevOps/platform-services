@@ -44,7 +44,7 @@ objects:
         memory: 1Gi
     runPolicy: SerialLatestOnly
     source:
-      contextDir: ${SOURCE_CONTEXT_DIR}
+      contextDir: ${CONTEXT_DIR}
       git:
         ref: ${GIT_REF}
         uri: ${GIT_REPO_URL}
@@ -77,7 +77,7 @@ objects:
         ref: ${GIT_REF}
         uri: ${GIT_REPO_URL}
       type: Git
-      contextDir: ${SOURCE_CONTEXT_DIR}/build
+      contextDir: ${CONTEXT_DIR}/build
     strategy:
       jenkinsPipelineStrategy:
         jenkinsfilePath: Jenkinsfile
@@ -112,7 +112,7 @@ parameters:
   name: SUFFIX
   required: false
   value: ""
-- name: SOURCE_CONTEXT_DIR
+- name: CONTEXT_DIR
   required: true
   value: security/aporeto/operator/secopspolicy
 - displayName: GitHub web hook secret
