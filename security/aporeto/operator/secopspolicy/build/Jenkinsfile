@@ -21,7 +21,7 @@
 def pipelineName = 'secops-operator-master-pipeline'
 def imageBuildConfigName = 'secops-operator'
 def imageStreamName = 'secops-operator'
-def watchPathRoot = 'security'
+def watchPathRoot = 'security/aporeto/operator/secopspolicy'
 def prodImageTag = 'prod'
 
 def cancelIfRequired(path, buildName) {
