@@ -46,8 +46,8 @@ objects:
     source:
       contextDir: ${SOURCE_CONTEXT_DIR}
       git:
-        ref: ${SOURCE_REPOSITORY_REF}
-        uri: ${SOURCE_REPOSITORY_URL}
+        ref: ${GIT_REF}
+        uri: ${GIT_REPO_URL}
       type: Git
     strategy:
       type: Docker
@@ -112,15 +112,9 @@ parameters:
   name: SUFFIX
   required: false
   value: ""
-- name: SOURCE_REPOSITORY_URL
-  required: true
-  value: https://github.com/BCDevOps/platform-services.git
 - name: SOURCE_CONTEXT_DIR
   required: true
   value: security/aporeto/operator/secopspolicy
-- name: SOURCE_REPOSITORY_REF
-  required: false
-  value: master
 - displayName: GitHub web hook secret
   from: '[a-zA-Z0-9]{16}'
   generate: expression
