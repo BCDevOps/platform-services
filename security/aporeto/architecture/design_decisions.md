@@ -82,15 +82,17 @@ Please refer to the **Playbook Flow** section of the Ansible [Build Docs ](../bu
 
 ### Policy Naming Conventions
 There are no hard restrictions on what developers will use for naming their policies. Every policy created by an end-user in the platform should have a name that follows the convention: 
-- `custom-[object-type]-[object-name]`
+- `[policy-description]-[namespace-name]`
 
-Developers can use any name that they wish for the `object-name`, however, it should be easy to determine what the policy does by it's name. This will help other team members when they are reviewing these objects. Some examples are outlined in the [developer guide](../docs/CustomPolicy.md). 
+Developers can use any name that they wish for the `policy-description`, however, it should be easy to determine what the policy does by it's name. This will help other team members when they are reviewing these objects. Some examples are outlined in the [developer guide](../docs/CustomPolicy.md). 
 
 ### Fallback Policies 
 Aporeto has a concept of **Fallback Policies** that can be used to generate a more permissive and forgiving policy that would be used if users have not created any other matching policy. It was determined that with the desire to achieve a Zero Trust network enforcement policy that fallback policies are not leveraged in this deployment. New container-platform teams will need to consider the desired network flow of their applications as early as the design phase and will **manually create NetworkSecurityPolicy objects** at the first deployment to allow network traffic to flow. 
 
 ### Developer Controlled Policies
 Each OpenShift project/namespace is directly mapped to an Aporeto child namespace and developers are enabled to create/read/edit/delete Network Access Policies for their applications. This is achieved through the **BCGov NetworkSecurityPolicy Operator** and `NetworkSecurityPolicy` custom resources. Please refer to the [Developer Docs](../docs/README.md) for additional details and instructions. 
+
+**Access to `apoctl` tool is not available for developers. All changes to the application custom network security policies should be done via the `NetworkSecurityPolicy` custom resources monitored by the [BCGov NetworkSecurityPolicy Operator](./high_level_design.md) that translates the policies written in YAML to the Aporeto native syntax.**
 
 **:point_up: Note**
 > Network security policies in a child namespace **cannot** override policies that are created at a parent or higher level. This permites teams to create more granular policies for their applications, but security teams within government can apply high-level policies that are propagated to these child namespaces. 
@@ -102,7 +104,7 @@ This section describes any additional operational design decisions that apply to
 The [Aporeto Console SaaS](../readme.md#accessing-the-console) solution provides a complete audit trail of every policy CRUD activity. It has a search engine that can be used to identify actions taken by specific users. 
 
 ### Backup
-A backup CronJob has been created to backup all configurations and policy within the `/bcgov` namespace on a daily basis. This can be used as secondary audit trail of daily configuration changes and can be leveraged if needed to re-import specific configurations into the Aporeto SaaS console. These backups are stored in the private git repo [bcgov-c/platform-secops-netpol](https://github.com/bcgov-c/platform-secops-netpol). Please refer to that repository for more details if you have the required access. 
+A [backup CronJob](../scripts/backup.yaml) has been created to backup all configurations and policy within the `/bcgov` namespace on a daily basis. This can be used as secondary audit trail of daily configuration changes and can be leveraged if needed to re-import specific configurations into the Aporeto SaaS console. These backups are stored in the private git repo [bcgov-c/platform-secops-netpol](https://github.com/bcgov-c/platform-secops-netpol). Please refer to that repository for more details if you have the required access. 
 
 
 ## Access to Aporeto Console (Coming soon...)
@@ -116,6 +118,7 @@ KeCloak SSO - prod and dev - instances have been configured as OIDC providers fo
 - pathfinder-sso-prod
 - pathfinder-sso-dev
 
+Further details are avilable in the [admin docs](../admin/readme.md).
+ 
 It's likely we will remove the dev OIDC provider option as the solution is more widely used.
-The KeyCloak prod intance uses the following realm for client access: `8gyaubgq`. Further details are avilable in the [admin docs](../admin/readme.md). 
 

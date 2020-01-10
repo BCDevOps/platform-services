@@ -1,5 +1,5 @@
 ---
-description: An overview of the Aporeto software used on the Openshift platform to implement the Zero-Trust security model including the implementation details.
+description: An overview of the Aporeto solution used  to implement the Zero-Trust security model on the Openshift platform.
 tags:
 - next gen security
 - custom network policy
@@ -63,8 +63,11 @@ Please use GitHub issues in this repo with the "security/aporeto".
 
 #### Operational Videos
 - [Aporeto Automation Playbook Walkthrough](https://www.youtube.com/watch?v=yQzJiExljrY)
-- [Aporeto Interfave Q&A](https://youtu.be/Nrf4EtxGXos)
+- [Aporeto Interface Q&A](https://youtu.be/Nrf4EtxGXos)
 
 #### Spint Demo Videos
 - [Sprint 2 - Demo 1 - Single Namespace NetworkSecurityPolicy Objects](https://youtu.be/qWt9gtaHFQQ)
 - [Sprint 2 - Demo 2 - Securing the Family Protection Order Project Namespace](https://www.youtube.com/watch?v=v2I0HCKRrgk)
+
+#### Developer Videos
+- [Quick Walkthrough - Aporeto User Interface](https://youtu.be/eirVDyPMTwM) 

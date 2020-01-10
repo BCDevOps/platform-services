@@ -1,0 +1,46 @@
+---
+- name: Create openshift project
+  k8s_raw: 
+    name: "{{ secops_utils_image_namespace }}"
+    kind: Namespace 
+    state: present
+
+- name: Add image-puller permissions
+  shell: > 
+    ''oc policy add-role-to-user system:image-puller  system:serviceaccount:"{{ openshift_project_prefix }}-operator":networksecuritypolicy-operator -n "{{ secops_utils_image_namespace }}"''
+
+
+- name: Create Build Config for Operator 
+  shell: > 
+    ''oc new-build https://github.com/BCDevOps/platform-services --context-dir=security/aporeto/operator/secopspolicy --name=networksecuritypolicy-operator''
+  ignore_errors: true
+
+- name: Create NetworkSecurityPolicies 
+  k8s_raw: 
+    src: ../../tools/secops-utils/openshift/tools-nsp.yaml
+    namespace: "{{ secops_utils_image_namespace }}"
+
+- name: Create aporeto-operator appcred 
+  shell: > 
+    apoctl appcred create secops-backup --namespace="/bcgov" --token="{{ aporeto_temp_token }}" --type k8s --role "@auth:role=namespace.viewer"  |  oc apply -f - -n "{{ secops_utils_image_namespace }}"
+
+- name: Create secops-utils Build Config
+  shell: > 
+      ''oc process -f ../../tools/secops-utils/openshift/build.yaml -p SOURCE_REPOSITORY_REF=feature/cronjob-to-play | oc apply -f -''
+
+
+- name: Render templates
+  template:
+    src: files/bcgov-networksecuritypolicy-operator/templates/{{ item }}.j2
+    dest: files/bcgov-networksecuritypolicy-operator/output/{{ item }}
+  with_items: 
+ #   - backup_secret.yml
+    - backup_cronjob.yml
+- name: Apply objects
+  k8s_raw: 
+    namespace: "{{ secops_utils_image_namespace }}"
+    src: "files/bcgov-networksecuritypolicy-operator/output/{{ item }}"
+  with_items: 
+#    - backup_secret.yml
+    - backup_cronjob.yml
+

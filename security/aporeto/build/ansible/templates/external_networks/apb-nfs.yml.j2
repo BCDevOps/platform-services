@@ -1,0 +1,14 @@
+APIVersion: 1
+label: apb-nfs
+data:
+  externalnetworks:
+  - name: apb-nfs
+    propagate: true
+    entries:
+    - {{ apb_external_nfs_host }}
+    ports:
+    - "22"
+    protocols:
+    - tcp
+    associatedTags:
+    - ext:network=nfs

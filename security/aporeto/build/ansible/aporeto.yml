@@ -8,11 +8,13 @@
   tasks: 
     - include_tasks: tasks/set_env.yml
     - include_tasks: tasks/process_templates.yml
-      when: activity == "apply_policies" or activity == "install"
+      when: activity == "apply_policies" or activity == "install" or activity == 'update_enforcer_profile'
     - include_tasks: tasks/namespace_preparation.yml
       when: activity == 'install'
     - include_tasks: tasks/install_aporeto_operator.yml
       when: activity == 'install' or activity == 'upgrade'
+    - include_tasks: tasks/apply_enforcer_policy.yml
+      when: activity == 'update_enforcer_profile'
     - include_tasks: tasks/apply_policies.yml
       when: activity == "apply_policies" or activity == "install"
       with_items: 
@@ -25,6 +27,8 @@
       when: activity == "install" or activity == "apply_basic_user_policies"
     - include_tasks: tasks/install_bcgov_networsecuritypolicy_operator.yml
       when: activity == "bcgov-operator-install" or activity == "install"
+    - include_tasks: tasks/install_secops_utils.yml
+      when: secops_utils_install == "true"
     - include_tasks: tasks/create_basic_policies.yml
       when: 
       - activity == "install" or activity == "apply_basic_user_policies"

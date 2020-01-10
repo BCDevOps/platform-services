@@ -1,0 +1,19 @@
+---
+- version: v1alpha1
+  group: secops.pathfinder.gov.bc.ca
+  kind: NetworkSecurityPolicy
+  reconcilePeriod: 0
+  watchDependentResources: False
+  playbook: /opt/ansible/netsecpol-main.yaml
+  finalizer:
+    name: finalizer.secops.pathfinder.gov.bc.ca
+    playbook: /opt/ansible/netsecpol-destroy.yaml
+- version: v1alpha1
+  group: secops.pathfinder.gov.bc.ca
+  kind: ExternalNetwork
+  reconcilePeriod: 0
+  watchDependentResources: False
+  playbook: /opt/ansible/extnet-main.yaml
+  finalizer:
+    name: finalizer.secops.pathfinder.gov.bc.ca
+    playbook: /opt/ansible/extnet-destroy.yaml

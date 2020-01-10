@@ -11,8 +11,8 @@ openshift_project_editors:
   - wmhutchison
 aporeto_parent_namespace: /bcgov/platform-services/production/kamloops       #full path for parent namespace
 aporeto_namespace: pathfinder  #single-level value only
-cluster_network: 172.51.0.0/16
-service_network: 172.50.0.0/16
+cluster_network: 172.51.0.0/16 # osm_cluster_network_cidr
+service_network: 172.50.0.0/16 # openshift_portal_net
 host_network: 142.34.143.128/26
 external_cluster_api_endpoint: console.pathfinder.gov.bc.ca
 external_cluster_api_port: 8443
@@ -52,7 +52,17 @@ openshift_project_exclusions:
 - openshift-monitoring
 - "{{ openshift_project_prefix }}-operator"
 - "{{ openshift_project_prefix }}-enforcers"
-
+apb_external_nfs_host: ociopf-p-150.dmz
 
 # BCGov Operator Details
-bcgov_networksecuritypolicy_operator_image: stewartshea/secops-operator:v0.8.2
+bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/secops-operator:latest"
+
+# Aporeto Policy Backup CronJob
+job_name: secops-apobak
+secops_utils_image_namespace: devops-security-tools
+secops_utils_image_name: secops-utils:latest
+schedule: '08 13 * * *' # 01:13 AM (Pacific Time) daily
+success_job_history: '3'
+failed_job_history_limit: '3'
+job_backoff_limit: '4'
+secops_utils_secret_name: backup-cronjob-creds

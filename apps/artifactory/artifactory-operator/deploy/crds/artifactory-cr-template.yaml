@@ -18,6 +18,7 @@ objects:
     repository_locator: ${REPO_LOCATOR}
     repository_description: ${REPO_DESCRIPTION}
     list_virtual_repositories: ${LIST_REPOS_VIRTUAL}
+    requester: ${REQUESTER}
     user: ${USER}
 parameters:
 - description: Cluster where the CR is being created (choose between "lab" or "prod"
@@ -40,10 +41,10 @@ parameters:
   displayName: Repository description
   name: REPO_DESCRIPTION
   value: "this is a description"
-- description: Description of the repo
+- description: Project admin who requested
   displayName: Repository description
-  name: REPO_DESCRIPTION
-  value: "this is a description"
+  name: REQUESTER
+  value: "caggles"
 - description: List of local repos to be added to the virtual repo. Only valid when the repository locator is virtual
   displayName: List local repos in a virtual repo
   name: LIST_REPOS_VIRTUAL

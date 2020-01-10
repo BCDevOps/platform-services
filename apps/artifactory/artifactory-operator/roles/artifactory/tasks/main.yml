@@ -1,19 +1,6 @@
 ---
 # tasks file for artifactory
-- name: Create artifactory group
-  uri:
-    url: "{{ artifactory_url }}/{{ artifactory_group_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" 
-    user: "{{ user }}"
-    password: "{{ lookup('file', '/tmp/ansible-operator/password') }}"
-    method: PUT
-    body_format: json
-    headers:
-      Content-type: "application/json" 
-    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","description" : "{{ repository_description }}","autoJoin" : false,"adminPrivileges" : false}'
-    force_basic_auth: yes
-    status_code: 201
-
-- name: Create artifactory user
+- name: Create artifactory repo-admin user
   uri:
     url: "{{ artifactory_url }}/{{ artifactory_user_endpoint }}/{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" 
     user: "{{ user }}"
@@ -22,9 +9,10 @@
     body_format: json
     headers:
       Content-type: "application/json" 
-    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","email" : "artifactory-ci-{{ team_name }}-{{ repository_type }}-{{ repository_locator }}@pathfinder.gov.bc.ca","password": "{{ lookup("password", "/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation") }}","admin": false,"profileUpdatable": false,"disableUIAccess" : true,"internalPasswordDisabled": false,"realm": "Internal","groups" : [ "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" ]}'
+    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","email" : "artifactory-ci-{{ team_name }}-{{ repository_type }}-{{ repository_locator }}@pathfinder.gov.bc.ca","password": "{{ lookup("password", "/tmp/passwordfile chars=ascii_letters,digits,hexdigits,punctuation") }}","admin": false,"profileUpdatable": false,"disableUIAccess" : true,"internalPasswordDisabled": false,"realm": "Internal","groups" : [ "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}-manage" ]}'
     force_basic_auth: yes
     status_code: 201
+  ignore_errors: yes
 
 - name: Split virtual repo list
   set_fact:
@@ -43,6 +31,7 @@
     body: '{"key":"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","rclass":"local","packageType":"{{ repository_type }}","description":"{{ repository_description }}"}'
     force_basic_auth: yes
   when: repository_locator == "local"
+  ignore_errors: yes
 
 - name: Create virtual artifactory repo
   uri:
@@ -56,6 +45,7 @@
     body: '{"key":"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","rclass":"virtual","packageType":"{{ repository_type }}","description":"{{ repository_description }}","repositories":{{ split_virtual_repos }}}'
     force_basic_auth: yes
   when: repository_locator == "virtual"
+  ignore_errors: yes
 
 - name: Add permission for repository
   uri:
@@ -66,8 +56,9 @@
     body_format: json
     headers:
       Content-type: "application/json"
-    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","repo":{"include-patterns": ["**"],"exclude-patterns": [""],"repositories": ["{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"],"actions": {"groups" : {"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" : ["manage","read","write","annotate","delete","manage"]}}}}'
+    body: '{"name": "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}","repo":{"include-patterns": ["**"],"exclude-patterns": [""], "repositories": ["{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"], "actions": {"users" : {"{{ team_name }}-{{ repository_type }}-{{ repository_locator }}" : ["manage","read","write","annotate","delete","manage"], "{{ requester }}" : ["manage","read","write","annotate","delete","manage"]}}}}'
     force_basic_auth: yes
+  when: repository_locator == "local"
 
 - name: Create route for docker registry
   k8s:
@@ -119,6 +110,15 @@
         wildcardPolicy: None
   when: repository_type == "docker" and console == "lab"
 
+- name: Find secret if exists
+  k8s_facts:
+    api_version: v1
+    kind: Secret
+    name: "{{ team_name }}-{{ repository_type }}-{{ repository_locator }}"
+    namespace: "{{ meta.namespace }}"
+  register: admin_secret
+  ignore_errors: yes
+
 - name: Generate token for repo
   uri:
     url: "{{ artifactory_url }}/{{ artifactory_token_endpoint }}" 
@@ -132,12 +132,11 @@
     force_basic_auth: yes
     #status_code: 200
   register: token_gen
-
-- debug:
-    msg: "{{ token_gen.json.access_token }}"
+  when: admin_secret.resources == []
 
 - set_fact:
     token: "{{ token_gen.json.access_token | b64encode }}"
+  when: admin_secret.resources == []
 
 - name: Create secret for token
   k8s:
@@ -151,3 +150,4 @@
       type: Opaque
       data:
         password: "{{ token }}"
+  when: admin_secret.resources == []
