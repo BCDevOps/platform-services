@@ -1,0 +1,16 @@
+---
+# Create Team if Doesn't Exist
+- name: Create Team
+  block: 
+  - name: Create team
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
+      method: POST
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
+      body_format: json
+      status_code: 200
+    register: default_dashboard_creation_output
+  when: team_exists == false

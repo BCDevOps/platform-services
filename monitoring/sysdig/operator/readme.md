@@ -88,3 +88,14 @@ These sample payloads might be useful when managing the operator templates:
 - validate that the user has access to the desired namespaces
 - test and validate that OIDC is the only option? not sure if this will invite regular sysdig users via email. 
 - need to create a bot account
+
+## Helpful Commands
+
+- Create a dashboard
+```shell
+curl -H "Authorization: Bearer $SYSDIG_TOKEN" -H "Content-Type: application/json" -X POST -d @./dashboard_requests_and_limits.json https://app.sysdigcloud.com/api/v2/dashboards/ 
+```
+- Get a dashboard
+```shell
+curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com/api/v2/dashboards/137400 | jq .
+```

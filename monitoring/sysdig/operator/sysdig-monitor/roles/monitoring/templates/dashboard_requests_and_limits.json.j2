@@ -1,0 +1,651 @@
+{
+  "dashboard": {
+    "widgets": [
+      {
+        "showAs": "timeSeries",
+        "name": "CPU Cores Usage vs Requests vs Limits Over Time",
+        "gridConfiguration": {
+          "col": 1,
+          "row": 2,
+          "size_x": 6,
+          "size_y": 4
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "overrideScope": false,
+        "metrics": [
+          {
+            "id": "timestamp",
+            "propertyName": "k0"
+          },
+          {
+            "id": "cpu.cores.used",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          },
+          {
+            "id": "cpu.cores.used",
+            "propertyName": "v1",
+            "timeAggregation": "max",
+            "groupAggregation": "sum"
+          },
+          {
+            "id": "kubernetes.pod.resourceRequests.cpuCores",
+            "propertyName": "v2",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          },
+          {
+            "id": "kubernetes.pod.resourceLimits.cpuCores",
+            "propertyName": "v3",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null
+      },
+      {
+        "showAs": "summary",
+        "name": "CPU Limits",
+        "gridConfiguration": {
+          "col": 7,
+          "row": 2,
+          "size_x": 2,
+          "size_y": 2
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "kubernetes.pod.resourceLimits.cpuCores",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": null
+      },
+      {
+        "showAs": "summary",
+        "name": "CPU Requests",
+        "gridConfiguration": {
+          "col": 7,
+          "row": 4,
+          "size_x": 2,
+          "size_y": 2
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "kubernetes.pod.resourceRequests.cpuCores",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": null
+      },
+      {
+        "showAs": "summary",
+        "name": "CPU Core Usage (Avg) ",
+        "gridConfiguration": {
+          "col": 9,
+          "row": 2,
+          "size_x": 2,
+          "size_y": 4
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "cpu.cores.used",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": null
+      },
+      {
+        "showAs": "summary",
+        "name": "CPU Core Used %",
+        "gridConfiguration": {
+          "col": 11,
+          "row": 2,
+          "size_x": 2,
+          "size_y": 4
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "cpu.cgroup.used.percent",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "avg"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": {
+          "active": false,
+          "thresholds": {
+            "worst": 50,
+            "best": 80
+          }
+        }
+      },
+      {
+        "showAs": "timeSeries",
+        "name": "Memory Usage vs. Requests vs Limits Over Time",
+        "gridConfiguration": {
+          "col": 1,
+          "row": 7,
+          "size_x": 6,
+          "size_y": 4
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "timestamp",
+            "propertyName": "k0"
+          },
+          {
+            "id": "memory.bytes.used",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          },
+          {
+            "id": "memory.bytes.used",
+            "propertyName": "v1",
+            "timeAggregation": "max",
+            "groupAggregation": "sum"
+          },
+          {
+            "id": "kubernetes.pod.resourceLimits.memBytes",
+            "propertyName": "v2",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          },
+          {
+            "id": "kubernetes.pod.resourceRequests.memBytes",
+            "propertyName": "v3",
+            "timeAggregation": "max",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null
+      },
+      {
+        "showAs": "summary",
+        "name": "Memory Usage",
+        "gridConfiguration": {
+          "col": 9,
+          "row": 7,
+          "size_x": 2,
+          "size_y": 4
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "memory.bytes.used",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": null
+      },
+      {
+        "showAs": "summary",
+        "name": "Memory Limits",
+        "gridConfiguration": {
+          "col": 7,
+          "row": 7,
+          "size_x": 2,
+          "size_y": 2
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "kubernetes.pod.resourceLimits.memBytes",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": null
+      },
+      {
+        "showAs": "summary",
+        "name": "Memory Requests",
+        "gridConfiguration": {
+          "col": 7,
+          "row": 9,
+          "size_x": 2,
+          "size_y": 2
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "kubernetes.pod.resourceRequests.memBytes",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": null
+      },
+      {
+        "showAs": "summary",
+        "name": "Memory Used %",
+        "gridConfiguration": {
+          "col": 11,
+          "row": 7,
+          "size_x": 2,
+          "size_y": 4
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "memory.limit.used.percent",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "avg"
+          }
+        ],
+        "compareToConfig": null,
+        "colorCoding": {
+          "active": false,
+          "thresholds": {
+            "worst": 80,
+            "best": 50
+          }
+        }
+      },
+      {
+        "showAs": "text",
+        "name": "My Panel",
+        "gridConfiguration": {
+          "col": 1,
+          "row": 1,
+          "size_x": 12,
+          "size_y": 1
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "markdownSource": "CPU Resource Allocation",
+        "transparentBackground": true,
+        "panelTitleVisible": false,
+        "textAutosized": true
+      },
+      {
+        "showAs": "text",
+        "name": "My Panel (2)",
+        "gridConfiguration": {
+          "col": 1,
+          "row": 6,
+          "size_x": 12,
+          "size_y": 1
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "markdownSource": "Memory Resource Allocation",
+        "transparentBackground": true,
+        "panelTitleVisible": false,
+        "textAutosized": true
+      },
+      {
+        "showAs": "timeSeries",
+        "name": "Persistent Volume Claims",
+        "gridConfiguration": {
+          "col": 1,
+          "row": 12,
+          "size_x": 6,
+          "size_y": 4
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "metrics": [
+          {
+            "id": "timestamp",
+            "propertyName": "k0"
+          },
+          {
+            "id": "kubernetes.persistentvolumeclaim.storage",
+            "propertyName": "v0",
+            "timeAggregation": "avg",
+            "groupAggregation": "sum"
+          }
+        ],
+        "compareToConfig": null
+      },
+      {
+        "showAs": "text",
+        "name": "Storage",
+        "gridConfiguration": {
+          "col": 1,
+          "row": 11,
+          "size_x": 12,
+          "size_y": 1
+        },
+        "customDisplayOptions": {
+          "valueLimit": {
+            "count": 10,
+            "direction": "desc"
+          },
+          "histogram": {
+            "numberOfBuckets": 10
+          },
+          "yAxisScale": "linear",
+          "yAxisLeftDomain": {
+            "from": 0,
+            "to": null
+          },
+          "yAxisRightDomain": {
+            "from": 0,
+            "to": null
+          },
+          "xAxis": {
+            "from": 0,
+            "to": null
+          }
+        },
+        "markdownSource": "Storage Allocation",
+        "transparentBackground": true,
+        "panelTitleVisible": false,
+        "textAutosized": true
+      }
+    ],
+    "eventsOverlaySettings": {
+      "showNotificationsEnabled": true,
+      "filterNotificationsScopeFilter": true,
+      "filterNotificationsUserInputFilter": "",
+      "eventOverlayLimit": 1000,
+      "filterNotificationsTypeFilter": "all",
+      "filterNotificationsStateFilter": "all",
+      "filterNotificationsSeverityFilter": "all",
+      "filterNotificationsResolvedFilter": "all"
+    },
+    "teamID": {{ team_data.id | int }},
+    "schema": 2,
+    "shared": true,
+    "name": "Team CPU and Memory Resources",
+    "public": false,
+    "autoCreated": true,
+    "favorite": true
+  }
+}
