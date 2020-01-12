@@ -2,7 +2,7 @@
 {   
     "canUseAwsMetrics": false,
     "canUseCustomEvents": true,
-    "canUseSysdigCapture": true,
+    "canUseSysdigCapture": false,
     "default": false,
     "description": "{{ team.description }}",
     "entryPoint": {
@@ -11,7 +11,7 @@
     "name": "{{ team_name }}",
     "show": "container",
     "theme": "#73A1F7",
-    "filter": "{% for namespace in namespaces  %}kubernetes.namespace.name in (\"{{ namespace }}\"){% if not loop.last %} and {% endif %}{% endfor %}",
+    "filter": "{% for namespace in namespaces  %}kubernetes.namespace.name is (\"{{ namespace }}\"){% if not loop.last %} and {% endif %}{% endfor %}",
     "userRoles": [
 {% for role in team_users_and_roles  %}
       {
