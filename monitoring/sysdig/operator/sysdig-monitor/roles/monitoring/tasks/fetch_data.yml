@@ -1,6 +1,4 @@
-# - name: initialize variables
-#   set_fact: 
-#     team_users_and_roles: {}
+---
 - name: Fetch list of current teams
   uri: 
     url: "{{ sysdig_api_endpoint }}/api/teams"

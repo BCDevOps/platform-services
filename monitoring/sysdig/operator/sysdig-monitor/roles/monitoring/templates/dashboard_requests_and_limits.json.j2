@@ -640,12 +640,11 @@
       "filterNotificationsSeverityFilter": "all",
       "filterNotificationsResolvedFilter": "all"
     },
-    "teamID": {{ team_data.id | int }},
+    "teamId": {{ team_creation_output.json.team.id | int }},
     "schema": 2,
     "shared": true,
     "name": "Team CPU and Memory Resources",
     "public": false,
-    "autoCreated": true,
     "favorite": true
   }
 }

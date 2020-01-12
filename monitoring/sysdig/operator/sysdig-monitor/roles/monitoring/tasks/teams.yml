@@ -9,20 +9,7 @@
   when: item.name == team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
-
-# - name: Test if team exists
-#   debug: msg="Team exists"
-#   when: team_exists == true
-
-# - name: show output
-#   debug: msg="{{ team_data }}"
-#   when: team_exists == true
-
-# - name: template test
-#   template: 
-#     src: templates/new_team.json.j2
-#     dest: test_output.json
-
+    
 # Create Team if Doesn't Exist
 - name: Create Team
   block: 
@@ -38,7 +25,6 @@
       status_code: 201
     register: team_creation_output
   when: team_exists == false
-- debug: msg="{{ team_exists }}"
 
 
 # Update Team if Exists Updates

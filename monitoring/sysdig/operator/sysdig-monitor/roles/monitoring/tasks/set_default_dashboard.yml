@@ -1,16 +1,35 @@
 ---
-# Create Team if Doesn't Exist
-- name: Create Team
-  block: 
-  - name: Create team
-    uri: 
-      url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
-      method: POST
-      headers:
-          Authorization: "Bearer {{ sysdig_token }}"
-          Content-Type: "application/json"
-      body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
-      body_format: json
-      status_code: 200
-    register: default_dashboard_creation_output
+# Create / Apply default dashboard
+
+# Since API tokens are Team Scoped, we need to find an Admin 
+# user of the new team and fetch their token for the dashboard 
+# configuration
+- name: Find a team admin user 
+  set_fact:
+    team_admin_username: "{{ item.name }}"
+  when: item.role == "ROLE_TEAM_MANAGER"
+  with_items: "{{ team_users_and_roles }}"
+
+- name: Get token from Admin user of team
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/token/{{ team_admin_username }}/{{ team_creation_output.json.team.id }}"
+    method: GET
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+  register: team_admin_user_token
+
+# Add the single dashboard that each team will need
+# More dashboards can be added or modified as needed
+- name: Set Default Dashboard
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
+    method: POST
+    headers:
+        Authorization: "Bearer {{ team_admin_user_token.json.token.key }}"
+        Content-Type: "application/json"
+    body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
+    body_format: json
+    status_code: 200
+  register: default_dashboard_creation_output
   when: team_exists == false

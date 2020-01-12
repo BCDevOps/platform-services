@@ -1,3 +1,6 @@
+---
+# Set some defaults to assume the standard namespaces provigioned 
+# for each team
 - name: Set prefix
   set_fact: 
     ns_prefix: "{{ meta.namespace.split('-')[0] | lower }}"

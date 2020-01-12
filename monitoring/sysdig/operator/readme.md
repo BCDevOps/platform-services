@@ -99,3 +99,10 @@ curl -H "Authorization: Bearer $SYSDIG_TOKEN" -H "Content-Type: application/json
 ```shell
 curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com/api/v2/dashboards/137400 | jq .
 ```
+
+- Fetching a user API token (since API tokens are team scoped (ugh), this is required to add a dashboard to a specific team)
+```shell
+curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com/api/token/${USERNAME}/${TEAMID}
+{"token":{"key":"key_value"}}
+```
+- [ref](https://raw.githubusercontent.com/draios/python-sdc-client/master/sdcclient/_common.py)
