@@ -15,7 +15,7 @@ else
     # Clone repo and branch
     if [ -d $repo ]; then (cd $repo && git pull); else git clone -b $branch $repourl;fi
 
-    ## Execute playbook with a timeout of 120 seconds
+    ## Execute playbook with a timeout of 240 seconds
     ## If dev succeeds, apply the same in test, and then in prod
     ## Todo; Replace this shell script with a more generic ansible playbook
     cd platform-services/apps/statuspage/ansible
