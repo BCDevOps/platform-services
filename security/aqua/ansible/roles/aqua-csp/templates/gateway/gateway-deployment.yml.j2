@@ -90,6 +90,13 @@ spec:
           protocol: TCP
         - containerPort: 8080
           protocol: TCP
+        resources:
+          requests:
+            cpu: '{{ aqua_gateway_cpu_request }}'
+            memory: '{{ aqua_gateway_memory_request }}'
+          limits:
+            cpu: '{{ aqua_gateway_cpu_limit }}'
+            memory: '{{ aqua_gateway_memory_limit }}'
         readinessProbe:
           httpGet:
             path: /

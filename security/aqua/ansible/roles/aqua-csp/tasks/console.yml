@@ -19,7 +19,7 @@
       definition: "{{ lookup('template', 'console/console-service.yml.j2') | from_yaml }}"
       state: '{{ aqua_state }}'
 
-  - name: 'SharedPVC=aqua-console - state={{ aqua_state }}'
+  - name: 'SharedPVC=aqua-console - State={{ aqua_state }}'
     k8s:
       namespace: '{{ aqua_common_namespace }}'
       definition: "{{ lookup('template', 'console/console-pvc.yml.j2') | from_yaml }}"
@@ -31,6 +31,7 @@
       definition: "{{ lookup('template', 'console/console-deployment.yml.j2') | from_yaml }}"
       state: '{{ aqua_state }}'
       wait: "{{ 'no' if aqua_console_cluster_mode_enabled else 'yes' }}"
+      wait_timeout: 240
 
   - name: 'Route=aqua-console - State={{ aqua_state }}'
     k8s:

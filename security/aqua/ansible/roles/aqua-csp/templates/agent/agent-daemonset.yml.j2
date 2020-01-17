@@ -1,0 +1,102 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: aqua-agent
+  name: aqua-agent
+  namespace: '{{ aqua_agent_namespace }}'
+spec:
+  selector:
+    matchLabels:
+      app: aqua-agent
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: aqua-agent
+      name: aqua-agent
+    spec:
+      nodeSelector:
+        aqua-agent-enabled: "true"
+      containers:
+      - env:
+        - name: SCALOCK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: aqua-agent-token
+        - name: SCALOCK_SERVER
+          value: aqua-gateway:3622
+        - name: RESTART_CONTAINERS
+          value: "no"
+        - name: AQUA_NETWORK_CONTROL
+          value: "0"
+        image: registry.aquasec.com/enforcer:4.5
+        imagePullPolicy: IfNotPresent
+        name: aqua-agent
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: '{{ aqua_agent_cpu_request }}'
+            memory: '{{ aqua_agent_memory_request }}'
+          limits:
+            cpu: '{{ aqua_agent_cpu_limit }}'
+            memory: '{{ aqua_agent_memory_limit }}'
+        volumeMounts:
+        - mountPath: /var/run
+          name: var-run
+        - mountPath: /dev
+          name: dev
+        - mountPath: /host/sys
+          name: sys
+          readOnly: true
+        - mountPath: /host/proc
+          name: proc
+          readOnly: true
+        - mountPath: /host/etc
+          name: etc
+          readOnly: true
+        - mountPath: /host/opt/aquasec
+          name: aquasec
+          readOnly: true
+        - mountPath: /opt/aquasec/tmp
+          name: aquasec-tmp
+        - mountPath: /opt/aquasec/audit
+          name: aquasec-audit
+        - mountPath: /data
+          name: aquasec-data
+      hostPID: true
+      restartPolicy: Always
+      serviceAccount: '{{ aqua_agent_service_account }}'
+      serviceAccountName: '{{ aqua_agent_service_account }}'
+      volumes:
+      - hostPath:
+          path: /var/run
+        name: var-run
+      - hostPath:
+          path: /dev
+        name: dev
+      - hostPath:
+          path: /sys
+        name: sys
+      - hostPath:
+          path: /proc
+        name: proc
+      - hostPath:
+          path: /etc
+        name: etc
+      - hostPath:
+          path: /opt/aquasec
+        name: aquasec
+      - hostPath:
+          path: /opt/aquasec/tmp
+        name: aquasec-tmp
+      - hostPath:
+          path: /opt/aquasec/audit
+        name: aquasec-audit
+      - hostPath:
+          path: /opt/aquasec/data
+        name: aquasec-data

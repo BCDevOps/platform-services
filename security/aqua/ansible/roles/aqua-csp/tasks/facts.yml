@@ -13,7 +13,6 @@
   - name: Set aqua_aporeto_enabled
     set_fact:
       aqua_aporeto_enabled: "{{ ('secops.pathfinder.gov.bc.ca' in lookup('k8s', cluster_info='api_groups')) | bool }}"
-  - debug: var=aqua_aporeto_enabled
 
   tags:
     - always

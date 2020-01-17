@@ -1,0 +1,31 @@
+{
+    "id": "{{ aqua_agent_logical_group_name }}",
+    "logicalname": "",
+    "hostname": "",
+    "token": "",
+    "enforce": false,
+    "container_activity_protection": true,
+    "network_protection": false,
+    "user_access_control": false,
+    "image_assurance": true,
+    "host_protection": false,
+    "audit_failed_login": false,
+    "audit_success_login": false,
+    "allowed_labels": [],
+    "allowed_registries": [],
+    "gateways": [
+        "aqua-gateway-0_gateway",
+        "aqua-gateway-1_gateway",
+        "aqua-gateway-2_gateway",
+    ],
+    "type": "agent",
+    "orchestrator": {
+        "type": "openshift",
+        "service_account": "{{ aqua_agent_service_account }}",
+        "project": "{{ aqua_agent_namespace }}"
+    },
+    "host_os": "Linux",
+    "syscall_enabled": false,
+    "runtime_type": "docker",
+    "sync_host_images": false
+}

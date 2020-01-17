@@ -1,6 +1,7 @@
 openshift_master_default_subdomain: lab.pathfinder.gov.bc.ca
 aqua_common_namespace: devops-security-aqua
-aqua_agent_namespace: devops-security-aqua-agent
+aqua_agent_namespace: devops-security-aqua
+aqua_patroni_storage_class: gluster-file
 node_list: 
   - ociopf-t-301.dmz
   - ociopf-t-302.dmz

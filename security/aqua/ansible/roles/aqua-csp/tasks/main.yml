@@ -32,14 +32,14 @@
 - include_tasks: scanner.yml
   tags: scanner
 
-# - include_tasks: namespace-preparation.yml
-#   vars:
-#     namespace: '{{ aqua_agent_namespace }}'
-#     manage_namespace: '{{ aqua_manage_agent_namespace }}'
-#     service_account: '{{ aqua_service_account }}'
-#     aqua_privileged: '{{ aqua_agent_privileged }}'
-#   tags: 
-#     - agent-ns
+- include_tasks: namespace-preparation.yml
+  vars:
+    namespace: '{{ aqua_agent_namespace }}'
+    manage_namespace: '{{ aqua_manage_agent_namespace }}'
+    service_account: '{{ aqua_agent_service_account }}'
+    aqua_privileged: '{{ aqua_agent_privileged }}'
+  tags: 
+    - agent-ns
 
-# - include_tasks: agent.yml
-#   tags: agent
+- include_tasks: agent.yml
+  tags: agent

@@ -49,6 +49,13 @@ spec:
           protocol: TCP
         - containerPort: 8443
           protocol: TCP
+        resources:
+          requests:
+            cpu: '{{ aqua_console_cpu_request }}'
+            memory: '{{ aqua_console_memory_request }}'
+          limits:
+            cpu: '{{ aqua_console_cpu_limit }}'
+            memory: '{{ aqua_console_memory_limit }}'
         readinessProbe:
           httpGet:
             path: /

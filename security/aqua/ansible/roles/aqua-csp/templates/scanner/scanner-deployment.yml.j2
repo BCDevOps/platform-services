@@ -50,6 +50,13 @@ spec:
         ports:
         - containerPort: 8080
           protocol: TCP
+        resources:
+          requests:
+            cpu: '{{ aqua_scanner_cpu_request }}'
+            memory: '{{ aqua_scanner_memory_request }}'
+          limits:
+            cpu: '{{ aqua_scanner_cpu_limit }}'
+            memory: '{{ aqua_scanner_memory_limit }}'
         volumeMounts:
         # - mountPath: /opt/aquascans
         #   name: scan-data
