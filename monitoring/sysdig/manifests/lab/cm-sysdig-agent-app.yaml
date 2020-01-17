@@ -98,18 +98,18 @@ data:
         #         path: /metrics/cadvisor
         #         ssl_verify: false
         #         auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
-        - include:
-            port: 10250
-            conf:
-                port: 10250
-                use_https: true
-                path: /metrics
-                ssl_verify: false
-                auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
-                host: localhost
-                tags: 
-                  kubernetes.process: kubelet
-        #- include:
+        # - include:
+        #     port: 10250
+        #     conf:
+        #         port: 10250
+        #         use_https: true
+        #         path: /metrics
+        #         ssl_verify: false
+        #         auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
+        #         host: localhost
+        #         tags: 
+        #           kubernetes.process: kubelet
+        # #- include:
         #    kubernetes.pod.label.app: "node-exporter"
         #    conf:
         #        host: localhost
