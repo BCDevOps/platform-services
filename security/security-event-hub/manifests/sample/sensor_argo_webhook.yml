@@ -9,16 +9,21 @@ spec:
     spec:
       containers:
         - name: "sensor"
-          image: "argoproj/sensor:v0.12-rc"
+          image: "argoproj/sensor:v0.12"
           imagePullPolicy: Always
       serviceAccountName: argo-events-sa
   dependencies:
-    - name: "webhook-gateway-with-standard-nats:example"
-  eventProtocol:
-    type: "NATS"
-    nats:
-      url: "nats://nats:4222"
-      type: "Standard"
+    - name: webhook-example
+      gatewayName: webhook-gateway-nats
+      eventName: example
+  subscription:
+    http:
+      port: 12000
+  # eventProtocol:
+  #   type: "NATS"
+  #   nats:
+  #     url: "nats://nats:4222"
+  #     type: "Standard"
   triggers:
     - template:
         name: webhook-pod-trigger

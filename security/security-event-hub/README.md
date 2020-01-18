@@ -1,5 +1,5 @@
-# The Name
-Is to be changed down the road. 
+# Security Event Hub
+The Security Event Hub is a centralized system to process incoming security event details and to store this data in a database and provide overall "security health" information about an application or repository. 
 
 # Quickstart for Developers
 The below content provides some detail regarding the original review of tools and someof the ones we are continuing to invest time into. 
@@ -24,8 +24,6 @@ For webhook receiver security, we likely need a function to automate the webhook
 - create / build the argo webhook CR 
 - generate SSL certs for security
 
-<!-- #### Gloo
-Looked at Gloo and it's pretty heavyweight for what we need... challenges to get it running on OCP **easily** makes me think it might not be the right fit for a mock-up. It does, however, promise a method of connecting to NATS. -->
 
 #### Argo-Events
 Argo events has an interesting kube-native way of building a webhook listener and passing those events into sensors, also ensuring that dependencies are met. 
@@ -34,16 +32,6 @@ Argo events has an interesting kube-native way of building a webhook listener an
   - Many different event sources (ie. schedules), not just wehbooks
 - Ties into NATS 
 - Can also be a subscriber to NATS and can run jobs based on events in the message queue
-
-<!-- 
-#### Resgate
-Is an option to build a REST API in front of NATS. Haven't spent much more time looking into this.  -->
-
-<!-- #### JS Wehbook
-We've used a javascript based wehbook server to kick off ansible jobs (the status page uses this). It's really lightweight and simple (ie. receive webhook, run script). I suspect that any additional feature requests down the road may limit the functionality of this. 
-
-- [webhook code](https://github.com/adnanh/webhook)
-- [status page example](https://github.com/BCDevOps/platform-services/tree/master/apps/statuspage/.pipeline/ansible-webhook) -->
 
 ### Messaging
 
