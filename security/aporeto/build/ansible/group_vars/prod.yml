@@ -55,7 +55,7 @@ openshift_project_exclusions:
 apb_external_nfs_host: ociopf-p-150.dmz
 
 # BCGov Operator Details
-bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"
+bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/secops-operator:latest"
 
 # Aporeto Policy Backup CronJob
 job_name: secops-apobak

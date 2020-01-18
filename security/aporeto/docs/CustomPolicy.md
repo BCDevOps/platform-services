@@ -301,9 +301,9 @@ spec:
   description: allow service accounts to run builds/deployments
   source:
     - - $namespace=jjrkby-tools
-      - "@app:k8s:serviceaccountname=jjrkby-tools/builder"
+      - "@app:k8s:serviceaccountname=builder"
     - - $namespace=jjrkby-tools
-      - "@app:k8s:serviceaccountname=jjrkby-tools/deployer"
+      - "@app:k8s:serviceaccountname=deployer"
   destination:
     - - int:network=internal-cluster-api-endpoint
 ```
