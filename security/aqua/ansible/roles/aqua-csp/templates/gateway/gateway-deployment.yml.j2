@@ -109,9 +109,13 @@ spec:
             port: 8080
           initialDelaySeconds: 15
           periodSeconds: 20
-{% if aqua_gateway_privledged %}
         securityContext:
+{% if aqua_gateway_privledged %}
           privileged: true
+{% else %}
+          runAsUser: 431
+          runAsGroup: 433
+          fsGroup: 433
 {% endif %}
       restartPolicy: Always
       serviceAccount: '{{ aqua_service_account }}'

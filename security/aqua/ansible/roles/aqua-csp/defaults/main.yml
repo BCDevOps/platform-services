@@ -43,6 +43,10 @@ aqua_console_dockerless_scanning: true
 aqua_console_external_subdomain: aqua-console
 aqua_console_pvc_size: 5 # Size in Gi (int)
 aqua_console_pvc_storage_class: gluster-file
+aqua_console_cpu_request: 0
+aqua_console_memory_request: 0
+aqua_console_cpu_limit: 0
+aqua_console_memory_limit: 0
 
 # --- Aqua Gateway ---
 aqua_gateway_replicas: 3
@@ -50,13 +54,22 @@ aqua_gateway_external_host_enabled: false
 aqua_gateway_external_subdomain: aqua-gateway
 aqua_gateway_privledged: false
 aqua_gateway_logical_group_name: aqua-gateway
+aqua_gateway_cpu_request: 0
+aqua_gateway_memory_request: 0
+aqua_gateway_cpu_limit: 0
+aqua_gateway_memory_limit: 0
 
 # --- Aqua Scanner ---
 aqua_scanner_replicas: 5
 aqua_scanner_service_account: aqua-sa
+aqua_scanner_privledged: false
 aqua_scanner_docker_sock_access: false
 aqua_scanner_display_name: Default-Scanner
 aqua_scanner_user: sirscanalot
+aqua_scanner_cpu_request: 0
+aqua_scanner_memory_request: 0
+aqua_scanner_cpu_limit: 0
+aqua_scanner_memory_limit: 0
 
 # --- Aqua Agent (Enforcer)
 aqua_agent_logical_group_name: aqua-agent
@@ -64,3 +77,7 @@ aqua_agent_description: 'OpenShift Agent Group'
 aqua_agent_service_account: aqua-agent
 aqua_manage_agent_namespace: false
 aqua_agent_privileged: true
+aqua_agent_cpu_request: 0
+aqua_agent_memory_request: 0
+aqua_agent_cpu_limit: 0
+aqua_agent_memory_limit: 0

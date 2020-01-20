@@ -17,6 +17,14 @@ spec:
       name: aqua-scanner
     spec:
       restartPolicy: Always
+      securityContext:
+{% if aqua_scanner_privledged %}
+          privileged: true
+{% else %}
+          runAsUser: 431
+          runAsGroup: 433
+          fsGroup: 433
+{% endif %}
       serviceAccount: '{{ aqua_scanner_service_account }}'
       serviceAccountName: '{{ aqua_scanner_service_account }}'
       containers:

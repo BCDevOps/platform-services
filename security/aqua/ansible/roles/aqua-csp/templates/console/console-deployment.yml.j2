@@ -40,9 +40,13 @@ spec:
         image: registry.aquasec.com/console:4.5
         imagePullPolicy: IfNotPresent
         restartPolicy: Always
-{% if aqua_console_privledged %}
         securityContext:
+{% if aqua_console_privledged %}
           privileged: true
+{% else %}
+          runAsUser: 431
+          runAsGroup: 433
+          fsGroup: 433
 {% endif %}
         ports:
         - containerPort: 8080
@@ -133,16 +137,14 @@ spec:
         - name: AQUA_GRPC_MODE
           value: "1"
 {% if aqua_console_cluster_mode_enabled %}
-        - name: CLUSTER_MODE
-          value: 'I_WILL_BE_BACK'
+        - name: AQUA_CLUSTER_MODE
+          value: 'active-active'
 {% endif %}
         - name: AQUA_CONSOLE_RAW_SCAN_RESULTS_STORAGE_SIZE
           value: '{{ aqua_console_pvc_size }}'
         volumeMounts:
         - mountPath: /opt/aquasec/raw-scan-results
           name: aqua-console-raw-scan-results
-#        - mountPath: /opt/aquasec
-#          name: aqua-console-opt
 {% if aqua_console_docker_sock_access %}
         - mountPath: /var/run/docker.sock
           name: docker-socket-mount
@@ -151,8 +153,6 @@ spec:
       - name: aqua-console-raw-scan-results
         persistentVolumeClaim:
           claimName: aqua-console
-#      - name: aqua-console-opt
-#        emptyDir: {}
 {% if aqua_console_docker_sock_access %}
       - name: docker-socket-mount
         hostPath:
