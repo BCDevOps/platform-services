@@ -1,0 +1,73 @@
+---
+- block:
+  - name: Disable Aqua Agents (label nodes)
+    command: oc label node {{ item }} aqua-agent-enabled=false --overwrite=true
+    loop: "{{ node_list }}"
+    ignore_errors: true
+    when: aqua_state == 'absent'
+
+  - block:
+    - name: Get Aqua agent (enforcer) group
+      uri:
+        url: 'https://{{ aqua_console_external_host }}/api/v1/hostsbatch/{{ aqua_agent_logical_group_name }}'
+        method: GET
+        headers:
+          Authorization: 'Bearer {{ aqua_console_auth_token }}'
+        body_format: json
+        status_code: 200
+        return_content: yes
+      register: agent_api_response
+
+    - name: Remove Aqua agent (enforcer) group
+      uri:
+        url: 'https://{{ aqua_console_external_host }}/api/v1/hostsbatch/{{ aqua_agent_logical_group_name }}'
+        method: DELETE
+        headers:
+          Authorization: "Bearer {{ aqua_console_auth_token }}"
+        body_format: json
+        status_code: 204
+      when: aqua_state == 'absent'
+
+    rescue:
+      - name: Create agent (enforcer) group
+        uri:
+          url: 'https://{{ aqua_console_external_host }}/api/v1/hostsbatch'
+          method: POST
+          headers:
+            Authorization: 'Bearer {{ aqua_console_auth_token }}'
+          body: "{{ lookup('template', 'agent/agent-group.json.j2') }}"
+          body_format: json
+          return_content: yes
+        register: agent_api_response
+        when: aqua_state == 'present'
+
+  - name: Set aqua_agent_token
+    set_fact:
+      aqua_agent_token: "{{ (agent_api_response.content | from_json).token }}"
+    when: aqua_state == 'present' 
+
+  - name: 'Secret=aqua-agent-token - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_agent_namespace }}'
+      definition: "{{ lookup('template', 'agent/agent-secret.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+
+  - name: 'Daemonset=aqua-agent - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_agent_namespace }}'
+      definition: "{{ lookup('template', 'agent/agent-daemonset.yml.j2') | from_yaml }}"
+      state: '{{ aqua_state }}'
+  
+  - block:
+    - pause:
+        prompt: "Do you want to label the nodes (yes/no)?"
+      register: node_label_comfirmation
+
+    - name: Label nodes to activate enforcers
+      shell: oc label node {{ item }} aqua-agent-enabled=true --overwrite=true
+      loop: "{{ node_list }}"
+      ignore_errors: true
+      when: node_label_comfirmation.user_input | bool
+    when: aqua_state == 'present'
+  tags: agent
+  
