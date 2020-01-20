@@ -1,0 +1,13 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-netpol-aqua-scanner-to-internet
+spec:
+  description: |
+    allow aqua-scanner to talk to the internet
+  source:
+    - - $namespace={{ aqua_common_namespace }}
+      - app=aqua-scanner
+  destination:
+    - - ext:network=any

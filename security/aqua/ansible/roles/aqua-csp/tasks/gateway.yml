@@ -3,8 +3,13 @@
   - name: 'aqua-gateway Network Policies - State={{ aqua_state }}'
     k8s:
       namespace: '{{ aqua_common_namespace }}'
-      definition: "{{ lookup('template', 'gateway/gateway-nsp.yml.j2') | from_yaml_all | list }}"
+      definition: "{{ lookup('template', 'gateway/network_policies/' + policy_template) | from_yaml }}"
       state: '{{ aqua_state }}'
+    loop:
+      - custom-netpol-gateway-to-database-and-console.yml.j2
+      - custom-netpol-gateway-to-internet.yml.j2
+    loop_control:
+      loop_var: policy_template
     when: aqua_aporeto_enabled | bool
 
   - name: 'Service=aqua-gateway - State={{ aqua_state }}'

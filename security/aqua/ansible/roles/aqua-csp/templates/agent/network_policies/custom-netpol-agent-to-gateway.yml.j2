@@ -1,0 +1,15 @@
+# Aqua-Agent NetworkSecurityPolicy (nsp)
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-netpol-aqua-agents-to-gateways
+spec:
+  description: |
+    Allow Aqua Agents and Aqua Gateways to Communicate
+  destination:
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-gateway
+  source:
+  - - $namespace={{ aqua_agent_namespace }}
+    - app=aqua-agent

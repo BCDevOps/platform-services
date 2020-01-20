@@ -3,8 +3,13 @@
   - name: 'aqua-scanner Network Policies - State={{ aqua_state }}'
     k8s:
       namespace: '{{ aqua_common_namespace }}'
-      definition: "{{ lookup('template', 'scanner/scanner-nsp.yml.j2') | from_yaml_all | list }}"
+      definition: "{{ lookup('template', 'scanner/network_policies/' + policy_template) | from_yaml }}"
       state: '{{ aqua_state }}'
+    loop:
+      - custom-netpol-scanner-to-console.yml.j2
+      - custom-netpol-scanner-to-internet.yml.j2
+    loop_control:
+      loop_var: policy_template
     when: aqua_aporeto_enabled | bool
 
   - name: Set scanner_secret_exists

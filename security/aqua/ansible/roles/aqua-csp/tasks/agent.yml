@@ -46,6 +46,17 @@
       aqua_agent_token: "{{ (agent_api_response.content | from_json).token }}"
     when: aqua_state == 'present' 
 
+  - name: 'aqua-agent Network Policies - State={{ aqua_state }}'
+    k8s:
+      namespace: '{{ aqua_agent_namespace }}'
+      definition: "{{ lookup('template', 'agent/network_policies/' + policy_template) | from_yaml }}"
+      state: '{{ aqua_state }}'
+    loop:
+      - custom-netpol-agent-to-gateway.yml.j2
+    loop_control:
+      loop_var: policy_template
+    when: aqua_aporeto_enabled | bool
+
   - name: 'Secret=aqua-agent-token - State={{ aqua_state }}'
     k8s:
       namespace: '{{ aqua_agent_namespace }}'

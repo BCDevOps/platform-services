@@ -1,0 +1,13 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-netpol-aqua-console-to-internet
+spec:
+  description: |
+    allow aqua-console to talk to the internet
+  source:
+    - - $namespace={{ aqua_common_namespace }}
+      - app=aqua-console
+  destination:
+    - - ext:network=any

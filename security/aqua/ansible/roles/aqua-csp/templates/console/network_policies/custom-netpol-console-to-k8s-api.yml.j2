@@ -1,0 +1,13 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-netpol-aqua-console-to-k8s-api
+spec:
+  description: |
+    Allow {{ aqua_common_namespace }} aqua-console pods to talk to the k8s api
+  destination:
+  - - int:network=internal-cluster-api-endpoint
+  source:
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-console

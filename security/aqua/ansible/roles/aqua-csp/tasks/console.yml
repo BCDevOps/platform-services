@@ -3,8 +3,14 @@
   - name: 'aqua-console Network Policies - State={{ aqua_state }}'
     k8s:
       namespace: '{{ aqua_common_namespace }}'
-      definition: "{{ lookup('template', 'console/console-nsp.yml.j2') | from_yaml_all | list }}"
+      definition: "{{ lookup('template', 'console/network_policies/' + policy_template) | from_yaml }}"
       state: '{{ aqua_state }}'
+    loop:
+      - custom-netpol-console-to-database-and-gateway.yml.j2
+      - custom-netpol-console-to-internet.yml.j2
+      - custom-netpol-console-to-k8s-api.yml.j2
+    loop_control:
+      loop_var: policy_template
     when: aqua_aporeto_enabled | bool
 
   - name: 'Secret=aqua-console - State={{ aqua_state }}'

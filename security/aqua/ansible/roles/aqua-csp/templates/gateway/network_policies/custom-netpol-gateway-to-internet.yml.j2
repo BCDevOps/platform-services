@@ -1,0 +1,13 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-netpol-aqua-gateway-to-internet
+spec:
+  description: |
+    allow aqua-gateway to talk to the internet
+  source:
+    - - $namespace={{ aqua_common_namespace }}
+      - app=aqua-gateway
+  destination:
+    - - ext:network=any

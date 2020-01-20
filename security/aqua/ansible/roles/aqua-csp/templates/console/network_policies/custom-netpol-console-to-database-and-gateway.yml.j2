@@ -1,0 +1,18 @@
+---
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: custom-netpol-aqua-console-to-db-and-gw
+spec:
+  description: |
+    Allow {{ aqua_common_namespace }} Aqua Console pods to talk to Database and Gateway
+  destination:
+  - - $namespace={{ aqua_common_namespace }}
+    - cluster-name={{ aqua_audit_patroni_name }}{{ aqua_patroni_suffix }}
+  - - $namespace={{ aqua_common_namespace }}
+    - cluster-name={{ aqua_patroni_name }}{{ aqua_patroni_suffix }}
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-gateway
+  source:
+  - - $namespace={{ aqua_common_namespace }}
+    - app=aqua-console
