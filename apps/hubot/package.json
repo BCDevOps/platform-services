@@ -21,7 +21,8 @@
     "start": "bin/hubot -a rocketchat --name rocketbot",
     "debug": "node --inspect --inspect-brk -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat",
     "shell": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a shell",
-    "local": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat"
+    "local": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat",
+    "test:lint": "eslint --fix ./scripts/github.js"
   },
   "dependencies": {
     "base64-url": "^2.3.2",
@@ -40,6 +41,11 @@
     "moment": "^2.24.0"
   },
   "devDependencies": {
-    "dotenv": "^5.0.1"
+    "babel-eslint": "^10.0.3",
+    "dotenv": "^5.0.1",
+    "eslint": "^6.5.1",
+    "eslint-config-prettier": "^6.4.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "prettier": "^1.18.2"
   }
 }
