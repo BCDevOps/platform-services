@@ -19,6 +19,7 @@ parameters:
     displayName: File Upload Storage Size
     required: true
 
+  # specify the storage class
   - name: SC_FILE_UPLOAD
     description: The Storage Class for the RocketChat uploads volume
     displayName: File Uploads Storage Class 
@@ -39,12 +40,14 @@ parameters:
   - name: ROCKETCHAT_IMAGE_REGISTRY
     description: Location of the RocketChat Image
     displayName: RocketChat Image
-    value: rocketchat/rocket.chat
+    value: "docker-registry.default.svc:5000/e5imao-prod/rocket.chat"
     required: true
-  
+
+  # specify the version
   - name: ROCKETCHAT_IMAGE_TAG
     description: Name of the RocketChat tag that should be used
     displayName: RocketChat Tag
+    value: "2.4.1"
     required: true
 
   - name: ROCKETCHAT_REPLICAS
@@ -86,7 +89,6 @@ parameters:
     displayName: MongoDB Secret.
     description: Name of the Secret containing MongoDB Assets
     value: "mongodb"
-    required: true    
 
 # Rocket Chat Environment Variables
   - name: FILEUPLOAD_ENABLED
@@ -119,6 +121,7 @@ parameters:
   - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA
   - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH
   - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH
+  # TODO: turn into secrets:
   - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID
   - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET
   - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE
@@ -171,13 +174,14 @@ objects:
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA}"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH}"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH}" 
+      # TODO: turn into secrets:
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID}"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET}"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE}"
       OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "${MESSAGE_ALLOWSNIPPETING}"
       # Messaging Settings
       OVERWRITE_SETTING_Message_AllowSnippeting: "True"
-      
+
   # Service for the Rocketchat NodeJS service
   - apiVersion: v1
     kind: Service
@@ -299,6 +303,7 @@ objects:
                 path: /api/v1/info
                 port: 3000
                 scheme: HTTP
+              # TODO: make delay longer
               initialDelaySeconds: 60
               timeoutSeconds: 5
               periodSeconds: 20
