@@ -7,6 +7,7 @@ internal_services_tls_verify:
   sso-dev: https://sso-dev.pathfinder.gov.bc.ca
   sso-test: https://sso-test.pathfinder.gov.bc.ca
   sso-prod: https://sso.pathfinder.gov.bc.ca
+  rocketchat: https://chat.pathfinder.gov.bc.ca
 internal_services_no_tls_verify: 
   kubernetes_api: https://kubernetes.default.svc.cluster.local
   registry: https://docker-registry.default.svc.cluster.local:5000/healthz 
@@ -26,4 +27,3 @@ ocp_green_status:
 
 
 
-    
