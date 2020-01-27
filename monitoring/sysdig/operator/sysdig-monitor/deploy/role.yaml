@@ -35,7 +35,7 @@ rules:
 - apiGroups:
   - apps
   resourceNames:
-  - sysdig-team
+  - sysdig-monitor
   resources:
   - deployments/finalizers
   verbs:

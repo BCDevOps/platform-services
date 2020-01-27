@@ -1,6 +1,6 @@
 ## Sysdig Monitor Operator
 
-Operator initilizalization with the oeprator-sdk: 
+Operator initilizalization with the operator-sdk: 
 
 ```
 operator-sdk new sysdig-monitor --type ansible --kind Monitoring --api-version ops.gov.bc.ca/v1alpha1 --generate-playbook

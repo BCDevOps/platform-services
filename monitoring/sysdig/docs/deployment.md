@@ -1,4 +1,4 @@
-## Deployment
+## Agent Deployment
 Deploying sysdig requires the following k8s components:
 
 - project/namespace with additional privileges

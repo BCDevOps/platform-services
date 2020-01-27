@@ -12,6 +12,7 @@ A custom Ansible-based operator has been created to manage Users and Teams in th
 
 
 ### Help / Contact
+See `#devops-platform-services` for assistance in Rocket.Chat
 
 
 

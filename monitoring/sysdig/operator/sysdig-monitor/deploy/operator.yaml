@@ -20,7 +20,7 @@ spec:
           - /tmp/ansible-operator/runner
           - stdout
           # Replace this with the built image name
-          image: stewartshea/sysdig-monitor:latest
+          image: quay.io/shea_stewart/sysdig-monitor:latest
           imagePullPolicy: "Always"
           volumeMounts:
           - mountPath: /tmp/ansible-operator/runner
@@ -28,7 +28,7 @@ spec:
             readOnly: true
         - name: operator
           # Replace this with the built image name
-          image: stewartshea/sysdig-monitor:latest
+          image: quay.io/shea_stewart/sysdig-monitor:latest
           imagePullPolicy: "Always"
           command:
             - /usr/local/bin/entrypoint
