@@ -7,3 +7,9 @@ Keycloak and Sysdig were configured manually for the OIDC integration (sad face 
 ![](assets/sysdig_oidc_kcsso_01.png)
 ![](assets/sysdig_oidc_kcsso_02.png)
 ![](assets/sysdig_oidc_sysdig_01.png)
+
+## Auth Realm
+The Next Gen Security realm is used for auth to Sysdig. 
+
+## The Client Org
+The Client Org for Sysdig is called `BCDevOps`. Users can login here: [https://app.sysdigcloud.com/api/oauth/openid/bcdevops](https://app.sysdigcloud.com/api/oauth/openid/bcdevops)

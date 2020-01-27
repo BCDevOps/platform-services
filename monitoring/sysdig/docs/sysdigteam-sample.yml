@@ -1,0 +1,16 @@
+apiVersion: ops.gov.bc.ca/v1alpha1
+kind: SysdigTeam
+metadata:
+  name: c81e6h-sysdigteam
+spec:
+  team: 
+    description: The SysDig Team for the PMS Namespaces
+    users:
+    - name: husker@arctiq.ca
+      role: ROLE_TEAM_READ 
+    - name: shea.stewart+bcgov@arctiq.ca
+      role: ROLE_TEAM_MANAGER
+    - name: shea.stewart+tester@arctiq.ca
+      role: ROLE_TEAM_EDIT
+    - name: boomer@arctiq.ca
+      role: ROLE_TEAM_READ 

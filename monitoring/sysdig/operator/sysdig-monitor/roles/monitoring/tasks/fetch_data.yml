@@ -1,0 +1,17 @@
+---
+- name: Fetch list of current teams
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/teams"
+    method: GET
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+  register: teams_output
+- name: Fetch list of current users
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/users"
+    method: GET
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+  register: users_output

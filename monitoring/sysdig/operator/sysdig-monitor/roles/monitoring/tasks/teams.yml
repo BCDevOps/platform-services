@@ -1,0 +1,44 @@
+---
+# tasks file for monitoring
+
+# Lookup Team
+- debug: msg=" Looking up {{ team_name }}"
+- set_fact: 
+    team_data: "{{ item }}"
+    team_exists: true
+  when: item.name == team_name
+  with_items: 
+    -  "{{ teams_output.json.teams }}"
+    
+# Create Team if Doesn't Exist
+- name: Create Team
+  block: 
+  - name: Create team
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/teams"
+      method: POST
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body: "{{ lookup('template', 'templates/new_team.json.j2') }}"
+      body_format: json
+      status_code: 201
+    register: team_creation_output
+  when: team_exists == false
+
+
+# Update Team if Exists Updates
+- name: Update Team
+  block: 
+  - name: Update Team
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_data.id | int }}"
+      method: PUT
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body: "{{ lookup('template', 'templates/existing_team.json.j2') }}"
+      body_format: json
+      status_code: 200
+    register: team_update_output
+  when: team_exists == true
