@@ -120,11 +120,18 @@ oc process -f mongodb-backup-template.yaml MONGODB_ADMIN_PASSWORD=adminpass MONG
 
 ##### Restore Backup
 
-To restore the database you will have to start another mongodb instance, then copy or mount the backup files to this instance and issue this restore command.
+You can deploy new rocketchat/mongo pods using the deployment info above or use an existing rocketchat/mongo deployment to restore a backup into. The pre-req is that there is a mongo db dump directory from a mongodump. If your deploying a new RC deployment it's easiest to deploy the mongo template, restore the db, then deploy the rocket chat template.
 
-```
-mongorestore -u admin -p \$MONGODB_ADMIN_PASSWORD --authenticationDatabase admin --gzip $DIR/DB_TO_RESTORE -d DB_TO_RESTORE_INTO"
-```
+1. Scale an existing rocketchat deployment config down to 0. Wait for pods to shutdown and connections to mongo to drop.
+2. Fire up a pod in the same namespaces of the backup pvc and mount that pvc.
+    ```
+    oc run mongo-restore-pod --overrides=' { "spec": { "containers": [ { "command": [ "/bin/sh", "-c", "for i in $(seq 1 999); do echo $i; sleep 5; done" ], "name": "mongo-restore-pod", "image": "docker-registry.default.svc:5000/openshift/mongodb:latest", "volumeMounts": [{ "mountPath": "/var/data", "name": "data" }] } ],"volumes": [ { "name": "data", "persistentVolumeClaim": { "claimName": "bk-e5imao-prod-o1uqn1z9r797" } } ] } } ' --image=notused --restart=Never
+    ```
+3. Copy the restore directory locally: `oc rsync mongo-restore-pod:/var/data/dump-2020-01-21-08:01:47/ .`
+4. Copy that directory to the destination mongo pod which may be in a different namespace or cluster: `oc rsync ./mongo-rocketdb-bak/ mongodb-0:/tmp/backup`
+5. `oc rsh` into of the mongo pods.
+6. Restore the backup files to the mongo server: `mongorestore --uri="mongodb://admin:Oyh1u4udQQkt2XuM@localhost:27017/local?authSource=admin&replicaSet=rs0" /tmp/backup --gzip` Note you can get the uri string from the mongodb secret. The restore process may take a while depending on the size of the backup. Once the restore is done for the local mongodb restore to the others in the replicaset: `mongorestore --uri="mongodb://admin:RWPypvI6uxJmB8QA@mongodb-1.mongodb-internal.e5imao-dev.svc.cluster.local:27017/local?authSource=admin&replicaSet=rs0" /tmp/backup --gzip && mongorestore --uri="mongodb://admin:RWPypvI6uxJmB8QA@mongodb-2.mongodb-internal.e5imao-dev.svc.cluster.local:27017/local?authSource=admin&replicaSet=rs0" /tmp/backup --gzip`
+7. Scale up the rocketchat deployment. Just 1 pod to start with. You may need to change the the `Accounts_ShowFormLogin:` configmap data to append `OVERWRITE_SETTING_` so you are able to log in as admin and adjust any config. You will need the rocketchat admin pass from the original backup.
 
 ## Operations
 
@@ -163,13 +170,17 @@ A Horizontal Pod Autoscaler is configured in the template. The Autoscaler is con
 ### Handy Commands
 Some handy commands for managing & inspecting Rocket Chat & MongoDB.
 
+## Bugs
+
+
+
 ## Operations
 ---
 Some handy commands for managing & inspecting Rocket Chat & MongoDB.
 
 Connect to the mongodb:
 
-`mongo mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongodb:27017/rocketdb?replicaSet=rs0`
+`mongo mongodb://$MONGODB_USER:$MONGODB_PASSWORD@mongodb:27017/local?authSource=admin&replicaSet=rs0`
 
 show collections:
 
@@ -183,6 +194,9 @@ Get DB stats:
 
 `db.runCommand({ dbStats: 1, scale: 1048576 })`
 
+Get replication set status:
+
+`rs.status()`
 
 ## Refrences
 

@@ -13,8 +13,8 @@ while read -r line; do
 done < "$filename"
 
 #curl example
-#curl -H "X-Auth-Token: 9HqLlyZOugoStsXCUfD_0YdwnNnunAJF8V47U3QHXSq" \
-#     -H "X-User-Id: aobEdbYhXfu5hkeqG" \
+#curl -H "X-Auth-Token: 9HqLlyZOugoStsXCUfD_0YdwnNXXXXX" \
+#     -H "X-User-Id: aobEdbYXXXXXX" \
 #     -H "Content-type:application/json" \
 #     http://localhost:3000/api/v1/permissions.update \
 #     -d '{"permissions": [{"_id": "manage-own-integrations", "roles": ["admin","bot","user"]}]}'

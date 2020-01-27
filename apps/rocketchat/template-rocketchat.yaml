@@ -160,7 +160,7 @@ objects:
       OVERWRITE_SETTING_Accounts_RegistrationForm: "${ACCOUNTS_REGISTRATIONFORM}"
       OVERWRITE_SETTING_Accounts_AllowRealNameChange: "${ACCOUNTS_ALLOWREALNAMECHANGE}"
       OVERWRITE_SETTING_Accounts_AllowPasswordChange: "${ACCOUNTS_ALLOWPASSWORDCHANGE}"
-      Accounts_ShowFormLogin: "${ACCOUNTS_SHOWFORMLOGIN}"
+      OVERWRITE_SETTING_Accounts_ShowFormLogin: "${ACCOUNTS_SHOWFORMLOGIN}"
       OVERWRITE_SETTING_Accounts_Send_Email_When_Activating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
       OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
       #Custom OAuth
