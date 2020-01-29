@@ -14,6 +14,25 @@ parameters:
     required: true
     value: rocketchat
 
+  - name: ROCKETCHAT_IMAGE
+    description: Location of the RocketChat Image
+    displayName: RocketChat Image
+    value: registry.hub.docker.com/library/rocket.chat
+    required: true
+
+  - name: ROCKETCHAT_IMAGE_NAME
+    description: Location of the RocketChat Image
+    displayName: RocketChat Image
+    value: "rocket.chat"
+    required: true
+
+  # specify the version
+  - name: ROCKETCHAT_IMAGE_TAG
+    description: Name of the RocketChat tag that should be used
+    displayName: RocketChat Tag
+    value: "2.4.1"
+    required: true
+
   - name: FILE_UPLOAD_STORAGE_SIZE
     description: The size of storage to allocate for file uploads to RocketChat
     displayName: File Upload Storage Size
@@ -35,19 +54,6 @@ parameters:
     description: "Password for the RocketChat admin user."
     generate: expression
     from: "[a-zA-Z0-9]{16}"
-    required: true
-
-  - name: ROCKETCHAT_IMAGE_REGISTRY
-    description: Location of the RocketChat Image
-    displayName: RocketChat Image
-    value: "docker-registry.default.svc:5000/e5imao-prod/rocket.chat"
-    required: true
-
-  # specify the version
-  - name: ROCKETCHAT_IMAGE_TAG
-    description: Name of the RocketChat tag that should be used
-    displayName: RocketChat Tag
-    value: "2.4.1"
     required: true
 
   - name: ROCKETCHAT_REPLICAS
@@ -129,6 +135,26 @@ parameters:
   - name: MESSAGE_ALLOWSNIPPETING
 
 objects:
+# Keep an istag in each namespace as no build is needed
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${ROCKETCHAT_IMAGE_NAME}
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+      - annotations: null
+        from:
+          kind: DockerImage
+          name: ${ROCKETCHAT_IMAGE}:${ROCKETCHAT_IMAGE_TAG}
+        importPolicy: {}
+        name: "${ROCKETCHAT_IMAGE_TAG}"
+        referencePolicy:
+          type: Source
+
   - apiVersion: v1
     kind: ConfigMap
     metadata:
@@ -283,8 +309,7 @@ objects:
             envFrom: 
               - configMapRef:
                   name: rocketchat-config
-            image: "${ROCKETCHAT_IMAGE_REGISTRY}:${ROCKETCHAT_IMAGE_TAG}"
-            imagePullPolicy: Always
+            image: "${ROCKETCHAT_IMAGE_NAME}:${ROCKETCHAT_IMAGE_TAG}"
             volumeMounts:
               - name: rocketchat-uploads
                 mountPath: /app/uploads
