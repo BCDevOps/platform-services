@@ -120,19 +120,6 @@ parameters:
   - name: ACCOUNTS_SHOWFORMLOGIN
   - name: ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING
   - name: ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH
-  # TODO: turn into secrets:
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_BUTTON_LABEL_TEXT
-  - name: MESSAGE_ALLOWSNIPPETING
 
 objects:
 # Keep an istag in each namespace as no build is needed
@@ -191,22 +178,29 @@ objects:
       OVERWRITE_SETTING_Accounts_AllowPasswordChange: "${ACCOUNTS_ALLOWPASSWORDCHANGE}"
       OVERWRITE_SETTING_Accounts_ShowFormLogin: "${ACCOUNTS_SHOWFORMLOGIN}"
       OVERWRITE_SETTING_Accounts_Send_Email_When_Activating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
-      OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
-      #Custom OAuth
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH}" 
-      # TODO: turn into secrets:
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "${MESSAGE_ALLOWSNIPPETING}"
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING}"
       # Messaging Settings
       OVERWRITE_SETTING_Message_AllowSnippeting: "True"
+
+      ## Rooms
+      # DevOps Alerts
+      # Random - Default
+      # DevOps Questions Community
+      # CSI Lab
+      # DevOps Platform Team
+      # Kudos - Default
+      # DevOps Request
+      ## Permissions 
+      # Users- Manage Own Integrations: Enabled
+
+  - apiVersion: v1
+    kind: Secret
+    metadata:
+      annotations:
+        as-copy-of: "template.rocketchat-config-secret"
+      name: rocketchat-config-secret
+    stringData:
+      CONTENT: placeholder for content from template.rocketchat-config-secret
 
   # Service for the Rocketchat NodeJS service
   - apiVersion: v1
@@ -309,6 +303,8 @@ objects:
             envFrom: 
               - configMapRef:
                   name: rocketchat-config
+              - secretRef:
+                  name: rocketchat-config-secret
             image: "${ROCKETCHAT_IMAGE_NAME}:${ROCKETCHAT_IMAGE_TAG}"
             volumeMounts:
               - name: rocketchat-uploads
@@ -347,7 +343,6 @@ objects:
                 cpu: "${CPU_REQUEST}"
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
-    status: {}
 
   - apiVersion: autoscaling/v1
     kind: HorizontalPodAutoscaler
