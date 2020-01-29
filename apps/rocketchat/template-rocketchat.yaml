@@ -320,7 +320,7 @@ objects:
             terminationMessagePath: /dev/termination-log
             livenessProbe:
               httpGet:
-                path: /api/v1/info
+                path: /api/info
                 port: 3000
                 scheme: HTTP
               initialDelaySeconds: 120
@@ -330,7 +330,7 @@ objects:
               failureThreshold: 3
             readinessProbe:
               httpGet:
-                path: /api/v1/info
+                path: /api/info
                 port: 3000
                 scheme: HTTP
               initialDelaySeconds: 120
