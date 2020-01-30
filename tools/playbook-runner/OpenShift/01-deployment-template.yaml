@@ -1,0 +1,141 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: playbook-runner
+labels:
+  app: ${NAME}${SUFFIX}
+  phase: deploy
+  app.kubernetes.io/instance: ${NAME}${SUFFIX}
+  app.kubernetes.io/component: ansible
+  app.kubernetes.io/name: playbook-runner  
+  app.kubernetes.io/managed-by: template
+  app.kubernetes.io/version: "1"
+objects:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${NAME}${SUFFIX}-data
+  spec:
+    storageClassName: ${STORAGE_CLASS}
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${PVC_SIZE}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      app: ${NAME}${SUFFIX}
+    name: ${NAME}${SUFFIX}
+  spec:
+    selector:
+    matchLabels:
+      app: ${NAME}${SUFFIX}
+    replicas: 1
+    revisionHistoryLimit: 10
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/name: playbook-runner
+      spec:
+        containers:
+        - env:
+          - name: K8S_AUTH_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: k8s-api-token
+                name: ${NAME}${SUFFIX}
+          - name: CLUSTER_ENV
+            valueFrom:
+              secretKeyRef:
+                key: cluster-environment
+                name: ${NAME}${SUFFIX}
+          - name: AQUA_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: aqua-admin-password
+                name: ${NAME}${SUFFIX}
+          - name: AQUA_REG_USER
+            valueFrom:
+              secretKeyRef:
+                key: aqua-registry-user
+                name: ${NAME}${SUFFIX}
+          - name: AQUA_REG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: aqua-registry-password
+                name: ${NAME}${SUFFIX}
+          - name: AQUA_LICENSE
+            valueFrom:
+              secretKeyRef:
+                key: aqua-license
+                name: ${NAME}${SUFFIX}
+          image: ${IMAGE_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/${IMAGE_STREAM_TAG}
+          imagePullPolicy: Always
+          name: playbook-runner
+          resources:
+            requests:
+              cpu: ${CPU_REQUEST}
+              memory: ${MEMORY_REQUEST}
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /opt
+            name: playbook-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        terminationGracePeriodSeconds: 0
+        volumes:
+        - name: playbook-data
+          persistentVolumeClaim:
+            claimName: ${NAME}${SUFFIX}-data
+    updateStrategy:
+      type: RollingUpdate
+parameters:
+- description: The name of the application for labelling all artifacts.
+  displayName: Application Name
+  name: NAME
+  value: playbook-runner
+- name: SUFFIX
+  description: A suffix appended to all artifact's name (NAME)
+  value: ''
+- description: Starting amount of CPU the container can use.
+  displayName: CPU REQUEST
+  name: CPU_REQUEST
+  value: '300m'
+- description: Maximum amount of CPU the container can use.
+  displayName: CPU Limit
+  name: CPU_LIMIT
+  value: '1'
+- description: Starting amount of memory the container can use.
+  displayName: Memory Request
+  name: MEMORY_REQUEST
+  value: 512Mi
+- description: Maximum amount of memory the container can use.
+  displayName: Memory Limit
+  name: MEMORY_LIMIT
+  value: 512Mi
+- description: The OpenShift Namespace where the patroni and postgresql ImageStream
+    resides.
+  displayName: ImageStream Namespace
+  name: IMAGE_STREAM_NAMESPACE
+  value: "jpye"
+- name: IMAGE_STREAM_TAG
+  description: Playbook-Runner ImageTag
+  value: playbook-runner:alpha
+- description: The size of the persistent volume to create.
+  displayName: Persistent Volume Size
+  name: PVC_SIZE
+  value: 2Gi
+- name: STORAGE_CLASS
+  value: gluster-file
+- name: IMAGE_REGISTRY
+  value: registry.hub.docker.com

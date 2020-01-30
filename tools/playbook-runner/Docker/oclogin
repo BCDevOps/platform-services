@@ -1,0 +1,12 @@
+#!/bin/sh
+if [ "$CLUSTER_ENV" == "PROD" ]; then
+    oc login https://console.pathfinder.gov.bc.ca:8443 --token=${K8S_AUTH_API_KEY}
+else
+    oc login https://console.lab.pathfinder.gov.bc.ca:8443 --token=${K8S_AUTH_API_KEY}
+fi
+
+if [ ! -d "/opt/git" ]; then
+    mkdir /opt/git
+    cd /opt/git
+    git clone https://github.com/BCDevOps/platform-services.git
+fi
