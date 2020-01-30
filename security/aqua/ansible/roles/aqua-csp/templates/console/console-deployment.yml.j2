@@ -44,9 +44,9 @@ spec:
 {% if aqua_console_privledged %}
           privileged: true
 {% else %}
-          runAsUser: 431
-          runAsGroup: 433
-          fsGroup: 433
+#          runAsUser: 431
+#          runAsGroup: 433
+#          fsGroup: 433
 {% endif %}
         ports:
         - containerPort: 8080
