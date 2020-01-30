@@ -10,5 +10,8 @@ roleRef:
   name: aqua-discovery-cluster-role
 subjects:
 - kind: ServiceAccount
-  name: '{{ service_account }}'
-  namespace: '{{ namespace }}'
+  name: '{{ aqua_service_account }}'
+  namespace: '{{ aqua_common_namespace }}'
+- kind: ServiceAccount
+  name: '{{ aqua_agent_service_account }}'
+  namespace: '{{ aqua_agent_namespace }}'
