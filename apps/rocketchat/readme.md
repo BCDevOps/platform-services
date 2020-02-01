@@ -189,6 +189,8 @@ show collections:
 Query the collection:
 
 `db.rocketchat_uploads.find( {} )`
+`db.rocketchat_sessions.find( {}).pretty().limit(1)`
+`db.rocketchat_sessions.count( {})`
 
 Get DB stats:
 
