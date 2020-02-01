@@ -137,11 +137,13 @@ spec:
         - name: AQUA_GRPC_MODE
           value: "1"
 {% if aqua_console_cluster_mode_enabled %}
-        - name: AQUA_CLUSTER_MODE
+        - name: CLUSTER_MODE
           value: 'active-active'
 {% endif %}
         - name: AQUA_CONSOLE_RAW_SCAN_RESULTS_STORAGE_SIZE
           value: '{{ aqua_console_pvc_size }}'
+        - name: AQUA_SAVE_SCAN_RESULTS_POOL_SIZE
+          value: '{{ aqau_console_worker_pool_size }}'
         volumeMounts:
         - mountPath: /opt/aquasec/raw-scan-results
           name: aqua-console-raw-scan-results

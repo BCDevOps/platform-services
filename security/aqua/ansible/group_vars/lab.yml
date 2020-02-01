@@ -8,14 +8,15 @@ aqua_agent_cpu_limit: 500m
 aqua_agent_memory_limit: 1Gi
 
 aqua_console_replicas: 2
-aqua_console_pvc_size: 5 # Size in Gi (int) - Minimum 5
+aqau_console_worker_pool_size: 10
+aqua_console_pvc_size: 10 # Size in Gi (int) - Minimum 5
 aqua_console_pvc_storage_class: gluster-file
 aqua_console_cpu_request: 150m
-aqua_console_memory_request: 100Mi
+aqua_console_memory_request: 512Mi
 aqua_console_cpu_limit: 1500m
-aqua_console_memory_limit: 4Gi
+aqua_console_memory_limit: 5Gi
 
-aqua_gateway_replicas: 3
+aqua_gateway_replicas: 2
 aqua_gateway_cpu_request: 250m
 aqua_gateway_memory_request: 256Mi
 aqua_gateway_cpu_limit: 1500m
@@ -28,7 +29,7 @@ aqua_scanner_cpu_limit: 800m
 aqua_scanner_memory_limit: 6Gi
 
 aqua_patroni_storage_class: gluster-file
-aqua_patroni_pvc_size: 10Gi
+aqua_patroni_pvc_size: 15Gi
 aqua_audit_patroni_pvc_size: 2Gi
 
 aqua_patroni_cpu_request: 250m

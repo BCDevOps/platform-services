@@ -41,6 +41,7 @@ aqua_console_privledged: false
 aqua_console_docker_sock_access: false
 aqua_console_dockerless_scanning: true
 aqua_console_external_subdomain: aqua-console
+aqau_console_worker_pool_size: 10
 aqua_console_pvc_size: 5 # Size in Gi (int)
 aqua_console_pvc_storage_class: gluster-file
 aqua_console_cpu_request: 0
