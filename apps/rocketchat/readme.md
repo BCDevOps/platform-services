@@ -63,7 +63,7 @@ Three services are utilized for the Rocket Chat application
 We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to authenticate to it.
 
 * create a new client in the RH-SSO admin console, call it rocketchat, leave defaults
-* fill in the `Valid Redirect URIs` with the redirect URI valid for current deployment e.g.; `https://chat-test.pathfinder.gov.bc.ca/_oauth/keycloak`
+* fill in the `Valid Redirect URIs` with the redirect URI valid for current deployment e.g.; `https://chat-<env>.pathfinder.gov.bc.ca/_oauth/keycloak`
 * add a role to the client called `rocketchat-users` 
 * turn off full scope allowed under `scope`
 * group role & flow auth in here...
@@ -74,7 +74,17 @@ All of the OpenShift objects are wrapped up in two template files. You can load 
 
 All of the template parameters are defined in environment files specific to the environment to deploy Rocket Chat into, dev, test, and prod.
 
-Before you deploy the Rocket Chat/Mongo DB template go through the environment file and update the template parameters values to ones that make sense for your deployment and deploy all the objects: `oc process -f template-rocketchat-mongodb.yaml --param-file=dev.env | oc create -f -`
+Before you deploy the Rocket Chat/Mongo DB template go through the environment file and update the template parameters values to ones that make sense for your deployment and deploy all the objects:
+```shell
+# 1. deploy mongo and check if it's up and running:
+oc process -f template-mongodb.yaml --param-file=<env>.env --ignore-unknown-parameters=true | oc create -f -
+
+# 2. make sure if the template secret if ready, if not use `template-rocketchat-secret-prep.yaml`
+
+# 3. deploy Rocketchat:
+oc process -f template-rocketchat.yaml --param-file=<env>.env --ignore-unknown-parameters=true | oc create -f -
+
+```
 
 A standard DeploymentConfig is created for the Rocket Chat NodeJS application. Environment variables are loaded in from the mongodb secret. Liveness and readiness health checks on HTTP port 3000 are set. The DeploymentConfig is set up for a rolling deployment with 3 replicas
 
@@ -85,7 +95,7 @@ After the Rocket Chat and MongoDB pods are up and running you can connect to the
  * Under Administration -> Accounts
  * Set "Show default login form" False (This will make sure only the custom Keycloak oauth is available for log in)
 
-We also Need to select pop-up for log in style and auth once, then can change to Redirect option.
+We also need to select pop-up for log in style and auth once, then can change to Redirect option.
 
 #### Add Channels
 
