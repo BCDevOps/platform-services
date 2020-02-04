@@ -1,0 +1,41 @@
+---
+# Lookup User
+- debug: msg=" Looking up {{ team_user.name }}"
+- name: reset user_exists flag
+  set_fact: 
+    user_exists: false
+
+- name: Lookup user
+  set_fact: 
+    user_data: "{{ item }}"
+    user_exists: true
+  when: item.username == team_user.name
+  with_items: 
+    -  "{{ users_output.json.users }}"
+
+# Create User if they don't already exist
+- name: Create User
+  block: 
+  - name: Create user
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/users"
+      method: POST
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body: "{{ lookup('template', 'templates/new_user.json.j2') }}"
+      body_format: json
+      status_code: 201
+    register: user_creation_output
+  when: user_exists == false
+
+
+- name: Build user list if user was just created
+  set_fact: 
+    team_users_and_roles: "{{ team_users_and_roles | default([]) + [ { 'name' : team_user.name, 'role': team_user.role, 'userID' : user_creation_output.userID } ] }}"
+  when: user_exists == false
+
+- name: Build user list if user previously existed
+  set_fact: 
+    team_users_and_roles: "{{ team_users_and_roles | default([]) + [ { 'name': team_user.name, 'role': team_user.role, 'userID': user_data.id } ] }}"
+  when: user_exists == true

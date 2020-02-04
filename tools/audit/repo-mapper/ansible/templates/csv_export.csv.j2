@@ -1,0 +1,4 @@
+Project,  BuildConfigName, Git Org, Repository, Product Lead, Ministry,  Org
+{% for n in map%}
+{{ n.Project }},{{ n.BuildConfigName }},{{ n.GitHubOrg }},{{ n.GitHubRepo }},{{ n.ProductLead }},{{ n.MinistryLead }},{{ n.MinistryOrg }}
+{% endfor %}
