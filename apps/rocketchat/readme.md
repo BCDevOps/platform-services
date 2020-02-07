@@ -91,7 +91,8 @@ A standard DeploymentConfig is created for the Rocket Chat NodeJS application. E
 After the Rocket Chat and MongoDB pods are up and running you can connect to the Rocket Chat route and log in with the admin user in pass defined in the config map. The custom OAuth settings are there but you need to manually enable it.
 
  * Under Administration -> OAuth
- * Add custom oauth -> Enter in "Keycloak"
+ * Add custom oauth -> Enter in "Keycloak", this will auto populate the Keycloak OAuth settings
+ * Under the Keycloak setting -> Reselect `Redirect` for the login style (sometime this value doesn't parse properly)
  * Under Administration -> Accounts
  * Set "Show default login form" False (This will make sure only the custom Keycloak oauth is available for log in)
 
