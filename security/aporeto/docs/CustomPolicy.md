@@ -116,18 +116,18 @@ In the subsections below we'll use one or more tags to identify the source and d
 
 See the [`samples` file](./sample/quickstart-nsp.yaml) accompanying these instructions for more information.
 
-### Namespace to OCP API
+### Namespace to Kubernetes Internal Cluster API
 
-The OCP has an internal API that your environment needs to communicate with to run deployments and for other internal mechanics to work. Change the source namespace in the sample below and apply it.
+The Kubernetes has an internal API that your environment needs to communicate with to run deployments and for other internal mechanics to work. Change the source namespace in the sample below and apply it.
 
 ```yaml
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: custom-pods-to-api-[APP_NAME]
+  name: custom-pods-to-k8s-api-[APP_NAME]
 spec:
   description: |
-    Allow pods to talk to the internal OCP api 
+    Allow pods to talk to the internal K8S api 
   source:
     - - $namespace=handy-dandy-prod
   destination:
@@ -287,7 +287,26 @@ spec:
       - - role=web
     ```
 
+### Service Account to Kubernetes Cluster API
 
+This sample policy allows specific service accounts within a namespace to communicate with the Kubernetes internal API in order to run builds and deployments.
+This is a more restrictive policy as compared to Namespsace to Kubernetes Cluster API, which translates to -> **better security**.
+
+```
+apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: allow-builds-internet-access
+spec:
+  description: allow service accounts to run builds/deployments
+  source:
+    - - $namespace=jjrkby-tools
+      - "@app:k8s:serviceaccountname=builder"
+    - - $namespace=jjrkby-tools
+      - "@app:k8s:serviceaccountname=deployer"
+  destination:
+    - - int:network=internal-cluster-api-endpoint
+```
 ## Usage
 
 Creating a Zero Trust security model is relatively easy; here's how you'll do it: Create your policy based on the information above; then add it to your OCP deployment manifest; and finally, deploy your application. Lets go over them in more details:
@@ -309,12 +328,17 @@ To do this see these two sections below:
 * [Check it Out](#check-it-out)
 * [Remove It](#remove-it)
 
-**Step 3 - Add Policy**
+**Step 3 - Add a Policy**
 
-In the same deployment manifest begin adding your NSP:
+```
+  oc apply -f <PATH_TO_LOCAL_POLICY_YAML_FILE>
+```
+Check the result of the policy creation as describe [here](CustomPolicy.md#troubleshooting) to make sure it was created successfully.
 
 
-In this illustration I copy the NSP directly from this tutorial and modify it so that my API can talk to the minio object store.
+**🤓 ProTip**
+
+* If your policy uses $namespace as a source, make sure the `oc` command is pointing to that namespace, otherwise the policy might fail.
 
 **Add Step 4 - Test It**
 
@@ -353,7 +377,7 @@ There are a few ways you can check out your existing NSP.
 
 **CLI - oc**
 
-The best and most simple way to view your existing NSP is to use the `oc` command line interface. Run the following command to see installed policy:
+The best and most simple way to view your existing NSP is to use the `oc` command line interface. Run the following command to see installed policies:
 
 ```console
 oc get networksecuritypolicy
@@ -431,5 +455,21 @@ oc delete networksecuritypolicy egress-internet-devex-von-tools -o yaml
 From the Web, again navigate to the NSP and use the "Actions" drop down to select "Delete".
 
 ### Troubleshooting
+
+Check the status of the policy once it was created:
+```
+  oc describe networksecuritypolicy custom-allow-service-accounts-k8s-api-comms-jjrkby-tools
+```
+If the policy was created successfully, the output should look like this:
+```
+Status:
+  Conditions:
+    Last Transition Time:  2019-12-05T18:36:45Z
+    Message:               Running reconciliation
+    Reason:                Running
+    Status:                True
+    Type:                  Running
+Events:                    <none>
+```
 
 See the `Support` section of the main help document [here](./README.md).

@@ -11,8 +11,8 @@ openshift_project_editors:
   - wmhutchison
 aporeto_parent_namespace: /bcgov/platform-services/non-production/kamloops/lab                         #full path for parent namespace
 aporeto_namespace: ocp311                                                                              #single-level value only
-cluster_network: 10.131.0.0/20
-service_network: 10.131.16.0/20
+cluster_network: 10.131.16.0/20 # osm_cluster_network_cidr
+service_network: 10.131.0.0/20  # openshift_portal_net
 host_network: 142.34.217.32/27
 external_cluster_api_endpoint: console.lab.pathfinder.gov.bc.ca
 external_cluster_api_port: 8443
@@ -35,6 +35,7 @@ openshift_project_exclusions:
 - openshift-monitoring
 - "{{ openshift_project_prefix }}-operator"
 - "{{ openshift_project_prefix }}-enforcers"
+apb_external_nfs_host: ociopf-t-350.dmz
 
 # BCGov Operator Details
 bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"

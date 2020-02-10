@@ -1,0 +1,43 @@
+---
+# - name: Get Project data
+#   set_fact:
+#     project_raw: "{{ lookup('k8s', api_version='v1', kind='Project', resource_name=item.metadata.namespace ) }}" 
+# - debug: 
+#     msg: "{{ project_raw }}"
+- name: Get project data
+  set_fact: 
+    project_details: "{{ projects | json_query(\"[] | [?metadata.name == '\"+ item.metadata.namespace +\"' ]\") }}"
+# - debug: 
+#     msg: "{{ project_details }}"
+- name: Evaluate and set git url when http
+  set_fact: 
+    gh_org: "{{ item.spec.source.git.uri.split('/')[3] }}"
+    gh_repo: "{{ item.spec.source.git.uri.split('/')[4] }}"
+  when: item.spec.source.git.uri is match ("http*")
+  ignore_errors: true
+
+- name: Evaluate and set git url when ssh
+  set_fact: 
+    gh_org: "{{ item.spec.source.git.uri.split(':')[1].split('/')[0] }}"
+    gh_repo: "{{ item.spec.source.git.uri.split('/')[1] }}"
+  when: item.spec.source.git.uri is match ("git@*")
+  ignore_errors: true
+
+
+- name: Create dictionary of BuildConfig and Project Details
+  set_fact: 
+    current_dict: 
+      - Project: "{{ item.metadata.namespace }}"
+        BuildConfigName: "{{ item.metadata.name }}"
+        GitHubOrg: "{{ gh_org }}"
+        GitHubRepo: "{{ gh_repo }}"
+        ProductLead: "{{ project_details[0] | json_query(product_lead_query) }}"
+        MinistryLead: "{{ project_details[0] | json_query(ministry_lead_query) }}"
+        MinistryOrg: "{{ project_details[0] | json_query(org_query) }}"
+- name: Add individual dictionary to full dictionary list
+  set_fact: 
+    map: "{{ map|default([]) + current_dict  }}"
+  when: 
+    - item.spec.source.type == "Git"
+#    - item.spec.source.git.uri.find('BCDevOps') != -1 or item.spec.source.git.uri.find('bcgov-c') != -1
+

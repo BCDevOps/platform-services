@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  vars_files: 
+   - vars.yml
+  vars: 
+    ansible_command_timeout: 10
+    current_list: {}
+  tasks: 
+    - name: Get list of projects
+      set_fact:
+        projects: "{{ lookup('k8s', api_version='v1', kind='Project') }}" 
+    - name: Get list of build configs
+      set_fact:
+        build_configs: "{{ lookup('k8s', api_version='v1', kind='BuildConfig') }}" 
+    - name: Create map
+      include_tasks: tasks/create_map.yml
+      with_items: 
+        - "{{ build_configs }}"
+    - name: Create CSV output
+      template: 
+        src: templates/csv_export.csv.j2
+        dest: csv_output.csv
+
+          

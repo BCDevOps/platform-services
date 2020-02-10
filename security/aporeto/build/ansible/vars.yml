@@ -6,5 +6,5 @@ aporeto_user_account: "{{ lookup('env', 'APOCTL_USER')}}"
 aporeto_user_password: "{{ lookup('env', 'APOCTL_PASSWORD')}}"
 aporeto_temp_token: "{{ lookup('env', 'APOCTL_TOKEN')}}"
 aporeto_auth_method: "aporeto"  # Could also be oidc or appcred when this is done
-skip_basic_user_policies: "false"
+skip_basic_user_policies: "true"
 github_deployment_key: "{{ lookup('env', 'GITHUB_DKEY')}}" # base64 encoded private key

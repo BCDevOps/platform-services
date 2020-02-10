@@ -8,8 +8,8 @@ data:
     #### Sysdig Software related config ####
     # Agent Log priority
     log:
-      file_priority: info
-      console_priority: warning
+      # file_priority: info
+       console_priority: info
 
     # Sysdig collector address
     collector: collector-static.sysdigcloud.com
@@ -27,7 +27,7 @@ data:
     new_k8s: true
     k8s_cluster_name: lab-pathfinder
 
-    ### Prometheus
+    ## Prometheus
     prometheus:
       enabled: true
       interval: 30
@@ -88,6 +88,14 @@ data:
                 host: kube-state-metrics.openshift-monitoring.svc
                 port: 8443
                 use_https: true
+                auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
+        - include:
+            process.name: hyperkube
+            conf:
+                port: 10250
+                use_https: true
+                path: /metrics
+                ssl_verify: false
                 auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
         #- include:
         #    kubernetes.pod.label.app: "node-exporter"

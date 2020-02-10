@@ -21,6 +21,7 @@ data:
 {% for ns in openshift_project_exclusions %}
         - - '@app:k8s:namespace={{ ns }}'
 {% endfor %}
+        - - '@app:image=docker-registry.default.svc:5000/openshift/backup-pvc-apb:latest'
       killContainersOnFailure: true
       kubernetesMetadataExtractor: PodAtomic
       kubernetesSupportEnabled: true
