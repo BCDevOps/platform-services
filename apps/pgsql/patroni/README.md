@@ -1,6 +1,9 @@
 # Source & Credit
 Contributed to and copied from https://github.com/zalando/patroni
 
+# Additional Information
+This documentation contains primarily examples on how to get patroni running on our Openshift cluster. For full documentation on Patroni, please see https://patroni.readthedocs.io/en/latest/
+
 # Patroni OpenShift Configuration
 Patroni can be run in OpenShift. Based on the kubernetes configuration, the Dockerfile and Entrypoint has been modified to support the dynamic UID/GID configuration that is applied in OpenShift. This can be run under the standard `restricted` SCC. 
 
