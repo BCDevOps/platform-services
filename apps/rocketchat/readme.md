@@ -150,7 +150,7 @@ You can deploy new rocketchat/mongo pods using the deployment info above or use 
     ```
 3. Pick the backup with timestamp at `/var/data` and copy the restore directory locally.
     ```
-    oc rsync mongo-restore-pod:/var/data/dump-2020-02-10-08:01:25/ ./mongo-rocketdb-bak
+    oc rsync mongo-restore-pod:/var/data/dump-2020-02-18-08:01:18/ ./mongo-rocketdb-bak
     ```
 4. Copy that directory to the destination mongo pod which may be in a different namespace or cluster.
     ```
@@ -171,16 +171,26 @@ You can deploy new rocketchat/mongo pods using the deployment info above or use 
     > # quit the mongo admin portal
     > quit()
 
+    # Setup the mongo replica host:
     export MONGO_REPLICA_HOST=<replica_host>
     export MONGO_REPLICA_URL="mongodb://admin:$MONGODB_ADMIN_PASSWORD@$MONGO_REPLICA_HOST/local?authSource=admin&replicaSet=rs0"
-    mongorestore --uri=$MONGO_REPLICA_URL /tmp/backup --gzip
+    # By default, mongorestore does not overwrite or delete any existing documents. We need to drop the original collection
+    mongorestore --uri=$MONGO_REPLICA_URL /tmp/backup --gzip --drop
     
     ```
 7. If the backup is from another KC instance, then you need to update the configmap for RC with values from the original backup. This includes the admin password for RC and other `OVERWRITE_SETTING_` variables.
+<!-- TODO: consider changing the db user password instead, so that no need to redeploy statefulset -->
+    ```
+    # inside mongodb
+    show dbs
+    use admin
+    show users
+    db.changeUserPassword("admin", "<original_admin_password>")
+    ```
 8. Scale up the rocketchat to test
-```
+    ```
     oc scale --replicas=1 dc rocketchat
-```
+    ```
 9. If all good, bring back the `horizontalpodautoscaler` and scale RC app to the expected replica number
 
 ## Operations
