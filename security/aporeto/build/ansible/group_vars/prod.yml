@@ -1,5 +1,5 @@
 # Aporeto Specific Details
-aporeto_release: 3.12.8
+aporeto_release: 3.13.2
 aporeto_enforcer_memory_limit: '8Gi'
 aporeto_enforcer_cpu_limit: '2'
 openshift_project_prefix: devops-security-aporeto
