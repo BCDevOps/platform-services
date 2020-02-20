@@ -45,6 +45,13 @@ node_list:
   - ociopf-p-198.dmz
   - ociopf-p-199.dmz
   - ociopf-p-200.dmz
+  - ociopf-p-201.dmz
+  - ociopf-p-202.dmz
+  - ociopf-p-203.dmz
+  - ociopf-p-204.dmz
+  - ociopf-p-205.dmz
+  - ociopf-p-206.dmz
+  - ociopf-p-207.dmz
 openshift_project_exclusions: 
 - kube-system
 - openshift-sdn
