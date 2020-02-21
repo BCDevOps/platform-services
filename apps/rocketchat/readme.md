@@ -132,6 +132,7 @@ oc process -f mongodb-backup-template.yaml MONGODB_ADMIN_PASSWORD=adminpass MONG
 ##### Restore Backup
 
 You can deploy new rocketchat/mongo pods using the deployment info above or use an existing rocketchat/mongo deployment to restore a backup into. The pre-req is that there is a mongo db dump directory from a mongodump. If your deploying a new RC deployment it's easiest to deploy the mongo template, restore the db, then deploy the rocket chat template.
+0. enable the RC app local admin user login
 
 1. Scale an existing rocketchat deployment config down to 0. Wait for pods to shutdown and connections to mongo to drop.
     ```
@@ -140,6 +141,9 @@ You can deploy new rocketchat/mongo pods using the deployment info above or use 
     ```
 2. Fire up a pod in the same namespaces of the backup pvc and mount that pvc.
     ```shell
+    # start a job to do a fresh db dump:
+    oc create job --from cronjob/mongodb-backup mongodb-backup-<timestamp>-migration
+
     # Setup the ref for mongo that match the existing
     export MONGO_IMAGE_REF=docker-registry.default.svc:5000/openshift/mongodb:3.6
 
@@ -236,6 +240,8 @@ Some handy commands for managing & inspecting Rocket Chat & MongoDB.
 
 ## Operations
 ---
+See more db admin documentations at ./docs
+
 Some handy commands for managing & inspecting Rocket Chat & MongoDB.
 
 Connect to the mongodb:
