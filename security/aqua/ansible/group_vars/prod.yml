@@ -1,0 +1,79 @@
+openshift_master_default_subdomain: pathfinder.gov.bc.ca
+aqua_common_namespace: devops-security-aqua
+aqua_agent_namespace: devops-security-aqua
+
+aqua_agent_cpu_request: 350m
+aqua_agent_memory_request: 512Mi
+aqua_agent_cpu_limit: 500m
+aqua_agent_memory_limit: 1536Mi
+
+aqua_console_replicas: 2
+aqua_console_worker_pool_size: 10
+aqua_console_pvc_size: 10Gi
+aqua_console_pvc_storage_class: netapp-file-standard
+aqua_console_cpu_request: 2000m
+aqua_console_memory_request: 3Gi
+aqua_console_cpu_limit: 3000m
+aqua_console_memory_limit: 5Gi
+
+aqua_gateway_replicas: 2
+aqua_gateway_cpu_request: 1000m
+aqua_gateway_memory_request: 1Gi
+aqua_gateway_cpu_limit: 1500m
+aqua_gateway_memory_limit: 4Gi
+
+aqua_scanner_replicas: 10
+aqua_scanner_cpu_request: 500m
+aqua_scanner_memory_request: 2Gi
+aqua_scanner_cpu_limit: 800m
+aqua_scanner_memory_limit: 6Gi
+
+aqua_patroni_storage_class: netapp-file-standard
+aqua_patroni_pvc_size: 100Gi
+aqua_audit_patroni_pvc_size: 10Gi
+
+aqua_patroni_cpu_request: 2000m
+aqua_patroni_memory_request: 6Gi
+aqua_patroni_cpu_limit: 10000m
+aqua_patroni_memory_limit: 30Gi
+
+
+# Nodes that Agents/Enforcers should be enabled on
+node_list: 
+  - ociopf-d-100.dmz
+  - ociopf-d-101.dmz
+  - ociopf-d-102.dmz
+  - ociopf-p-160.dmz
+  - ociopf-p-161.dmz
+  - ociopf-p-162.dmz
+  - ociopf-p-163.dmz
+  - ociopf-p-170.dmz
+  - ociopf-p-171.dmz
+  - ociopf-p-180.dmz
+  - ociopf-p-181.dmz
+  - ociopf-p-182.dmz
+  - ociopf-p-183.dmz
+  - ociopf-p-184.dmz
+  - ociopf-p-185.dmz
+  - ociopf-p-186.dmz
+  - ociopf-p-187.dmz
+  - ociopf-p-188.dmz
+  - ociopf-p-189.dmz
+  - ociopf-p-190.dmz
+  - ociopf-p-191.dmz
+  - ociopf-p-192.dmz
+  - ociopf-p-193.dmz
+  - ociopf-p-194.dmz
+  - ociopf-p-195.dmz
+  - ociopf-p-196.dmz
+  - ociopf-p-197.dmz
+  - ociopf-p-198.dmz
+  - ociopf-p-199.dmz
+  - ociopf-p-200.dmz
+  - ociopf-p-201.dmz
+  - ociopf-p-202.dmz
+  - ociopf-p-203.dmz
+  - ociopf-p-204.dmz
+  - ociopf-p-205.dmz
+  - ociopf-p-206.dmz
+  - ociopf-p-207.dmz
