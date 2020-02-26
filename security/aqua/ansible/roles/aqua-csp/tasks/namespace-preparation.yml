@@ -18,6 +18,14 @@
     when: 
       - aqua_state == 'present'
       - not manage_namespace | bool
+
+  - name: "Add OpenShift editor roles to {{ namespace }} namespace"
+    command:
+      "oc policy add-role-to-user edit {{ item }} -n {{ namespace }}"
+    loop: "{{ openshift_project_editors }}"
+    when:
+      - aqua_state == 'present'
+      - namespace == aqua_common_namespace
   
   - name: 'Patch {{ namespace }} node-selector - region=infra'
     command: |

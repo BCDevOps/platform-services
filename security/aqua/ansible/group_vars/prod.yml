@@ -1,4 +1,10 @@
 openshift_master_default_subdomain: pathfinder.gov.bc.ca
+openshift_project_editors:
+  - jleach
+  - sstewart
+  - j-pye
+  - sbarre-esit
+  - wmhutchison
 aqua_common_namespace: devops-security-aqua
 aqua_agent_namespace: devops-security-aqua
 
