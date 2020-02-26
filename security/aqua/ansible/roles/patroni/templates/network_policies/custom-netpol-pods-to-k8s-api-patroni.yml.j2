@@ -3,7 +3,7 @@
 apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
-  name: custom-pods-to-k8s-api-{{ patroni_name }}{{ patroni_suffix }}
+  name: pods-to-k8s-api-{{ patroni_name }}{{ patroni_suffix }}
 spec:
   description: |
     Allow {{ patroni_name }}{{ patroni_suffix }} pods to talk to the k8s api
