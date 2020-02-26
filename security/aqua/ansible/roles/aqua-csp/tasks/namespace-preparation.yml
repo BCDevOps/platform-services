@@ -20,8 +20,8 @@
       - not manage_namespace | bool
 
   - name: "Add OpenShift editor roles to {{ namespace }} namespace"
-    command:
-      "oc policy add-role-to-user edit {{ item }} -n {{ namespace }}"
+    command: |
+      oc policy add-role-to-user edit {{ item }} -n {{ namespace }}
     loop: "{{ openshift_project_editors }}"
     when:
       - aqua_state == 'present'
@@ -58,7 +58,7 @@
       state: '{{ aqua_state }}'
 
   - name: Create aqua-registry Secret
-    command: "oc create secret docker-registry aqua-registry --docker-server={{ aqua_registry_host }} --docker-username={{ aqua_registry_user }} --docker-password={{ aqua_registry_password }} --docker-email={{ aqua_registry_user }} -n {{ namespace }}"
+    command: 'oc create secret docker-registry aqua-registry --docker-server={{ aqua_registry_host }} --docker-username={{ aqua_registry_user }} --docker-password={{ aqua_registry_password }} --docker-email={{ aqua_registry_user }} -n {{ namespace }}'
     when: 
       - aqua_state == 'present'
       - not (lookup('k8s', kind='Secret', namespace=namespace ,resource_name='aqua-registry') | length > 0)
