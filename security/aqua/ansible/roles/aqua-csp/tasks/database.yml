@@ -14,6 +14,7 @@
       patroni_memory_request: '{{ aqua_patroni_memory_request }}'
       patroni_memory_limit: '{{ aqua_patroni_memory_limit }}'
       patroni_pvc_size: '{{ item.pvc_size }}'
+      patroni_storage_class: '{{ aqua_patroni_storage_class }}'
     loop:
       - name: '{{ aqua_patroni_name }}'
         db_name: '{{ aqua_patroni_db_name }}'
