@@ -6,21 +6,20 @@
       with_items: 
         - "{{ node_list }}"
       ignore_errors: true
-    - name: Add the helm repo
-      command: "helm repo add {{ helm_repo_name }} {{ aporeto_repo }}"
 
-    - name: Fetch helm charts for enforcers
-      command: "helm fetch aporeto/enforcerd"
-    - name: Use Helm Template to delete OpenShift Objects
-      shell: "helm template enforcerd-*.tgz \
-      --namespace {{ openshift_project_prefix }}-enforcers \
-      | oc delete -f - -n {{ openshift_project_prefix }}-enforcers "
-      ignore_errors: true
+    - name: Remove Aporeto Enforcers from OpenShift
+      k8s:
+        namespace: '{{ openshift_project_prefix }}-enforcers'
+        src: 'output/{{ item }}'
+        state: absent
+      loop:
+        - enforcerd_rbac.yml
+        - enforcerd_ds.yml
+        - enforcerd_infra_ds.yml
 
     - name: Disable Aporeto operator syncing
       command: "oc annotate namespace {{ openshift_project_prefix }}-enforcers aporeto.io/disable-aporeto-ctrls='true' --overwrite"
       ignore_errors: true
-
 
     - name: Remove all custom resources created by the Aporeto Operator
       shell: "for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc delete $crd -n {{ openshift_project_prefix }}-enforcers --all ; done"
@@ -44,22 +43,25 @@
       shell: "kubectl delete -f files/bcgov-networksecuritypolicy-operator/crds/definition.yaml"
       ignore_errors: true         #errors show up even though the resources are removed successfully
 
+    - name: Add the helm repo
+      command: "helm repo add {{ helm_repo_name }} {{ aporeto_repo }}"
+
     - name: Fetch helm charts for aporeto-operator
       command: "helm fetch aporeto/aporeto-operator"
+
     - name: Use Helm Template to delete OpenShift Objects
       shell: "helm template aporeto-operator-*.tgz \
         --name aporeto-operator \
         --namespace {{ openshift_project_prefix }}-operator --set options.baseNamespace={{ openshift_project_prefix }}-enforcers \
         | oc delete -f - -n {{ openshift_project_prefix }}-operator"
       ignore_errors: true
-
   
     - name: Fetch helm charts for aporeto-crds
       command: "helm fetch aporeto/aporeto-crds"
+
     - name: Use Helm Template to delete OpenShift Objects
       shell: "helm template aporeto-crds-*.tgz | oc delete -f - "
       ignore_errors: true
 
     - name: Remove OpenShift Projects
       command: "oc delete project {{ openshift_project_prefix }}-enforcers {{ openshift_project_prefix }}-operator"
-
