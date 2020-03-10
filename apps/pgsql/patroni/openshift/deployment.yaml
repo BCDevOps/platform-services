@@ -293,7 +293,7 @@ parameters:
   name: PVC_SIZE
   value: 1Gi
 - name: STORAGE_CLASS
-  value: gluster-block
+  value: netapp-file-standard
 - name: IMAGE_REGISTRY
   #docker-registry.default.svc:5000
   value: docker-registry.default.svc:5000
