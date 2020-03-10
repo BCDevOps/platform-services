@@ -211,6 +211,11 @@ objects:
                     secretKeyRef:
                       key: admin-password
                       name: "${MONGODB_SERVICE_NAME}"
+                - name: MONGO_OPLOG_URL
+                  valueFrom:
+                    secretKeyRef:
+                      key: mongo-oplog-url
+                      name: "${MONGODB_SECRET_NAME}"
                 - name: MONGODB_REPLICA_NAME
                   valueFrom:
                     secretKeyRef:
