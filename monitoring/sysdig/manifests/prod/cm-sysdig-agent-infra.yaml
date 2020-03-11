@@ -13,13 +13,13 @@ data:
 
     # Watchdog config (prod only)
     watchdog:
-      max_memory_usage_mb: 1024
+      max_memory_usage_mb: 2048
       max_memory_usage_subprocesses:
         sdchecks: 128
         sdjagent: 256
         mountedfs_reader: 32
         statsite_forwarder: 32
-        cointerface: 1024
+        cointerface: 2048
 
     # Sysdig collector address
     collector: collector-static.sysdigcloud.com
