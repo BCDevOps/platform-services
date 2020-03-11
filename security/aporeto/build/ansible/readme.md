@@ -68,8 +68,9 @@ The Ansible playbook accepts a few switches:
 - **activity=apply_policies**
     - applies all base policies that are required for OpenShift components to function
 
+<!--  NOTE: This function is moving to the management playbook; 
 - **activity=update_enforcer_profile**
-    - renders the templates again and only applies the enforcer profile
+    - renders the templates again and only applies the enforcer profile -->
 
 - **activity=bcgov-operator-install**
     - only installs the bcgov networksecuritypolicy operator
@@ -117,9 +118,9 @@ ansible-playbook -i lab aporeto.yml -e activity=install
 3. namespace_preparation.yml
     - Create *Enforcer* and *Operator* OpenShift Projects
     - Create OpenShift service accounts with appropriate privileges
-    - Create Aporeto Namespace in the Aporeto control plane
-    - Create and Import the OpenShift enforcer profile and mapping into Aporeto
-      - The enforcer profiles also specify projects that can be **ignored** by Aporeto. This list is maintained in the group_vars file. 
+    - Create Aporeto Namespace in the Aporeto control plane (Note: Profiles are now managed with the private aporeto mangaement playbook)
+    <!-- - Create and Import the OpenShift enforcer profile and mapping into Aporeto -->
+      <!-- - The enforcer profiles also specify projects that can be **ignored** by Aporeto. This list is maintained in the group_vars file.  -->
     - Create App Credentials for enforcer and aporeto-operator
 
 4. install_aporeto_operator.yml

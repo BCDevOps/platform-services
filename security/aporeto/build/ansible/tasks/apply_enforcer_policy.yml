@@ -1,10 +1,12 @@
-- name: Create base enforcer profiles and policies 
-  block: 
-    - name: Import OpenShift profile & mapping
-      shell: 
-        apoctl api import --file output/profiles/openshift-default-profile.yml --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
 
-    - name: Import OpenShift Profile Mapping
-      shell: > 
-        apoctl api import --file output/profiles/openshift-default-profile-mapping.yml --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
-  ignore_errors: true
+## This is being commented out and is handled by the aporeto management playbook
+# - name: Create base enforcer profiles and policies 
+#   block: 
+#     - name: Import OpenShift profile & mapping
+#       shell: 
+#         apoctl api import --file output/profiles/openshift-default-profile.yml --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
+
+#     - name: Import OpenShift Profile Mapping
+#       shell: > 
+#         apoctl api import --file output/profiles/openshift-default-profile-mapping.yml --namespace="{{ aporeto_parent_namespace }}/{{ aporeto_namespace }}" --token="{{ aporeto_temp_token }}"
+#   ignore_errors: true
