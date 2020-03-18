@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  name: "rocketchat-config-pipeline"
+spec:
+  strategy:
+    jenkinsPipelineStrategy:
+      jenkinsfile: |-
+        pipeline {
+            agent any
+            stages {
+                stage('Input') {
+                    steps {
+                        script {
+                            def userInput = input(
+                                id: 'userInput', message: 'Enter name of environment to deploy and prefix of your environment',
+                                parameters: [
+                                    choice(choices: ['dev', 'prod', 'test'], description: '', name: 'environ'),
+                                    string(defaultValue: 'a5bcde', description: '', name: 'prefix', trim: false),
+                                ])
+                            project = userInput.prefix+"-"+userInput.environ
+                            environment = userInput.environ
+                            echo("Updating Rocket Chat config in: ${project}")
+                        }
+                    }
+                }
+                stage('Checkout') {
+                    steps {
+                        git branch: 'rc-work', url: 'https://github.com/BCDevOps/platform-services'
+                    }
+                }
+                stage('Config') {
+                    steps {
+                        sh "oc process -f apps/rocketchat/template-rocketchat.yaml --param-file=apps/rocketchat/${environment}.env --ignore-unknown-parameters=true --local -o yaml | oc apply -n ${project} -f -"
+                        sh "oc rollout latest dc/rocketchat"
+                    }    
+                }
+                stage ('Wait RC Ready') {
+                    steps {
+                        script {
+                            sh '''
+                            while [[ "$(curl -s -o /dev/null -w %{http_code} https://$(oc -n ${project} get route rocketchat | grep gov.bc | awk '{printf $2}')/api/info)" != "200" ]]; do sleep 5; done"
+                            '''
+                        }
+                    }
+                }
+            }
+        }

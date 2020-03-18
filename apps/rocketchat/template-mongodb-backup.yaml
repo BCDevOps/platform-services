@@ -14,7 +14,7 @@ parameters:
     value: '1 0 * * *'
   - name: MONGODB_BACKUP_VOLUME_CLAIM
     description: 'Name of the volume claim to be used as storage'
-    value: ''
+    value: 'mongodb-backup'
   - name: MONGODB_ADMIN_PASSWORD
     description: 'MongoDB admin user''s password. Required.'
 objects:

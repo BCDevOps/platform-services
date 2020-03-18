@@ -3,7 +3,7 @@ apiVersion: v1
 metadata:
   name: rocket-chat
   annotations:
-    description: "Rocket.Chat with a MongoDB database running as replicate set"
+    description: "Rocket.Chat Deployment"
     iconClass: "icon-nodejs"
     tags: "nodejs,mongodb,replication,instant-app"
 
@@ -14,16 +14,35 @@ parameters:
     required: true
     value: rocketchat
 
+  - name: ROCKETCHAT_IMAGE
+    description: Location of the RocketChat Image
+    displayName: RocketChat Image
+    value: registry.hub.docker.com/library/rocket.chat
+    required: true
+
+  - name: ROCKETCHAT_IMAGE_NAME
+    description: Location of the RocketChat Image
+    displayName: RocketChat Image
+    value: "rocket.chat"
+    required: true
+
+  # specify the version
+  - name: ROCKETCHAT_IMAGE_TAG
+    description: Name of the RocketChat tag that should be used
+    displayName: RocketChat Tag
+    value: "2.4.1"
+    required: true
+
   - name: FILE_UPLOAD_STORAGE_SIZE
     description: The size of storage to allocate for file uploads to RocketChat
     displayName: File Upload Storage Size
     required: true
 
+  # specify the storage class
   - name: SC_FILE_UPLOAD
     description: The Storage Class for the RocketChat uploads volume
     displayName: File Uploads Storage Class 
     required: true
-    value: "gluster-file"
 
   - name: HOSTNAME_HTTPS
     description: Hostname serving the application
@@ -35,18 +54,6 @@ parameters:
     description: "Password for the RocketChat admin user."
     generate: expression
     from: "[a-zA-Z0-9]{16}"
-    required: true
-
-  - name: ROCKETCHAT_IMAGE_REGISTRY
-    description: Location of the RocketChat Image
-    displayName: RocketChat Image
-    value: docker.io/library/rocket.chat
-    required: true
-  
-  - name: ROCKETCHAT_IMAGE_TAG
-    description: Name of the RocketChat tag that should be used
-    displayName: RocketChat Tag
-    value: "latest"
     required: true
 
   - name: ROCKETCHAT_REPLICAS
@@ -63,19 +70,7 @@ parameters:
     description: Max Number of RocketChat pods for HPA
     displayName: RocketChat Max HPA
     required: true
-
-  - name: MONGODB_REPLICAS
-    description: Number of MongoDB replica pods
-    displayName: MongoDB Replicas
-    value: "3"
-    required: true
   
-  - name: MONGODB_SERVICE_NAME
-    description: Name of the MongoDB Service
-    displayName: MongoDB Service Name
-    value: "mongodb"
-    required: true
-
   - name: MEMORY_REQUEST
     description: Amount of Memory to Request.
     displayName: Memory Request
@@ -100,64 +95,6 @@ parameters:
     displayName: MongoDB Secret.
     description: Name of the Secret containing MongoDB Assets
     value: "mongodb"
-    required: true
-    
-  - name: MONGODB_USER
-    displayName: "MongoDB Connection Username"
-    description: "Username for MongoDB user that will be used for accessing the database."
-    generate: expression
-    from: "[a-zA-Z0-9]{5}"
-    required: true
-
-  - name: MONGODB_PASSWORD
-    displayName: "MongoDB Connection Password"
-    description: "Password for the MongoDB connection user."
-    generate: expression
-    from: "[a-zA-Z0-9]{16}"
-    required: true
-
-  - name: MONGODB_DATABASE
-    displayName: "MongoDB Database Name"
-    description: "Name of the MongoDB database accessed."
-    value: rocketdb
-    required: true
-
-  - name: MONGODB_ADMIN_PASSWORD
-    displayName: "MongoDB Admin Password"
-    description: "Password for the database admin user."
-    generate: expression
-    from: "[a-zA-Z0-9]{16}"
-    required: true
-
-  - name: MONGODB_REPLICA_NAME
-    displayName: "Replica Set Name"
-    description: "The name of the replica set."
-    value: rs0
-    required: true
-
-  - name: MONGODB_KEYFILE_VALUE
-    displayName: "Keyfile Content"
-    description: "The value of the MongoDB keyfile (https://docs.mongodb.com/manual/core/security-internal-authentication/#internal-auth-keyfile)."
-    generate: expression
-    from: "[a-zA-Z0-9]{255}"
-    required: true
-
-  - name: MONGODB_IMAGE
-    displayName: "MongoDB Docker Image"
-    description: "A reference to a supported MongoDB Docker image."
-    value: "docker-registry.default.svc:5000/openshift/mongodb:latest"
-    required: true
-
-  - name: VOLUME_CAPACITY
-    displayName: "Volume Capacity for MongoDB"
-    description: "Volume space available for data, e.g. 512Mi, 2Gi."
-    required: true
-
-  - name: SC_MONGO
-    description: The Storage Class for the MongoDB
-    displayName: Storage Class for MongoDB
-    required: true
-    value: "gluster-file"
 
 # Rocket Chat Environment Variables
   - name: FILEUPLOAD_ENABLED
@@ -183,20 +120,28 @@ parameters:
   - name: ACCOUNTS_SHOWFORMLOGIN
   - name: ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING
   - name: ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE
-  - name: ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_BUTTON_LABEL_TEXT
-  - name: MESSAGE_ALLOWSNIPPETING
 
 objects:
+# Keep an istag in each namespace as no build is needed
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      labels:
+        app: ${APPLICATION_NAME}
+      name: ${ROCKETCHAT_IMAGE_NAME}
+    spec:
+      lookupPolicy:
+        local: false
+      tags:
+      - annotations: null
+        from:
+          kind: DockerImage
+          name: ${ROCKETCHAT_IMAGE}:${ROCKETCHAT_IMAGE_TAG}
+        importPolicy: {}
+        name: "${ROCKETCHAT_IMAGE_TAG}"
+        referencePolicy:
+          type: Source
+
   - apiVersion: v1
     kind: ConfigMap
     metadata:
@@ -231,24 +176,12 @@ objects:
       OVERWRITE_SETTING_Accounts_RegistrationForm: "${ACCOUNTS_REGISTRATIONFORM}"
       OVERWRITE_SETTING_Accounts_AllowRealNameChange: "${ACCOUNTS_ALLOWREALNAMECHANGE}"
       OVERWRITE_SETTING_Accounts_AllowPasswordChange: "${ACCOUNTS_ALLOWPASSWORDCHANGE}"
-      Accounts_ShowFormLogin: "${ACCOUNTS_SHOWFORMLOGIN}"
+      OVERWRITE_SETTING_Accounts_ShowFormLogin: "${ACCOUNTS_SHOWFORMLOGIN}"
       OVERWRITE_SETTING_Accounts_Send_Email_When_Activating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
-      OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_ACTIVATING}"
-      #Custom OAuth
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-url: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_URL}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_PATH}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_TOKEN_SENT_VIA}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_token_sent_via: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_TOKEN_SENT_VIA}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-identity_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_IDENTITY_PATH}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-authorize_path: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_AUTHORIZE_PATH}" 
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-id: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_ID}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-secret: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_SECRET}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-login_style: "${ACCOUNTS_OAUTH_CUSTOM_KEYCLOAK_LOGIN_STYLE}"
-      OVERWRITE_SETTING_Accounts_OAuth_Custom-Keycloak-button_label_text: "${MESSAGE_ALLOWSNIPPETING}"
+      OVERWRITE_SETTING_Accounts_Send_Email_When_Deactivating: "${ACCOUNTS_SEND_EMAIL_WHEN_DEACTIVATING}"
       # Messaging Settings
       OVERWRITE_SETTING_Message_AllowSnippeting: "True"
-      
+
       ## Rooms
       # DevOps Alerts
       # Random - Default
@@ -263,18 +196,11 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: ${MONGODB_SERVICE_NAME}
-      labels:
-        name: "${MONGODB_SERVICE_NAME}"
+      annotations:
+        as-copy-of: "template.rocketchat-config-secret"
+      name: rocketchat-config-secret
     stringData:
-      username: "${MONGODB_USER}"
-      password: "${MONGODB_PASSWORD}"
-      admin-username: "admin"
-      admin-password: "${MONGODB_ADMIN_PASSWORD}"
-      database: "${MONGODB_DATABASE}"
-      replica-name: "${MONGODB_REPLICA_NAME}"
-      mongo-url: "mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/${MONGODB_DATABASE}?replicaSet=${MONGODB_REPLICA_NAME}"
-      mongo-oplog-url: "mongodb://admin:${MONGODB_ADMIN_PASSWORD}@${MONGODB_SERVICE_NAME}:27017/local?authSource=admin&replicaSet=${MONGODB_REPLICA_NAME}"
+      CONTENT: placeholder for content from template.rocketchat-config-secret
 
   # Service for the Rocketchat NodeJS service
   - apiVersion: v1
@@ -313,119 +239,6 @@ objects:
         termination: edge
         insecureEdgeTerminationPolicy: Redirect
 
-  # A non-headless service which takes pod readiness into consideration
-  - kind: Service
-    apiVersion: v1
-    metadata:
-      name: "${MONGODB_SERVICE_NAME}"
-      labels:
-        name: "${MONGODB_SERVICE_NAME}"
-    spec:
-      ports:
-        - name: mongodb
-          port: 27017
-      selector:
-        name: "${MONGODB_SERVICE_NAME}"
-
-  # A headless service to create DNS records
-  - kind: Service
-    apiVersion: v1
-    metadata:
-      name: "${MONGODB_SERVICE_NAME}-internal"
-      labels:
-        name: "${MONGODB_SERVICE_NAME}"
-      annotations:
-        service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
-    spec:    
-      clusterIP: None
-      ports:
-        - name: mongodb
-          port: 27017
-      selector:
-        name: "${MONGODB_SERVICE_NAME}"
-
-  - kind: StatefulSet
-    apiVersion: apps/v1beta1
-    metadata:
-      name: "${MONGODB_SERVICE_NAME}"
-    spec:
-      serviceName: "${MONGODB_SERVICE_NAME}-internal"
-      replicas: "${MONGODB_REPLICAS}"
-      template:
-        metadata:
-          labels:
-            name: "${MONGODB_SERVICE_NAME}"
-        spec:
-          affinity:
-            podAntiAffinity:
-              requiredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                  - key: name
-                    operator: In
-                    values: 
-                    - ${MONGODB_SERVICE_NAME}
-                topologyKey: "kubernetes.io/hostname"
-          containers:
-            - name: mongo-container
-              image: "${MONGODB_IMAGE}"
-              ports:
-                - containerPort: 27017
-              args:
-                - "run-mongod-replication"
-              volumeMounts:
-                - name: mongo-data
-                  mountPath: "/var/lib/mongodb/data"
-              env:
-                - name: MONGODB_USER
-                  valueFrom:
-                    secretKeyRef:
-                      key: username
-                      name: "${MONGODB_SERVICE_NAME}"
-                - name: MONGODB_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: password
-                      name: "${MONGODB_SERVICE_NAME}"
-                - name: MONGODB_DATABASE
-                  valueFrom:
-                    secretKeyRef:
-                      key: database
-                      name: "${MONGODB_SERVICE_NAME}"
-                - name: MONGODB_ADMIN_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: admin-password
-                      name: "${MONGODB_SERVICE_NAME}"
-                - name: MONGODB_REPLICA_NAME
-                  valueFrom:
-                    secretKeyRef:
-                      key: replica-name
-                      name: "${MONGODB_SERVICE_NAME}"
-                - name: MONGODB_KEYFILE_VALUE
-                  value: "${MONGODB_KEYFILE_VALUE}"
-                - name: MONGODB_SERVICE_NAME
-                  value: "${MONGODB_SERVICE_NAME}-internal"
-              resources:
-                limits:
-                  memory: "${MEMORY_LIMIT}"
-              readinessProbe:
-                exec:
-                  command:
-                    - stat
-                    - /tmp/initialized
-      volumeClaimTemplates:
-        - metadata:
-            name: mongo-data
-            labels:
-              name: "${MONGODB_SERVICE_NAME}"
-          spec:
-            accessModes: [ ReadWriteOnce ]
-            storageClassName: "${SC_MONGO}"
-            resources:
-              requests:
-                storage: "${VOLUME_CAPACITY}"
-
   - kind: PersistentVolumeClaim
     apiVersion: v1
     metadata:
@@ -447,13 +260,8 @@ objects:
       name: ${APPLICATION_NAME}
     spec:
       strategy:
-        type: Rolling
-        rollingParams:
-          updatePeriodSeconds: 1
-          intervalSeconds: 1
-          timeoutSeconds: 600
-          maxSurge: "25%"
-          maxUnavailable: "25%"
+        type: Recreate
+        # TODO: redirect the route to Static pages in pre hook?
       triggers:
       - type: ConfigChange
       replicas: "${ROCKETCHAT_REPLICAS}"
@@ -495,8 +303,9 @@ objects:
             envFrom: 
               - configMapRef:
                   name: rocketchat-config
-            image: "${ROCKETCHAT_IMAGE_REGISTRY}:${ROCKETCHAT_IMAGE_TAG}"
-            imagePullPolicy: Always
+              - secretRef:
+                  name: rocketchat-config-secret
+            image: "${ROCKETCHAT_IMAGE_NAME}:${ROCKETCHAT_IMAGE_TAG}"
             volumeMounts:
               - name: rocketchat-uploads
                 mountPath: /app/uploads
@@ -507,20 +316,20 @@ objects:
             terminationMessagePath: /dev/termination-log
             livenessProbe:
               httpGet:
-                path: /api/v1/info
+                path: /api/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 60
+              initialDelaySeconds: 120
               timeoutSeconds: 5
               periodSeconds: 20
               successThreshold: 1
               failureThreshold: 3
             readinessProbe:
               httpGet:
-                path: /api/v1/info
+                path: /api/info
                 port: 3000
                 scheme: HTTP
-              initialDelaySeconds: 60
+              initialDelaySeconds: 120
               timeoutSeconds: 5
               periodSeconds: 20
               successThreshold: 1
@@ -534,7 +343,6 @@ objects:
                 cpu: "${CPU_REQUEST}"
           restartPolicy: Always
           terminationGracePeriodSeconds: 30
-    status: {}
 
   - apiVersion: autoscaling/v1
     kind: HorizontalPodAutoscaler
