@@ -33,6 +33,9 @@ data:
     # collector certificate validation
     ssl_verify_certificate: true
 
+    # Sysdig Case 00005175
+    reconnect_max_backoff: 8
+
     #######################################
     new_k8s: true
     k8s_cluster_name: pathfinder
