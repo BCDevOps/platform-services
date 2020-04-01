@@ -113,7 +113,7 @@ objects:
   - apiVersion: v1
     kind: Secret
     metadata:
-      name: ${MONGODB_SERVICE_NAME}
+      name: ${MONGODB_SECRET_NAME}
       labels:
         name: "${MONGODB_SERVICE_NAME}"
     stringData:
@@ -195,22 +195,22 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       key: username
-                      name: "${MONGODB_SERVICE_NAME}"
+                      name: "${MONGODB_SECRET_NAME}"
                 - name: MONGODB_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: password
-                      name: "${MONGODB_SERVICE_NAME}"
+                      name: "${MONGODB_SECRET_NAME}"
                 - name: MONGODB_DATABASE
                   valueFrom:
                     secretKeyRef:
                       key: database
-                      name: "${MONGODB_SERVICE_NAME}"
+                      name: "${MONGODB_SECRET_NAME}"
                 - name: MONGODB_ADMIN_PASSWORD
                   valueFrom:
                     secretKeyRef:
                       key: admin-password
-                      name: "${MONGODB_SERVICE_NAME}"
+                      name: "${MONGODB_SECRET_NAME}"
                 - name: MONGO_OPLOG_URL
                   valueFrom:
                     secretKeyRef:
@@ -220,7 +220,7 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       key: replica-name
-                      name: "${MONGODB_SERVICE_NAME}"
+                      name: "${MONGODB_SECRET_NAME}"
                 - name: MONGODB_KEYFILE_VALUE
                   value: "${MONGODB_KEYFILE_VALUE}"
                 - name: MONGODB_SERVICE_NAME
