@@ -3,14 +3,32 @@
 ## Purpose
 This ansible utility will query all build configs with an OpenShift environment and map out the associated git repos details and metadata that is tied to an OpenShift project. 
 
+### Prerequisite
+- install ansible
+    ```shell
+    # check python version:
+    python3 --version
+    pip3 --version
+    # ansible
+    pip3 install ansible
+    # Verify the py version used by ansible:
+    ansible --version
+    ```
+
+- install packages included in requirements.txt
+    ```shell
+    sudo pip3 install --user --force-reinstall -r requirements.txt
+    ```
 
 ### Usage
 
 Run the following playbook while logged into an OpenShift cluster with `cluster-reader` access. 
 
+```shell
+# include -vvv for debugging mode
+ansible-playbook repo-mapper.yml
 ```
-ansible-playbook  repo-mapper.yml
-```
+
 ### Duration
 The current run time against the prod Pathfinder cluster is about 35mins. 
 
