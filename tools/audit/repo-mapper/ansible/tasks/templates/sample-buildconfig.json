@@ -1,0 +1,67 @@
+{
+    "apiVersion": "build.openshift.io/v1",
+    "kind": "BuildConfig",
+    "metadata": {
+        "annotations": {
+            "kubectl.kubernetes.io/last-applied-configuration": ""
+        },
+        "creationTimestamp": "2020-04-09T19:51:24Z",
+        "labels": {
+            "app": "ansible-repo-mapper"
+        },
+        "name": "ansible-repo-mapper",
+        "namespace": "xxx"
+    },
+    "spec": {
+        "failedBuildsHistoryLimit": 5,
+        "nodeSelector": null,
+        "output": {
+            "to": {
+                "kind": "ImageStreamTag",
+                "name": "ansible-repo-mapper:v1.0"
+            }
+        },
+        "postCommit": {},
+        "resources": {
+            "limits": {
+                "cpu": "1"
+            },
+            "requests": {
+                "cpu": "1"
+            }
+        },
+        "runPolicy": "Serial",
+        "source": {
+            "contextDir": "tools/audit/repo-mapper",
+            "git": {
+                "ref": "master",
+                "uri": "https://github.com/BCDevOps/platform-services.git"
+            },
+            "type": "Git"
+        },
+        "strategy": {
+            "dockerStrategy": {
+                "from": {
+                    "kind": "ImageStreamTag",
+                    "name": "ansible-operator:v0.15.2"
+                }
+            },
+            "type": "Docker"
+        },
+        "successfulBuildsHistoryLimit": 5,
+        "triggers": [
+            {
+                "type": "ConfigChange"
+            },
+            {
+                "imageChange": {
+                    "lastTriggeredImageID": "quay.io/operator-framework/ansible-operator@sha256:3b9fdeeb24af3e474bf210292579ef8a0e84d36e3d6453e9ff0c105367681714"
+                },
+                "type": "ImageChange"
+            }
+        ]
+    },
+    "status": {
+        "lastVersion": 5
+    }
+}
