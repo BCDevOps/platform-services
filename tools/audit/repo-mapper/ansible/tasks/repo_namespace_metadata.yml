@@ -12,4 +12,5 @@
 - name: Create CSV output
   template: 
     src: templates/repo_namespace_metadata.csv.j2
-    dest: output/repo_namespace_metadata.csv
+    dest: "{{ output_dir }}/repo_namespace_metadata.csv"
+    

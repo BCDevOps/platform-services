@@ -5,3 +5,6 @@ product_lead_query: metadata.annotations."product-lead"
 product_owner_query: metadata.annotations."product-owner"
 org_query: metadata.labels.bus_org_code
 unit_query: metadata.labels.bus_org_unit_code  
+
+## Settings
+output_dir: /tmp

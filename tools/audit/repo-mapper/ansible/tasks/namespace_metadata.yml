@@ -9,5 +9,4 @@
 - name: Create CSV output
   template: 
     src: templates/namespace_metadata.csv.j2
-    dest: output/namespace_metadata.csv
-
+    dest: "{{ output_dir }}/namespace_metadata.csv"
