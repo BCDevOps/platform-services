@@ -1,4 +1,4 @@
 Project, Product Name, Product Lead, Ministry Organization Code
-{% for n in map%}
+{% for n in project_metadata%}
 {{ n.Project }},{{ n.Product }},{{ n.ProductLead }},{{ n.ProductOwner }},{{ n.OrgCode }}-{{ n.UnitCode }}
 {% endfor %}
