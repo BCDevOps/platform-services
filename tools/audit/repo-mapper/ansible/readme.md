@@ -9,7 +9,7 @@ This ansible utility will query all build configs with an OpenShift environment 
     # check python version:
     python3 --version
     pip3 --version
-    # ansible
+    # Ansible
     pip3 install ansible
     # Verify the py version used by ansible:
     ansible --version
@@ -21,8 +21,7 @@ This ansible utility will query all build configs with an OpenShift environment 
     ```
 
 ### Usage
-
-Run the following playbook while logged into an OpenShift cluster with `cluster-reader` access. 
+*Note:* Run the following playbook while logged into an OpenShift cluster with `cluster-reader` access. 
 
 ```shell
 # include -vvv for debugging mode
@@ -30,12 +29,12 @@ Run the following playbook while logged into an OpenShift cluster with `cluster-
 # List standard namespace metadata:
 ansible-playbook repo-mapper.yml
 
-# List all GitHub repo us
+# List all GitHub repo used for builds on OpenShift
 ansible-playbook repo-mapper.yml -e map_repo=True
 ```
 
 ### Duration
-The current run time against the prod Pathfinder cluster is about 35mins. 
+Standard list of namespace would not take long. However, if you are also outputing all relevant GitHub repos, then the current run time against the prod Pathfinder cluster is about 35mins.
 
 ### Objects
 All data is collected into a dictionary object and can be used to create an export file or to push data into an external system. The object structure looks as follows: 
@@ -57,127 +56,12 @@ Additional labels can be added to the query as necessary. See `vars.yml` and `ta
 
 ### Output
 This utility currently generates a CSV output file. This can be extended as needed. 
-The template `templates/csv_output.csv.j2` can be modified to include additional fields. 
+The template `tasks/templates/repo_namespace_metadata.csv.j2` can be modified to include additional fields. 
 
 ### Possible Improvements
 ~~We could likely load in all project data in a single API call to speed this up.~~
+<!-- todo: combining the repo search to project query -->
 
-## JSON Lookup Reference
-
-#### Projects
-Sample Project Lookup 
-```
-    "msg": {
-        "apiVersion": "v1",
-        "kind": "Project",
-        "metadata": {
-            "annotations": {
-                "openshift.io/description": "",
-                "openshift.io/display-name": "",
-                "openshift.io/requester": "stewartshea",
-                "openshift.io/sa.scc.mcs": "s0:c28,c17",
-                "openshift.io/sa.scc.supplemental-groups": "1000790000/10000",
-                "openshift.io/sa.scc.uid-range": "1000790000/10000",
-                "product-lead": "shea.stewart@arctiq.ca"
-            },
-            "creationTimestamp": "2019-12-02T21:08:31Z",
-            "labels": {
-                "project_type": "user"
-            },
-            "name": "aaa-label-test",
-            "resourceVersion": "470395469",
-            "selfLink": "/oapi/v1/projects/aaa-label-test",
-            "uid": "e4d71aee-1547-11ea-ab8b-00505683c9cc"
-        },
-        "spec": {
-            "finalizers": [
-                "kubernetes"
-            ]
-        },
-        "status": {
-            "phase": "Active"
-        }
-    }
-}
-```
-
-#### Build Configs
-
-Sample BuildConfig Lookup
-```
-    "msg": {
-        "apiVersion": "v1",
-        "kind": "BuildConfig",
-        "metadata": {
-            "annotations": {
-                "openshift.io/generated-by": "OpenShiftNewBuild"
-            },
-            "creationTimestamp": "2019-12-02T21:14:32Z",
-            "labels": {
-                "build": "platform-services"
-            },
-            "name": "platform-services",
-            "namespace": "aaa-label-test",
-            "resourceVersion": "470400668",
-            "selfLink": "/oapi/v1/namespaces/aaa-label-test/buildconfigs/platform-services",
-            "uid": "bbe8dcec-1548-11ea-a7ae-00505683394a"
-        },
-        "spec": {
-            "failedBuildsHistoryLimit": 5,
-            "nodeSelector": null,
-            "output": {
-                "to": {
-                    "kind": "ImageStreamTag",
-                    "name": "platform-services:latest"
-                }
-            },
-            "postCommit": {},
-            "resources": {},
-            "runPolicy": "Serial",
-            "source": {
-                "contextDir": "security/aporeto/operator/secopspolicy",
-                "git": {
-                    "uri": "https://github.com/BCDevOps/platform-services"
-                },
-                "type": "Git"
-            },
-            "strategy": {
-                "dockerStrategy": {
-                    "from": {
-                        "kind": "ImageStreamTag",
-                        "name": "ansible-operator:v0.10.1"
-                    }
-                },
-                "type": "Docker"
-            },
-            "successfulBuildsHistoryLimit": 5,
-            "triggers": [
-                {
-                    "github": {
-                        "secret": "vhYrPZPVNgwLl4CL73Zy"
-                    },
-                    "type": "GitHub"
-                },
-                {
-                    "generic": {
-                        "secret": "cnMT-KrzOpWs1YZemGB8"
-                    },
-                    "type": "Generic"
-                },
-                {
-                    "type": "ConfigChange"
-                },
-                {
-                    "imageChange": {
-                        "lastTriggeredImageID": "quay.io/operator-framework/ansible-operator@sha256:e921d4b44c94dc4c791f5acd86af89d51959baa21c457755db0f40452b37ee17"
-                    },
-                    "type": "ImageChange"
-                }
-            ]
-        },
-        "status": {
-            "lastVersion": 1
-        }
-    }
-}
-```
+### JSON Lookup Reference
+- [Sample Project Lookup](tasks/templates/sample-project.json)
+- [Sample BuildConfig Lookup](tasks/templates/sample-buildconfig.json)
