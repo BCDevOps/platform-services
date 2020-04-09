@@ -4,23 +4,18 @@
   connection: local
   vars_files: 
    - vars.yml
-  vars: 
+  vars:
+    map_repo: "{{ list_git_repo | default(False) }}"
     ansible_command_timeout: 10
     current_list: {}
   tasks: 
     - name: Get list of projects
       set_fact:
         projects: "{{ lookup('k8s', api_version='v1', kind='Project') }}" 
-    - name: Get list of build configs
-      set_fact:
-        build_configs: "{{ lookup('k8s', api_version='v1', kind='BuildConfig') }}" 
-    - name: Create map
-      include_tasks: tasks/create_map.yml
-      with_items: 
-        - "{{ build_configs }}"
-    - name: Create CSV output
-      template: 
-        src: templates/csv_export.csv.j2
-        dest: csv_output.csv
 
-          
+    - name: Output namespace basic info
+      include_tasks: tasks/namespace_metadata.yml
+
+    - name: Output all GitHub repo in namespaces
+      include_tasks: tasks/repo_namespace_metadata.yml
+      when: map_repo
