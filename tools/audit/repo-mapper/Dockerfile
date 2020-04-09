@@ -9,6 +9,8 @@ RUN         ansible --version
 # Install openshift
 # RUN         pip3 install --user --ignore-installed openshift
 
+USER        0
+WORKDIR     /opt/
 COPY        ansible/  .
 
 # # Make Ansible happy with arbitrary UID/GID in OpenShift.
