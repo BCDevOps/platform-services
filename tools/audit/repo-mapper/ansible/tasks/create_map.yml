@@ -1,14 +1,11 @@
 ---
-# - name: Get Project data
-#   set_fact:
-#     project_raw: "{{ lookup('k8s', api_version='v1', kind='Project', resource_name=item.metadata.namespace ) }}" 
-# - debug: 
-#     msg: "{{ project_raw }}"
+# TODO: include this into the project sorting task, loop through namespace instead of bc
+
 - name: Get project data
   set_fact: 
     project_details: "{{ projects | json_query(\"[] | [?metadata.name == '\"+ item.metadata.namespace +\"' ]\") }}"
 # - debug: 
-#     msg: "{{ project_details }}"
+#     msg: "{{ projects }}"
 - name: Evaluate and set git url when http
   set_fact: 
     gh_org: "{{ item.spec.source.git.uri.split('/')[3] }}"
@@ -32,12 +29,12 @@
         GitHubOrg: "{{ gh_org }}"
         GitHubRepo: "{{ gh_repo }}"
         ProductLead: "{{ project_details[0] | json_query(product_lead_query) }}"
-        MinistryLead: "{{ project_details[0] | json_query(ministry_lead_query) }}"
-        MinistryOrg: "{{ project_details[0] | json_query(org_query) }}"
+        MinistryLead: "{{ project_details[0] | json_query(org_query) }}"
+        MinistryOrg: "{{ project_details[0] | json_query(unit_query) }}"
+
 - name: Add individual dictionary to full dictionary list
   set_fact: 
     map: "{{ map|default([]) + current_dict  }}"
   when: 
     - item.spec.source.type == "Git"
 #    - item.spec.source.git.uri.find('BCDevOps') != -1 or item.spec.source.git.uri.find('bcgov-c') != -1
-
