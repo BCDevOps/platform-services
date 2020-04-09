@@ -11,5 +11,12 @@ RUN         ansible --version
 
 COPY        ansible/  .
 
+# # Make Ansible happy with arbitrary UID/GID in OpenShift.
+# RUN         chmod g=u /etc/passwd /etc/group
+# Set permissions for OpenShift on webhook artifacts
+RUN         chgrp -R 0 /opt && \
+            chmod -R g+rwX /opt && \
+            chmod 664 /etc/passwd
+
 # Need to source the script for env var to be available
 ENTRYPOINT  ["./entrypoint.sh"]
