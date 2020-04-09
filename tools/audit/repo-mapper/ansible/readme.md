@@ -26,7 +26,12 @@ Run the following playbook while logged into an OpenShift cluster with `cluster-
 
 ```shell
 # include -vvv for debugging mode
+
+# List standard namespace metadata:
 ansible-playbook repo-mapper.yml
+
+# List all GitHub repo us
+ansible-playbook repo-mapper.yml -e map_repo=True
 ```
 
 ### Duration
