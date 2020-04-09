@@ -12,4 +12,4 @@ RUN         ansible --version
 COPY        ansible/  .
 
 # Need to source the script for env var to be available
-ENTRYPOINT  ["echo 123"]
+ENTRYPOINT  ["./entrypoint.sh"]
