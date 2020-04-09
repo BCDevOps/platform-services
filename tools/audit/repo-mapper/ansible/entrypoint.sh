@@ -10,5 +10,6 @@ fi
 # export TOKEN=$(cat /opt/creds/token)
 # echo $TOKEN
 
-# ansible-playbook repo-mapper.yml
+# TODO: this is to be replaced with Caddy host as well as the ansible command
 for i in $(seq 1 999); do echo $i; sleep 5; done
+# ansible-playbook repo-mapper.yml
