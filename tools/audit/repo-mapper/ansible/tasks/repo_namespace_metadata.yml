@@ -4,19 +4,10 @@
   set_fact:
     build_configs: "{{ lookup('k8s', api_version='v1', kind='BuildConfig') }}"
 
-- name: Get list of build configs2
-  set_fact:
-    builds: "{{ build_configs | json_query(jmesquery) }}"
-  vars:
-    jmesquery: '[? metadata.namespace==`hmg6pw-tools`]'
-
 - name: Create map
   include_tasks: create_map.yml
   with_items:
-    - "{{ builds }}"
-    # - "{{ build_configs }}"
-
-- debug: msg="{{map}}"
+    - "{{ build_configs }}"
 
 - name: Create CSV output
   template: 

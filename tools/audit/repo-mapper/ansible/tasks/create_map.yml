@@ -5,7 +5,7 @@
   set_fact: 
     project_details: "{{ projects | json_query(\"[] | [?metadata.name == '\"+ item.metadata.namespace +\"' ]\") }}"
 # - debug: 
-#     msg: "{{ projects }}"
+#     msg: "{{ project_details }}"
 - name: Evaluate and set git url when http
   set_fact: 
     gh_org: "{{ item.spec.source.git.uri.split('/')[3] }}"
