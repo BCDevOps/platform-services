@@ -1,0 +1,12 @@
+---
+# Get list of namespace metadata:
+- name: Map PRODUCTION namespace metadata
+  set_fact:
+    project_metadata: '{{ projects | json_query(jmesquery) }}'
+  vars:
+    jmesquery: '[? metadata.labels.environment==`prod`].{Project: {{ project_name_query }}, Product: {{ product_name_query }}, ProductLead: {{ product_lead_query }}, ProductOwner: {{ product_owner_query }} OrgCode: {{ org_query }}, UnitCode: {{ unit_query }} }'
+
+- name: Create CSV output
+  template: 
+    src: templates/namespace_metadata.csv.j2
+    dest: "{{ output_dir }}/namespace_metadata.csv"

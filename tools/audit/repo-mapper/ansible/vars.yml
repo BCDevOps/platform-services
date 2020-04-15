@@ -1,5 +1,10 @@
-    ## JSON Query Vars
-    product_lead_query: 'metadata.annotations."product-lead"'
-    ministry_lead_query: 'metadata.labels.bus_org_code'
-    org_query: 'metadata.labels.bus_org_unit_code'  
-  
+## JSON Query Vars
+project_name_query: metadata.name
+product_name_query: metadata.annotations."openshift.io/display-name"
+product_lead_query: metadata.annotations."product-lead"
+product_owner_query: metadata.annotations."product-owner"
+org_query: metadata.labels.bus_org_code
+unit_query: metadata.labels.bus_org_unit_code  
+
+## Settings
+output_dir: /tmp

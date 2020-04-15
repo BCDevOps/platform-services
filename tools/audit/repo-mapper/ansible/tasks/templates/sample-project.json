@@ -1,0 +1,39 @@
+{
+    "apiVersion": "project.openshift.io/v1",
+    "kind": "Project",
+    "metadata": {
+        "annotations": {
+            "openshift.io/description": "xxx",
+            "openshift.io/display-name": "xxx",
+            "openshift.io/requester": "xxx",
+            "openshift.io/sa.scc.mcs": "",
+            "openshift.io/sa.scc.supplemental-groups": "",
+            "openshift.io/sa.scc.uid-range": "",
+            "product-lead": "xxx",
+            "product-owner": "xxx"
+        },
+        "creationTimestamp": "2018-07-17T18:53:23Z",
+        "labels": {
+            "bus_org_code": "CITZ",
+            "bus_org_unit_code": "BCDEV",
+            "category": "xxx",
+            "environment": "prod",
+            "mcio": "CITZ-IM",
+            "miso": "CITZ-IMBSPC",
+            "mpo": "CITZ-IMBSPC",
+            "name": "xxx",
+            "product": "xxx",
+            "project_type": "user",
+            "team": "xxx"
+        },
+        "name": "xxx-prod",
+    },
+    "spec": {
+        "finalizers": [
+            "kubernetes"
+        ]
+    },
+    "status": {
+        "phase": "Active"
+    }
+}
