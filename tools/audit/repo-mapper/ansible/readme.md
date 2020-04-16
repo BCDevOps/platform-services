@@ -21,7 +21,7 @@ This ansible utility will query all build configs with an OpenShift environment 
     ```
 
 ### Usage
-*Note:* Run the following playbook while logged into an OpenShift cluster with `cluster-reader` access. 
+*Note:* Run the following playbook while logged into an OpenShift cluster with `cluster-reader` access on `namespaces`, if also exporting GitHub repos, one could need access cluster role with `buildConfig` resources.
 
 ```shell
 # include -vvv for debugging mode
