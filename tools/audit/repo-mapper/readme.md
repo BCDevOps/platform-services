@@ -20,10 +20,11 @@ This ansible utility will query all build configs with an OpenShift environment 
     sudo pip3 install --user --force-reinstall -r requirements.txt
     ```
 
-### Usage
+### Local usage
 *Note:* Run the following playbook while logged into an OpenShift cluster with `cluster-reader` access on `namespaces`, if also exporting GitHub repos, one could need access cluster role with `buildConfig` resources.
 
 ```shell
+cd ansible
 # include -vvv for debugging mode
 
 # List standard namespace metadata:
@@ -31,6 +32,18 @@ ansible-playbook repo-mapper.yml
 
 # List all GitHub repo used for builds on OpenShift
 ansible-playbook repo-mapper.yml -e map_repo=True
+```
+
+### Run on OpenShift
+Use the OpenShift manifests to build and deploy the ansible playbook.
+```shell
+cd .openshift
+
+# update the local.param file
+# Build:
+oc process -f build.yml --param-file=local.param | oc apply -f -
+# Deploy:
+oc process -f deployment.yml --param-file=local.param | oc apply -f -
 ```
 
 ### Duration
