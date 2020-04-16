@@ -1,0 +1,11 @@
+#=========================================================
+# OpenShift template parameters for running bc and dc of repo mapper
+# Template File: ./build.yml & ./deployment.yml
+#=========================================================
+NAME=metadata-ansible
+# BC:
+ANSIBLE_OPERATOR_VERSION=v0.15.2
+SOURCE_REPOSITORY_REF=repo-mapper-wip
+# DC:
+IS_NAMESPACE=devhub-tools
+SA_NAME=cluster-view-sa
