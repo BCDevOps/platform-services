@@ -3,6 +3,19 @@ kind: Template
 metadata:
   name: ${NAME}
 objects:
+- apiVersion: authorization.openshift.io/v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    name: admin
+  roleRef:
+    name: admin
+  subjects:
+  - kind: ServiceAccount
+    name: ${SA_NAME}
+    namespace: ${NAMESPACE}
+  userNames:
+  - system:serviceaccount:${SA_NAMESPACE}:${SA_NAME}
 - apiVersion: v1
   kind: Service
   metadata:
@@ -87,7 +100,12 @@ parameters:
   name: NAME
   required: true
   value: metadata-ansible
-- description: Namespace for base image
+- description: Namespace for deployment
+  displayName: NAMESPACE
+  name: NAMESPACE
+  required: true
+  value: devhub-tools
+- description: Namespace for the image stream
   displayName: IS_NAMESPACE
   name: IS_NAMESPACE
   required: true
@@ -106,3 +124,8 @@ parameters:
   name: SA_NAME
   required: true
   value: cluster-view-sa
+- description: Namespace where the service account is
+  displayName: SA_NAMESPACE
+  name: SA_NAMESPACE
+  required: true
+  value: devhub-tools
