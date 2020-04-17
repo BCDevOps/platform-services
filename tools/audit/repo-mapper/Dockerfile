@@ -8,12 +8,12 @@ RUN         ansible --version
 
 # test out oc command:
 # specify the version string of the oc release
-ENV OC_VERSION "v3.11.0"
-ENV OC_RELEASE "openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit"
+ENV         OC_VERSION "v3.11.0"
+ENV         OC_RELEASE "openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit"
 USER        0
 WORKDIR     /opt/
 # install the oc client tools
-RUN         curl -L --silent -o /opt/oc-release.tar.gz https://github.com/openshift/origin/releases/download/$OC_VERSION/$OC_RELEASE.tar.gz && \
+RUN         curl -L --silent -o /opt/oc-release.tar.gz https://github.com/openshift/origin/releases/download/${OC_VERSION}/${OC_RELEASE}.tar.gz && \
             tar --strip-components=1 -xzvf  /opt/oc/release.tar.gz -C /opt/oc/ && \
             mv /opt/oc/oc /usr/bin/
 
