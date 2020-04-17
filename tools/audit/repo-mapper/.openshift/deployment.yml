@@ -19,6 +19,20 @@ objects:
       deploymentconfig: ${NAME}
     sessionAffinity: None
     type: ClusterIP
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    port:
+      targetPort: 9000
+    to:
+      kind: Service
+      name: ${NAME}
+      weight: 100
+    wildcardPolicy: None
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
