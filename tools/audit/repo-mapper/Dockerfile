@@ -16,7 +16,7 @@ WORKDIR     /opt/
 RUN         curl -L --silent -o oc.tar.gz https://github.com/openshift/origin/releases/download/${OC_VERSION}/${OC_RELEASE}.tar.gz && \
             tar -xzf oc.tar.gz --strip 1 && \
             chmod +x oc && \
-            mv oc/oc /usr/bin/
+            mv oc /usr/bin/
 
 # copy playbook
 COPY        ansible/  .
