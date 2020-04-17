@@ -18,19 +18,10 @@
     - name: Get list of projects
       set_fact:
         projects: "{{ lookup('k8s', api_version='v1', kind='Project') }}" 
-    - debug: msg="{{ projects }}"
 
-    - name: test out oc command
-      command: >
-        oc get services
-      register: services
+    - name: Output namespace basic info
+      include_tasks: tasks/namespace_metadata.yml
 
-    - debug: msg="{{ services }}"
-
-
-    # - name: Output namespace basic info
-    #   include_tasks: tasks/namespace_metadata.yml
-
-    # - name: Output all GitHub repo in namespaces
-    #   include_tasks: tasks/repo_namespace_metadata.yml
-    #   when: map_repo
+    - name: Output all GitHub repo in namespaces
+      include_tasks: tasks/repo_namespace_metadata.yml
+      when: map_repo
