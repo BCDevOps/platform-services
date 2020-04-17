@@ -18,10 +18,15 @@ RUN         curl -L --silent -o oc.tar.gz https://github.com/openshift/origin/re
             tar -xzf oc.tar.gz --strip 1 && \
             chmod +x oc
 
+RUN         cp oc /usr/bin/
+
 # Set permissions for OpenShift on webhook artifacts
 RUN         chgrp -R 0 /opt && \
             chmod -R g+rwX /opt && \
             chmod 664 /etc/passwd
+
+# Port for Caddy:
+EXPOSE      9000
 
 # Need to source the script for env var to be available
 ENTRYPOINT  ["./entrypoint.sh"]
