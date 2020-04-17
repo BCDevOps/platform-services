@@ -7,7 +7,7 @@ objects:
   groupNames: null
   kind: RoleBinding
   metadata:
-    name: admin
+    name: admin-sa
   roleRef:
     name: admin
   subjects:
