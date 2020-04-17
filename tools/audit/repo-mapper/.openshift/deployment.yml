@@ -88,11 +88,17 @@ objects:
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /etc/output
+            name: output-dir
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: output-dir
     test: false
 parameters:
 - description: A name used for all objects
