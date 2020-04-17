@@ -1,0 +1,5 @@
+{
+  "csvRoute": "/reports/repo-mapper.csv",
+  "maxServerPollBeforeFailure": 3,
+  "pollInterval": 2000
+}

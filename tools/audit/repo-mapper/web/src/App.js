@@ -15,11 +15,18 @@ limitations under the License.
 
 Created by Patrick Simonian
 */
-import React from 'react';
-
+import React, { useState } from 'react';
+import { ClimbingBoxLoader } from 'react-spinners'
 import './App.css';
 
 import logoSVG from './images/logo.svg';
+
+
+import axios from 'axios';
+
+import config from './config';
+
+import { asyncPoll } from './utils'
 
 const Header = () => (
 
@@ -33,14 +40,68 @@ const Header = () => (
   </header>
 )
 
+
+const fetchCSV = async () => {
+  console.log('fetching')
+  try {
+    const response = await axios.get(config.csvRoute);
+    return response.status !== 200;
+
+  } catch(e) {
+    // file not found, keep polling
+    return true;
+  }
+}
+
+const validateCb = shouldPoll => shouldPoll;
+
+const CSVLink = () =>  (
+  <div className="container">
+    <h2>
+      Report Complete!
+    </h2>
+    <a href="" download={config.csvRoute}>Download</a>
+  </div>
+)
+
 const App = ()  => {
+  const [polling, setPolling] = useState(false);
+  const [fileExists, setFileExists] = useState(false);
+  const [error, setError] = useState(null);
+  const timeout = config.pollInterval * config.maxServerPollBeforeFailure;
+  const pollForCSV = () => {
+    if(!polling) {
+      setPolling(true)
+      asyncPoll(fetchCSV, validateCb, {interval: config.pollInterval, timeout})
+      .then(() => {
+        setPolling(false);
+        setFileExists(true);
+      })
+      .catch(() => {
+        setPolling(false);
+        setFileExists(false);
+        setError(true);
+      })
+    }  
+  }
+
   return (
     <React.Fragment>
       <Header />
       <main>
         <h1 style={{textAlign: "center"}}>Request a CSV report</h1>
-        <div class="container">
-          <button className="BC-Gov-SecondaryButton">Start Report</button>
+        <div className="container">
+          {fileExists  && <CSVLink />}
+          {!polling && !error && !fileExists && <button className="BC-Gov-SecondaryButton" onClick={pollForCSV}>Start Report</button>}
+          {polling && <h2>Generating Report <ClimbingBoxLoader /></h2>}
+          {error && !polling && <div className="container">
+            <div>
+              <h2 style={{color: "#D8292F"}}>Report failed to generate within {timeout / 1000 } seconds. </h2>
+            </div>
+            <div>
+              <button className="BC-Gov-SecondaryButton" onClick={pollForCSV}>Try Again</button>
+            </div>
+          </div>}
         </div>
       </main>
     </React.Fragment>
