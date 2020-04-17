@@ -25,3 +25,16 @@
     - name: Output all GitHub repo in namespaces
       include_tasks: tasks/repo_namespace_metadata.yml
       when: map_repo
+    
+    - name: Wait for output exists
+      wait_for:
+        path: "{{ output_dir }}/namespace_metadata.csv"
+
+    - name: Wait for "{{ wait_time }}" seconds before going idle
+      wait_for:
+        timeout: "{{ wait_time | int }}"
+      delegate_to: localhost
+
+    - name: Idle service
+      command: >
+        oc -n "{{ namespace }}" idle "{{ exposed_service }}"
