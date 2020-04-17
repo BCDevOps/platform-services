@@ -13,10 +13,9 @@ ENV OC_RELEASE "openshift-origin-client-tools-v3.11.0-0cbc58b-linux-64bit"
 USER        0
 WORKDIR     /opt/
 # install the oc client tools
-RUN         curl -L --silent -o /opt/oc/release.tar.gz https://github.com/adnanh/webhook/releases/download/${WEBHOOK_VERSION}/webhook-linux-amd64.tar.gz && \
-            tar --strip-components=1 -xzvf  /opt/oc/release.tar.gz -C /opt/oc/ && \
-            mv /opt/oc/oc /usr/bin/ && \
-            rm -rf /opt/oc
+RUN         curl -L --silent -o /opt/oc-release.tar.gz https://github.com/adnanh/webhook/releases/download/${WEBHOOK_VERSION}/webhook-linux-amd64.tar.gz && \
+            tar --strip-components=1 -xzvf  /opt/oc-release.tar.gz -C /opt/oc/ && \
+            mv /opt/oc/oc /usr/bin/
 
 # copy playbook
 COPY        ansible/  .
