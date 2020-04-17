@@ -151,7 +151,7 @@ parameters:
   displayName: SOURCE_REPOSITORY_URL
   name: SOURCE_REPOSITORY_URL
   required: true
-  value: https://github.com/cvarjao-o/repo-mapper.git
+  value: https://github.com/bcdevops/platform-services.git
 - description: SOURCE_REPOSITORY_REF
   displayName: SOURCE_REPOSITORY_REF
   name: SOURCE_REPOSITORY_REF
