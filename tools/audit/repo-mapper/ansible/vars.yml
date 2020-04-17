@@ -8,4 +8,8 @@ org_query: metadata.labels.bus_org_code
 unit_query: metadata.labels.bus_org_unit_code  
 
 ## Settings
+# TODO: use env vars
 output_dir: /tmp
+exposed_service: metadata-ansible
+namespace: devhub-tools
+wait_time: 10
