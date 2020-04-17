@@ -8,6 +8,11 @@
     map_repo: "{{ list_git_repo | default(False) }}"
     ansible_command_timeout: 10
     current_list: {}
+    # From env vars:
+    output_dir: "{{ lookup('env','OUTPUT_PATH') }}"
+    exposed_service: "{{ lookup('env','SERVICE_NAME') }}"
+    namespace: "{{ lookup('env','SERVICE_NAMESPACE') }}"
+    wait_time: "{{ lookup('env','WAIT_TIME') }}"
   tasks:
     - name: Pre-install packages
       pip:
