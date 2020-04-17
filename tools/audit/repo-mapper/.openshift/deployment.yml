@@ -3,6 +3,22 @@ kind: Template
 metadata:
   name: ${NAME}
 objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    ports:
+    - port: 9000
+      protocol: TCP
+      targetPort: 9000
+    selector:
+      app: ${NAME}
+      deploymentconfig: ${NAME}
+    sessionAffinity: None
+    type: ClusterIP
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
