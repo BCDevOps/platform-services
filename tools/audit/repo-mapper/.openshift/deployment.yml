@@ -85,11 +85,20 @@ objects:
           ports:
           - containerPort: 9000
             protocol: TCP
+          env:
+          - name: OUTPUT_PATH
+            value: ${OUTPUT_PATH}
+          - name: SERVICE_NAME
+            value: ${SERVICE_NAME}
+          - name: SERVICE_NAMESPACE
+            value: ${NAMESPACE}
+          - name: WAIT_TIME
+            value: ${WAIT_TIME}
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-          - mountPath: /etc/output
+          - mountPath: ${OUTPUT_PATH}
             name: output-dir
         dnsPolicy: ClusterFirst
         restartPolicy: Always
@@ -135,3 +144,22 @@ parameters:
   name: SA_NAMESPACE
   required: true
   value: devhub-tools
+- description: Path to keep the output file
+  displayName: OUTPUT_PATH
+  name: OUTPUT_PATH
+  required: true
+  value: /etc/output
+- description: Service to issue idle command
+  displayName: SERVICE_NAME
+  name: SERVICE_NAME
+  required: true
+  value: metadata-ansible
+- description: Namespace of the service
+  displayName: SERVICE_NAMESPACE
+  name: SERVICE_NAMESPACE
+  required: true
+  value: devhub-tools
+- description: Time in seconds before idling the service
+  displayName: WAIT_TIME
+  name: WAIT_TIME
+  required: true
