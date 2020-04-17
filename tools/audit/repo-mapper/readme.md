@@ -41,9 +41,9 @@ cd .openshift
 
 # update the local.param file
 # Build:
-oc process -f build.yml --param-file=local.param | oc apply -f -
+oc process --ignore-unknown-parameters=true -f build.yml --param-file=local.param | oc apply -f -
 # Deploy:
-oc process -f deployment.yml --param-file=local.param | oc apply -f -
+oc process --ignore-unknown-parameters=true -f deployment.yml --param-file=local.param | oc apply -f -
 ```
 
 ### Duration
