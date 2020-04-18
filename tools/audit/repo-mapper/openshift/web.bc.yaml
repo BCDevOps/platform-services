@@ -68,7 +68,7 @@ objects:
       configMaps:
         - configMap:
             name: ${NAME}-react-config
-          destinationDir: 'src/config'
+          destinationDir: 'config'
     strategy: 
       sourceStrategy:
         from:
@@ -120,14 +120,10 @@ objects:
       dockerStrategy:
         from:
           kind: ImageStreamTag
-          name: 'bcgov-s2i-caddy:v2'
+          name: 's2i-caddy:dev'
+          namespace: 'devhub-tools'
       type: Docker
     triggers:
-    - imageChange:
-        from:
-          kind: ImageStreamTag
-          name: ${NAME}:${VERSION}
-      type: ImageChange
     - type: ConfigChange
     - imageChange: {}
       type: ImageChange
@@ -168,18 +164,3 @@ parameters:
   name: DOCKER_IMAGE_DIRECTORY
   required: true
   value: docker-images/nodejs-base
-- description: Location of the Matomo server that the app should post events to.
-  displayName: Matomo URL
-  name: MATOMO_URL
-  required: false
-  value: ''
-- description: URL (route) where this app is deployed
-  displayName: Matomo URL
-  name: MATOMO_SITE_URL
-  required: false
-  value: ''
-- description: Identifier for this site within Matomo
-  displayName: Matomo URL
-  name: MATOMO_SITE_ID
-  required: false
-  value: '1'

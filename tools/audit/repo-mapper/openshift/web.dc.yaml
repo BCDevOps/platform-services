@@ -10,7 +10,11 @@ objects:
   data:
     Caddyfile: |
       :2015
-      
+
+      root * /var/www/html
+
+      file_server
+
       encode gzip
       log stdout
       log stderr
@@ -27,6 +31,8 @@ objects:
   metadata:
     creationTimestamp: null
     name: ${NAME}-static
+    labels: 
+      app: ${NAME}-static${SUFFIX}
   spec:
     lookupPolicy:
       local: false
@@ -35,10 +41,12 @@ objects:
   metadata:
     creationTimestamp: null
     name: ${NAME}-static${SUFFIX}
+    labels: 
+      app: ${NAME}-static${SUFFIX}
   spec:
     minReadySeconds: 20 # should be ready for atleast 20 seconds before the container is considered available. This will allow us
     # to catch any errors on deploy before they are available to the web
-    replicas: 3
+    replicas: 1
     selector:
       deploymentconfig: ${NAME}-static${SUFFIX}
     strategy:
@@ -54,12 +62,38 @@ objects:
         creationTimestamp: null
         labels:
           deploymentconfig: ${NAME}-static${SUFFIX}
+          app: ${NAME}-static${SUFFIX}
       spec:
         containers:
+        - command:
+            - /bin/sh
+            - '-c'
+            - ./entrypoint.sh
+          env:
+            - name: OUTPUT_PATH
+              value: /var/www/html/reports
+            - name: SERVICE_NAME
+              value: metadata-ansible
+            - name: SERVICE_NAMESPACE
+              value: devhub-tools
+            - name: WAIT_TIME
+              value: '60'
+          image: 'docker-registry.default.svc:5000/devhub-tools/metadata-ansible:v1.0'
+          imagePullPolicy: IfNotPresent
+          name: metadata-ansible
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /var/www/html/reports
+              name: output-dir
         - image: ${NAME}-static:${VERSION}
           name: repo-mapper
           args:
-          - /tmp/scripts/run
+            - /tmp/scripts/run
           ports:
           - containerPort: 2015
             protocol: TCP
@@ -76,11 +110,14 @@ objects:
             mountPath: /etc/Caddyfile
             readOnly: true
             subPath: Caddyfile
+          - mountPath: /var/www/html/reports
+            name: output-dir
         volumes:
         - name: caddy-${NAME}-static${SUFFIX}
           configMap:
             defaultMode: 420
             name: caddy-${NAME}-static${SUFFIX}
+        - name: output-dir
     test: false
     triggers:
     - type: ConfigChange
@@ -97,6 +134,8 @@ objects:
   metadata:
     creationTimestamp: null
     name: ${NAME}-static${SUFFIX}
+    labels: 
+      app: ${NAME}-static${SUFFIX}
   spec:
     ports:
     - name: web
@@ -112,6 +151,8 @@ objects:
       haproxy.router.openshift.io/disable_cookies: 'true'
     creationTimestamp: null
     name: ${NAME}-static${SUFFIX}
+    labels: 
+      app: ${NAME}-static${SUFFIX}
   spec:
     host:
     port:
