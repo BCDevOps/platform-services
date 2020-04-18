@@ -1,5 +1,6 @@
 ## JSON Query Vars
 project_name_query: metadata.name
+project_description_query: metadata.annotations."openshift.io/description"
 product_name_query: metadata.annotations."openshift.io/display-name"
 product_lead_query: metadata.annotations."product-lead"
 product_owner_query: metadata.annotations."product-owner"
