@@ -252,7 +252,7 @@ parameters:
   displayName: SERVICE_NAME
   name: SERVICE_NAME
   required: true
-  value: metadata-ansible
+  value: repo-mapper
 - description: Namespace of the service
   displayName: SERVICE_NAMESPACE
   name: SERVICE_NAMESPACE
