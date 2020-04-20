@@ -28,6 +28,10 @@ import config from './config';
 
 import { asyncPoll } from './utils'
 
+const { REACT_APP_CSV_ROUTE, REACT_APP_MAX_SERVER_POLL_BEFORE_FAILURE, REACT_APP_POLL_INTERVAL} = process.env;
+// converting envronment strings into nums
+const POLL_INTERVAL = REACT_APP_POLL_INTERVAL / 1;
+const MAX_SERVER_POLL_BEFORE_FAILURE = REACT_APP_MAX_SERVER_POLL_BEFORE_FAILURE / 1;
 const Header = () => (
 
   <header>
@@ -42,9 +46,9 @@ const Header = () => (
 
 
 const fetchCSV = async () => {
-  console.log('fetching')
+
   try {
-    const response = await axios.get(config.csvRoute);
+    const response = await axios.get(process.env.REACT_APP_CSV_ROUTE);
     return response.status !== 200;
 
   } catch(e) {
@@ -60,7 +64,7 @@ const CSVLink = () =>  (
     <h2>
       Report Complete!
     </h2>
-    <a href="" download={config.csvRoute}>Download</a>
+    <a href="" download={process.env.REACT_APP_CSV_ROUTE}>Download</a>
   </div>
 )
 
@@ -68,11 +72,11 @@ const App = ()  => {
   const [polling, setPolling] = useState(false);
   const [fileExists, setFileExists] = useState(false);
   const [error, setError] = useState(null);
-  const timeout = config.pollInterval * config.maxServerPollBeforeFailure;
+  const timeout = POLL_INTERVAL * MAX_SERVER_POLL_BEFORE_FAILURE;
   const pollForCSV = () => {
     if(!polling) {
       setPolling(true)
-      asyncPoll(fetchCSV, validateCb, {interval: config.pollInterval, timeout})
+      asyncPoll(fetchCSV, validateCb, {interval: POLL_INTERVAL, timeout})
       .then(() => {
         setPolling(false);
         setFileExists(true);

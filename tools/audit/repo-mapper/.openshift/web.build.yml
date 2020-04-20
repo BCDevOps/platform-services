@@ -68,7 +68,7 @@ objects:
       configMaps:
         - configMap:
             name: ${NAME}-react-config
-          destinationDir: 'config'
+          destinationDir: '/opt/app-root/src/config'
     strategy: 
       sourceStrategy:
         from:
@@ -125,7 +125,10 @@ objects:
       type: Docker
     triggers:
     - type: ConfigChange
-    - imageChange: {}
+    - imageChange:
+        from:
+          kind: ImageStreamTag
+          name: ${NAME}:${VERSION}
       type: ImageChange
 parameters:
 - description: A name used for all objects
@@ -142,7 +145,7 @@ parameters:
   displayName: version
   name: VERSION
   required: true
-  value: v1.0.0
+  value: v1.0
 - description: SOURCE_REPOSITORY_URL
   displayName: SOURCE_REPOSITORY_URL
   name: SOURCE_REPOSITORY_URL
@@ -169,7 +172,7 @@ parameters:
   value: /reports/namespace_metadata.csv
 - name: MAX_SERVER_POLLS
   description: "this app polls caddy for the csv file, this is the max amount of polls before failing"
-  value: 40
+  value: "40"
 - name: SERVER_POLL_INTERVAL
   description: this app polls caddy for the csv file, this is the interval of polls in ms
-  value: 2000
+  value: "2000"

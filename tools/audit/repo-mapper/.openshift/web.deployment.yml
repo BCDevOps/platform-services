@@ -71,7 +71,7 @@ objects:
             - /bin/sh
             - -c
             - ./entrypoint.sh
-          name: ${NAME}
+          name: ${ANSIBLE_IS_NAME}
           ports:
           - containerPort: 9000
             protocol: TCP
@@ -91,7 +91,7 @@ objects:
           - mountPath: ${OUTPUT_PATH}
             name: output-dir
         - image: ${NAME}-static:${VERSION}
-          name: repo-mapper
+          name: ${NAME}
           args:
             - /tmp/scripts/run
           ports:
