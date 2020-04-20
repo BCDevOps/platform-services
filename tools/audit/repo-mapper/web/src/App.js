@@ -24,7 +24,6 @@ import logoSVG from './images/logo.svg';
 
 import axios from 'axios';
 
-import config from './config';
 
 import { asyncPoll } from './utils'
 

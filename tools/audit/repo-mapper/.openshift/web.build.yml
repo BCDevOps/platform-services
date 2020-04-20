@@ -62,12 +62,24 @@ objects:
         ref: ${SOURCE_REPOSITORY_REF}
       contextDir: 'tools/audit/repo-mapper/web'
       type: Git
-      configMaps:
-        - configMap:
-            name: ${NAME}-react-config
-          destinationDir: '/opt/app-root/src/config'
     strategy: 
       sourceStrategy:
+        env:
+          - name: REACT_APP_CSV_ROUTE
+            valueFrom:
+              configMapKeyRef:
+                key: REACT_APP_CSV_ROUTE
+                name: repo-mapper-react-config
+          - name: REACT_APP_MAX_SERVER_POLL_BEFORE_FAILURE
+            valueFrom:
+              configMapKeyRef:
+                key: REACT_APP_MAX_SERVER_POLL_BEFORE_FAILURE
+                name: repo-mapper-react-config
+          - name: REACT_APP_POLL_INTERVAL
+            valueFrom:
+              configMapKeyRef:
+                key: REACT_APP_POLL_INTERVAL
+                name: repo-mapper-react-config
         from:
           kind: ImageStreamTag
           name: nodejs:${NODE_JS_VERSION}
