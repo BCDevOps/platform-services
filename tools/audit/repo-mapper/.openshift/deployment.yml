@@ -1,0 +1,165 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: ${NAME}
+objects:
+- apiVersion: authorization.openshift.io/v1
+  groupNames: null
+  kind: RoleBinding
+  metadata:
+    name: admin-sa
+  roleRef:
+    name: admin
+  subjects:
+  - kind: ServiceAccount
+    name: ${SA_NAME}
+    namespace: ${NAMESPACE}
+  userNames:
+  - system:serviceaccount:${SA_NAMESPACE}:${SA_NAME}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    ports:
+    - port: 9000
+      protocol: TCP
+      targetPort: 9000
+    selector:
+      app: ${NAME}
+      deploymentconfig: ${NAME}
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    port:
+      targetPort: 9000
+    to:
+      kind: Service
+      name: ${NAME}
+      weight: 100
+    wildcardPolicy: None
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${NAME}
+    name: ${NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: ${NAME}
+      deploymentconfig: ${NAME}
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: ${NAME}
+          deploymentconfig: ${NAME}
+      spec:
+        serviceAccountName: ${SA_NAME}
+        containers:
+        - image: docker-registry.default.svc:5000/${IS_NAMESPACE}/${NAME}:${VERSION}
+          command:
+            - /bin/sh
+            - -c
+            - ./entrypoint.sh
+          name: ${NAME}
+          ports:
+          - containerPort: 9000
+            protocol: TCP
+          env:
+          - name: OUTPUT_PATH
+            value: ${OUTPUT_PATH}
+          - name: SERVICE_NAME
+            value: ${SERVICE_NAME}
+          - name: SERVICE_NAMESPACE
+            value: ${NAMESPACE}
+          - name: WAIT_TIME
+            value: ${WAIT_TIME}
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: ${OUTPUT_PATH}
+            name: output-dir
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: output-dir
+    test: false
+parameters:
+- description: A name used for all objects
+  displayName: Name
+  name: NAME
+  required: true
+  value: metadata-ansible
+- description: Namespace for deployment
+  displayName: NAMESPACE
+  name: NAMESPACE
+  required: true
+  value: devhub-tools
+- description: Namespace for the image stream
+  displayName: IS_NAMESPACE
+  name: IS_NAMESPACE
+  required: true
+  value: devhub-tools
+- description: A name suffix used for all objects
+  displayName: Suffix
+  name: SUFFIX
+  required: false
+- description: A version used for the image tags
+  displayName: version
+  name: VERSION
+  required: true
+  value: v1.0
+- description: Cluster read service account name. Note that it only works in devhub-tools namespace.
+  displayName: service account name
+  name: SA_NAME
+  required: true
+  value: cluster-view-sa
+- description: Namespace where the service account is
+  displayName: SA_NAMESPACE
+  name: SA_NAMESPACE
+  required: true
+  value: devhub-tools
+- description: Path to keep the output file
+  displayName: OUTPUT_PATH
+  name: OUTPUT_PATH
+  required: true
+  value: /etc/output
+- description: Service to issue idle command
+  displayName: SERVICE_NAME
+  name: SERVICE_NAME
+  required: true
+  value: metadata-ansible
+- description: Namespace of the service
+  displayName: SERVICE_NAMESPACE
+  name: SERVICE_NAMESPACE
+  required: true
+  value: devhub-tools
+- description: Time in seconds before idling the service
+  displayName: WAIT_TIME
+  name: WAIT_TIME
+  required: true

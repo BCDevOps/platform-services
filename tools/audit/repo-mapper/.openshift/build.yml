@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: ${NAME}
+labels:
+  app: ${NAME}
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      shared: true
+    name: ansible-operator
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: quay.io/operator-framework/ansible-operator:${ANSIBLE_OPERATOR_VERSION}
+      from:
+        kind: DockerImage
+        name: quay.io/operator-framework/ansible-operator:${ANSIBLE_OPERATOR_VERSION}
+      importPolicy: {}
+      name: ${ANSIBLE_OPERATOR_VERSION}
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    labels:
+      shared: true
+    name: ${NAME}
+  spec:
+    lookupPolicy:
+      local: false
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    name: ${NAME}${SUFFIX}
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${NAME}:${VERSION}
+    postCommit: {}
+    resources:
+      limits:
+        cpu: 1
+      requests:
+        cpu: 1
+    runPolicy: Serial
+    source:
+      git:
+        uri: ${SOURCE_REPOSITORY_URL}
+        ref: ${SOURCE_REPOSITORY_REF}
+      contextDir: ${SOURCE_CONTEXT_DIR}
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: ansible-operator:${ANSIBLE_OPERATOR_VERSION}
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+parameters:
+- description: A name used for all objects
+  displayName: Name
+  name: NAME
+  required: true
+  value: metadata-ansible
+- description: A name suffix used for all objects
+  displayName: Suffix
+  name: SUFFIX
+  required: false
+- description: A version used for the image tags
+  displayName: version
+  name: VERSION
+  required: true
+  value: v1.0
+- description: SOURCE_REPOSITORY_URL
+  displayName: SOURCE_REPOSITORY_URL
+  name: SOURCE_REPOSITORY_URL
+  required: true
+  value: https://github.com/BCDevOps/platform-services.git
+- description: SOURCE_REPOSITORY_REF
+  displayName: SOURCE_REPOSITORY_REF
+  name: SOURCE_REPOSITORY_REF
+  required: true
+  value: master
+- description: SOURCE_CONTEXT_DIR
+  displayName: SOURCE_CONTEXT_DIR
+  name: SOURCE_CONTEXT_DIR
+  required: true
+  value: tools/audit/repo-mapper
+- description: ANSIBLE_OPERATOR_VERSION
+  displayName: ANSIBLE_OPERATOR_VERSION
+  name: ANSIBLE_OPERATOR_VERSION
+  required: true
+  value: v0.15.2
+  

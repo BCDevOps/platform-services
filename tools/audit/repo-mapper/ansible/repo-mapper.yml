@@ -8,6 +8,11 @@
     map_repo: "{{ list_git_repo | default(False) }}"
     ansible_command_timeout: 10
     current_list: {}
+    # From env vars:
+    output_dir: "{{ lookup('env','OUTPUT_PATH') }}"
+    exposed_service: "{{ lookup('env','SERVICE_NAME') }}"
+    namespace: "{{ lookup('env','SERVICE_NAMESPACE') }}"
+    wait_time: "{{ lookup('env','WAIT_TIME') }}"
   tasks:
     - name: Pre-install packages
       pip:
@@ -25,3 +30,16 @@
     - name: Output all GitHub repo in namespaces
       include_tasks: tasks/repo_namespace_metadata.yml
       when: map_repo
+    
+    - name: Wait for output exists
+      wait_for:
+        path: "{{ output_dir }}/namespace_metadata.csv"
+
+    - name: Wait for "{{ wait_time }}" seconds before going idle
+      wait_for:
+        timeout: "{{ wait_time | int }}"
+      delegate_to: localhost
+
+    - name: Idle service
+      command: >
+        oc -n "{{ namespace }}" idle "{{ exposed_service }}"
