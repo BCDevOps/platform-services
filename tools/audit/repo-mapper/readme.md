@@ -58,10 +58,11 @@ Use the OpenShift manifests to build and deploy the ansible playbook.
 cd .openshift
 
 # update the local.param file
-# Build:
-oc process --ignore-unknown-parameters=true -f build.yml --param-file=local.param | oc apply -f -
+# Build ansible and caddy:
+oc process --ignore-unknown-parameters=true -f ansible.build.yml --param-file=local.param | oc apply -f -
+oc process --ignore-unknown-parameters=true -f web.build.yml --param-file=local.param | oc apply -f -
 # Deploy:
-oc process --ignore-unknown-parameters=true -f deployment.yml --param-file=local.param | oc apply -f -
+oc process --ignore-unknown-parameters=true -f web.deployment.yml --param-file=local.param | oc apply -f -
 ```
 
 ### Duration
