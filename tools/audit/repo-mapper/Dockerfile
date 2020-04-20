@@ -26,8 +26,5 @@ RUN         chgrp -R 0 /opt && \
             chmod -R g+rwX /opt && \
             chmod 664 /etc/passwd
 
-# Port for Caddy:
-EXPOSE      9000
-
 # Need to source the script for env var to be available
 ENTRYPOINT  ["./entrypoint.sh"]
