@@ -11,9 +11,9 @@ SOURCE_REPOSITORY_REF=repo-mapper/web
 CSV_REPORT_PATH=/reports/namespace_metadata.csv
 # MAX_SERVER_POLLS=20
 # SERVER_POLL_INTERVAL=2000
-# NAME=metadata-ansible
 
 # DC:
+NAME=repo-mapper
 # note: use a pair of service account in the current namespace. Make sure SA has the required cluster read access to be able to query namespaces.
 NAMESPACE=devhub-tools
 IS_NAMESPACE=devhub-tools
@@ -21,7 +21,7 @@ SA_NAME=cluster-view-sa
 SA_NAMESPACE=devhub-tools
 # Ansible playbook vars:
 OUTPUT_PATH=/var/www/html/reports
-SERVICE_NAME=repo-mapper-static
 NAMESPACE=devhub-tools
+# 12 hrs before going to idle:
 WAIT_TIME=43200
-# 12 hrs before going to idle
+# SERVICE_NAME=$NAME-static -> dynamically generated

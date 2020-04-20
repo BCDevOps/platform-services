@@ -79,7 +79,7 @@ objects:
           - name: OUTPUT_PATH
             value: ${OUTPUT_PATH}
           - name: SERVICE_NAME
-            value: ${SERVICE_NAME}
+            value: ${NAME}-static${SUFFIX}
           - name: SERVICE_NAMESPACE
             value: ${NAMESPACE}
           - name: WAIT_TIME
