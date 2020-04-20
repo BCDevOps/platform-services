@@ -8,12 +8,9 @@ labels:
 objects:
 - apiVersion: v1
   data:
-    index.json: |-
-      {
-        "csvRoute": "${CSV_REPORT_PATH}",
-        "maxServerPollBeforeFailure": ${MAX_SERVER_POLLS},
-        "pollInterval": ${SERVER_POLL_INTERVAL}
-      }
+    REACT_APP_CSV_ROUTE: ${CSV_REPORT_PATH}
+    REACT_APP_MAX_SERVER_POLL_BEFORE_FAILURE: ${MAX_SERVER_POLLS}
+    REACT_APP_POLL_INTERVAL:  ${SERVER_POLL_INTERVAL}
   kind: ConfigMap
   metadata:
     creationTimestamp: null
