@@ -66,7 +66,7 @@ objects:
       spec:
         serviceAccountName: ${SA_NAME}
         containers:
-        - image: docker-registry.default.svc:5000/${IS_NAMESPACE}/${NAME}:${VERSION}
+        - image: docker-registry.default.svc:5000/${IS_NAMESPACE}/${ANSIBLE_IS_NAME}:${VERSION}
           command:
             - /bin/sh
             - -c
@@ -221,6 +221,9 @@ parameters:
   name: IS_NAMESPACE
   required: true
   value: devhub-tools
+- name: ANSIBLE_IS_NAME
+  displayName: Ansible Imagestream Name
+  value: metadata-ansible
 - description: A name suffix used for all objects
   displayName: Suffix
   name: SUFFIX

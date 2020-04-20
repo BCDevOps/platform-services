@@ -100,7 +100,7 @@ parameters:
   displayName: SOURCE_CONTEXT_DIR
   name: SOURCE_CONTEXT_DIR
   required: true
-  value: tools/audit/repo-mapper
+  value: tools/audit/repo-mapper/audit-playbook
 - description: ANSIBLE_OPERATOR_VERSION
   displayName: ANSIBLE_OPERATOR_VERSION
   name: ANSIBLE_OPERATOR_VERSION

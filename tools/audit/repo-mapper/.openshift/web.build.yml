@@ -166,9 +166,9 @@ parameters:
   value: docker-images/nodejs-base
 - name: CSV_REPORT_PATH
   description: The path where the CSV file will be mounted to
-  value: /reports/repo-mapper.csv
+  value: /reports/namespace_metadata.csv
 - name: MAX_SERVER_POLLS
-  description: this app polls caddy for the csv file, this is the max amount of polls before failing
+  description: "this app polls caddy for the csv file, this is the max amount of polls before failing"
   value: 40
 - name: SERVER_POLL_INTERVAL
   description: this app polls caddy for the csv file, this is the interval of polls in ms
