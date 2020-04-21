@@ -15,6 +15,6 @@ RUN         curl -L --silent -o oc.tar.gz https://github.com/openshift/origin/re
 
 RUN         cp oc /usr/bin/
 
-COPY . .
+COPY ./entrypoint.sh .
 
 ENTRYPOINT  ["./entrypoint.sh"]
