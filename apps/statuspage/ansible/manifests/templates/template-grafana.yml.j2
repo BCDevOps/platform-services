@@ -65,6 +65,25 @@ items:
               value: {{ patroni_superuser_username }}
             - name: GF_DATABASE_PASSWORD
               value: {{ patroni_superuser_password }}
+            - name: GF_AUTH_GENERIC_OAUTH_ENABLED
+              value: {{ grafana_oauth_generic_oauth_enabled }}
+            - name: GF_AUTH_GENERIC_OAUTH_NAME
+              value: {{ grafana_auth_oauth_name }}
+            - name: GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP
+              value: {{ grafana_auth_oauth_allow_signup }}
+            - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+              value: {{ grafana_auth_oauth_client_id }}
+            - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+              value: {{ grafana_auth_oauth_client_secret }}
+            - name: GF_AUTH_GENERIC_OAUTH_AUTH_URL
+              value: >-
+                {{ grafana_auth_oauth_auth_url }}
+            - name: GF_AUTH_GENERIC_OAUTH_TOKEN_URL
+              value: >-
+                {{ grafana_auth_oauth_token_url }}
+            - name: GF_AUTH_GENERIC_OAUTH_API_URL
+              value: >-
+                {{ grafana_auth_oauth_api_url }}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
