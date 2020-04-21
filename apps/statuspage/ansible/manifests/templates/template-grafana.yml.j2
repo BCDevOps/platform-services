@@ -65,6 +65,8 @@ items:
               value: {{ patroni_superuser_username }}
             - name: GF_DATABASE_PASSWORD
               value: {{ patroni_superuser_password }}
+            - name: GF_INSTALL_PLUGINS
+              value: {{ grafana_sysdig_plugin_source }}
             - name: GF_AUTH_GENERIC_OAUTH_ENABLED
               value: {{ grafana_oauth_generic_oauth_enabled }}
             - name: GF_AUTH_GENERIC_OAUTH_NAME

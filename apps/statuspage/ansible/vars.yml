@@ -26,6 +26,7 @@ grafana_auth_oauth_client_secret: "{{ lookup('file',  grafana_secret_file ) | re
 grafana_auth_oauth_auth_url: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_AUTH_URL.*', multiline=True) | regex_search('[^=]*$') }}"
 grafana_auth_oauth_token_url: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_TOKEN_URL.*', multiline=True) | regex_search('[^=]*$') }}"
 grafana_auth_oauth_api_url: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_APU_URL.*', multiline=True) | regex_search('[^=]*$') }}"
+grafana_sysdig_plugin_source: "https://download.sysdig.com/stable/grafana-sysdig-datasource/grafana-sysdig-datasource-v0.7.zip;sysdig"
 
 prometheus_service_name: prometheus
 prometheus_pvc_size: 5Gi
