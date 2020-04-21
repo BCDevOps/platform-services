@@ -47,7 +47,7 @@ const Header = () => (
 const fetchCSV = async () => {
 
   try {
-    const response = await axios.get(process.env.REACT_APP_CSV_ROUTE);
+    const response = await axios.get(REACT_APP_CSV_ROUTE);
     return response.status !== 200;
 
   } catch(e) {
@@ -63,7 +63,7 @@ const CSVLink = () =>  (
     <h2>
       Report Complete!
     </h2>
-    <a href="" download={process.env.REACT_APP_CSV_ROUTE}>Download</a>
+    <a href={REACT_APP_CSV_ROUTE} download>Download</a>
   </div>
 )
 

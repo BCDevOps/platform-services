@@ -14,6 +14,11 @@
     namespace: "{{ lookup('env','SERVICE_NAMESPACE') }}"
     wait_time: "{{ lookup('env','WAIT_TIME') }}"
   tasks:
+    - name: Clean up report directory
+      file:
+        path: "{{ output_dir }}/namespace_metadata.csv"
+        state: absent
+
     - name: Pre-install packages
       pip:
         name:
@@ -39,6 +44,11 @@
       wait_for:
         timeout: "{{ wait_time | int }}"
       delegate_to: localhost
+
+    - name: Clean up report directory
+      file:
+        path: "{{ output_dir }}/namespace_metadata.csv"
+        state: absent
 
     - name: Idle service
       command: >
