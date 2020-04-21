@@ -26,5 +26,11 @@ oc create secret generic grafana-secret \
 
 ```
 
+Add the secret to the webhook-ansible delpoyment for use: 
+
+```shell
+oc set volume dc/webhook-ansible --add --type=secret --secret-name=grafana-secret --mount-path=/etc/secrets
+```
+
 # Authentication
 Users may access these dashboards via SSO.
