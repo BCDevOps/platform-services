@@ -17,4 +17,4 @@ RUN         cp oc /usr/bin/
 
 COPY ./entrypoint.sh .
 
-ENTRYPOINT  ["./entrypoint.sh"]
+CMD  ["/bin/sh", "./entrypoint.sh"]
