@@ -1,6 +1,5 @@
 FROM caddy/caddy:alpine
 
-USER        1001
 WORKDIR     /opt/
 # install curl 
 RUN apk --no-cache add curl
