@@ -18,6 +18,10 @@ objects:
       encode gzip
       log stdout
       log stderr
+
+      basicauth * {
+        admin JDJhJDEwJHJPdnd5R3k0eC8vbUpXcUFaaFVsbU82VzYwb09BaXl1ZVE0cTdtT2JNWWZHZDljV1dtNlRT
+      }
   kind: ConfigMap
   metadata:
     creationTimestamp: null
