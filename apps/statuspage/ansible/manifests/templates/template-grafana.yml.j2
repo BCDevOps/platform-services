@@ -324,6 +324,13 @@ items:
           isDefault: true
           version: 1  
           editable: true
+        - name: Sysdig
+          type: sysdig
+          access: proxy
+          jsonData: 
+            apiToken: {{ grafana_sysdig_apiToken }}
+          orgId: 1 
+          editable: true
   kind: ConfigMap
   metadata:
     labels:
