@@ -64,34 +64,9 @@ objects:
           deploymentconfig: ${NAME}-static${SUFFIX}
           app: ${NAME}-static${SUFFIX}
       spec:
-        serviceAccountName: ${SA_NAME}
         containers:
-        - image: ${ANSIBLE_IS_NAME}:${VERSION}
-          command:
-            - /bin/sh
-            - -c
-            - ./entrypoint.sh
-          name: ${ANSIBLE_IS_NAME}
-          ports:
-          - containerPort: 9000
-            protocol: TCP
-          env:
-          - name: OUTPUT_PATH
-            value: ${OUTPUT_PATH}
-          - name: SERVICE_NAME
-            value: ${NAME}-static${SUFFIX}
-          - name: SERVICE_NAMESPACE
-            value: ${NAMESPACE}
-          - name: WAIT_TIME
-            value: ${WAIT_TIME}
-          resources: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-          - mountPath: ${OUTPUT_PATH}
-            name: output-dir
-        - image: ${NAME}-static:${VERSION}
-          name: ${NAME}
+        - name: ${NAME}
+          image: ${NAME}-static:${VERSION}
           args:
             - /tmp/scripts/run
           ports:
@@ -124,7 +99,7 @@ objects:
     - imageChangeParams:
         automatic: true
         containerNames:
-        - repo-mapper
+        - ${NAME}
         from:
           kind: ImageStreamTag
           name: ${NAME}-static:${VERSION}
@@ -201,14 +176,6 @@ parameters:
   name: MEMORY_LIMIT
   required: false
   value: 75Mi
-- description: Namespace for deployment
-  displayName: NAMESPACE
-  name: NAMESPACE
-  required: true
-  value: devhub-tools
-- name: ANSIBLE_IS_NAME
-  displayName: Ansible Imagestream Name
-  value: metadata-ansible
 - description: A name suffix used for all objects
   displayName: Suffix
   name: SUFFIX
@@ -218,32 +185,3 @@ parameters:
   name: VERSION
   required: true
   value: v1.0
-- description: Cluster read service account name. Note that it only works in devhub-tools namespace.
-  displayName: service account name
-  name: SA_NAME
-  required: true
-  value: cluster-view-sa
-- description: Namespace where the service account is
-  displayName: SA_NAMESPACE
-  name: SA_NAMESPACE
-  required: true
-  value: devhub-tools
-- description: Path to keep the output file
-  displayName: OUTPUT_PATH
-  name: OUTPUT_PATH
-  required: true
-  value: /var/www/html/
-- description: Service to issue idle command
-  displayName: SERVICE_NAME
-  name: SERVICE_NAME
-  required: true
-  value: repo-mapper
-- description: Namespace of the service
-  displayName: SERVICE_NAMESPACE
-  name: SERVICE_NAMESPACE
-  required: true
-  value: devhub-tools
-- description: Time in seconds before idling the service
-  displayName: WAIT_TIME
-  name: WAIT_TIME
-  required: true
