@@ -1,16 +1,22 @@
 # Repo Mapper
 
-The repo mapper does .. (TODO)
+This application will generate a list of OpenShift Project Set metadata and return as csv file available from the frontend.
 
 ## Architecture
 
-The repo mapper is a 2 container pod. 
+The repo mapper is a 2 container pod. See the following structure.
+- Caddy Container
+- Ansible Container
+
+![structure](./structure.png)
+
 
 ### Ansible Container
 
 The ansible container has all the credentials and logic to perform the audit and create a `csv` file. 
 
 The `csv` is written to a volume in the Caddy Container
+
 
 ### Caddy Container
 
