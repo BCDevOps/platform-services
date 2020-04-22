@@ -37,7 +37,7 @@ function basicAuthDirective {
   }
 EOF
 }
-configmap=$(oc get configmap/$CADDY_CONFIGMAP)
+configmap=$(/usr/bin/oc get configmap/$CADDY_CONFIGMAP)
 
 if [ $configmap="No Resources Found." ]; then
   echo "Config map at $configmap was not found"
@@ -54,3 +54,5 @@ basicAuthDirective $BASIC_AUTH_USERNAME $hashedPw >> caddyfile
 echo "caddyfile created"
 
 cat $caddyfile
+
+tools/audit/repo-mapper/passwordUpdate
