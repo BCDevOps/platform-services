@@ -16,7 +16,7 @@ You will require Node versions > 10.15.3
 ### Running on Openshift
 
 There are build and deploy infra code stored `../openshift/web.build.yml` and `../openshift/web.deployment.yml`.
-1. The deployment template has a `metadata-ansible` container so ensure that this exists in your namespace
+1. Make sure there is the output file that caddy will be serving in the mounted volume
 2. Process the templates against the param file and apply 
 ```
 oc process --ignore-unknown-parameters=true -f web.build.yml --param-file=local.param | oc apply -f -

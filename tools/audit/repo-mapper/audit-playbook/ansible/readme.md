@@ -35,15 +35,17 @@ ansible-playbook repo-mapper.yml -e map_repo=True
 ```
 
 ### Run on OpenShift
-Use the OpenShift manifests to build and deploy the ansible playbook.
+Use the OpenShift manifests to build and deploy the app.
 ```shell
-cd .openshift
+cd ../.openshift
 
-# update the local.param file
-# Build:
-oc process --ignore-unknown-parameters=true -f build.yml --param-file=local.param | oc apply -f -
-# Deploy:
-oc process --ignore-unknown-parameters=true -f deployment.yml --param-file=local.param | oc apply -f -
+# Step 1: update the local.param file to match your setup
+
+# Step 2: Build
+oc process --ignore-unknown-parameters=true -f ansible.build.yml --param-file=local.param | oc apply -f -
+
+# Step 3: Deploy when istag complete
+oc process --ignore-unknown-parameters=true -f ansible.deployment.yml --param-file=local.param | oc apply -f -
 ```
 
 ### Duration
