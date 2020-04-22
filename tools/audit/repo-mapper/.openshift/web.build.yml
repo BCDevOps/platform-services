@@ -60,7 +60,7 @@ objects:
       git:
         uri: ${SOURCE_REPOSITORY_URL}
         ref: ${SOURCE_REPOSITORY_REF}
-      contextDir: 'tools/audit/repo-mapper/web'
+      contextDir: ${CADDY_SOURCE_CONTEXT_DIR}
       type: Git
     strategy: 
       sourceStrategy:
@@ -69,17 +69,17 @@ objects:
             valueFrom:
               configMapKeyRef:
                 key: REACT_APP_CSV_ROUTE
-                name: repo-mapper-react-config
+                name: ${NAME}-react-config
           - name: REACT_APP_MAX_SERVER_POLL_BEFORE_FAILURE
             valueFrom:
               configMapKeyRef:
                 key: REACT_APP_MAX_SERVER_POLL_BEFORE_FAILURE
-                name: repo-mapper-react-config
+                name: ${NAME}-react-config
           - name: REACT_APP_POLL_INTERVAL
             valueFrom:
               configMapKeyRef:
                 key: REACT_APP_POLL_INTERVAL
-                name: repo-mapper-react-config
+                name: ${NAME}-react-config
         from:
           kind: ImageStreamTag
           name: nodejs:${NODE_JS_VERSION}
@@ -149,7 +149,6 @@ parameters:
   displayName: Suffix
   name: SUFFIX
   required: false
-  value: -dev
 - description: A version used for the image tags
   displayName: version
   name: VERSION
@@ -164,7 +163,12 @@ parameters:
   displayName: SOURCE_REPOSITORY_REF
   name: SOURCE_REPOSITORY_REF
   required: true
-  value: ''
+  value: master
+- description: CADDY_SOURCE_CONTEXT_DIR
+  displayName: CADDY_SOURCE_CONTEXT_DIR
+  name: CADDY_SOURCE_CONTEXT_DIR
+  required: true
+  value: tools/audit/repo-mapper/web
   # latest node js version as of Apr 2 2019
 - description: NODE_JS_VERSION
   displayName: NODE_JS_VERSION
