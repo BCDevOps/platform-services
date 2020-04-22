@@ -34,18 +34,6 @@ ansible-playbook repo-mapper.yml
 ansible-playbook repo-mapper.yml -e map_repo=True
 ```
 
-### Run on OpenShift
-Use the OpenShift manifests to build and deploy the ansible playbook.
-```shell
-cd .openshift
-
-# update the local.param file
-# Build:
-oc process --ignore-unknown-parameters=true -f build.yml --param-file=local.param | oc apply -f -
-# Deploy:
-oc process --ignore-unknown-parameters=true -f deployment.yml --param-file=local.param | oc apply -f -
-```
-
 ### Duration
 Standard list of namespace would not take long. However, if you are also outputing all relevant GitHub repos, then the current run time against the prod Pathfinder cluster is about 35mins.
 
