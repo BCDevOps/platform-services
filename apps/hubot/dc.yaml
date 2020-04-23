@@ -71,6 +71,8 @@ objects:
             value: 'redis://:$(REDIS_PASSWORD)@$(REDIS_SERVICE_HOST)'
           - name: TZ
             value: America/Vancouver
+          - name: HUBOT_LOG_LEVEL
+              value: ${HUBOT_LOG_LEVEL}
     test: false
     triggers:
     - type: ConfigChange
@@ -148,3 +150,7 @@ parameters:
   displayName: bot rooms
   name: ROCKETCHAT_ROOM_VALUE
   required: false
+- description: Log level
+  displayName: log level
+  name: HUBOT_LOG_LEVEL
+  value: warn

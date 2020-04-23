@@ -1,0 +1,28 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    app: rocketchat
+  name: rocketchat
+  namespace: e5imao-test
+spec:
+  host: chat.pathfinder.gov.bc.ca
+  port:
+    targetPort: 3000-tcp
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: rocketchat
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions:
+    - lastTransitionTime: 2020-01-23T23:47:48Z
+      status: "True"
+      type: Admitted
+    host: chat.pathfinder.gov.bc.ca
+    routerName: router
+    wildcardPolicy: None
