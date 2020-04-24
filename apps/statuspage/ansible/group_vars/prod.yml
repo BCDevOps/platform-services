@@ -7,4 +7,3 @@ route:
   dev: status-dev.pathfinder.gov.bc.ca
   test: status-test.pathfinder.gov.bc.ca
   prod: status.pathfinder.gov.bc.ca
-

@@ -6,6 +6,8 @@ pip install --upgrade requests --user
 dnf install libselinux-python
 ```
 
+Note: the grafana-dashboard binary (from grafyaml) requires python 2. This is configured in `group_vars`. 
+
 # Usage
 
 ```
