@@ -72,7 +72,7 @@ objects:
           - name: TZ
             value: America/Vancouver
           - name: HUBOT_LOG_LEVEL
-              value: ${HUBOT_LOG_LEVEL}
+            value: ${HUBOT_LOG_LEVEL_VALUE}
     test: false
     triggers:
     - type: ConfigChange
@@ -152,5 +152,6 @@ parameters:
   required: false
 - description: Log level
   displayName: log level
-  name: HUBOT_LOG_LEVEL
+  name: HUBOT_LOG_LEVEL_VALUE
   value: warn
+  required: true
