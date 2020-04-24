@@ -7,7 +7,7 @@
     - "{{ patroni_cluster_name }}"
     - "{{ grafana_service_name }}"
     - "{{ prometheus_service_name }}"
-    - "{{ envoy_service_name }}"
+#    - "{{ envoy_service_name }}"
     - "{{ blackbox_service_name }}"
 - name: Create objects
   command: "oc apply -f manifests/template-{{ item }}.yml -n {{ namespace }}"
@@ -15,7 +15,7 @@
     - "{{ patroni_cluster_name }}"
     - "{{ grafana_service_name }}"
     - "{{ prometheus_service_name }}"
-    - "{{ envoy_service_name }}"
+#    - "{{ envoy_service_name }}"
     - "{{ blackbox_service_name }}"
   when: activity == "install"
 - name: Delete objects
@@ -24,7 +24,7 @@
     - "{{ patroni_cluster_name }}"
     - "{{ grafana_service_name }}"
     - "{{ prometheus_service_name }}"
-    - "{{ envoy_service_name }}"
+#    - "{{ envoy_service_name }}"
     - "{{ blackbox_service_name }}"
   when: activity == "uninstall"
   ignore_errors: true

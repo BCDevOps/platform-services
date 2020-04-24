@@ -17,7 +17,8 @@ grafana_database_service: patroni-master
 grafana_db_name: patroni
 grafana_db_username: statuspage
 grafana_db_password: statuspage
-grafana_secret_file: "/etc/secrets/grafana_creds"
+#grafana_secret_file: "/etc/secrets/grafana_creds"
+grafana_secret_file: "../grafana_creds"
 grafana_oauth_generic_oauth_enabled: true
 grafana_auth_oauth_name: sso
 grafana_auth_oauth_allow_signup: true
@@ -25,7 +26,7 @@ grafana_auth_oauth_client_id: "{{ lookup('file',  grafana_secret_file ) | regex_
 grafana_auth_oauth_client_secret: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_CLIENT_SECRET.*', multiline=True) | regex_search('[^=]*$') }}"
 grafana_auth_oauth_auth_url: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_AUTH_URL.*', multiline=True) | regex_search('[^=]*$') }}"
 grafana_auth_oauth_token_url: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_TOKEN_URL.*', multiline=True) | regex_search('[^=]*$') }}"
-grafana_auth_oauth_api_url: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_APU_URL.*', multiline=True) | regex_search('[^=]*$') }}"
+grafana_auth_oauth_api_url: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_API_URL.*', multiline=True) | regex_search('[^=]*$') }}"
 grafana_sysdig_plugin_source: "https://download.sysdig.com/stable/grafana-sysdig-datasource/grafana-sysdig-datasource-v0.7.zip;sysdig"
 grafana_sysdig_apiToken: "{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_SYSDIG_API_TOKEN.*', multiline=True) | regex_search('[^=]*$') }}"
 

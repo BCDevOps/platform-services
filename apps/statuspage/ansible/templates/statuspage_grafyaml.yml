@@ -112,6 +112,22 @@ dashboard:
              - value: -1
                text: 'UP'
           valueFontSize: "100%"
+        - title: rocketchat 
+          datasource: Prometheus
+          span: 1
+          thresholds: -0.5,0
+          colorBackground: true
+          targets:
+            - expr: probe_success{instance="https://chat.pathfinder.gov.bc.ca",job="blackbox_tls_verify"}*-1
+              refId: A
+          type: singlestat
+          valueName: current
+          valueMaps:
+             - value: 0
+               text: 'DOWN'
+             - value: -1
+               text: 'UP'
+          valueFontSize: "100%"
         - title: kubernetes_api 
           datasource: Prometheus
           span: 1
@@ -280,43 +296,211 @@ dashboard:
         - title: Operations Notices
           content: |
 
-              # Notice: 10-09-19-0900.md
+              # Notice: 04-23-1500.md
 
               ## 
 
-              ## **RFC 186212 - MCS - Install Aporeto Zero Trust Network Security Enforcement in PROD**
+              ## **What is happening?**
 
               ## 
 
-              ## Wednesday October 9 at 9am
+              ## RFC 193346 - CITZ - PROD MCS - INC0035082 - Reboot OCIOPF-P-199.DMZ to put node back into service
 
               ## 
 
-              ## AdvSol will be installing a new network security solution [Aporeto](https://github.com/BCDevOps/platform-services/tree/master/security/aporeto) into the production cluster. All existing applications will be assigned default `NetworkSecurityPolicy` objects that will allow the same network traffic as currently supported by the application - between pods in the project, between pods and the API server (for builds), and between pods and the internet. This will ensure that there will be **no impact on the existing projects**.
+              ## We will be rebooting an app node that was taken out of service previously to ensure the node is back up in a consistent state. After reboot, the node will remain cordoned off for the sake of future changes where we will be leveraging that node for additional advance changes.
 
               ## 
 
-              ## If you have any questions or concerns about the install, please contact the Next Gen Security Project team at <olena.mitovska@gov.bc.ca>
+              ## **When?**
 
               ## 
 
-              ## [Steps of the install](https://github.com/BCDevOps/platform-services/tree/master/security/aporeto/build/ansible#playbook-flow-install):
-
-              ## - Create CustomResourceDefinitions and Operators
-
-              ## - Create default `NetworkSecurityPolicy` objects for all projects and wait for them to sync with Aporeto. We expect this step will take a while (up to a few hours) as there are over 600 projects.
-
-              ## - Create Enforcer DaemonSet. This is the step where the new policies will actually be enforced. No downtime for applications is expected, but if we do have any issues, this is where it will happen.
+              ## This afternoon (April 23rd 2020) starting after 3:00pm PDT. 
 
               ## 
 
-              ## If you have any connectivity issues once the enforcers are in place please post in #devops-sos for the team to triage.
+              ## **Will there be an impact on the Platform apps?**
 
-              # Notice: 08-03-19-1900.md
+              ## 
 
-              ## # This is an official release of the Status Page
+              ## No impact whatsoever. The node in question was previously evacuated of all pods, and the remaining nodes hosting user workloads will not be touched during this change window.
 
-              ## Please use the status page to quickly determine if systems are up/down and for any relavent operational notices.
+              ## 
+
+              ## **Do I need to do anything?**
+
+              ## 
+
+              ## No - the node being worked on has no running pods residing on it, thus the reboot will not affect running pods or the ability for new pods to be started.
+
+              ## 
+
+              ## **Check the #devops-alert channel for the announcement of when the change is complete and check the health of your app.**
+
+              ## 
+
+              ## **Where do I get help if my app doesn't work after the change is complete?**
+
+              ## 
+
+              ## This does not technically apply here since the change taking place does not have any pods running on it right now, and will remain cordoned off after reboot.
+
+              ## 
+
+              ## Each Platform application has an assigned DevOps Specialist within the Ministry so contact them first. If you don't know who your assigned DevOps Specialist, check with the app's Product Owner.
+
+              ## 
+
+              ## The DevOps Specialist will troubleshoot the issue with the app and if they need help, they will reach out to the Platform Services Team and the Developer Community in Rocket.Chat as per these [RocketChat Channel Use Guidelines](
+
+              ## https://developer.gov.bc.ca/Getting-human-support-for-issues-not-covered-by-devops-requests).
+
+              # Notice: 04-22-20-1700.md
+
+              ## 
+
+              ## **What is happening?**
+
+              ## 
+
+              ## RFC 193346 - CITZ - PROD MCS - RITM0059520 - Add RAM to 3 APP nodes
+
+              ## 
+
+              ## Back on April 1-3 we took some RAM from 3 app nodes and put it into the Infra nodes to improve their stability. We then ordered more RAM for the App nodes to get them back up to spec with the rest of the cluster. We will now be shutting down those three nodes to add the RAM back in.
+
+              ## 
+
+              ## **When?**
+
+              ## 
+
+              ## TBD as the RAM hasn't arrived at the datacenter yet, but is expected early next week. This will likely take place Wednesday April 22nd @ 17:00 - 19:00. But may get moved to Thursday if needed. Once a firm date is know it will be posted to #devops-alerts
+
+              ## 
+
+              ## **Will there be an impact on the Platform apps?**
+
+              ## 
+
+              ## At 5pm we'll issue a `oc adm drain` on the nodes, one node at a time. This will delete any pods on those hosts. Your ReplicationControllers will then take over and create new pods to maintain the scale factor you've configured and the scheduler will place them onto new hosts.
+
+              ## 
+
+              ## If your application is designed to be highly available then losing one pod should be a non-issue. If that pod is the only one supporting your app there may be **up to 10 minutes of downtime** while it starts up on another node.
+
+              ## 
+
+              ## To assist teams with performing a more controlled move of their pods we will be unscheduling the affected nodes Monday April 20th @ 10:00. After that time you may delete your pod at your convenience and let it schedule to another node.
+
+              ## 
+
+              ## **Do I need to do anything?**
+
+              ## 
+
+              ## If your application is sensitive to pod restarts ( which is considered a bad design ) you should proactively move the pods to other nodes by deleting them and letting them be restarted onto other nodes. This should be done between Monday morning when the nodes are unscheduled and Wednesday evening when they will be drained.
+
+              ## 
+
+              ## Otherwise, you should be available for testing of your application as it is drained at 5pm, and after the change as new pods start being scheduled onto the affected nodes.
+
+              ## 
+
+              ## Long term you must design your application to be resilient to node drains as it is a common part of the platforms maintenance that will happen during business hours.
+
+              ## 
+
+              ## **Check the #devops-alert channel for the announcement of when the change is complete and check the health of your app.**
+
+              ## 
+
+              ## **Where do I get help if my app doesn't work after the change is complete?**
+
+              ## 
+
+              ## Each Platform application has an assigned DevOps Specialist within the Ministry so contact them first. If you don't know who your assigned DevOps Specialist, check with the app's Product Owner.
+
+              ## 
+
+              ## The DevOps Specialist will troubleshoot the issue with the app and if they need help, they will reach out to the Platform Services Team and the Developer Community in Rocket.Chat as per these [RocketChat Channel Use Guidelines](
+
+              ## https://developer.gov.bc.ca/Getting-human-support-for-issues-not-covered-by-devops-requests).
+
+              # Notice: 04-21-20-1200.md
+
+              ## 
+
+              ## **What is happening?**
+
+              ## 
+
+              ## RFC 193520 - CITZ MCS PROD - Drain OICOPF-P-208.dmz due to partial multipath failure
+
+              ## 
+
+              ## We experienced a partial failure of the multipath last night. To prevent further unscheduled outages, we need to cordon and drain this node asap.
+
+              ## 
+
+              ## **When?**
+
+              ## 
+
+              ## Tuesday April 21st at 1200 
+
+              ## 
+
+              ## A list of affected workspaces and pods follows. Further updates will be posted to the #devops-alerts channel.
+
+              ## 
+
+              ## **Will there be an impact on the Platform apps?**
+
+              ## 
+
+              ## At noon we'll issue a oc adm drain on the node. This will delete any pods on this host. Your ReplicationControllers will then take over and create new pods to maintain the scale factor you've configured and the scheduler will place them onto new hosts.
+
+              ## 
+
+              ## If your application is designed to be highly available then losing one pod should be a non-issue. If that pod is the only one supporting your app there may be up to 10 minutes of downtime while it starts up on another node.
+
+              ## 
+
+              ## To assist teams with performing a more controlled move of their pods we will be unscheduling the affected nodes now. After that time you may delete your pod at your convenience and let it schedule to another node.
+
+              ## 
+
+              ## **Do I need to do anything?**
+
+              ## 
+
+              ## If your application is sensitive to pod restarts ( which is considered a bad design ) you should proactively move the pods to other nodes by deleting them and letting them be restarted onto other nodes. 
+
+              ## 
+
+              ## Otherwise, you should be available for testing of your application as it is drained at 5pm, and after the change as new pods start being scheduled onto the affected nodes.
+
+              ## 
+
+              ## Long term you must design your application to be resilient to node drains as it is a common part of the platforms maintenance that will happen during business hours.
+
+              ## 
+
+              ## **Check the #devops-alert channel for the announcement of when the change is complete and check the health of your app.**
+
+              ## 
+
+              ## **Where do I get help if my app doesn't work after the change is complete?**
+
+              ## 
+
+              ## Each Platform application has an assigned DevOps Specialist within the Ministry so contact them first. If you don't know who your assigned DevOps Specialist, check with the app's Product Owner.
+
+              ## 
+
+              ## The DevOps Specialist will troubleshoot the issue with the app and if they need help, they will reach out to the Platform Services Team and the Developer Community in Rocket.Chat as per these RocketChat Channel Use Guidelines.
 
 
           type: text

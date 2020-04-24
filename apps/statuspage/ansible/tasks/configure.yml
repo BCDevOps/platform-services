@@ -28,7 +28,7 @@
     command: sleep 15
   - name: Reset admin password
     uri: 
-      url: "http://{{ grafana_route.stdout }}/api/admin/users/1/password"
+      url: "https://{{ grafana_route.stdout }}/api/admin/users/1/password"
       method: PUT
       user: "admin"
       password: "admin"
@@ -44,9 +44,9 @@
     when: admin_default == true
   - name:  Set light theme 
     shell: "oc set env dc/grafana GF_USERS_DEFAULT_THEME='light' -n {{ namespace }}"
-  - name: Get existing public viewer API key
+  - name: Get existing API keys
     uri: 
-      url: "http://{{ grafana_route.stdout }}/api/auth/keys"
+      url: "https://{{ grafana_route.stdout }}/api/auth/keys"
       method: GET 
       user: "admin"
       password: "{{ grafana_admin_pwd }}"
@@ -59,35 +59,35 @@
   - set_fact: 
       existing_api_key: true
     when: existing_keys | length > 0 
-  - set_fact: 
-      api_key_query: "[?name =='public'].id"
-    when: existing_api_key == true 
-    ignore_errors: true 
+  # - set_fact: 
+  #     api_key_query: "[?name =='public'].id"
+  #   when: existing_api_key == true 
+  #   ignore_errors: true 
   - set_fact: 
       admin_api_key_query: "[?name =='admin'].id"
     when: existing_api_key == true
     ignore_errors: true
-  - set_fact: 
-      public_api_id: "{{ existing_keys.content | from_json | json_query(api_key_query) | replace('[', '') | replace(']', '') }}"
-    when: existing_api_key == true
+  # - set_fact: 
+  #     public_api_id: "{{ existing_keys.content | from_json | json_query(api_key_query) | replace('[', '') | replace(']', '') }}"
+  #   when: existing_api_key == true
   - set_fact: 
       admin_api_id: "{{ existing_keys.content | from_json | json_query(admin_api_key_query) | replace('[', '') | replace(']', '') }}"
     when: existing_api_key == true  
-  - name: Delete existing public viewer API key
-    uri: 
-      url: "http://{{ grafana_route.stdout }}/api/auth/keys/{{ public_api_id }} "
-      method: DELETE 
-      user: "admin"
-      password: "{{ grafana_admin_pwd }}"
-      force_basic_auth: true
-      return_content: true
-      headers: 
-        Content-Type: application/json
-    ignore_errors: true
-    when: existing_api_key == true  
+  # - name: Delete existing public viewer API key
+  #   uri: 
+  #     url: "https://{{ grafana_route.stdout }}/api/auth/keys/{{ public_api_id }} "
+  #     method: DELETE 
+  #     user: "admin"
+  #     password: "{{ grafana_admin_pwd }}"
+  #     force_basic_auth: true
+  #     return_content: true
+  #     headers: 
+  #       Content-Type: application/json
+  #   ignore_errors: true
+  #   when: existing_api_key == true  
   - name: Delete existing admin viewer API key
     uri: 
-      url: "http://{{ grafana_route.stdout }}/api/auth/keys/{{ admin_api_id }} "
+      url: "https://{{ grafana_route.stdout }}/api/auth/keys/{{ admin_api_id }} "
       method: DELETE 
       user: "admin"
       password: "{{ grafana_admin_pwd }}"
@@ -97,23 +97,22 @@
         Content-Type: application/json
     ignore_errors: true
     when: existing_api_key == true  
-  - name: Create new public viewer API key
-    uri: 
-      url: "http://{{ grafana_route.stdout }}/api/auth/keys"
-      method: POST
-      user: "admin"
-      password: "{{ grafana_admin_pwd }}"
-      force_basic_auth: true
-      return_content: true
-      headers: 
-        Content-Type: application/json
-      body_format: json
-      body: {"name": "public", "role": "Viewer"}
-    register: grafana_apikey
-
+  # - name: Create new public viewer API key
+  #   uri: 
+  #     url: "https://{{ grafana_route.stdout }}/api/auth/keys"
+  #     method: POST
+  #     user: "admin"
+  #     password: "{{ grafana_admin_pwd }}"
+  #     force_basic_auth: true
+  #     return_content: true
+  #     headers: 
+  #       Content-Type: application/json
+  #     body_format: json
+  #     body: {"name": "public", "role": "Viewer"}
+  #   register: grafana_apikey
   - name: Create new admin API key
     uri: 
-      url: "http://{{ grafana_route.stdout }}/api/auth/keys"
+      url: "https://{{ grafana_route.stdout }}/api/auth/keys"
       method: POST
       user: "admin"
       password: "{{ grafana_admin_pwd }}"
@@ -124,21 +123,21 @@
       body_format: json
       body: {"name": "admin", "role": "Admin"}
     register: grafana_admin_apikey
-  - name: Add api key to envoy ConfigMap
-    template: 
-      src: "manifests/templates/template-configmap-envoy.yml.j2"
-      dest: "manifests/configmap-envoy.yml"
-  - name: Reapply envoy configmap
-    k8s_raw:
-      state: present
-      src: manifests/configmap-envoy.yml
-      namespace: "{{ namespace }}"
-  - name: Redeploy Envoy
-    command: "oc delete pod -l app=envoy -n {{ namespace }} --grace-period=0"
+  # - name: Add api key to envoy ConfigMap
+  #   template: 
+  #     src: "manifests/templates/template-configmap-envoy.yml.j2"
+  #     dest: "manifests/configmap-envoy.yml"
+  # - name: Reapply envoy configmap
+  #   k8s_raw:
+  #     state: present
+  #     src: manifests/configmap-envoy.yml
+  #     namespace: "{{ namespace }}"
+  # - name: Redeploy Envoy
+  #   command: "oc delete pod -l app=envoy -n {{ namespace }} --grace-period=0"
   - name: Configure Grafana Datasource
     grafana_datasource:
       name: "Prometheus"
-      grafana_url: "http://{{ grafana_route.stdout }}"
+      grafana_url: "https://{{ grafana_route.stdout }}"
       grafana_user: "admin"
       grafana_password: "{{ grafana_admin_pwd }}"
       org_id: "1"
@@ -150,7 +149,7 @@
     ignore_errors: true
   - name: Get dashboard uid
     uri: 
-      url: http://{{ grafana_route.stdout }}/api/search?folderIds=0&query=&starred=false
+      url: https://{{ grafana_route.stdout }}/api/search?folderIds=0&query=&starred=false
       method: GET
       user: "admin"
       password: "{{ grafana_admin_pwd }}"
@@ -159,7 +158,7 @@
     register: dashboard_list
   - name:  Set home dashboard
     uri:
-      url: http://{{ grafana_route.stdout }}/api/org/preferences
+      url: https://{{ grafana_route.stdout }}/api/org/preferences
       method: PUT
       body_format: json
       body: '{"homeDashboardId": {{ dashboard_list.json[0].id }} }'
@@ -169,7 +168,7 @@
       return_content: true
   - name: Export dashboard
     grafana_dashboard:
-      grafana_url: http://{{ grafana_route.stdout }}
+      grafana_url: https://{{ grafana_route.stdout }}
       grafana_user: "admin"
       grafana_password: "{{ grafana_admin_pwd }}"
       org_id: 1
@@ -183,7 +182,7 @@
       replace: '"uid": "homedashboard"'
   - name: Import updated dashboard
     grafana_dashboard:
-      grafana_url: http://{{ grafana_route.stdout }}
+      grafana_url: https://{{ grafana_route.stdout }}
       grafana_user: "admin"
       grafana_password: "{{ grafana_admin_pwd }}"
       state: present

@@ -68,15 +68,17 @@ items:
             - name: GF_INSTALL_PLUGINS
               value: {{ grafana_sysdig_plugin_source }}
             - name: GF_AUTH_GENERIC_OAUTH_ENABLED
-              value: {{ grafana_oauth_generic_oauth_enabled }}
+              value: "{{ grafana_oauth_generic_oauth_enabled | lower }}"
             - name: GF_AUTH_GENERIC_OAUTH_NAME
               value: {{ grafana_auth_oauth_name }}
             - name: GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP
-              value: {{ grafana_auth_oauth_allow_signup }}
+              value: "{{ grafana_auth_oauth_allow_signup | lower }}"
             - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
               value: {{ grafana_auth_oauth_client_id }}
             - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
               value: {{ grafana_auth_oauth_client_secret }}
+            - name: GF_SERVER_ROOT_URL
+              value: https://{{ route }}
             - name: GF_AUTH_GENERIC_OAUTH_AUTH_URL
               value: >-
                 {{ grafana_auth_oauth_auth_url }}
@@ -123,9 +125,12 @@ items:
       app: {{ grafana_service_name }}
     name: {{ grafana_service_name }}
   spec:
-    host:
+    host: {{ route }}
     port:
       targetPort: 3000-tcp
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
     to:
       kind: Service
       name: {{ grafana_service_name }}
