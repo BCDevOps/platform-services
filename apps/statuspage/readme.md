@@ -1,5 +1,12 @@
+## Architecture
+- [ ] Create arch diagram
+- [ ] Create arch documenation note
+
 ## Deployment
-This application stack is fully deployed into OpenShift via Ansible. 
+This application stack is fully deployed into OpenShift via Ansible.
+
+The tools namespace holds a `webhook-ansible` container that is responsible for running the deployment.
+
 
 ### Sensitive Data
 Some sensitive data exists to configure Grafana for: 
@@ -34,3 +41,19 @@ oc set volume dc/webhook-ansible --add --type=secret --secret-name=grafana-secre
 
 # Authentication
 Users may access these dashboards via SSO.
+
+## Datasources
+
+### Prometheus
+
+### Sysdig
+
+## Dashboards
+
+### Automated Dashboard Creation
+
+### Sysdig Dashboards
+
+#### Updating or Adding Sysdig Dashboards
+
+## Maintenance Notifications
