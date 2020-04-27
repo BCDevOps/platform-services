@@ -1,0 +1,16 @@
+{% for rb in spec.rolebindings %}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: "{{ spec.namespace + '-' + rb.username + '-' + rb.rolename }}"
+  namespace: {{ spec.namespace }}
+subjects:
+- kind: User
+  name: {{ rb.username }}
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: {{ rb.rolename }}
+  apiGroup: rbac.authorization.k8s.io
+{% endfor %}

@@ -1,0 +1,33 @@
+github_org: "orgname"
+git_repo_name: "test"
+env_list:
+- namespace: 'test-dev'
+  cluster: 'https://kubernetes.default.svc'
+  total_cpu: '4'
+  total_memory: '2Gi'
+  requests_cpu: '100m'
+  requests_memory: '256Mi'
+  num_pods: '10'
+  num_pv_claims: '10'
+  num_secrets: '50'
+  num_services: '10'
+  rolebindings:
+    - username: bob
+      rolename: admin
+    - username: mike
+      rolename: edit
+- namespace: 'test-staging'
+  cluster: '<cluster-url>'
+  total_cpu: '4'
+  total_memory: '2Gi'
+  requests_cpu: '100m'
+  requests_memory: '256Mi'
+  num_pods: '10'
+  num_pv_claims: '10'
+  num_secrets: '50'
+  num_services: '10'
+  rolebindings:
+    - username: bob
+      rolename: admin
+    - username: mike
+      rolename: view   

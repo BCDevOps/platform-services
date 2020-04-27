@@ -1,0 +1,7 @@
+---
+# defaults file for github_create_project
+git_repo_description: "Initial Repo Creation"
+git_repo_is_private: "yes"
+git_repo_has_issues: "no"
+git_repo_has_wiki: "no"
+git_repo_has_downloads: "no"

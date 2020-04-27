@@ -1,0 +1,42 @@
+---
+# tasks file for argocd_create_project
+- name: ArgoCD create-project | Log into ArgoCD with CLI
+  shell: argocd login {{ argocd_hostname }} --username {{ argocd_admin_name }} --password {{ argocd_current_admin_password }} --insecure
+  register: argocd_login_result
+
+- debug:
+    msg: "ArgoCD login result : {{ argocd_login_result.stdout_lines }}"  
+
+- name: ArgoCD Create Repo with SSH Key
+  shell: "argocd repo add {{ git_repo_url }} --ssh-private-key-path {{ github_ssh_private_key }} --name {{ git_repo_name }}-{{ git_repo_default_branch }}"
+
+- debug:
+    msg: "argocd app create {{ spec.namespace }} --insecure --repo {{ git_repo_url }} --path {{ spec.namespace }} --dest-server {{ spec.cluster }} --dest-namespace {{ spec.namespace }} --sync-policy automated"
+  loop: "{{ env_list }}"
+  vars:
+    spec: "{{ item }}"
+
+- name: ArgoCD create-project | Create project
+  shell: "argocd app create {{ spec.namespace }} --insecure --repo {{ git_repo_url }} --path {{ spec.namespace }} --dest-server {{ spec.cluster }} --dest-namespace {{ spec.namespace }}"
+  register: argocd_app_create_results
+  loop: "{{ env_list }}"
+  vars:
+    spec: "{{ item }}"
+
+- debug:
+    msg: "ArgoCD app create result : {{ argocd_app_create_results.results }}"  
+
+- debug:
+    msg: "ArgoCD app create result : {{ item }}"  
+  with_items: "{{ argocd_app_create_results.results }}"
+
+- name: ArgoCD create-project | Sync with k8s cluster
+  shell: "argocd app sync {{ spec.namespace }} --insecure"
+  register: argocd_app_sync_results
+  loop: "{{ env_list }}"
+  vars:
+    spec: "{{ item }}"
+
+- debug:
+    msg: "ArgoCD app sync result : {{ item }}"  
+  with_items: "{{ argocd_app_sync_results.results }}"

@@ -1,0 +1,66 @@
+---
+# tasks file for openshift-generate-and-checkin-manifests
+- name: OC create objects | Create working dir
+  file:
+    path: ./repo
+    state: directory
+
+- name: OC create objects | Git clone https://github.com/{{ github_org }}/{{ git_repo_name }}.git
+  shell:
+    cmd: "git clone https://{{ github_auth_key }}@github.com/{{ github_org }}/{{ git_repo_name }}.git"
+    chdir: ./repo
+
+- name: OC create objects | Create directory structure
+  file:
+    path: ./repo/{{ git_repo_name }}/{{ item.namespace }}
+    state: directory
+  loop: "{{env_list}}"
+
+- name: OC create objects | Create namespace yaml
+  template:
+    src: project.yml.j2
+    dest: "./repo/{{ git_repo_name }}/{{ item.namespace }}/namespace.yaml"
+    mode: '0777'
+  loop: "{{ env_list }}"
+  vars:
+    spec: "{{ item }}"
+
+- name: OC create objects | Create quotas yaml
+  template:
+    src: quotas.yml.j2
+    dest: "./repo/{{ git_repo_name }}/{{ item.namespace }}/quotas.yaml"
+    mode: '0777'
+  loop: "{{ env_list }}"
+  vars:
+    spec: "{{ item }}"
+
+- name: OC create objects | Create rbac yaml
+  template:
+    src: rbac.yml.j2
+    dest: "./repo/{{ git_repo_name }}/{{ item.namespace }}/rbac.yaml"
+    mode: '0777'
+  loop: "{{ env_list }}"
+  vars:
+    spec: "{{ item }}"
+
+- name: OC create objects | Git commit and push master to origin
+  shell:
+    cmd: "git add . && git commit -m 'Adding initial yaml files for envs' && git push -u origin master"
+    chdir: ./repo/{{ git_repo_name }}
+  register: git_master_checkin_result  
+
+- debug:
+    msg: "Checkin to master {{ git_master_checkin_result.stderr_lines }}"
+
+# 10 sec delay for the lock to clear
+- pause:
+    seconds: 10
+
+- name: OC create objects | Git create develop branch and push to origin
+  shell:
+    cmd: "git checkout -b develop && git push -u origin develop"
+    chdir: ./repo/{{ git_repo_name }}
+  register: git_develop_checkin_result  
+
+- debug:
+    msg: "Checkin to develop {{ git_develop_checkin_result }}"

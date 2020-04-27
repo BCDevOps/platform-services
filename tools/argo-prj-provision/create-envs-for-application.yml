@@ -1,0 +1,42 @@
+---
+
+# - name: Key
+#   hosts: localhost
+#   gather_facts: no
+#   tasks:
+
+#     - name: Show Var
+#       debug:
+#         var: github_ssh_private_key
+
+# This playbook requires a customized virtual environment with the following requirements:
+    
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    cluster_url: 'https://api.kfwk3l1c.eastus.aroapp.io:6443'
+  tasks:
+    - name: "Log into Cluster"
+      shell: "oc login {{ cluster_url }} -u kubeadmin -p {{ lookup('env','KUBEADMIN_PASS') }}"
+    - name: Add Git Config Details
+      shell: |
+        git config --global user.email 'ansibletower@suncor.com'
+        git config --global user.name 'ARO Ansible Tower'
+
+- hosts: localhost
+  connection: local 
+  gather_facts: false
+  # remote_user: hartripley
+  vars:
+    argocd_namespace: argocd
+    argocd_admin_name: "{{ lookup('env','ARGO_USER') }}"
+    argocd_current_admin_password: "{{ lookup('env','ARGO_PASS') }}"
+    github_auth_key: "{{ lookup('env','GITHUB_PAT') }}"
+  roles:
+  - argocd-retrieve-server-host # Populate the env_list.cluster variable from argocd-server route
+  - github-create-repo
+  - github-init-repo
+  - generate-and-checkin-manifests
+  - argocd-retrieve-server-host
+  - argocd-create-project

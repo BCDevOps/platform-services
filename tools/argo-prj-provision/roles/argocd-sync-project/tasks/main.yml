@@ -1,0 +1,16 @@
+---
+# tasks file for argocd_sync_project
+- name: ArgoCD create-project | Log into ArgoCD with CLI
+  shell: argocd login {{ argocd_hostname }} --username {{ argocd_admin_name }} --password {{ argocd_current_admin_password }} --insecure
+  register: argocd_login_result
+
+- debug:
+    msg: "ArgoCD login result : {{ argocd_login_result.stdout_lines }}"  
+
+- name: ArgoCD create-project | Sync with k8s cluster
+  shell: argocd app sync {{ spec.namespace }} --insecure"
+  register: argocd_app_sync_result
+
+- debug:
+    msg: "ArgoCD app sync result : {{ argocd_app_sync_result.stdout_lines }}"  
+  loop: argocd_app_sync_results

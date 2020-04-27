@@ -46,3 +46,12 @@ spec:
                 }
             }
         }
+
+# Scenario 1
+# Pull down latest configmaps from repo 
+# oc apply config maps
+# redeploy
+#Scenario 2
+# update image stream tag
+# redeploy
+# should trigger from PR into specific branch in github

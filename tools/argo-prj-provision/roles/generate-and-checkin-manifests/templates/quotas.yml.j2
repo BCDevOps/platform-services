@@ -1,0 +1,15 @@
+kind: ResourceQuota
+apiVersion: v1
+metadata:
+  name: quota
+  namespace: {{ spec.namespace }}
+spec:
+  hard:
+    limits.cpu: "{{ spec.total_cpu }}"
+    limits.memory: "{{ spec.total_memory }}"
+    pods: "{{ spec.num_pods }}"
+    requests.cpu: "{{ spec.requests_cpu }}"
+    requests.memory: "{{ spec.requests_memory }}"
+    persistentvolumeclaims: "{{ spec.num_pv_claims }}"
+    secrets: "{{ spec.num_secrets }}"
+    services: "{{ spec.num_services }}"

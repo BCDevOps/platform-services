@@ -1,0 +1,30 @@
+---
+# tasks file for github_create_project
+
+- name: Github | Create repo in github
+  github_repo:
+    github_auth_key: "{{github_auth_key}}"
+    name: "{{git_repo_name}}"
+    description: "{{git_repo_description}}"
+    github_org: "{{github_org}}"
+    private: "{{git_repo_is_private}}"
+    has_issues: "{{git_repo_has_issues}}"
+    has_wiki: "{{git_repo_has_wiki}}"
+    has_downloads: "{{git_repo_has_downloads}}"
+  register: result
+
+- debug:
+    msg: "{{ result }}"
+
+- debug:
+    msg: "{% if result.failed == False %} Created git repo : '{{ result.meta.ssh_url }}' {% else %} Error creating repo '{{result}}' {% endif %}"
+    #msg: "delete repo {{result}}"
+
+- name: Github | Register the github repo url
+  set_fact:
+    git_repo_url: "{{ result.meta.ssh_url }}"
+
+- name: Github | Register the github branch
+  set_fact:
+    git_repo_default_branch: "{{ result.meta.default_branch }}"
+    

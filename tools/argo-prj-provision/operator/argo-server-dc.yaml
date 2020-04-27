@@ -1,0 +1,126 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '10'
+  selfLink: /apis/apps/v1/namespaces/argocd/deployments/argocd-server
+  resourceVersion: '1456538'
+  name: argocd-server
+  uid: c898141d-e1b9-41e4-a931-c67b6826c6c6
+  creationTimestamp: '2020-04-18T13:22:28Z'
+  generation: 10
+  namespace: argocd
+  ownerReferences:
+    - apiVersion: argoproj.io/v1alpha1
+      kind: ArgoCD
+      name: argocd
+      uid: c9cfed7c-f2bf-44bb-b4f9-729f6f4b9475
+      controller: true
+      blockOwnerDeletion: true
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-server
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        admin.password.changed: 04182020-133020-UTC
+        app.kubernetes.io/name: argocd-server
+    spec:
+      restartPolicy: Always
+      serviceAccountName: argocd-server
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      securityContext: {}
+      containers:
+        - resources: {}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            timeoutSeconds: 1
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          name: argocd-server
+          command:
+            - argocd-server
+            - '--staticassets'
+            - /shared/app
+            - '--dex-server'
+            - 'http://argocd-dex-server:5556'
+            - '--repo-server'
+            - 'argocd-repo-server:8081'
+            - '--redis'
+            - 'argocd-redis:6379'
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            timeoutSeconds: 1
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 3
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8083
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: ssh-known-hosts
+              mountPath: /app/config/ssh
+            - name: tls-certs
+              mountPath: /app/config/tls
+          terminationMessagePolicy: File
+          image: >-
+            argoproj/argocd@sha256:515d6cecf70169491efba5b9802b1ddb21a30e7ec59e87ab1f29196d6945afd5
+      serviceAccount: argocd-server
+      volumes:
+        - name: ssh-known-hosts
+          configMap:
+            name: argocd-ssh-known-hosts-cm
+            defaultMode: 420
+        - name: tls-certs
+          configMap:
+            name: argocd-tls-certs-cm
+            defaultMode: 420
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 10
+  replicas: 2
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  unavailableReplicas: 1
+  conditions:
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2020-04-18T13:28:13Z'
+      lastTransitionTime: '2020-04-18T13:28:13Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2020-04-18T13:30:00Z'
+      lastTransitionTime: '2020-04-18T13:22:28Z'
+      reason: ReplicaSetUpdated
+      message: ReplicaSet "argocd-server-5bd98d77d5" is progressing.

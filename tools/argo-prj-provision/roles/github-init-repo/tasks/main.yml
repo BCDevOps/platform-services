@@ -1,0 +1,26 @@
+---
+# tasks file for github-init-repo 
+- name: Git Init Repo | Create working dir
+  file:
+    path: ./repo
+    state: directory
+
+- name: Git Init Repo | touch README.md
+  file:
+      path: "./repo/README.md"
+      state: touch
+
+- name: Git Init Repo | Init & checkin README.md
+  shell:
+    cmd: git init && git add . && git commit -m "Adding readme"
+    chdir: ./repo
+
+- name: Git Init Repo | Push to remote
+  shell:
+    cmd: "git remote add origin https://{{ github_auth_key }}@github.com/{{ github_org }}/{{ git_repo_name }}.git && git push -u origin master"
+    chdir: ./repo
+
+- name: Git Init Repo | Cleanup working dir
+  file:
+    state: absent
+    path: ./repo

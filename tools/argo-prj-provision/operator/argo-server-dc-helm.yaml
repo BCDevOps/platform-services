@@ -1,0 +1,160 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+  selfLink: /apis/apps/v1/namespaces/argo/deployments/argo-argocd-server
+  resourceVersion: '1472043'
+  name: argo-argocd-server
+  uid: 8f5aee56-9699-4b59-bd60-b86bda914ff6
+  creationTimestamp: '2020-04-18T13:52:53Z'
+  generation: 1
+  namespace: argo
+  ownerReferences:
+    - apiVersion: argoproj.io/v1alpha1
+      kind: ArgoCD
+      name: argo
+      uid: 3423cbcf-d820-497e-b637-4075f5d49d61
+      controller: true
+      blockOwnerDeletion: true
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: argo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+    app.kubernetes.io/version: v1.4.0
+    helm.sh/chart: argo-cd-1.6.5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: argo
+      app.kubernetes.io/name: argocd-server
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/component: server
+        app.kubernetes.io/instance: argo
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: argocd-server
+        app.kubernetes.io/part-of: argocd
+        app.kubernetes.io/version: v1.4.0
+        helm.sh/chart: argo-cd-1.6.5
+    spec:
+      restartPolicy: Always
+      initContainers:
+        - name: openshift-oauth-config
+          image: 'quay.io/openshift/origin-cli:latest'
+          command:
+            - sh
+            - '-c'
+            - >-
+              oc get ArgoCD $(oc get ArgoCDs -n $ARGOCD_NAMESPACE -o
+              jsonpath="{.items[0].metadata.name}") -n $ARGOCD_NAMESPACE -o yaml
+              | sed -e 's,openshiftOAuthConfigClientSecret,'$(oc serviceaccounts
+              get-token argocd-dex-server -n $ARGOCD_NAMESPACE)',g' | sed -e
+              's,openshiftOAuthConfigIssuer,'$(oc whoami --show-server)',g' |
+              sed -e 's,openshiftOAuthConfigRedirectURI,'https://$(oc get route
+              argo-argocd-server -n $ARGOCD_NAMESPACE -o
+              jsonpath={.spec.host})/api/dex/callback',g' | sed -e
+              's,openshiftOAuthConfigClientID,'system:serviceaccount:$ARGOCD_NAMESPACE:argocd-dex-server',g'
+              | sed -e 's,openshiftOAuthConfigBaseUrl,'https://$(oc get route
+              argo-argocd-server -n $ARGOCD_NAMESPACE -o
+              jsonpath={.spec.host})',g' | oc apply -f -
+          env:
+            - name: ARGOCD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      serviceAccountName: argocd-server
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      securityContext: {}
+      containers:
+        - resources: {}
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          name: server
+          command:
+            - argocd-server
+            - '--staticassets'
+            - /shared/app
+            - '--repo-server'
+            - 'argo-argocd-repo-server:8081'
+            - '--dex-server'
+            - 'http://argo-argocd-dex-server:5556'
+            - '--loglevel'
+            - info
+            - '--redis'
+            - 'argo-argocd-redis:6379'
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          ports:
+            - name: server
+              containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: ssh-known-hosts
+              mountPath: /app/config/ssh
+          terminationMessagePolicy: File
+          image: 'argoproj/argocd:v1.4.0'
+      serviceAccount: argocd-server
+      volumes:
+        - name: static-files
+          emptyDir: {}
+        - name: ssh-known-hosts
+          configMap:
+            name: argocd-ssh-known-hosts-cm
+            defaultMode: 420
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 1
+  replicas: 1
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  conditions:
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2020-04-18T13:53:36Z'
+      lastTransitionTime: '2020-04-18T13:53:36Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2020-04-18T13:53:36Z'
+      lastTransitionTime: '2020-04-18T13:52:53Z'
+      reason: NewReplicaSetAvailable
+      message: ReplicaSet "argo-argocd-server-5bf89776d7" has successfully progressed.
