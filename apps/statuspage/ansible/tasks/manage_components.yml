@@ -5,6 +5,7 @@
     dest: manifests/template-{{ item }}.yml
   with_items: 
     - "{{ patroni_cluster_name }}"
+    - "{{ grafana-dashboard-configmap }}"
     - "{{ grafana_service_name }}"
     - "{{ prometheus_service_name }}"
 #    - "{{ envoy_service_name }}"
@@ -13,6 +14,7 @@
   command: "oc apply -f manifests/template-{{ item }}.yml -n {{ namespace }}"
   with_items: 
     - "{{ patroni_cluster_name }}"
+    - "{{ grafana-dashboard-configmap }}"
     - "{{ grafana_service_name }}"
     - "{{ prometheus_service_name }}"
 #    - "{{ envoy_service_name }}"
