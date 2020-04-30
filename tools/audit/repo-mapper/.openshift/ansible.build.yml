@@ -2,16 +2,14 @@ apiVersion: v1
 kind: Template
 metadata:
   creationTimestamp: null
-  name: ${NAME}
+  name: ${ANSIBLE_IS_NAME}
 labels:
-  app: ${NAME}
+  app: ${ANSIBLE_IS_NAME}
 objects:
 - apiVersion: v1
   kind: ImageStream
   metadata:
     creationTimestamp: null
-    labels:
-      shared: true
     name: ansible-operator
   spec:
     lookupPolicy:
@@ -30,23 +28,21 @@ objects:
   kind: ImageStream
   metadata:
     creationTimestamp: null
-    labels:
-      shared: true
-    name: ${NAME}
+    name: ${ANSIBLE_IS_NAME}
   spec:
     lookupPolicy:
       local: false
 - apiVersion: v1
   kind: BuildConfig
   metadata:
-    name: ${NAME}${SUFFIX}
+    name: ${ANSIBLE_IS_NAME}${SUFFIX}
   spec:
     failedBuildsHistoryLimit: 5
     nodeSelector: null
     output:
       to:
         kind: ImageStreamTag
-        name: ${NAME}:${VERSION}
+        name: ${ANSIBLE_IS_NAME}:${VERSION}
     postCommit: {}
     resources:
       limits:
@@ -58,7 +54,7 @@ objects:
       git:
         uri: ${SOURCE_REPOSITORY_URL}
         ref: ${SOURCE_REPOSITORY_REF}
-      contextDir: ${SOURCE_CONTEXT_DIR}
+      contextDir: ${ANSIBLE_SOURCE_CONTEXT_DIR}
       type: Git
     strategy:
       dockerStrategy:
@@ -72,9 +68,9 @@ objects:
     - imageChange: {}
       type: ImageChange
 parameters:
-- description: A name used for all objects
+- description: A name used for the build objects
   displayName: Name
-  name: NAME
+  name: ANSIBLE_IS_NAME
   required: true
   value: metadata-ansible
 - description: A name suffix used for all objects
@@ -96,11 +92,11 @@ parameters:
   name: SOURCE_REPOSITORY_REF
   required: true
   value: master
-- description: SOURCE_CONTEXT_DIR
-  displayName: SOURCE_CONTEXT_DIR
-  name: SOURCE_CONTEXT_DIR
+- description: ANSIBLE_SOURCE_CONTEXT_DIR
+  displayName: ANSIBLE_SOURCE_CONTEXT_DIR
+  name: ANSIBLE_SOURCE_CONTEXT_DIR
   required: true
-  value: tools/audit/repo-mapper
+  value: tools/audit/repo-mapper/audit-playbook
 - description: ANSIBLE_OPERATOR_VERSION
   displayName: ANSIBLE_OPERATOR_VERSION
   name: ANSIBLE_OPERATOR_VERSION

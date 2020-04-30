@@ -1,0 +1,187 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: repo-mapper
+labels:
+  template: repo-mapper
+objects:
+- apiVersion: v1
+  data:
+    Caddyfile: |
+      :2015
+
+      root * /var/www/html
+
+      file_server
+
+      encode gzip
+      log stdout
+      log stderr
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: caddy-${NAME}-static${SUFFIX}
+    labels:
+      app: ${NAME}-static${SUFFIX}
+      deploymentconfig: ${NAME}-static${SUFFIX}
+      app-name: ${NAME}-static${SUFFIX}
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}-static
+    labels: 
+      app: ${NAME}-static${SUFFIX}
+  spec:
+    lookupPolicy:
+      local: false
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}-static${SUFFIX}
+    labels: 
+      app: ${NAME}-static${SUFFIX}
+  spec:
+    minReadySeconds: 20 # should be ready for atleast 20 seconds before the container is considered available. This will allow us
+    # to catch any errors on deploy before they are available to the web
+    replicas: 1
+    selector:
+      deploymentconfig: ${NAME}-static${SUFFIX}
+    strategy:
+      resources:
+        requests:
+          cpu: '150m'
+          memory: '50Mi'
+        limits:
+          cpu: '250m'
+          memory: '105Mi'
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          deploymentconfig: ${NAME}-static${SUFFIX}
+          app: ${NAME}-static${SUFFIX}
+      spec:
+        containers:
+        - name: ${NAME}
+          image: ${NAME}-static:${VERSION}
+          args:
+            - /tmp/scripts/run
+          ports:
+          - containerPort: 2015
+            protocol: TCP
+          resources:
+            requests:
+              cpu: ${CPU_REQUEST}
+              memory: ${MEMORY_REQUEST}
+            limits:
+              cpu: ${CPU_LIMIT}
+              memory: ${MEMORY_LIMIT}
+          env:
+          volumeMounts:
+          - name: caddy-${NAME}-static${SUFFIX}
+            mountPath: /etc/Caddyfile
+            readOnly: true
+            subPath: Caddyfile
+          - mountPath: ${OUTPUT_PATH}
+            name: output-dir
+        volumes:
+        - name: caddy-${NAME}-static${SUFFIX}
+          configMap:
+            defaultMode: 420
+            name: caddy-${NAME}-static${SUFFIX}
+        - name: output-dir
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${NAME}-static:${VERSION}
+      type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}-static${SUFFIX}
+    labels: 
+      app: ${NAME}-static${SUFFIX}
+  spec:
+    ports:
+    - name: web
+      port: 2015
+      protocol: TCP
+      targetPort: 2015
+    selector:
+      deploymentconfig: ${NAME}-static${SUFFIX}
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      haproxy.router.openshift.io/disable_cookies: 'true'
+    creationTimestamp: null
+    name: ${NAME}-static${SUFFIX}
+    labels: 
+      app: ${NAME}-static${SUFFIX}
+  spec:
+    host:
+    port:
+      targetPort: web
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${NAME}-static${SUFFIX}
+      weight: 100
+    wildcardPolicy: None
+parameters:
+- description: A name used for all objects
+  displayName: Name
+  name: NAME
+  required: true
+  value: repo-mapper
+- description: A name used for routes/services and deployment configs
+  displayName: Host
+  name: HOST
+  required: false
+  value: ''
+- description: A volumn used for the caddy from config map
+  displayName: volumn name
+  name: CADDY_VOLUME_NAME
+  required: false
+  value: web-caddy-config
+- description: The CPU Request for the deployment config
+  displayName: CPU Request 
+  name: CPU_REQUEST
+  required: false
+  value: 10m
+- description: The CPU Limit for the deployment config
+  displayName: CPU Limit 
+  name: CPU_LIMIT
+  required: false
+  value: 100m
+- description: The Memory Request for the deployment config
+  displayName: Memory Request 
+  name: MEMORY_REQUEST
+  required: false
+  value: 50Mi
+- description: The Memory Limit for the deployment config
+  displayName: Memory Limit 
+  name: MEMORY_LIMIT
+  required: false
+  value: 75Mi
+- description: A name suffix used for all objects
+  displayName: Suffix
+  name: SUFFIX
+  required: false
+- description: A version used for the image tags
+  displayName: version
+  name: VERSION
+  required: true
+  value: v1.0
