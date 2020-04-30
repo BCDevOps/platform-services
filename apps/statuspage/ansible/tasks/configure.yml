@@ -25,7 +25,7 @@
       admin_default: false
     when: generated_pwd == false
   - name: Insert delay
-    command: sleep 15
+    command: sleep 30
   - name: Reset admin password
     uri: 
       url: "https://{{ grafana_route.stdout }}/api/admin/users/1/password"
