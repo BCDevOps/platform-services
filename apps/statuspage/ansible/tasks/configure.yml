@@ -26,7 +26,7 @@
     when: generated_pwd == false
   - name: Wait for Grafana service to be ready
     uri: 
-      url: "https://{{ grafana_route.stdout }}/api/admin/users/1/password"
+      url: "https://{{ grafana_route.stdout }}"
       status_code: 200
     register: grafana_result
     until: grafana_result.status == 200
