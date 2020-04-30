@@ -25,17 +25,17 @@
 
 ## Apply Dashboard      
     - name: Validate dashboard
-      command: "bin/grafana-dashboard --debug --grafana-url http://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} validate templates/statuspage_grafyaml.yml"
+      command: "/usr/bin/python2 bin/grafana-dashboard --debug --grafana-url https://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} validate templates/statuspage_grafyaml.yml"
       register: validate_dashboard
 #      no_log: true
   # Feels like this is a bug - like it needs to be run before the dashboard is "updated"
     - name: Delete dashboard due to bug
-      shell: "bin/grafana-dashboard --debug --grafana-url http://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} delete templates/statuspage_grafyaml.yml"
+      shell: "/usr/bin/python2 bin/grafana-dashboard --debug --grafana-url https://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} delete templates/statuspage_grafyaml.yml"
       when: validate_dashboard.stdout == 'SUCCESS!'
       ignore_errors: true
 
     - name: Update dashboard
-      shell: "bin/grafana-dashboard --debug --grafana-url http://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} update templates/statuspage_grafyaml.yml"
+      shell: "/usr/bin/python2 bin/grafana-dashboard --debug --grafana-url https://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} update templates/statuspage_grafyaml.yml"
       when: validate_dashboard.stdout == 'SUCCESS!'
 #      no_log: true
 

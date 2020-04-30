@@ -1,0 +1,11 @@
+- hosts: localhost
+  connection: local
+  vars: 
+    grafana_secret_file: "/home/sheastewart/GIT/BCDevOps/platform-services/apps/statuspage/grafana_creds"
+  tasks: 
+    # - name: read env var
+    #   shell: ". {{ playbook_dir }}/environ"
+    # - name: output
+    #   debug: msg="{{ lookup('env', 'BLABLA') }}"
+    - debug: msg="{{ lookup('file',  grafana_secret_file ) | regex_search('^GF_AUTH_OAUTH_CLIENT_SECRET.*', multiline=True) | regex_search('[^=]*$') }}"
+    - debug: msg="{{ lookup('file',  '../grafana_creds') | regex_search('^GF_AUTH_OAUTH_AUTH_URL.*', multiline=True) | regex_search('[^=]*$') }}"
