@@ -180,11 +180,12 @@ items:
           editable: true
         - name: Sysdig
           type: sysdig
-          access: direct
+          access: proxy
           jsonData: 
             apiToken: {{ grafana_sysdig_apiToken }}
           orgId: 1 
           editable: true
+          version: true
   kind: ConfigMap
   metadata:
     labels:
