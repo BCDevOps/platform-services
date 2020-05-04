@@ -9,6 +9,7 @@ pwd_alias: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
 generated_pwd: false
 admin_default: false
 existing_api_key: false
+rc_notify: "yes"
 
 
 grafana_service_name: grafana

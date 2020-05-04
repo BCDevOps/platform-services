@@ -17,23 +17,23 @@ if [ -d $repo ]; then (cd $repo && git pull); else git clone -b $branch $repourl
 ## Todo; Replace this shell script with a more generic ansible playbook
 cd platform-services/apps/statuspage/ansible
 
-if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=uninstall -e env=dev statuspage.yml)
+if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=uninstall -e env=dev statuspage.yml -e rc_notify="no")
 then 
   echo "Dev Removed - Reinstalling..."
-  if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=install -e env=dev statuspage.yml)
+  if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=install -e env=dev statuspage.yml )
   then 
     echo "Dev Installed - Configuring..."
-    if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=dev statuspage.yml)
+    if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=dev statuspage.yml -e rc_notify="no")
     then
       echo "Configured Dev"
       if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=install -e env=test statuspage.yml)
       then 
         echo "Configuring Test"
-        timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=test statuspage.yml
+        timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=test statuspage.yml -e rc_notify="no"
         if (timeout --preserve-status 240 ansible-playbook -i prod -e activity=install -e env=prod statuspage.yml)
         then 
           echo "Configuring prod"
-          timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=prod statuspage.yml
+          timeout --preserve-status 240 ansible-playbook -i prod -e activity=configure -e env=prod statuspage.yml -e rc_notify="no"
         else
           echo "Failed to configure prod"
         fi

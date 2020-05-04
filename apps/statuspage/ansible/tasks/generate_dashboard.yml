@@ -70,4 +70,4 @@
         link_names: 0
       delegate_to: localhost
       ignore_errors: true
-      when: env == 'prod'
+      when: env == 'prod' && rc_notify == 'yes'
