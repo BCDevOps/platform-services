@@ -28,6 +28,10 @@
       uri: 
         url: "https://{{ grafana_route.stdout }}/api/dashboards/db"
         status_code: 200
+        method: GET 
+        user: "admin"
+        password: "{{ grafana_admin_pwd }}"
+        force_basic_auth: true
       register: grafana_db_result
       until: grafana_db_result.status == 200
       retries: 120
