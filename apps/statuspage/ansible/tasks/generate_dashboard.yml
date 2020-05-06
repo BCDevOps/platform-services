@@ -23,6 +23,21 @@
         src: templates/statuspage_grafyaml.yml.j2
         dest: templates/statuspage_grafyaml.yml
 
+ ## Render template     
+    - name: Wait for Grafana service to be ready
+      uri: 
+        url: "https://{{ grafana_route.stdout }}/api/dashboards/db"
+        status_code: 200
+        method: GET 
+        user: "admin"
+        password: "{{ grafana_admin_pwd }}"
+        force_basic_auth: true
+      register: grafana_db_result
+      until: grafana_db_result.status == 200
+      retries: 120
+      delay: 1
+      changed_when: false
+      
 ## Apply Dashboard      
     - name: Validate dashboard
       command: "/usr/bin/python2 bin/grafana-dashboard --debug --grafana-url https://{{ grafana_route.stdout }} --grafana-apikey {{ grafana_admin_apikey.json.key }} validate templates/statuspage_grafyaml.yml"
@@ -55,4 +70,6 @@
         link_names: 0
       delegate_to: localhost
       ignore_errors: true
-      when: env == 'prod'
+      when: 
+        - env == 'prod' 
+        - rc_notify == 'yes'

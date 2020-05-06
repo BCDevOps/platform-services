@@ -24,8 +24,15 @@
       grafana_admin_pwd: "{{ grafana_admin_password.stdout }}"
       admin_default: false
     when: generated_pwd == false
-  - name: Insert delay
-    command: sleep 15
+  - name: Wait for Grafana service to be ready
+    uri: 
+      url: "https://{{ grafana_route.stdout }}"
+      status_code: 200
+    register: grafana_result
+    until: grafana_result.status == 200
+    retries: 120
+    delay: 1
+    changed_when: false
   - name: Reset admin password
     uri: 
       url: "https://{{ grafana_route.stdout }}/api/admin/users/1/password"

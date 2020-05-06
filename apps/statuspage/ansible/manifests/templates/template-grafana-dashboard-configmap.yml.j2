@@ -18,11 +18,11 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 7,
+      "id": 1,
       "links": [],
       "panels": [
         {
-          "content": "Node Ready Status by Function",
+          "content": "# Node Ready Status by Function\n",
           "datasource": "Sysdig",
           "gridPos": {
             "h": 2,
@@ -32,17 +32,17 @@ data:
           },
           "id": 11,
           "mode": "markdown",
-          "title": "My Panel (3)",
+          "title": "",
           "type": "text"
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
           "colorValue": false,
           "colors": [
-            "#299c46",
+            "#d44a3a",
             "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
+            "#299c46"
           ],
           "datasource": "Sysdig",
           "format": "short",
@@ -103,15 +103,16 @@ data:
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "kubernetes.node.ready",
               "timeAggregation": "avg"
             }
           ],
-          "thresholds": "",
+          "thresholds": "2,3",
           "title": "Masters - Ready",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -123,7 +124,7 @@ data:
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
           "colorValue": false,
           "colors": [
             "#299c46",
@@ -189,15 +190,16 @@ data:
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "kubernetes.node.unschedulable",
               "timeAggregation": "avg"
             }
           ],
-          "thresholds": "",
+          "thresholds": "2,3",
           "title": "Masters - NotReady",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -209,12 +211,12 @@ data:
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
           "colorValue": false,
           "colors": [
-            "#299c46",
+            "#d44a3a",
             "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
+            "#299c46"
           ],
           "datasource": "Sysdig",
           "format": "short",
@@ -275,15 +277,16 @@ data:
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "kubernetes.node.ready",
               "timeAggregation": "avg"
             }
           ],
-          "thresholds": "",
+          "thresholds": "2,3",
           "title": "Infrastructure - Ready",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -295,7 +298,7 @@ data:
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
           "colorValue": false,
           "colors": [
             "#299c46",
@@ -361,15 +364,16 @@ data:
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "kubernetes.node.unschedulable",
               "timeAggregation": "avg"
             }
           ],
-          "thresholds": "",
+          "thresholds": "2,3",
           "title": "Infrastructure  - NotReady",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -381,12 +385,12 @@ data:
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
           "colorValue": false,
           "colors": [
-            "#299c46",
+            "#d44a3a",
             "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
+            "#299c46"
           ],
           "datasource": "Sysdig",
           "format": "short",
@@ -447,15 +451,16 @@ data:
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "kubernetes.node.ready",
               "timeAggregation": "max"
             }
           ],
-          "thresholds": "",
+          "thresholds": "26,31",
           "title": "Application - Ready",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -467,7 +472,7 @@ data:
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
           "colorValue": false,
           "colors": [
             "#299c46",
@@ -532,15 +537,16 @@ data:
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "kubernetes.node.unschedulable",
               "timeAggregation": "avg"
             }
           ],
-          "thresholds": "",
+          "thresholds": "2,6",
           "title": "Application - NotReady",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -551,7 +557,7 @@ data:
           "valueName": "avg"
         },
         {
-          "content": "Application Node Actual Usage",
+          "content": "# Application Node Actual Usage",
           "datasource": "Sysdig",
           "gridPos": {
             "h": 2,
@@ -561,12 +567,12 @@ data:
           },
           "id": 2,
           "mode": "markdown",
-          "title": "My Panel",
+          "title": "",
           "type": "text"
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
           "colorValue": false,
           "colors": [
             "#299c46",
@@ -632,15 +638,16 @@ data:
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "cpu.used.percent",
               "timeAggregation": "avg"
             }
           ],
-          "thresholds": "",
+          "thresholds": "50,80",
           "title": "CPU % Used (Avg.)",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -747,7 +754,9 @@ data:
         },
         {
           "cacheTimeout": null,
-          "colorBackground": false,
+          "colorBackground": true,
+          "colorPostfix": false,
+          "colorPrefix": false,
           "colorValue": false,
           "colors": [
             "#299c46",
@@ -808,20 +817,21 @@ data:
           "tableColumn": "",
           "targets": [
             {
-              "filter": "agent.tag.region in (\"infra\")",
+              "filter": "agent.tag.region in (\"app\")",
               "groupAggregation": "avg",
               "isSingleDataPoint": true,
               "isTabularFormat": false,
               "refId": "0",
-              "segmentBy": null,
+              "segmentBy": [],
+              "sortDirection": "desc",
               "target": "memory.used.percent",
               "timeAggregation": "avg"
             }
           ],
-          "thresholds": "",
+          "thresholds": "50,80",
           "title": "Memory % Used (Avg.)",
           "type": "singlestat",
-          "valueFontSize": "80%",
+          "valueFontSize": "100%",
           "valueMaps": [
             {
               "op": "=",
@@ -872,7 +882,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "filter": "agent.tag.region in (\"infra\")",
+              "filter": "agent.tag.region in (\"app\")",
               "groupAggregation": "avg",
               "isSingleDataPoint": false,
               "isTabularFormat": false,
@@ -927,17 +937,17 @@ data:
           }
         },
         {
-          "content": "Platform Supply & Demand",
+          "content": "# Platform Supply & Demand\nSupply is calculated based on the available CPU and Memory available for scheduling as reported by each application node kubetlet.  \nDemand is calculated based on the CPU and Memory as requested by application deployments.",
           "datasource": "Sysdig",
           "gridPos": {
-            "h": 2,
+            "h": 3,
             "w": 24,
             "x": 0,
             "y": 13
           },
           "id": 3,
           "mode": "markdown",
-          "title": "My Panel (2)",
+          "title": "",
           "type": "text"
         },
         {
@@ -962,7 +972,7 @@ data:
             "h": 5,
             "w": 4,
             "x": 0,
-            "y": 15
+            "y": 16
           },
           "id": 4,
           "interval": null,
@@ -1048,7 +1058,7 @@ data:
             "h": 5,
             "w": 4,
             "x": 4,
-            "y": 15
+            "y": 16
           },
           "id": 12,
           "interval": null,
@@ -1134,7 +1144,7 @@ data:
             "h": 5,
             "w": 4,
             "x": 8,
-            "y": 15
+            "y": 16
           },
           "id": 13,
           "interval": null,
@@ -1220,7 +1230,7 @@ data:
             "h": 5,
             "w": 4,
             "x": 12,
-            "y": 15
+            "y": 16
           },
           "id": 14,
           "interval": null,
@@ -1285,6 +1295,7 @@ data:
           "valueName": "avg"
         }
       ],
+      "refresh": false,
       "schemaVersion": 22,
       "style": "dark",
       "tags": [
@@ -1305,7 +1316,7 @@ data:
       "variables": {
         "list": []
       },
-      "version": 2
+      "version": 1
     }
 kind: ConfigMap
 metadata:
