@@ -1,0 +1,10 @@
+# - name: Generate dict from input variables
+#   set_fact:
+#     test_pattern: 
+#       - name: "{{ app_name }}-{{ cpu_test_limits[indx] }}"
+#         cpu_limit: "{{ item }}"
+#         cpu_request:
+#         memory_limit: 
+#         memory_request: 
+
+# - debug: msg="{{ test_pattern }}"

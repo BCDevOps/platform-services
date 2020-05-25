@@ -1,0 +1,50 @@
+# - name: Render template
+#   set_fact: 
+#     test_object: "{{ lookup('template', './templates/pod.yml.j2' )}}"
+
+# - debug: msg="{{ test_object }}"
+
+- name: Collect system time
+  command: "date +%s"
+  register: start_time
+  
+- name: Create test_object
+  k8s:
+    state: present
+    definition: "{{ lookup('template', '../templates/pod.yml.j2' )}}"
+    wait: yes
+    wait_condition: 
+      type: Ready
+      status: True
+
+- name: Collect system time
+  command: "date +%s"
+  register: end_time
+
+- name: Calculate pod startup duration
+  set_fact: 
+    total_startup_time: "{{ ( end_time.stdout | int ) - ( start_time.stdout | int) }}"
+
+- name: Show startup time
+  debug: msg="Total of {{ total_startup_time }} seconds"
+
+- name: Remove test_object
+  k8s:
+    state: absent
+    definition: "{{ lookup('template', '../templates/pod.yml.j2' )}}"
+
+- name: Create record
+  set_fact: 
+    current_record: 
+      - name: "{{ item.name }}"
+        memory_limit:  "{{ item.memory_test_limits }}"
+        memory_request: "{{ item.memory_test_requests }}"
+        cpu_limit: "{{ item.cpu_test_limits }}"
+        cpu_request: "{{ item.cpu_test_requests }}"
+        startup_time: "{{ total_startup_time }}"
+          
+
+- name: Create datapoint entry in report_records variable
+  set_fact: 
+    report_records: "{{ report_records|default([]) + current_record }}"
+ 

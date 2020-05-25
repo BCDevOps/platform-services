@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars_files:
+    - vars.yml
+  tasks: 
+    # - include_tasks: tasks/create_dict.yml
+    #   with_items: cpu_test_limits
+    #   loop_control: 
+    #     index_var: indx
+    - include_tasks: tasks/run_tests.yml
+      with_items: 
+        - "{{ test_patterns }}"
+    - debug: msg="{{ report_records }}"
+    
+    - name: Create CSV output
+      template: 
+        src: templates/report_output.csv.j2
+        dest: "report.csv"
+
+

@@ -1,0 +1,7 @@
+Name, Memory Limit, Memory Request, CPU Limit, CPU Request, Startup Time
+100m-req-500m-limit-128m,256Mi,128Mi,500m,100m,18
+500m-req-1000m-limit-128m,256Mi,128Mi,1000m,500m,19
+1000m-req-2000m-limit-128m,256Mi,128Mi,2000m,1000m,18
+100m-req-500m-limit-512m,1024Mi,512Mi,500m,100m,18
+500m-req-1000m-limit-512m,1024Mi,512Mi,1000m,500m,13
+1000m-req-2000m-limit-512m,1024Mi,512Mi,2000m,1000m,18
