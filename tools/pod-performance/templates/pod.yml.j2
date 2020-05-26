@@ -7,7 +7,7 @@ spec:
   containers:
   - name: {{ item.name }}-{{ seq }}
     image: {{ image_path }}
-    imagePullPolicy: always
+    imagePullPolicy: Always
     ports: 
       - containerPort: {{ httpget_port }}
     readinessProbe:

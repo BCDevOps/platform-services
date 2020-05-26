@@ -1,5 +1,5 @@
 # App Details
-namespace: ws-test
+namespace: c81e6h-test
 app_name: test
 image_path: "docker-registry.default.svc:5000/openshift/jenkins:latest"
 # image_path: "jenkins/jenkins"
