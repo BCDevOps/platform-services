@@ -1,19 +1,23 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ item.name }}
+  name: {{ item.name }}-{{ seq }}
   namespace: {{ namespace }}
 spec:
   containers:
-  - name: {{ item.name }}
+  - name: {{ item.name }}-{{ seq }}
     image: {{ image_path }}
+    imagePullPolicy: always
+    ports: 
+      - containerPort: {{ httpget_port }}
     readinessProbe:
       httpGet:
         path: {{ httpget_path}}
         port: {{ httpget_port }}
-      initialDelaySeconds: 5
+      initialDelaySeconds: 30
       periodSeconds: 5
-      failureThreshold: 30
+      timeoutSeconds: 5
+      failureThreshold: 240
     resources:
       limits:
         memory: {{ item.memory_test_limits }}

@@ -1,9 +1,11 @@
 # App Details
 namespace: ws-test
 app_name: test
-image_path: grafana/grafana:latest
-httpget_port: "3000"
-httpget_path: "/lo"
+image_path: "docker-registry.default.svc:5000/openshift/jenkins:latest"
+# image_path: "jenkins/jenkins"
+# image_path: "grafana/grafana:latest"
+httpget_port: "8080"
+httpget_path: "/login"
 
 
 
@@ -24,26 +26,31 @@ test_patterns:
     cpu_test_requests: "100m"
     memory_test_limits: "256Mi"
     memory_test_requests: "128Mi"
+
   - name: 500m-req-1000m-limit-128m
     cpu_test_limits: "1000m"
     cpu_test_requests: "500m"
     memory_test_limits: "256Mi"
     memory_test_requests: "128Mi"
+
   - name: 1000m-req-2000m-limit-128m
     cpu_test_limits: "2000m"
     cpu_test_requests: "1000m"
     memory_test_limits: "256Mi"
     memory_test_requests: "128Mi"
+
   - name: 100m-req-500m-limit-512m
     cpu_test_limits: "500m"
     cpu_test_requests: "100m"
     memory_test_limits: "1024Mi"
     memory_test_requests: "512Mi"
+
   - name: 500m-req-1000m-limit-512m
     cpu_test_limits: "1000m"
     cpu_test_requests: "500m"
     memory_test_limits: "1024Mi"
     memory_test_requests: "512Mi"
+
   - name: 1000m-req-2000m-limit-512m
     cpu_test_limits: "2000m"
     cpu_test_requests: "1000m"

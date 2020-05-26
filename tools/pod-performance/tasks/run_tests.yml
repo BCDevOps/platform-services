@@ -1,9 +1,3 @@
-# - name: Render template
-#   set_fact: 
-#     test_object: "{{ lookup('template', './templates/pod.yml.j2' )}}"
-
-# - debug: msg="{{ test_object }}"
-
 - name: Collect system time
   command: "date +%s"
   register: start_time
@@ -16,7 +10,10 @@
     wait_condition: 
       type: Ready
       status: True
+    wait_timeout: 600
+  register: k8s_object_details
 
+# - debug: msg="{{ k8s_object_details }}"
 - name: Collect system time
   command: "date +%s"
   register: end_time
@@ -37,13 +34,14 @@
   set_fact: 
     current_record: 
       - name: "{{ item.name }}"
+        test_number: "{{ seq }}"
         memory_limit:  "{{ item.memory_test_limits }}"
         memory_request: "{{ item.memory_test_requests }}"
         cpu_limit: "{{ item.cpu_test_limits }}"
         cpu_request: "{{ item.cpu_test_requests }}"
         startup_time: "{{ total_startup_time }}"
-          
-
+        node_name: "{{ k8s_object_details.result.spec.nodeName }}"
+  
 - name: Create datapoint entry in report_records variable
   set_fact: 
     report_records: "{{ report_records|default([]) + current_record }}"
