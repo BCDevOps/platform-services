@@ -8,18 +8,8 @@ httpget_port: "8080"
 httpget_path: "/login"
 
 
-
-# Notes: 
-# CPU Performance Metrics 
-# cpu_test_limits: ["500m", "1", "1500m"]
-# cpu_test_requests: ["100m", "250m", "500m", "1", "2"]
-# Memory Poerformance Metrics in Mb
-# memory_test_limits: ["256Mi", "512Mi", "1Gi"]
-# memory_test_requests: ["128Mi", "256Mi", "512mi", "1Gi", "2Gi"]
-
-
 # Test Patterns
-test_attempts: 3
+test_attempts: 3              # Number of times to run each configuration below
 test_patterns: 
   - name: 100m-req-500m-limit-128m
     cpu_test_limits: "500m"
@@ -27,13 +17,13 @@ test_patterns:
     memory_test_limits: "256Mi"
     memory_test_requests: "128Mi"
 
-  - name: 500m-req-1000m-limit-128m
+  - name: 100m-req-1000m-limit-128m
     cpu_test_limits: "1000m"
-    cpu_test_requests: "500m"
+    cpu_test_requests: "100m"
     memory_test_limits: "256Mi"
     memory_test_requests: "128Mi"
 
-  - name: 1000m-req-2000m-limit-128m
+  - name: 100m-req-2000m-limit-128m
     cpu_test_limits: "2000m"
     cpu_test_requests: "1000m"
     memory_test_limits: "256Mi"
@@ -45,15 +35,15 @@ test_patterns:
     memory_test_limits: "1024Mi"
     memory_test_requests: "512Mi"
 
-  - name: 500m-req-1000m-limit-512m
+  - name: 100m-req-1000m-limit-512m
     cpu_test_limits: "1000m"
-    cpu_test_requests: "500m"
+    cpu_test_requests: "100m"
     memory_test_limits: "1024Mi"
     memory_test_requests: "512Mi"
 
-  - name: 1000m-req-2000m-limit-512m
+  - name: 100m-req-2000m-limit-512m
     cpu_test_limits: "2000m"
-    cpu_test_requests: "1000m"
+    cpu_test_requests: "100m"
     memory_test_limits: "1024Mi"
     memory_test_requests: "512Mi"
 

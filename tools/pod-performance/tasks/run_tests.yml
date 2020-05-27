@@ -2,7 +2,7 @@
   command: "date +%s"
   register: start_time
   
-- name: Create test_object
+- name: Create test pod
   k8s:
     state: present
     definition: "{{ lookup('template', '../templates/pod.yml.j2' )}}"
@@ -13,7 +13,6 @@
     wait_timeout: 600
   register: k8s_object_details
 
-# - debug: msg="{{ k8s_object_details }}"
 - name: Collect system time
   command: "date +%s"
   register: end_time
@@ -22,8 +21,6 @@
   set_fact: 
     total_startup_time: "{{ ( end_time.stdout | int ) - ( start_time.stdout | int) }}"
 
-- name: Show startup time
-  debug: msg="Total of {{ total_startup_time }} seconds"
 
 - name: Remove test_object
   k8s:

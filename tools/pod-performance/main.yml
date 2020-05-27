@@ -5,10 +5,7 @@
   vars_files:
     - vars.yml
   tasks: 
-    # - include_tasks: tasks/create_dict.yml
-    #   with_items: cpu_test_limits
-    #   loop_control: 
-    #     index_var: indx
+  
     - include_tasks: tasks/loop_tests.yml
       with_items: 
         - "{{ test_patterns }}"
