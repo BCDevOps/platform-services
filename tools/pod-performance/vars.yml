@@ -25,7 +25,7 @@ test_patterns:
 
   - name: 100m-req-2000m-limit-128m
     cpu_test_limits: "2000m"
-    cpu_test_requests: "1000m"
+    cpu_test_requests: "100m"
     memory_test_limits: "256Mi"
     memory_test_requests: "128Mi"
 
