@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars_files:
+    - vars.yml
+  tasks: 
+  
+    - include_tasks: tasks/loop_tests.yml
+      with_items: 
+        - "{{ test_patterns }}"
+    - debug: msg="{{ report_records }}"
+
+    - name: Create CSV report
+      template: 
+        src: templates/report.csv.j2
+        dest: "report_output.csv"
+
+

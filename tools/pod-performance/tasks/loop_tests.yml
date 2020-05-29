@@ -1,0 +1,5 @@
+- name: Run tests
+  include_tasks: tasks/run_tests.yml
+  with_sequence: count="{{ test_attempts }}"
+  loop_control: 
+    loop_var: seq

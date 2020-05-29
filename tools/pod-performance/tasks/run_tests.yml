@@ -1,0 +1,45 @@
+- name: Collect system time
+  command: "date +%s"
+  register: start_time
+  
+- name: Create test pod
+  k8s:
+    state: present
+    definition: "{{ lookup('template', '../templates/pod.yml.j2' )}}"
+    wait: yes
+    wait_condition: 
+      type: Ready
+      status: True
+    wait_timeout: 600
+  register: k8s_object_details
+
+- name: Collect system time
+  command: "date +%s"
+  register: end_time
+
+- name: Calculate pod startup duration
+  set_fact: 
+    total_startup_time: "{{ ( end_time.stdout | int ) - ( start_time.stdout | int) }}"
+
+
+- name: Remove test_object
+  k8s:
+    state: absent
+    definition: "{{ lookup('template', '../templates/pod.yml.j2' )}}"
+
+- name: Create record
+  set_fact: 
+    current_record: 
+      - name: "{{ item.name }}"
+        test_number: "{{ seq }}"
+        memory_limit:  "{{ item.memory_test_limits }}"
+        memory_request: "{{ item.memory_test_requests }}"
+        cpu_limit: "{{ item.cpu_test_limits }}"
+        cpu_request: "{{ item.cpu_test_requests }}"
+        startup_time: "{{ total_startup_time }}"
+        node_name: "{{ k8s_object_details.result.spec.nodeName }}"
+  
+- name: Create datapoint entry in report_records variable
+  set_fact: 
+    report_records: "{{ report_records|default([]) + current_record }}"
+ 
