@@ -1,0 +1,4 @@
+Name, Test Number, Memory Limit, Memory Request, CPU Limit, CPU Request, Startup Time, Node Name
+{% for n in report_records%}
+{{ n.name }},{{ n.test_number}},{{ n.memory_limit }},{{ n.memory_request }},{{ n.cpu_limit }},{{ n.cpu_request }},{{ n.startup_time }}, {{ n.node_name }}
+{% endfor %}
