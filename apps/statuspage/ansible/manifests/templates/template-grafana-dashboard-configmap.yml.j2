@@ -117,7 +117,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.ready",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               },
               {
                 "filter": "kubernetes.node.label.region in (\"master\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -127,7 +127,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.unschedulable",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               }
             ],
             "title": "Masters - Ready",
@@ -228,7 +228,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.unschedulable",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               }
             ],
             "title": "Masters - NotReady",
@@ -310,7 +310,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.ready",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               },
               {
                 "filter": "kubernetes.node.label.region in (\"infra\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -421,7 +421,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.unschedulable",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               }
             ],
             "title": "Infrastructure  - NotReady",
@@ -503,7 +503,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.ready",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               },
               {
                 "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -513,7 +513,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.unschedulable",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               }
             ],
             "title": "Application - Ready",
@@ -614,7 +614,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.unschedulable",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               }
             ],
             "title": "Application - NotReady",
@@ -696,7 +696,7 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.ready",
-                "timeAggregation": "avg"
+                "timeAggregation": "max"
               }
             ],
             "title": "Quarantined Nodes",
