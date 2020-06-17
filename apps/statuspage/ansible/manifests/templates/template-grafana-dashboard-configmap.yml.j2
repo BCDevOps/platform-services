@@ -1,1323 +1,1199 @@
 apiVersion: v1
 data:
   sysdig-public-capacity.json: |-
-    {
-      "annotations": {
-        "list": [
+      {
+        "annotations": {
+          "list": [
+            {
+              "builtIn": 1,
+              "datasource": "-- Grafana --",
+              "enable": true,
+              "hide": true,
+              "iconColor": "rgba(0, 211, 255, 1)",
+              "name": "Annotations & Alerts",
+              "type": "dashboard"
+            }
+          ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": 45,
+        "links": [],
+        "panels": [
           {
-            "builtIn": 1,
-            "datasource": "-- Grafana --",
-            "enable": true,
-            "hide": true,
-            "iconColor": "rgba(0, 211, 255, 1)",
-            "name": "Annotations & Alerts",
-            "type": "dashboard"
+            "content": "# Node Ready Status by Function\n",
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 2,
+              "w": 24,
+              "x": 0,
+              "y": 0
+            },
+            "id": 11,
+            "mode": "markdown",
+            "title": "",
+            "type": "text"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#d44a3a",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 2
+                    },
+                    {
+                      "color": "#299c46",
+                      "value": 3
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 0,
+              "y": 2
+            },
+            "id": 9,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"master\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.ready",
+                "timeAggregation": "max"
+              },
+              {
+                "filter": "kubernetes.node.label.region in (\"master\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "max",
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.unschedulable",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Masters - Ready",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "schedulable_nodes",
+                  "binary": {
+                    "left": "kubernetes.node.ready",
+                    "operator": "-",
+                    "reducer": "sum",
+                    "right": "kubernetes.node.unschedulable"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              }
+            ],
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 2
+                    },
+                    {
+                      "color": "#d44a3a",
+                      "value": 3
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 3,
+              "y": 2
+            },
+            "id": 10,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"master\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.unschedulable",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Masters - NotReady",
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#d44a3a",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 2
+                    },
+                    {
+                      "color": "#299c46",
+                      "value": 3
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 6,
+              "y": 2
+            },
+            "id": 7,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"infra\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.ready",
+                "timeAggregation": "max"
+              },
+              {
+                "filter": "kubernetes.node.label.region in (\"infra\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.unschedulable",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Infrastructure - Ready",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "schedulable_nodes",
+                  "binary": {
+                    "left": "kubernetes.node.ready",
+                    "operator": "-",
+                    "reducer": "sum",
+                    "right": "kubernetes.node.unschedulable"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              }
+            ],
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 2
+                    },
+                    {
+                      "color": "#d44a3a",
+                      "value": 3
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 9,
+              "y": 2
+            },
+            "id": 8,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"infra\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.unschedulable",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Infrastructure  - NotReady",
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#d44a3a",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 26
+                    },
+                    {
+                      "color": "#299c46",
+                      "value": 31
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 12,
+              "y": 2
+            },
+            "id": 5,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.ready",
+                "timeAggregation": "max"
+              },
+              {
+                "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.unschedulable",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Application - Ready",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "schedulable_nodes",
+                  "binary": {
+                    "left": "kubernetes.node.ready",
+                    "operator": "-",
+                    "reducer": "sum",
+                    "right": "kubernetes.node.unschedulable"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              }
+            ],
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 2
+                    },
+                    {
+                      "color": "#d44a3a",
+                      "value": 6
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 15,
+              "y": 2
+            },
+            "id": 6,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.unschedulable",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Application - NotReady",
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 2
+                    },
+                    {
+                      "color": "#d44a3a",
+                      "value": 6
+                    }
+                  ]
+                },
+                "unit": "short"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 18,
+              "y": 2
+            },
+            "id": 19,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "last"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"quarantine\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.ready",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Quarantined Nodes",
+            "type": "stat"
+          },
+          {
+            "content": "# Application Node Resource Commitment\nCommitment is computed from the **CPU & Memory Requests / Available CPU Cores & Memory** across all **App** nodes.   \nIf the platform commitment reaches 100%, no new workloads can be deployed. \n",
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 3,
+              "w": 24,
+              "x": 0,
+              "y": 6
+            },
+            "id": 3,
+            "mode": "markdown",
+            "title": "",
+            "type": "text"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "decimals": 0,
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 60
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 8,
+              "x": 0,
+              "y": 9
+            },
+            "id": 17,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": true
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.allocatable.cpuCores",
+                "timeAggregation": "max"
+              },
+              {
+                "filter": "kubernetes.node.label.region in (\"app\")",
+                "groupAggregation": "sum",
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.pod.resourceRequests.cpuCores",
+                "timeAggregation": "max"
+              }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "CPU Commitment",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "kubernetes.pod.resourceRequests.cpuCores",
+                    "operator": "/",
+                    "reducer": "sum",
+                    "right": "kubernetes.node.allocatable.cpuCores"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "kubernetes.pod.resourceRequests.cpuCores / kubernetes.node.allocatable.cpuCores",
+                    "operator": "*",
+                    "reducer": "sum",
+                    "right": "100"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              }
+            ],
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 70
+                    },
+                    {
+                      "color": "red",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 7,
+              "x": 8,
+              "y": 9
+            },
+            "id": 18,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "kubernetes.node.label.region in (\"app\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.allocatable.memBytes",
+                "timeAggregation": "max"
+              },
+              {
+                "filter": "kubernetes.node.label.region in (\"app\")",
+                "groupAggregation": "sum",
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.pod.resourceRequests.memBytes",
+                "timeAggregation": "max"
+              }
+            ],
+            "title": "Memory Commitment",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "kubernetes.pod.resourceRequests.memBytes",
+                    "operator": "/",
+                    "reducer": "sum",
+                    "right": "kubernetes.node.allocatable.memBytes"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "kubernetes.pod.resourceRequests.memBytes / kubernetes.node.allocatable.memBytes",
+                    "operator": "*",
+                    "reducer": "sum",
+                    "right": "100"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              }
+            ],
+            "type": "stat"
+          },
+          {
+            "content": "# Application Node Actual Usage\nUsage is calculated based on the **Average** (over time) of the **Maximum** usage across all **app** nodes.\n",
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {}
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 3,
+              "w": 24,
+              "x": 0,
+              "y": 14
+            },
+            "id": 2,
+            "mode": "markdown",
+            "title": "",
+            "type": "text"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 50
+                    },
+                    {
+                      "color": "#d44a3a",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 8,
+              "x": 0,
+              "y": 17
+            },
+            "id": 0,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "agent.tag.region in (\"app\") and agent.tag.env in (\"prod\")",
+                "groupAggregation": "max",
+                "isSingleDataPoint": false,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "cpu.used.percent",
+                "timeAggregation": "avg"
+              }
+            ],
+            "title": "CPU % Used (Avg.)",
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    },
+                    {
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 50
+                    },
+                    {
+                      "color": "#d44a3a",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percent"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 7,
+              "x": 8,
+              "y": 17
+            },
+            "id": 1,
+            "interval": null,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "lastNotNull"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.3",
+            "targets": [
+              {
+                "filter": "agent.tag.region in (\"app\") and agent.tag.env in (\"prod\")",
+                "groupAggregation": "max",
+                "isSingleDataPoint": false,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "memory.used.percent",
+                "timeAggregation": "avg"
+              }
+            ],
+            "title": "Memory % Used (Avg.)",
+            "type": "stat"
           }
-        ]
-      },
-      "editable": true,
-      "gnetId": null,
-      "graphTooltip": 0,
-      "id": 1,
-      "links": [],
-      "panels": [
-        {
-          "content": "# Node Ready Status by Function\n",
-          "datasource": "Sysdig",
-          "gridPos": {
-            "h": 2,
-            "w": 24,
-            "x": 0,
-            "y": 0
-          },
-          "id": 11,
-          "mode": "markdown",
-          "title": "",
-          "type": "text"
+        ],
+        "refresh": "1h",
+        "schemaVersion": 25,
+        "style": "dark",
+        "tags": [
+          "Sysdig",
+          "Shared dashboard"
+        ],
+        "templating": {
+          "list": []
         },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorValue": false,
-          "colors": [
-            "#d44a3a",
-            "rgba(237, 129, 40, 0.89)",
-            "#299c46"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 0,
-            "y": 2
-          },
-          "id": 9,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"master\")",
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "kubernetes.node.ready",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": "2,3",
-          "title": "Masters - Ready",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
+        "time": {
+          "from": "now-1h",
+          "to": "now"
         },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 4,
-            "y": 2
-          },
-          "id": 10,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"master\")",
-              "groupAggregation": "avg",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "kubernetes.node.unschedulable",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": "2,3",
-          "title": "Masters - NotReady",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
+        "timepicker": {
+          "refresh_intervals": [
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+          ]
         },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorValue": false,
-          "colors": [
-            "#d44a3a",
-            "rgba(237, 129, 40, 0.89)",
-            "#299c46"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 8,
-            "y": 2
-          },
-          "id": 7,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"infra\")",
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "kubernetes.node.ready",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": "2,3",
-          "title": "Infrastructure - Ready",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 12,
-            "y": 2
-          },
-          "id": 8,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"infra\")",
-              "groupAggregation": "avg",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "kubernetes.node.unschedulable",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": "2,3",
-          "title": "Infrastructure  - NotReady",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorValue": false,
-          "colors": [
-            "#d44a3a",
-            "rgba(237, 129, 40, 0.89)",
-            "#299c46"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 16,
-            "y": 2
-          },
-          "id": 5,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"app\")",
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "kubernetes.node.ready",
-              "timeAggregation": "max"
-            }
-          ],
-          "thresholds": "26,31",
-          "title": "Application - Ready",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 4,
-            "x": 20,
-            "y": 2
-          },
-          "id": 6,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "kubernetes.node.unschedulable",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": "2,6",
-          "title": "Application - NotReady",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "content": "# Application Node Actual Usage",
-          "datasource": "Sysdig",
-          "gridPos": {
-            "h": 2,
-            "w": 24,
-            "x": 0,
-            "y": 6
-          },
-          "id": 2,
-          "mode": "markdown",
-          "title": "",
-          "type": "text"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 0,
-            "y": 8
-          },
-          "id": 0,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "agent.tag.region in (\"app\")",
-              "groupAggregation": "max",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "cpu.used.percent",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": "50,80",
-          "title": "CPU % Used (Avg.)",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Sysdig",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 4,
-            "y": 8
-          },
-          "hiddenSeries": false,
-          "id": 15,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
-          "percentage": false,
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "filter": "agent.tag.region in (\"app\")",
-              "groupAggregation": "max",
-              "isSingleDataPoint": false,
-              "isTabularFormat": false,
-              "pageLimit": 10,
-              "refId": "0",
-              "segmentBy": [
-                "host.hostName"
-              ],
-              "sortDirection": "desc",
-              "target": "cpu.used.percent",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "CPU % Used (Avg.) Top 10",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": true,
-          "colorPostfix": false,
-          "colorPrefix": false,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 12,
-            "y": 8
-          },
-          "id": 1,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "agent.tag.region in (\"app\")",
-              "groupAggregation": "avg",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": [],
-              "sortDirection": "desc",
-              "target": "memory.used.percent",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": "50,80",
-          "title": "Memory % Used (Avg.)",
-          "type": "singlestat",
-          "valueFontSize": "100%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Sysdig",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 16,
-            "y": 8
-          },
-          "hiddenSeries": false,
-          "id": 16,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "dataLinks": []
-          },
-          "percentage": false,
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "filter": "agent.tag.region in (\"app\")",
-              "groupAggregation": "avg",
-              "isSingleDataPoint": false,
-              "isTabularFormat": false,
-              "pageLimit": 10,
-              "refId": "0",
-              "segmentBy": [
-                "host.hostName"
-              ],
-              "sortDirection": "desc",
-              "target": "memory.used.percent",
-              "timeAggregation": "avg"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "Memory % Used (Avg.) Top 10",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "content": "# Platform Supply & Demand\nSupply is calculated based on the available CPU and Memory available for scheduling as reported by each application node kubetlet.  \nDemand is calculated based on the CPU and Memory as requested by application deployments.",
-          "datasource": "Sysdig",
-          "gridPos": {
-            "h": 3,
-            "w": 24,
-            "x": 0,
-            "y": 13
-          },
-          "id": 3,
-          "mode": "markdown",
-          "title": "",
-          "type": "text"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 0,
-            "y": 16
-          },
-          "id": 4,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"app\")",
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": null,
-              "target": "kubernetes.node.allocatable.cpuCores",
-              "timeAggregation": "max"
-            }
-          ],
-          "thresholds": "",
-          "title": "CPU Supply (Cores)",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 4,
-            "y": 16
-          },
-          "id": 12,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"app\")",
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": null,
-              "target": "kubernetes.pod.resourceRequests.cpuCores",
-              "timeAggregation": "max"
-            }
-          ],
-          "thresholds": "",
-          "title": "CPU Demand (Cores)",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 8,
-            "y": 16
-          },
-          "id": 13,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"app\")",
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": null,
-              "target": "kubernetes.node.allocatable.memBytes",
-              "timeAggregation": "max"
-            }
-          ],
-          "thresholds": "",
-          "title": "Memory Supply (GB)",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "Sysdig",
-          "format": "short",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 4,
-            "x": 12,
-            "y": 16
-          },
-          "id": 14,
-          "interval": null,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false,
-            "ymax": null,
-            "ymin": null
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "filter": "kubernetes.node.label.region in (\"app\")",
-              "groupAggregation": "sum",
-              "isSingleDataPoint": true,
-              "isTabularFormat": false,
-              "refId": "0",
-              "segmentBy": null,
-              "target": "kubernetes.pod.resourceRequests.memBytes",
-              "timeAggregation": "max"
-            }
-          ],
-          "thresholds": "",
-          "title": "Memory Demand (GB)",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        }
-      ],
-      "refresh": false,
-      "schemaVersion": 22,
-      "style": "dark",
-      "tags": [
-        "Sysdig",
-        "Shared dashboard"
-      ],
-      "templating": {
-        "list": []
-      },
-      "time": {
-        "from": "now-1h",
-        "to": "now"
-      },
-      "timepicker": {},
-      "timezone": "browser",
-      "title": "Pathfinder Capacity and Utilization",
-      "uid": "ZykxoQqZz",
-      "variables": {
-        "list": []
-      },
-      "version": 1
-    }
+        "timezone": "browser",
+        "title": "Pathfinder Capacity and Utilization",
+        "uid": "ZykxoDDqZz",
+        "version": 42
+      }
 kind: ConfigMap
 metadata:
   labels:
