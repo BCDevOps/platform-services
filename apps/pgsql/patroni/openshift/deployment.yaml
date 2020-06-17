@@ -223,6 +223,15 @@ objects:
             exec:
               command:
                 - /usr/share/scripts/patroni/health_check.sh
+          livenessProbe:
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 4
+            periodSeconds: 60
+            exec:
+              command:
+                - /usr/share/scripts/patroni/health_check.sh
           volumeMounts:
           - mountPath: /home/postgres/pgdata
             name: postgresql
