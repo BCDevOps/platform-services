@@ -41,6 +41,13 @@ data:
     new_k8s: true
     k8s_cluster_name: pathfinder
 
+    ##### Debug and disable undesired metrics
+    app_checks_enabled: false
+    statsd:
+      enabled: false
+    jmx:
+      enabled: false    
+      
     ### Prometheus
     prometheus:
       enabled: true
