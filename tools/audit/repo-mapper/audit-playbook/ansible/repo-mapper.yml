@@ -20,7 +20,7 @@
         state: absent
       with_items:
         - namespace_metadata.csv
-        - project-stats.csv
+        - project_stats.csv
         - reports.zip
 
     - name: Pre-install packages
@@ -49,7 +49,7 @@
 
     - name: Wait for CPU output exists
       wait_for:
-        path: "{{ output_dir }}/project-stats.csv"
+        path: "{{ output_dir }}/project_stats.csv"
     
     - name: Zip up the results
       archive:
