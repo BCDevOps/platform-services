@@ -55,7 +55,4 @@ echo "authenticate as developer again"
 oc login -u developer -p hello
 
 echo "Associate deverloper account - so that image repose can be found"
-minishift ssh -- 'sudo bash -c "subscription-manager attach --pool=8a85f9916977b22c0169aafb6379038b"'
-
-echo "confirm that the RHSCL imager repos can be found"
-minishift ssh -- 'sudo bash -c "subscription-manager repos --list | grep scl"'
+minishift ssh -- 'sudo subscription-manager refresh && sudo subscription-manager list --available "--matches=Red Hat Developer Subscription" --pool-only | xargs -t -I {} sudo subscription-manager attach "--pool={}"'
