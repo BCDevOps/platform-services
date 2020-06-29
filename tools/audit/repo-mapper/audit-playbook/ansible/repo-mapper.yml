@@ -36,9 +36,16 @@
       include_tasks: tasks/repo_namespace_metadata.yml
       when: map_repo
     
-    - name: Wait for output exists
+    - name: Wait for metadata output exists
       wait_for:
         path: "{{ output_dir }}/namespace_metadata.csv"
+
+    - name: Output CPU usage
+      shell: ./projstats.sh
+
+    - name: Wait for CPU output exists
+      wait_for:
+        path: "{{ output_dir }}/project-stats.csv"
 
     - name: Wait for "{{ wait_time }}" seconds before going idle
       wait_for:
