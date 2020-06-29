@@ -16,8 +16,12 @@
   tasks:
     - name: Clean up report directory
       file:
-        path: "{{ output_dir }}/namespace_metadata.csv"
+        path: "{{ output_dir }}/{{ item }}"
         state: absent
+      with_items:
+        - namespace_metadata.csv
+        - project-stats.csv
+        - reports.zip
 
     - name: Pre-install packages
       pip:
@@ -46,6 +50,12 @@
     - name: Wait for CPU output exists
       wait_for:
         path: "{{ output_dir }}/project-stats.csv"
+    
+    - name: Zip up the results
+      archive:
+        path: "{{ output_dir }}"
+        dest: "{{ output_dir }}/reports.zip"
+        format: zip
 
     - name: Wait for "{{ wait_time }}" seconds before going idle
       wait_for:
