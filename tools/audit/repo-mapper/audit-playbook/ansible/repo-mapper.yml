@@ -21,7 +21,6 @@
       with_items:
         - namespace_metadata.csv
         - project_stats.csv
-        - reports.zip
 
     - name: Pre-install packages
       pip:
@@ -50,12 +49,23 @@
     - name: Wait for CPU output exists
       wait_for:
         path: "{{ output_dir }}/project_stats.csv"
-    
-    - name: Zip up the results
-      archive:
-        path: "{{ output_dir }}"
-        dest: "{{ output_dir }}/reports.zip"
-        format: zip
+
+    - name: Send email to platform PO with attachment
+      mail:
+        host: apps.smtp.gov.bc.ca
+        port: 25
+        subject: Ansible-report
+        body: Hello, please see the CPU usage report attached in this email!
+        from: Repo Mapper <pathfinder@gov.bc.ca>
+        to:
+        - Shelly Han <shelly.han@gov.bc.ca>
+        # - Tolu
+        # - Olena
+        cc: Shelly Han <shelly.han@gov.bc.ca>
+        attach:
+        - "{{ output_dir }}/project_stats.csv"
+        charset: us-ascii
+      delegate_to: localhost
 
     - name: Wait for "{{ wait_time }}" seconds before going idle
       wait_for:
