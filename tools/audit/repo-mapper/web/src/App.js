@@ -96,7 +96,7 @@ const App = ()  => {
         <div className="container">
           {fileExists  && <CSVLink />}
           {!polling && !error && !fileExists && <button className="BC-Gov-SecondaryButton" onClick={pollForCSV}>Start Report</button>}
-          {polling && <h2>Generating Report <ClimbingBoxLoader /></h2>}
+          {polling && <h2>Generating project set metadata report. The CPU report takes longer to generate, it will be emailed to you around an hour. <ClimbingBoxLoader /></h2>}
           {error && !polling && <div className="container">
             <div>
               <h2 style={{color: "#D8292F"}}>Report failed to generate within {timeout / 1000 } seconds. </h2>
