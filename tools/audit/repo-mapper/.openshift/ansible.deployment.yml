@@ -3,6 +3,18 @@ kind: Template
 metadata:
   name: ${NAME}
 objects:
+- apiVersion: v1
+  data:
+    SMTP_HOST: ${SMTP_HOST}
+    SMTP_PORT: ${SMTP_PORT}
+    FROM_EMAIL: ${FROM_EMAIL}
+    TO_A: ${TO_A}
+    TO_B: ${TO_B}
+    TO_C: ${TO_C}
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: null
+    name: ${NAME}-email-conf
 - apiVersion: authorization.openshift.io/v1
   groupNames: null
   kind: RoleBinding
@@ -94,6 +106,31 @@ objects:
             value: ${NAMESPACE}
           - name: WAIT_TIME
             value: ${WAIT_TIME}
+          - name: SMTP_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: SMTP_HOST
+                name: ${NAME}-email-conf
+          - name: SMTP_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: SMTP_PORT
+                name: ${NAME}-email-conf
+          - name: TO_A
+            valueFrom:
+              configMapKeyRef:
+                key: TO_A
+                name: ${NAME}-email-conf
+          - name: TO_B
+            valueFrom:
+              configMapKeyRef:
+                key: TO_B
+                name: ${NAME}-email-conf
+          - name: TO_C
+            valueFrom:
+              configMapKeyRef:
+                key: TO_C
+                name: ${NAME}-email-conf
           resources: {}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
@@ -162,4 +199,28 @@ parameters:
 - description: Time in seconds before idling the service
   displayName: WAIT_TIME
   name: WAIT_TIME
+  required: true
+- description: BCGOV smtp service host
+  displayName: SMTP_HOST
+  name: SMTP_HOST
+  required: true
+- description: BCGOV smtp service port
+  displayName: SMTP_PORT
+  name: SMTP_PORT
+  required: true
+- description: Email sent from
+  displayName: FROM_EMAIL
+  name: FROM_EMAIL
+  required: true
+- description: Email send to A
+  displayName: TO_A
+  name: TO_A
+  required: true
+- description: Email send to B
+  displayName: TO_B
+  name: TO_B
+  required: true
+- description: Email send to C
+  displayName: TO_C
+  name: TO_C
   required: true

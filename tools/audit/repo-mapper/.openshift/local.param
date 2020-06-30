@@ -27,4 +27,10 @@ SA_NAMESPACE=devhub-tools
 OUTPUT_PATH=/var/www/html/reports
 # 12 hrs before going to idle:
 WAIT_TIME=43200
+SMTP_HOST=
+SMTP_PORT=
+FROM_EMAIL=
+TO_A=
+TO_B=
+TO_C=
 # SERVICE_NAME=$NAME-static -> dynamically generated
