@@ -13,7 +13,7 @@ ANSIBLE_SOURCE_CONTEXT_DIR=tools/audit/repo-mapper/audit-playbook
 ANSIBLE_IS_NAME=metadata-ansible
 
 # Caddy BC:
-CSV_REPORT_PATH=/reports/namespace_metadata.csv
+CSV_REPORT_PATH=/reports/reports.zip
 CADDY_SOURCE_CONTEXT_DIR=tools/audit/repo-mapper/web
 # MAX_SERVER_POLLS=20
 # SERVER_POLL_INTERVAL=2000
