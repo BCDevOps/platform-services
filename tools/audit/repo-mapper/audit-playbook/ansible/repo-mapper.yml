@@ -13,6 +13,12 @@
     exposed_service: "{{ lookup('env','SERVICE_NAME') }}"
     namespace: "{{ lookup('env','SERVICE_NAMESPACE') }}"
     wait_time: "{{ lookup('env','WAIT_TIME') }}"
+    smtp_host: "{{ lookup('env','SMTP_HOST') }}"
+    smtp_port: "{{ lookup('env','SMTP_PORT') }}"
+    from_email: "{{ lookup('env','FROM_EMAIL') }}"
+    send_a: "{{ lookup('env','TO_A') }}"
+    send_b: "{{ lookup('env','TO_B') }}"
+    send_c: "{{ lookup('env','TO_C') }}"
   tasks:
     - name: Clean up report directory
       file:
@@ -52,16 +58,15 @@
 
     - name: Send email to platform PO with attachment
       mail:
-        host: apps.smtp.gov.bc.ca
-        port: 25
+        host: "{{ smtp_host }}"
+        port: "{{ smtp_port }}"
         subject: Ansible-report
         body: Hello, please see the CPU usage report attached in this email!
-        from: Repo Mapper <pathfinder@gov.bc.ca>
+        from: "{{ from_email }}"
         to:
-        - Shelly Han <shelly.han@gov.bc.ca>
-        # - Tolu
-        # - Olena
-        cc: Shelly Han <shelly.han@gov.bc.ca>
+        - "{{ send_c }}"
+        # - add
+        cc: "{{ send_c }}"
         attach:
         - "{{ output_dir }}/project_stats.csv"
         charset: us-ascii
