@@ -64,8 +64,8 @@
         body: Hello, please see the CPU usage report attached in this email!
         from: "{{ from_email }}"
         to:
-        - "{{ send_c }}"
-        # - add
+        - "{{ send_a }}"
+        - "{{ send_b }}"
         cc: "{{ send_c }}"
         attach:
         - "{{ output_dir }}/project_stats.csv"

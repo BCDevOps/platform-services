@@ -1,8 +1,7 @@
 rm $OUTPUT_PATH/project_stats.csv;
 echo "sep=;" >> $OUTPUT_PATH/project_stats.csv
 echo "\"Namespace\";\"Display Name\";\"Product Lead\";\"Product Owner\";\"Environment\";\"Product\";\"Project Type\";\"Team\";\"CPU Usage\";\"CPU Requests\";\"CPU Limits\";\"CPU Requests %\";\"CPU Limits %\"" >> $OUTPUT_PATH/project_stats.csv
-for NS in $(oc get -o=custom-columns=NAME:.metadata.name --no-headers projects -l app=devhub); do
-# for NS in $(oc get -o=custom-columns=NAME:.metadata.name --no-headers projects); do
+for NS in $(oc get -o=custom-columns=NAME:.metadata.name --no-headers projects); do
   NS_DATA=$(oc get ns -o json "${NS}")
   DISPLAY_NAME=$(echo "${NS_DATA}" | ./jq -r '.metadata.annotations."openshift.io/display-name"')
   PRODUCT_LEAD=$(echo "${NS_DATA}" | ./jq -r '.metadata.annotations."product-lead"')
