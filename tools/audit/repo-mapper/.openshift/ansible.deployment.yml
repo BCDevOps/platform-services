@@ -116,6 +116,11 @@ objects:
               configMapKeyRef:
                 key: SMTP_PORT
                 name: ${NAME}-email-conf
+          - name: FROM_EMAIL
+            valueFrom:
+              configMapKeyRef:
+                key: FROM_EMAIL
+                name: ${NAME}-email-conf
           - name: TO_A
             valueFrom:
               configMapKeyRef:
