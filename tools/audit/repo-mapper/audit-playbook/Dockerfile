@@ -27,6 +27,13 @@ RUN         curl -L --silent -o jq https://stedolan.github.io/jq/download/linux6
             cp jq /usr/bin/ && \
             chmod +x jq
 
+# install bc:
+RUN         curl -L --silent -o bc.tar.gz http://ftp.gnu.org/gnu/bc/bc-1.06.tar.gz && \
+            tar -xzf bc.tar.gz --strip 1 && \
+            cp bc /usr/bin/ && \
+            chmod +x bc
+
+
 # Set permissions for OpenShift on webhook artifacts
 RUN         chgrp -R 0 /opt && \
             chmod -R g+rwX /opt && \
