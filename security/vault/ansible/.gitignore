@@ -1,0 +1,45 @@
+*.retry
+# Ignored vscode files
+.vscode/
+.vscode/settings.json
+
+creds/*
+tls/*
+
+# begin exclude MAC OS X files
+__MACOSX
+*/.DS_Store
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+# end
+
+# begin exclude for Terraform
+# Local .terraform directories
+**/tf/*
+**/.terraform/*
+# .tfstate files
+*.tfstate
+*.tfstate.*
+# Crash log files
+crash.log
+# Directories
+.terraform/
+myterraform.tfvars
+azureuser.pem
+# end
+# exclude general stuff
+# SSH Keys
+*.pem
+
+# Backup files
+*.bak
+.vagrant/
+
+debug.log
+all2.yaml

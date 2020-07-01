@@ -1,0 +1,71 @@
+---
+- name: Create working directory
+  file:
+    path: "{{ vault_install_working_dir }}"
+    state: directory
+ 
+- name: Helm - add HashiCorp repository
+  command: helm repo add hashicorp "{{ vault_install_helm_repo_url }}"
+
+- name: Copy values.yaml to working directory
+  copy:
+    src: "{{ vault_install_chart_values }}"
+    dest: "{{ vault_install_working_dir }}"
+
+#- name: Helm - template out chart to single file
+#  shell: helm template vault hashicorp/vault --values "{{ vault_install_working_dir }}/{{ vault_install_chart_values }}" --namespace "{{ vault_install_ocp_namespace }}" > "{{ vault_install_working_dir }}/{{ vault_install_k8s_manifests }}"
+
+- name: Helm - template out chart to single file
+  shell: >
+    helm template vault hashicorp/vault --namespace "{{ vault_install_ocp_namespace }}"
+    --set='server.image.repository=hashicorp/vault-enterprise'
+    --set='server.image.tag=1.4.2_ent'
+    --set='server.route.enabled=true'
+    --set='server.ha.enabled=true'
+    --set='server.ha.raft.enabled=true'
+    --set='global.tlsDisable=false'
+    --set='global.openshift=true'
+    --values "{{ vault_install_working_dir }}/{{ vault_install_chart_values }}"
+    > "{{ vault_install_working_dir }}/{{ vault_install_k8s_manifests }}"
+
+# Parameters below moved to {{ vault_install_chart_values }}
+#    --set='server.extraEnvironmentVars.VAULT_CACERT=/vault/userconfig/vault-tls/vault.ca'
+#    --set='server.tls.secretName=vault-tls'
+
+- name: Helm - template out chart to multiple files
+  shell: >
+    helm template --dry-run vault hashicorp/vault --namespace "{{ vault_install_ocp_namespace }}"
+    --set='server.image.repository=hashicorp/vault-enterprise'
+    --set='server.image.tag=1.4.2_ent'
+    --set='server.route.enabled=true'
+    --set='server.ha.enabled=true'
+    --set='server.ha.raft.enabled=true'
+    --set='global.tlsDisable=false'
+    --set='global.openshift=true'
+    --values "{{ vault_install_working_dir }}/{{ vault_install_chart_values }}"
+    | awk -vout="{{ vault_install_working_dir }}" -F": " '$0~/^# Source: /{file=out"/"$2; print "Creating "file; system ("mkdir -p $(dirname "file"); echo -n "" > "file)} $0!~/^#/ && $0!="---"{print $0 >> file}'
+    
+- name: Bug fix - fix ^M line endings in OpenShift Route object
+  shell: sed -i 's/\r$//g' "{{ vault_install_working_dir }}/vault/templates/server-route.yaml"
+
+- name: Bug fix - fix missing namespace in OpenShift Route object
+  lineinfile:
+    path: "{{ vault_install_working_dir }}/vault/templates/server-route.yaml"
+    #regexp: '^  name: vault'
+    insertafter: '^  name: vault'
+    line: '  namespace: {{ vault_install_ocp_namespace }}'
+
+#- name: Remove from Kubernetes manifests - Helm labels
+#  lineinfile:
+#
+#- name: Remove from Kubernetes - runAsUser
+#  lineinfile:
+#
+#- name: Remove from Kubernetes - fsGroup
+#  lineinfile:
+
+- name: Install Vault on OCP cluster
+  k8s:
+    state: present
+    src: "{{ vault_install_working_dir }}/{{ vault_install_k8s_manifests }}"
+

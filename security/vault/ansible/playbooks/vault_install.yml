@@ -1,0 +1,8 @@
+---
+- name: Install Vault cluster
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  roles:
+  - vault_install
