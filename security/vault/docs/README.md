@@ -6,7 +6,7 @@ This documentation outlines the HashiCorp Vault Architecture and Design on OpenS
 
 ### Vault Architecture and Design
 
-- [Introduction](./introduction.md)
+- [Introduction and Architecture](./introduction.md)
 - [Telemetry](./telemetry.md)
 - [Troubleshooting](./troubleshooting.md)
 - [TLS Cipher Suites](./vault-tls-cipher-suites.md)

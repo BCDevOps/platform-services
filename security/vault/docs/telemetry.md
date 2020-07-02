@@ -6,8 +6,8 @@ This section explains selected metrics that are relevant to Vault and Consul.
 
 For further information please go through the following resources:
 
-- [HashiCorp - Production Monitoring of Vault and Consul](./assets/Monitoring%20Vault%20and%20Consul%20in%20Prod.pdf)
-- [Vault/Consul Monitoring Guide](./assets/Vault-Consul-Monitoring-Guide.pdf)
+- [HashiCorp - Production Monitoring of Vault and Consul](./assets/pdfs/Monitoring%20Vault%20and%20Consul%20in%20Prod.pdf)
+- [Vault/Consul Monitoring Guide](./assets/pdfs/Vault-Consul-Monitoring-Guide.pdf)
 
 ## Operating System Metrics
 
