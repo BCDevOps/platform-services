@@ -1,0 +1,15 @@
+ on:
+   push:
+     paths: 
+     - 'monitoring/sysdig/operator/*'
+ 
+ steps:
+    - name: OpenShift Action
+      uses: redhat-developer/openshift-action
+      with:
+        version: '3.11.90'
+    - name: followingScript
+      run: |
+        oc login --token=${{ secrets.SYSDIG_OPERATOR_SA_API_TOKEN }} --server=${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
+        oc project ${{ secrets.SYSDIG_OPERATOR_PROJECT }}
+        oc get pods 
