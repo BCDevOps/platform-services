@@ -1,3 +1,5 @@
+ name: sysdig-teams-operator-build
+ 
  on:
    push:
      paths: 
