@@ -15,8 +15,7 @@ jobs:
       uses: redhat-developer/openshift-actions@v1.1
       with:
         version: 'latest'
-    - name: followingScript
-      run: |
-        oc login --token=${{ secrets.SYSDIG_OPERATOR_SA_API_TOKEN }} --server=${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
-        oc project ${{ secrets.SYSDIG_OPERATOR_PROJECT }}
-        oc get pods 
+        cmd: |
+          oc login --token=${{ secrets.SYSDIG_OPERATOR_SA_API_TOKEN }} --server=${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
+          oc project ${{ secrets.SYSDIG_OPERATOR_PROJECT }}
+          oc get pods 
