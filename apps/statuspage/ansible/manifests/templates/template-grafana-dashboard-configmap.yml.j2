@@ -18,11 +18,11 @@ data:
         "editable": true,
         "gnetId": null,
         "graphTooltip": 0,
-        "id": 45,
+        "id": 35,
         "links": [],
         "panels": [
           {
-            "content": "# Node Ready Status by Function\n",
+            "content": "# Node Ready Status by Function\n**Nodes** are also commonly known as servers.  \n**Master** nodes are responsible for scheduling all workloads in the cluster.  \n**Infrastructure** nodes are responsible for running support services such as network routers, logging, and metrics.  \n**Application** nodes are responsible for running Ministry workloads. They support highly-available application deployments that follow the Resiliency Guidelines. ",
             "datasource": "Sysdig",
             "fieldConfig": {
               "defaults": {
@@ -31,12 +31,19 @@ data:
               "overrides": []
             },
             "gridPos": {
-              "h": 2,
+              "h": 4,
               "w": 24,
               "x": 0,
               "y": 0
             },
             "id": 11,
+            "links": [
+              {
+                "targetBlank": true,
+                "title": "Resiliency Guidelines",
+                "url": "https://developer.gov.bc.ca/Resiliency-Guidelines"
+              }
+            ],
             "mode": "markdown",
             "title": "",
             "type": "text"
@@ -82,10 +89,10 @@ data:
               "h": 4,
               "w": 3,
               "x": 0,
-              "y": 2
+              "y": 4
             },
             "id": 9,
-            "interval": null,
+            "interval": "",
             "links": [],
             "maxDataPoints": 100,
             "options": {
@@ -106,7 +113,7 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"master\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -130,6 +137,7 @@ data:
                 "timeAggregation": "max"
               }
             ],
+            "timeFrom": null,
             "title": "Masters - Ready",
             "transformations": [
               {
@@ -193,10 +201,10 @@ data:
               "h": 4,
               "w": 3,
               "x": 3,
-              "y": 2
+              "y": 4
             },
             "id": 10,
-            "interval": null,
+            "interval": "",
             "links": [],
             "maxDataPoints": 100,
             "options": {
@@ -217,7 +225,7 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"master\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -231,6 +239,7 @@ data:
                 "timeAggregation": "max"
               }
             ],
+            "timeFrom": null,
             "title": "Masters - NotReady",
             "type": "stat"
           },
@@ -275,10 +284,10 @@ data:
               "h": 4,
               "w": 3,
               "x": 6,
-              "y": 2
+              "y": 4
             },
             "id": 7,
-            "interval": null,
+            "interval": "",
             "links": [],
             "maxDataPoints": 100,
             "options": {
@@ -299,7 +308,7 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"infra\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -323,6 +332,7 @@ data:
                 "timeAggregation": "max"
               }
             ],
+            "timeFrom": null,
             "title": "Infrastructure - Ready",
             "transformations": [
               {
@@ -386,10 +396,10 @@ data:
               "h": 4,
               "w": 3,
               "x": 9,
-              "y": 2
+              "y": 4
             },
             "id": 8,
-            "interval": null,
+            "interval": "",
             "links": [],
             "maxDataPoints": 100,
             "options": {
@@ -410,7 +420,7 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"infra\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -424,6 +434,7 @@ data:
                 "timeAggregation": "max"
               }
             ],
+            "timeFrom": null,
             "title": "Infrastructure  - NotReady",
             "type": "stat"
           },
@@ -468,10 +479,10 @@ data:
               "h": 4,
               "w": 3,
               "x": 12,
-              "y": 2
+              "y": 4
             },
             "id": 5,
-            "interval": null,
+            "interval": "",
             "links": [],
             "maxDataPoints": 100,
             "options": {
@@ -492,7 +503,7 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -516,6 +527,7 @@ data:
                 "timeAggregation": "max"
               }
             ],
+            "timeFrom": null,
             "title": "Application - Ready",
             "transformations": [
               {
@@ -579,10 +591,10 @@ data:
               "h": 4,
               "w": 3,
               "x": 15,
-              "y": 2
+              "y": 4
             },
             "id": 6,
-            "interval": null,
+            "interval": "",
             "links": [],
             "maxDataPoints": 100,
             "options": {
@@ -603,7 +615,7 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -617,6 +629,7 @@ data:
                 "timeAggregation": "max"
               }
             ],
+            "timeFrom": null,
             "title": "Application - NotReady",
             "type": "stat"
           },
@@ -661,12 +674,11 @@ data:
               "h": 4,
               "w": 3,
               "x": 18,
-              "y": 2
+              "y": 4
             },
             "id": 19,
-            "interval": null,
+            "interval": "1m",
             "links": [],
-            "maxDataPoints": 100,
             "options": {
               "colorMode": "background",
               "fieldOptions": {
@@ -685,7 +697,7 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"quarantine\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -699,11 +711,69 @@ data:
                 "timeAggregation": "max"
               }
             ],
+            "timeFrom": null,
             "title": "Quarantined Nodes",
             "type": "stat"
           },
           {
-            "content": "# Application Node Resource Commitment\nCommitment is computed from the **CPU & Memory Requests / Available CPU Cores & Memory** across all **App** nodes.   \nIf the platform commitment reaches 100%, no new workloads can be deployed. \n",
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "mappings": [],
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 4,
+              "w": 3,
+              "x": 21,
+              "y": 4
+            },
+            "id": 25,
+            "options": {
+              "colorMode": "background",
+              "graphMode": "area",
+              "justifyMode": "auto",
+              "orientation": "auto",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": true
+              }
+            },
+            "pluginVersion": "7.0.4",
+            "targets": [
+              {
+                "filter": "kubernetes.cluster.name in (\"pathfinder\") and kubernetes.namespace.label.environment in (\"prod\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.namespace.count",
+                "timeAggregation": "max"
+              }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Total Production Projects",
+            "type": "stat"
+          },
+          {
+            "content": "# CPU Capacity on Application Nodes\nUsage is the **Maxiumum amount of cores used / Available CPU Cores** across all **Application** nodes used during the last 15 minute period.   \nRequest / Commitment  is the amount of **CPU Core Requests / Available CPU Cores** guaranteed for pods across all **Application** nodes.   \nIf the platform **Request / Commitment** reaches 100%, **no new workloads can be deployed**.\n\n",
             "datasource": "Sysdig",
             "fieldConfig": {
               "defaults": {
@@ -712,10 +782,10 @@ data:
               "overrides": []
             },
             "gridPos": {
-              "h": 3,
+              "h": 4,
               "w": 24,
               "x": 0,
-              "y": 6
+              "y": 8
             },
             "id": 3,
             "mode": "markdown",
@@ -740,19 +810,132 @@ data:
                 ],
                 "nullValueMode": "connected",
                 "thresholds": {
-                  "mode": "absolute",
+                  "mode": "percentage",
                   "steps": [
                     {
                       "color": "green",
                       "value": null
                     },
                     {
-                      "color": "yellow",
-                      "value": 60
+                      "color": "rgba(237, 129, 40, 0.89)",
+                      "value": 50
+                    },
+                    {
+                      "color": "#d44a3a",
+                      "value": 80
+                    }
+                  ]
+                },
+                "unit": "percentunit"
+              },
+              "overrides": []
+            },
+            "gridPos": {
+              "h": 5,
+              "w": 7,
+              "x": 0,
+              "y": 12
+            },
+            "id": 0,
+            "interval": "",
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+              "colorMode": "background",
+              "fieldOptions": {
+                "calcs": [
+                  "mean"
+                ]
+              },
+              "graphMode": "none",
+              "justifyMode": "auto",
+              "orientation": "horizontal",
+              "reduceOptions": {
+                "calcs": [
+                  "mean"
+                ],
+                "fields": "",
+                "values": false
+              }
+            },
+            "pluginVersion": "7.0.4",
+            "targets": [
+              {
+                "filter": "agent.tag.region in (\"app\") and agent.tag.env in (\"prod\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
+                "isTabularFormat": false,
+                "refId": "0",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "cpu.cores.used",
+                "timeAggregation": "max"
+              },
+              {
+                "filter": "kubernetes.cluster.name in (\"pathfinder\") and kubernetes.node.label.region in(\"app\")",
+                "groupAggregation": "sum",
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.node.capacity.cpuCores",
+                "timeAggregation": "max"
+              }
+            ],
+            "timeFrom": null,
+            "title": "CPU % Used (Max)",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "alias": "CPU Cores Used %",
+                  "binary": {
+                    "left": "cpu.cores.used",
+                    "operator": "/",
+                    "reducer": "sum",
+                    "right": "kubernetes.node.capacity.cpuCores"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              }
+            ],
+            "type": "stat"
+          },
+          {
+            "cacheTimeout": null,
+            "datasource": "Sysdig",
+            "fieldConfig": {
+              "defaults": {
+                "custom": {},
+                "decimals": 0,
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#299c46",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 55
                     },
                     {
                       "color": "red",
-                      "value": 80
+                      "value": 75
                     }
                   ]
                 },
@@ -762,9 +945,9 @@ data:
             },
             "gridPos": {
               "h": 5,
-              "w": 8,
-              "x": 0,
-              "y": 9
+              "w": 7,
+              "x": 7,
+              "y": 12
             },
             "id": 17,
             "interval": null,
@@ -788,7 +971,7 @@ data:
                 "values": true
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
@@ -799,22 +982,22 @@ data:
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.node.allocatable.cpuCores",
-                "timeAggregation": "max"
+                "timeAggregation": "avg"
               },
               {
-                "filter": "kubernetes.node.label.region in (\"app\")",
+                "filter": "kubernetes.node.label.region in (\"app\") and kubernetes.cluster.name in (\"pathfinder\")",
                 "groupAggregation": "sum",
                 "isTabularFormat": false,
                 "refId": "A",
                 "segmentBy": [],
                 "sortDirection": "desc",
                 "target": "kubernetes.pod.resourceRequests.cpuCores",
-                "timeAggregation": "max"
+                "timeAggregation": "avg"
               }
             ],
             "timeFrom": null,
             "timeShift": null,
-            "title": "CPU Commitment",
+            "title": "CPU Request / Commitment",
             "transformations": [
               {
                 "id": "calculateField",
@@ -852,133 +1035,7 @@ data:
             "type": "stat"
           },
           {
-            "cacheTimeout": null,
-            "datasource": "Sysdig",
-            "fieldConfig": {
-              "defaults": {
-                "custom": {},
-                "mappings": [
-                  {
-                    "id": 0,
-                    "op": "=",
-                    "text": "N/A",
-                    "type": 1,
-                    "value": "null"
-                  }
-                ],
-                "nullValueMode": "connected",
-                "thresholds": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green",
-                      "value": null
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 70
-                    },
-                    {
-                      "color": "red",
-                      "value": 80
-                    }
-                  ]
-                },
-                "unit": "percent"
-              },
-              "overrides": []
-            },
-            "gridPos": {
-              "h": 5,
-              "w": 7,
-              "x": 8,
-              "y": 9
-            },
-            "id": 18,
-            "interval": null,
-            "links": [],
-            "maxDataPoints": 100,
-            "options": {
-              "colorMode": "background",
-              "fieldOptions": {
-                "calcs": [
-                  "mean"
-                ]
-              },
-              "graphMode": "none",
-              "justifyMode": "auto",
-              "orientation": "horizontal",
-              "reduceOptions": {
-                "calcs": [
-                  "lastNotNull"
-                ],
-                "fields": "",
-                "values": false
-              }
-            },
-            "pluginVersion": "7.0.3",
-            "targets": [
-              {
-                "filter": "kubernetes.node.label.region in (\"app\")",
-                "groupAggregation": "sum",
-                "isSingleDataPoint": true,
-                "isTabularFormat": false,
-                "refId": "0",
-                "segmentBy": [],
-                "sortDirection": "desc",
-                "target": "kubernetes.node.allocatable.memBytes",
-                "timeAggregation": "max"
-              },
-              {
-                "filter": "kubernetes.node.label.region in (\"app\")",
-                "groupAggregation": "sum",
-                "isTabularFormat": false,
-                "refId": "A",
-                "segmentBy": [],
-                "sortDirection": "desc",
-                "target": "kubernetes.pod.resourceRequests.memBytes",
-                "timeAggregation": "max"
-              }
-            ],
-            "title": "Memory Commitment",
-            "transformations": [
-              {
-                "id": "calculateField",
-                "options": {
-                  "binary": {
-                    "left": "kubernetes.pod.resourceRequests.memBytes",
-                    "operator": "/",
-                    "reducer": "sum",
-                    "right": "kubernetes.node.allocatable.memBytes"
-                  },
-                  "mode": "binary",
-                  "reduce": {
-                    "reducer": "sum"
-                  },
-                  "replaceFields": true
-                }
-              },
-              {
-                "id": "calculateField",
-                "options": {
-                  "binary": {
-                    "left": "kubernetes.pod.resourceRequests.memBytes / kubernetes.node.allocatable.memBytes",
-                    "operator": "*",
-                    "reducer": "sum",
-                    "right": "100"
-                  },
-                  "mode": "binary",
-                  "reduce": {
-                    "reducer": "sum"
-                  },
-                  "replaceFields": true
-                }
-              }
-            ],
-            "type": "stat"
-          },
-          {
-            "content": "# Application Node Actual Usage\nUsage is calculated based on the **Average** (over time) of the **Maximum** usage across all **app** nodes.\n",
+            "content": "# Memory Capacity on Application Nodes\nUsage is the **Maxiumum amount of Memory used / Available Memory** across all **Application** nodes used during the last 15 minute period.   \nRequest / Commitment  is the amount of **Memory Requests / Available Memory** guaranteed for pods across all **App** nodes.   \nIf the platform **Request / Commitment** reaches 100%, **no new workloads can be deployed**.",
             "datasource": "Sysdig",
             "fieldConfig": {
               "defaults": {
@@ -987,10 +1044,10 @@ data:
               "overrides": []
             },
             "gridPos": {
-              "h": 3,
+              "h": 4,
               "w": 24,
               "x": 0,
-              "y": 14
+              "y": 17
             },
             "id": 2,
             "mode": "markdown",
@@ -1036,11 +1093,11 @@ data:
             },
             "gridPos": {
               "h": 5,
-              "w": 8,
+              "w": 7,
               "x": 0,
-              "y": 17
+              "y": 21
             },
-            "id": 0,
+            "id": 1,
             "interval": null,
             "links": [],
             "maxDataPoints": 100,
@@ -1056,13 +1113,13 @@ data:
               "orientation": "horizontal",
               "reduceOptions": {
                 "calcs": [
-                  "mean"
+                  "lastNotNull"
                 ],
                 "fields": "",
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
                 "filter": "agent.tag.region in (\"app\") and agent.tag.env in (\"prod\")",
@@ -1072,11 +1129,11 @@ data:
                 "refId": "0",
                 "segmentBy": [],
                 "sortDirection": "desc",
-                "target": "cpu.used.percent",
-                "timeAggregation": "avg"
+                "target": "memory.used.percent",
+                "timeAggregation": "max"
               }
             ],
-            "title": "CPU % Used (Avg.)",
+            "title": "Memory % Used (Max)",
             "type": "stat"
           },
           {
@@ -1103,11 +1160,11 @@ data:
                       "value": null
                     },
                     {
-                      "color": "rgba(237, 129, 40, 0.89)",
-                      "value": 50
+                      "color": "yellow",
+                      "value": 70
                     },
                     {
-                      "color": "#d44a3a",
+                      "color": "red",
                       "value": 80
                     }
                   ]
@@ -1119,10 +1176,10 @@ data:
             "gridPos": {
               "h": 5,
               "w": 7,
-              "x": 8,
-              "y": 17
+              "x": 7,
+              "y": 21
             },
-            "id": 1,
+            "id": 18,
             "interval": null,
             "links": [],
             "maxDataPoints": 100,
@@ -1144,39 +1201,81 @@ data:
                 "values": false
               }
             },
-            "pluginVersion": "7.0.3",
+            "pluginVersion": "7.0.4",
             "targets": [
               {
-                "filter": "agent.tag.region in (\"app\") and agent.tag.env in (\"prod\")",
-                "groupAggregation": "max",
-                "isSingleDataPoint": false,
+                "filter": "kubernetes.node.label.region in (\"app\")",
+                "groupAggregation": "sum",
+                "isSingleDataPoint": true,
                 "isTabularFormat": false,
                 "refId": "0",
                 "segmentBy": [],
                 "sortDirection": "desc",
-                "target": "memory.used.percent",
-                "timeAggregation": "avg"
+                "target": "kubernetes.node.allocatable.memBytes",
+                "timeAggregation": "max"
+              },
+              {
+                "filter": "kubernetes.node.label.region in (\"app\")",
+                "groupAggregation": "sum",
+                "isTabularFormat": false,
+                "refId": "A",
+                "segmentBy": [],
+                "sortDirection": "desc",
+                "target": "kubernetes.pod.resourceRequests.memBytes",
+                "timeAggregation": "max"
               }
             ],
-            "title": "Memory % Used (Avg.)",
+            "title": "Memory Request / Commitment",
+            "transformations": [
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "kubernetes.pod.resourceRequests.memBytes",
+                    "operator": "/",
+                    "reducer": "sum",
+                    "right": "kubernetes.node.allocatable.memBytes"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              },
+              {
+                "id": "calculateField",
+                "options": {
+                  "binary": {
+                    "left": "kubernetes.pod.resourceRequests.memBytes / kubernetes.node.allocatable.memBytes",
+                    "operator": "*",
+                    "reducer": "sum",
+                    "right": "100"
+                  },
+                  "mode": "binary",
+                  "reduce": {
+                    "reducer": "sum"
+                  },
+                  "replaceFields": true
+                }
+              }
+            ],
             "type": "stat"
           }
         ],
         "refresh": "1h",
         "schemaVersion": 25,
         "style": "dark",
-        "tags": [
-          "Sysdig",
-          "Shared dashboard"
-        ],
+        "tags": [],
         "templating": {
           "list": []
         },
         "time": {
-          "from": "now-1h",
+          "from": "now-15m",
           "to": "now"
         },
         "timepicker": {
+          "hidden": true,
           "refresh_intervals": [
             "10s",
             "30s",
@@ -1190,9 +1289,8 @@ data:
           ]
         },
         "timezone": "browser",
-        "title": "Pathfinder Capacity and Utilization",
-        "uid": "ZykxoDDqZz",
-        "version": 42
+        "title": "Pathfinder Capacity and Utilization Copy",
+        "uid": "capacity"
       }
 kind: ConfigMap
 metadata:
