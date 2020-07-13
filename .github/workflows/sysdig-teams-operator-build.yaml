@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: OpenShift Action
-      uses: redhat-developer/openshift-action
+      uses: redhat-developer/openshift-actions
       with:
         version: '3.11.90'
     - name: followingScript
