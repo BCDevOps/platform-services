@@ -10,10 +10,11 @@ jobs:
   build: 
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v1
     - name: OpenShift Action
-      uses: redhat-developer/openshift-actions
+      uses: redhat-developer/openshift-actions@v1.1
       with:
-        version: '3.11.90'
+        version: 'latest'
     - name: followingScript
       run: |
         oc login --token=${{ secrets.SYSDIG_OPERATOR_SA_API_TOKEN }} --server=${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
