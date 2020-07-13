@@ -7,3 +7,4 @@
   finalizer:
     name: finalizer.ops.gov.bc.ca
     playbook: /opt/ansible/delete_team.yml
+    
