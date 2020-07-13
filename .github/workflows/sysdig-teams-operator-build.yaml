@@ -2,7 +2,7 @@ name: sysdig-teams-operator-build
 on:
   push:
     paths: 
-    - 'monitoring/sysdig/operator/*'
+    - 'monitoring/sysdig/operator/**'
  
 jobs:
   build: 
