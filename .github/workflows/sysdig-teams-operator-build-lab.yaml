@@ -2,7 +2,8 @@ name: sysdig-teams-operator-build-lab
 on:
   push:
     branches:
-    - '!master'
+      - '*'
+      - '!master'
     paths: 
     - 'monitoring/sysdig/operator/sysdig-monitor/**'
     - '.github/workflows/**'
