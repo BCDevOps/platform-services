@@ -106,3 +106,6 @@ curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com
 {"token":{"key":"key_value"}}
 ```
 - [ref](https://raw.githubusercontent.com/draios/python-sdc-client/master/sdcclient/_common.py)
+
+## Build Process
+GitHub Actions will create a new clean build from whatever branch changes are pushed to. This should be replaced with a method by which the lab environment is tested prior to a simple deployment into production. 

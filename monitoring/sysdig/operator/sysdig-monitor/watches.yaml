@@ -6,4 +6,5 @@
   playbook: /opt/ansible/configure_teams.yml
   finalizer:
     name: finalizer.ops.gov.bc.ca
-    playbook: /opt/ansible/delete_team.yml
+    playbook: /opt/ansible/delete_team.yml 
+    
