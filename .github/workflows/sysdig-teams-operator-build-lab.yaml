@@ -5,7 +5,7 @@ on:
     - '*'
     - '!master'
     paths: 
-    - 'monitoring/sysdig/operator/*.yml'
+    - 'monitoring/sysdig/operator/sysdig-monitor/**'
  
 jobs:
   build: 
