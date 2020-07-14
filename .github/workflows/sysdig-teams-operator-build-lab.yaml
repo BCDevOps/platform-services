@@ -2,7 +2,6 @@ name: sysdig-teams-operator-build-lab
 on:
   push:
     branches:
-    - '*'
     - '!master'
     paths: 
     - 'monitoring/sysdig/operator/sysdig-monitor/**'
