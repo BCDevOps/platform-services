@@ -22,4 +22,4 @@ jobs:
         cmd: |
           'project ${{ secrets.SYSDIG_OPERATOR_PROJECT }}'
           'delete all -l build=gh-actions'
-          'new-build https://github.com/BCDevOps/platform-services#${{ github.ref }} --context-dir=monitoring/sysdig/operator/sysdig-monitor/build --name sysdig-operator -l build=gh-actions'
+          'new-build https://github.com/BCDevOps/platform-services#${GITHUB_REF##*/} --context-dir=monitoring/sysdig/operator/sysdig-monitor/build --name sysdig-operator -l build=gh-actions'
