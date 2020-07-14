@@ -16,7 +16,7 @@ jobs:
       with:
         version: 'latest'
         openshift_server_url: ${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
-        parameters: '{"apitoken": "${{ secrets.SYSDIG_OPERATOR_SA_API_TOKEN }}"}'
+        parameters: '{"apitoken": "${{ secrets.SYSDIG_OPERATOR_SA_TOKEN }}"}'
         cmd: |
           'oc project ${{ secrets.SYSDIG_OPERATOR_PROJECT }}'
           'oc get pods'
