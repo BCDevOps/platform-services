@@ -21,9 +21,9 @@ jobs:
       uses: redhat-developer/openshift-actions@v1.1
       with:
         version: '3.11.235'
-        openshift_server_url: ${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
-        parameters: '{"apitoken": "${{ secrets.SYSDIG_OPERATOR_SA_TOKEN }}"}'
+        openshift_server_url: ${{ secrets.LAB_SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
+        parameters: '{"apitoken": "${{ secrets.LAB_SYSDIG_OPERATOR_SA_TOKEN }}"}'
         cmd: |
-          'project ${{ secrets.SYSDIG_OPERATOR_PROJECT }}'
+          'project ${{ secrets.LAB_SYSDIG_OPERATOR_PROJECT }}'
           'delete all -l build=gh-actions'
           'new-build https://github.com/BCDevOps/platform-services#${{ steps.branchref.outputs.branch }} --context-dir=monitoring/sysdig/operator/sysdig-monitor --name sysdig-monitor-operator -l build=gh-actions'
