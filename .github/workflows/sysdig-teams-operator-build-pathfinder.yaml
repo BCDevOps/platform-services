@@ -1,4 +1,4 @@
-name: sysdig-teams-operator-build
+name: sysdig-teams-operator-build-pathfinder
 on:
   push:
     branches: 

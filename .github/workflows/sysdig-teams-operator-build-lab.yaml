@@ -1,7 +1,8 @@
-name: sysdig-teams-operator-build
+name: sysdig-teams-operator-build-lab
 on:
   push:
-    branches: 
+    branches:
+    - '*'
     - '!master'
     paths: 
     - 'monitoring/sysdig/operator/*.yml'
