@@ -1,8 +1,8 @@
 name: sysdig-teams-operator-build-lab
 on:
   push:
-    # branches:
-    # - '!master'
+    branches:
+    - '!master'
     paths: 
     - 'monitoring/sysdig/operator/sysdig-monitor/**'
     - '.github/workflows/**'
@@ -26,5 +26,5 @@ jobs:
         parameters: '{"apitoken": "${{ secrets.LAB_SYSDIG_OPERATOR_SA_TOKEN }}"}'
         cmd: |
           'project ${{ secrets.LAB_SYSDIG_OPERATOR_PROJECT }}'
-          'delete all -l build=gh-actions'
+          'delete is,bc -l build=gh-actions'
           'new-build https://github.com/BCDevOps/platform-services#${{ steps.branchref.outputs.branch }} --context-dir=monitoring/sysdig/operator/sysdig-monitor --name sysdig-monitor-operator -l build=gh-actions'
