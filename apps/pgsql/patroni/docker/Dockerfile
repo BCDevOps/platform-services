@@ -19,7 +19,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
     && mkdir -p $PGHOME \
     && sed -i "s|/var/lib/postgresql.*|$PGHOME:/bin/bash|" /etc/passwd \
-
+    # Workaround for dependency version mismatch when running Patroni latest (v1.6.5)
+    && pip3 install urllib3==1.21.1 \
     # Set permissions for OpenShift
     && chmod 775 $PGHOME \
     && chmod 664 /etc/passwd \
