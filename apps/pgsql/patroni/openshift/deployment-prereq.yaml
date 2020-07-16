@@ -14,7 +14,7 @@ labels:
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni
   app.kubernetes.io/managed-by: template
-  app.kubernetes.io/version: "10"
+  app.kubernetes.io/version: "${POSTGRES_VERSION}"
 objects:
 - apiVersion: v1
   kind: Secret
@@ -110,6 +110,10 @@ parameters:
   displayName: Application Name
   name: NAME
   value: patroni
+- description: The postgres version used as label for all artifacts
+  displayName: Postgresql version
+  name: POSTGRES_VERSION
+  value: 11
 - name: SUFFIX
 - description: Username of the superuser account for initialization.
   displayName: Superuser Username

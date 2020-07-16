@@ -17,7 +17,7 @@ labels:
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni  
   app.kubernetes.io/managed-by: template
-  app.kubernetes.io/version: "10"
+  app.kubernetes.io/version: "${POSTGRES_VERSION}"
 objects:
 # It doesn't seem to be used/needed - remote it?
 #- apiVersion: v1
@@ -262,6 +262,10 @@ parameters:
   displayName: Application Name
   name: NAME
   value: patroni
+- description: The postgres version for labelling all artifacts.
+  displayName: Postgresql Version
+  name: POSTGRES_VERSION
+  value: 11
 - name: SUFFIX
   description: A suffix appended to all artifact's name (NAME)
 - description: Starting amount of CPU the container can use.
@@ -287,7 +291,7 @@ parameters:
   value: "bcgov"
 - name: IMAGE_STREAM_TAG
   description: Patroni ImageTag
-  value: patroni:v10-stable
+  value: patroni:v11-stable
 - description: The size of the persistent volume to create.
   displayName: Persistent Volume Size
   name: PVC_SIZE
@@ -295,5 +299,5 @@ parameters:
 - name: STORAGE_CLASS
   value: netapp-block-standard
 - name: IMAGE_REGISTRY
-  #docker-registry.default.svc:5000
-  value: docker-registry.default.svc:5000
+  #ocp3#docker-registry.default.svc:5000
+  value: image-registry.openshift-image-registry.svc:5000
