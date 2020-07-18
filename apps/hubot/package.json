@@ -37,7 +37,7 @@
     "hubot-remind": "^0.1.5",
     "hubot-rocketchat": "^2.0.0",
     "hubot-scripts": "^2.17.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0"
   },
   "devDependencies": {
