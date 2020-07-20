@@ -265,7 +265,7 @@ parameters:
 - description: The postgres version for labelling all artifacts.
   displayName: Postgresql Version
   name: POSTGRES_VERSION
-  value: 11
+  value: "11"
 - name: SUFFIX
   description: A suffix appended to all artifact's name (NAME)
 - description: Starting amount of CPU the container can use.
