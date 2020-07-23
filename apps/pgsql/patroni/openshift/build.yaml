@@ -26,7 +26,7 @@ parameters:
   - name: POSTGRES_VERSION
     value: "11"
 objects:
-#ImageStream is create if it doesn't already exist
+#Postgres ImageStream is created if it doesn't already exist
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
@@ -43,8 +43,9 @@ objects:
         kind: DockerImage
         name: registry.hub.docker.com/library/postgres:${POSTGRES_VERSION}
       generation: 1
-      importPolicy: {}
       name: "${POSTGRES_VERSION}"
+      importPolicy:
+        scheduled: true
       referencePolicy:
         type: Source
   status:
