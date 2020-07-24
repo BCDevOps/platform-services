@@ -46,7 +46,7 @@
     | awk -vout="{{ vault_install_working_dir }}" -F": " '$0~/^# Source: /{file=out"/"$2; print "Creating "file; system ("mkdir -p $(dirname "file"); echo -n "" > "file)} $0!~/^#/ && $0!="---"{print $0 >> file}'
     
 - name: Bug fix - fix ^M line endings in OpenShift Route object
-  shell: sed -i 's/\r$//g' "{{ vault_install_working_dir }}/vault/templates/server-route.yaml"
+  shell: sed -i'' 's/\r$//g' "{{ vault_install_working_dir }}/vault/templates/server-route.yaml"
 
 - name: Bug fix - fix missing namespace in OpenShift Route object
   lineinfile:
@@ -55,17 +55,9 @@
     insertafter: '^  name: vault'
     line: '  namespace: {{ vault_install_ocp_namespace }}'
 
-#- name: Remove from Kubernetes manifests - Helm labels
-#  lineinfile:
-#
-#- name: Remove from Kubernetes - runAsUser
-#  lineinfile:
-#
-#- name: Remove from Kubernetes - fsGroup
-#  lineinfile:
-
 - name: Install Vault on OCP cluster
   k8s:
+    namespace: "{{ vault_install_ocp_namespace }}"
     state: present
     src: "{{ vault_install_working_dir }}/{{ vault_install_k8s_manifests }}"
 
