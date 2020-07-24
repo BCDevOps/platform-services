@@ -17,7 +17,6 @@ labels:
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni  
   app.kubernetes.io/managed-by: template
-  app.kubernetes.io/version: "${POSTGRES_VERSION}"
 objects:
 # It doesn't seem to be used/needed - remote it?
 #- apiVersion: v1
@@ -262,10 +261,6 @@ parameters:
   displayName: Application Name
   name: NAME
   value: patroni
-- description: The postgres version for labelling all artifacts.
-  displayName: Postgresql Version
-  name: POSTGRES_VERSION
-  value: "11"
 - name: SUFFIX
   description: A suffix appended to all artifact's name (NAME)
 - name: SS_REPLICAS
