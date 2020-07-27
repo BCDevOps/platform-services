@@ -1,4 +1,7 @@
 server:
+  route:
+    enabled: true
+    host: {{ ocp_route_fqdn }}
   extraEnvironmentVars:
     VAULT_CACERT: /vault/userconfig/vault-tls/vault.ca
   extraVolumes:

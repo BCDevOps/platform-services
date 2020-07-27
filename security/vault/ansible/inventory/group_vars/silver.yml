@@ -1,0 +1,3 @@
+---
+# OpenShift Route FQDN to template Helm values file
+ocp_route_fqdn: "one.vault-lab.developer.gov.bc.ca"
