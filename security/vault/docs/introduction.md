@@ -17,7 +17,7 @@ The API is exposed via an OpenShift Route.
 This Route object forwards the TLS traffic in passthrough mode to the underlying Vault Service object.
 The Service object then communicates with Vault's StatefulSet, which writes its data to a Persistent Volume.
 
-The Vault pods operate in a highly-available cluster mode employing the Raft consensus algorithm for data replication inside the Vault cluster.
+The five Vault pods operate in a highly-available cluster mode employing the Raft consensus algorithm for data replication inside the Vault cluster.
 
 ## Multi-Cluster Architecture
 
@@ -33,3 +33,20 @@ This Chart is used in this project to template out the Kubernetes manifests befo
 to the cluster (figure below).
 
 !["Vault provisioning workflow with Ansible"](./assets/images/vault-mvp-workflow-ocp.png "Vault provisioning workflow with Ansible")
+
+## Traffic Flow
+
+The Vault project team together with DXC has settled on the following DNS and traffic flow (figure below).
+Traffic will flow to either the `vault.developer.gov.bc.ca` vanity domain for the production cluster, or to
+`vault-lab.developer.gov.bc.ca`.
+
+An F5 load balancer will run health checks against the Vault clusters.
+Typically, the left side in the diagram is the active site (`one.vault.developer.gov.bc.ca`). The right side
+(`two.vault.developer.gov.bc.ca`) will not receive traffic from any clients until the health check
+to the primary/left side fails. \
+This is the Disaster Recovery (DR) scenario.
+In a DR case, the F5 can either fail over the traffic automatically to the right side, or it can be a manual step.
+
+Importantly, while the failover steps for the Vault application can be automated to an extent, it will require manual intervention.
+
+!["Vault DNS and traffic flow"](./assets/images/trafficflow_vault_dns_lb.png "Vault DNS and traffic flow")

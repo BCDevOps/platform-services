@@ -8,6 +8,7 @@ server:
     - type: secret
       name: vault-tls
   ha:
+    replicas: {{ vault_install_replicas }}
     raft:
       config: |
         ui = true

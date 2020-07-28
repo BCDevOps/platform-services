@@ -23,7 +23,7 @@ kubectl exec -ti vault-0 -n ${NAMESPACE} -- vault operator init -key-shares=5 -k
 
 The output of the above command looks similar to this:
 
-```bash 
+```bash
 Unseal Key 1: x5+JLLgw8V3yGb9HWlElHtFXpcgijfR8t/d/cbD+qrE=
 Unseal Key 2: ...
 Unseal Key 3: ...
