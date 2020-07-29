@@ -96,7 +96,7 @@ objects:
     name: ${NAME}${SUFFIX}
   spec:
     podManagementPolicy: OrderedReady
-    replicas: ${{SS_REPLICAS}}
+    replicas: ${{REPLICAS}}
     revisionHistoryLimit: 10
     selector:
       matchLabels:
@@ -263,8 +263,8 @@ parameters:
   value: patroni
 - name: SUFFIX
   description: A suffix appended to all artifact's name (NAME)
-- name: SS_REPLICAS
-  displayName: SS_REPLICAS
+- name: REPLICAS
+  displayName: REPLICAS
   description: The number of statefulSet replicas to use.
   value: '3'
 - description: Starting amount of CPU the container can use.
