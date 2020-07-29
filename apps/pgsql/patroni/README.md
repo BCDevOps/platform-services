@@ -64,7 +64,7 @@ oc process -f openshift/deployment.yaml \
  -p NAME=patroni \
  -p "IMAGE_STREAM_NAMESPACE=$(oc project -q)" \
  -p "IMAGE_STREAM_TAG=patroni:v11-latest" \
- -p REPLICAS=3 \
+ -p SS_REPLICAS=3 \
  -p SUFFIX=-001 | oc apply -f -
 
 # HINT: Internal registry changed between OCP3 and OCP4.  Current default is for OCP4.  Simply add the following option to the deployment.yaml to deploy on OCP 3.11
