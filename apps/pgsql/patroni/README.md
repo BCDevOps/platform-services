@@ -38,14 +38,13 @@ oc start-build patroni-pg11
 oc tag patroni:v11-latest patroni:v11-stable
 ```
 
-A sample Dockerfile to leverage a postgres:10 base image is also available for your builds.  See the following example:
+Simply change the OUT_VERSION and the PG_VERSION if you would like a build with a different postgres base (also created a separate buildconfig in this example for parallel builds):
 
 ``` bash
 oc process -f openshift/build.yaml \
  -p "GIT_URI=$(git config --get remote.origin.url)" \
  -p "GIT_REF=$(git rev-parse --abbrev-ref HEAD)" \
  -p SUFFIX=-pg10 \
- -p DOCKER_FILE=Dockerfile-pg10 \
  -p OUT_VERSION=v10-latest \
  -p PG_VERSION=10 | oc create -f -
  ```
