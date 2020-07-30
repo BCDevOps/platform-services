@@ -25,7 +25,7 @@
     --set='server.image.tag={{ vault_install_version }}_ent'
     --set='server.ha.enabled=true'
     --set='server.ha.raft.enabled=true'
-    --set='global.tlsDisable=false'
+    --set='global.tlsDisable=true'
     --set='global.openshift=true'
     --values "{{ vault_install_working_dir }}/{{ vault_install_chart_value_file }}"
     | awk -vout="{{ vault_install_working_dir }}" -F": " '$0~/^# Source: /{file=out"/"$2; print "Creating "file; system ("mkdir -p $(dirname "file"); echo -n "" > "file)} $0!~/^#/ && $0!="---"{print $0 >> file}'

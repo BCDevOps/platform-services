@@ -1,6 +1,8 @@
 *.retry
 # Ignored vscode files
 .vscode/
+../.vscode/
+../../.vscode/
 .vscode/settings.json
 
 creds/*

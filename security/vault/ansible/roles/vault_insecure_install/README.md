@@ -1,6 +1,8 @@
-# Ansible Role: vault_install
+# Ansible Role: vault_insecure_install
 
-Runs a Vault cluster installation.
+[WARNING] Runs an _INSECURE_ Vault cluster installation.
+
+Intented for temporary lab purposes only.
 
 ## Requirements
 
@@ -60,12 +62,12 @@ localhost ansible_connection=local
 
 ```yaml
 ---
-- name: Install Vault cluster
+- name: "[WARNING] Install insecure Vault cluster"
   hosts: all
   gather_facts: false
 
   roles:
-  - vault_install
+  - vault_insecure_install
 ```
 
 Always include a `-v` for more verbose output when running `ansible-playbook`. This ensures diagnostic
@@ -74,12 +76,12 @@ output is printed on standard out.
 Execute the playbook without building the cluster:
 
 ```bash
-ansible-playbook -i inventories/lab vault_install.yml --skip-tags build -v
+ansible-playbook -i inventories/lab vault_insecure_install.yml --skip-tags build -v
 ```
 
 Execute the playbook for a full cluster build:
 
 ```bash
-ansible-playbook -i inventories/lab vault_install.yml -v
+ansible-playbook -i inventories/lab vault_insecure_install.yml -v
 ```
 

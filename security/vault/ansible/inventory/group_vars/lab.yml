@@ -1,4 +1,5 @@
 ---
 # OpenShift Route FQDN to template Helm values file
 ocp_route_fqdn: "one.vault-lab.developer.gov.bc.ca"
+vault_install_ocp_namespace: "devops-security-vault"
 vault_install_replicas: 3 # has to be 5 for production

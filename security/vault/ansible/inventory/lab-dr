@@ -1,0 +1,2 @@
+[lab-dr]
+localhost ansible_connection=local

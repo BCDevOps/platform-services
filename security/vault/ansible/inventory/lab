@@ -1,2 +1,2 @@
-[silver]
+[lab]
 localhost ansible_connection=local
