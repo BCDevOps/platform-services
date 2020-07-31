@@ -1,5 +1,6 @@
 [
   "hubot-redis-brain",
   "hubot-help",
-  "hubot-group"
+  "hubot-group",
+  "hubot-health"
 ]
