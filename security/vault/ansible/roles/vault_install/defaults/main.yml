@@ -3,10 +3,10 @@ vault_install_helm_repo_url: "https://helm.releases.hashicorp.com"
 vault_install_chart_version: "0.6.0"
 vault_install_chart_value_template: "values-minimal.yaml.j2"
 vault_install_chart_value_file: "values-minimal.yaml"
-vault_install_ocp_namespace: "devops-security-vault"
+vault_install_ocp_namespace: "" # set with inventory group_vars
 vault_install_k8s_manifests: "vault-all.yaml"
 vault_install_replicas: 5
-vault_install_version: "1.4.3"
+vault_install_version: "1.5.0"
 
 vault_install_working_dir: "/tmp/vault_install/"
 
