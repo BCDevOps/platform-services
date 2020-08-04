@@ -2,6 +2,8 @@ server:
   route:
     enabled: true
     host: {{ ocp_route_fqdn }}
+  extraEnvironmentVars:
+    VAULT_SKIP_VERIFY: "1"
   ha:
     replicas: {{ vault_install_replicas }}
     raft:
