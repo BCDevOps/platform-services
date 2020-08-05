@@ -1,0 +1,21 @@
+- name: Vault License / Audit Init
+  hosts: all
+  gather_facts: false
+  tasks:
+    
+  - name: Ensure Vault License is Set
+    fail:
+      msg: "'VAULT_LICENSE' ENV Variable Must Be Set."
+    when: lookup('env', 'VAULT_LICENSE') | length == 0 
+
+  - name: Apply Vault License
+    hashivault_write:
+      secret: /sys/license
+      data:
+        text: "{{ lookup('env', 'VAULT_LICENSE') }}"
+
+  - name: Enable Vault Audit Log (stdout)
+    hashivault_audit_enable:
+      name: "file"
+      options:
+        file_path: "stdout"
