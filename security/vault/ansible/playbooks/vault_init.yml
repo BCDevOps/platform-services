@@ -1,4 +1,4 @@
-- name: Vault License / Audit Init
+- name: Vault License / Audit Initialization
   hosts: all
   gather_facts: false
   tasks:
