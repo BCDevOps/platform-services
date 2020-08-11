@@ -55,7 +55,7 @@ items:
           http_2xx:
             prober: http
             http:
-              valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+              valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
               valid_status_codes: []  # Defaults to 2xx
               method: GET
               preferred_ip_protocol: "ip4" # defaults to "ip6"
@@ -63,7 +63,7 @@ items:
           http_2xx__no_tls_verify:
             prober: http
             http:
-              valid_http_versions: ["HTTP/1.1", "HTTP/2"]
+              valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
               valid_status_codes: []  # Defaults to 2xx
               method: GET
               preferred_ip_protocol: "ip4" # defaults to "ip6"
