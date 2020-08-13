@@ -1,4 +1,4 @@
-apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+apiVersion: security.developer.gov.bc.ca/v1alpha1
 kind: ExternalNetwork
 metadata:
   # This metadata field will be what you see with the command

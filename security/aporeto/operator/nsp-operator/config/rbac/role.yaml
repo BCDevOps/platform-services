@@ -1,0 +1,72 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+  ##
+  ## Base operator rules
+  ##
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+      - pods
+      - pods/exec
+      - pods/log
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for security.developer.gov.bc.ca/v1alpha1, Kind: ExternalNetwork
+  ##
+  - apiGroups:
+      - security.developer.gov.bc.ca
+    resources:
+      - externalnetworks
+      - externalnetworks/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for security.developer.gov.bc.ca/v1alpha1, Kind: NetworkSecurityPolicy
+  ##
+  - apiGroups:
+      - security.developer.gov.bc.ca
+    resources:
+      - networksecuritypolicies
+      - networksecuritypolicies/status
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+# +kubebuilder:scaffold:rules

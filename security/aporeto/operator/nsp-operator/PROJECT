@@ -1,0 +1,11 @@
+domain: developer.gov.bc.ca
+layout: ansible.sdk.operatorframework.io/v1
+projectName: nsp-operator
+resources:
+- group: security
+  kind: ExternalNetwork
+  version: v1alpha1
+- group: security
+  kind: NetworkSecurityPolicy
+  version: v1alpha1
+version: 3-alpha

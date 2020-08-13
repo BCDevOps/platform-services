@@ -1,0 +1,53 @@
+---
+# tasks file for ExternalNetwork Create / Update
+- name: Debug metadata
+  debug:
+    var: ansible_operator_meta
+    verbosity: 3
+
+- name: Debug description
+  debug:
+    var: description
+    verbosity: 3
+
+- name: Debug entires
+  debug: 
+    var: entries
+    verbosity: 3
+
+- name: Debug protocols
+  debug:
+    var: protocols
+    verbosity: 3
+
+- name: Debug ports
+  debug:
+    var: ports
+    verbosity: 3
+
+- name: Set vars for custom-netpol template generation
+  set_fact:
+    aporeto_base_namespace: "{{ lookup('env', 'APORETO_BASE_NAMESPACE') }}"
+    import_label: "{{ ansible_operator_meta.namespace }}-{{ ansible_operator_meta.name }}"
+    network_name: "custom-extnet-{{ ansible_operator_meta.name }}"
+
+- name: Set aporeto_namespace
+  set_fact:
+    aporeto_namespace: "{{ aporeto_base_namespace }}/{{ ansible_operator_meta.namespace }}"
+
+- name: Debug Aporeto Namespaces
+  debug:
+    msg:
+      - "aporeto_base_namespace: {{ aporeto_base_namespace }}"
+      - "aporeto_namespace: {{ aporeto_namespace }}"
+      - "import_label: {{ import_label }}"
+      - "network_name: {{ network_name }}"
+    verbosity: 1
+
+- name: Create Or Update Policy
+  command: |
+    apoctl api import \
+    --namespace {{ aporeto_namespace }} \
+    -f -
+  args:
+    stdin: "{{ lookup('template', 'custom-extnet.yaml.j2') }}"

@@ -1,2 +1,6 @@
 ---
-# tasks file for networksecuritypolicy
+- include_tasks: import.yml
+  when: state = 'present'
+
+- include_tasks: delete.yml
+  when: state = 'absent'
