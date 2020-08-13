@@ -10,6 +10,8 @@ spec:
     listKind: ExternalNetworkList
     plural: externalnetworks
     singular: externalnetwork
+    shortNames:
+      - en
   scope: Namespaced
   versions:
   - name: v1alpha1

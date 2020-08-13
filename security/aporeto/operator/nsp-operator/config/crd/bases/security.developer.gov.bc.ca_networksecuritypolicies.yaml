@@ -10,6 +10,8 @@ spec:
     listKind: NetworkSecurityPolicyList
     plural: networksecuritypolicies
     singular: networksecuritypolicy
+    shortNames:
+    - nsp
   scope: Namespaced
   versions:
   - name: v1alpha1
