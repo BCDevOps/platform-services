@@ -1,9 +1,5 @@
 ---
-- name: Set network_name
-  set_fact:
-    network_name: "custom-extnet-{{ ansible_operator_meta.name }}"
-
-- name: "Delete NetworkSecurityPolicy - custom-netpol-{{ ansible_operator_meta.name }}"
+- name: "Delete ExternalNetwork - {{ network_name }}"
   command: |
     apoctl api delete \
     externalnetworks {{ network_name }} \

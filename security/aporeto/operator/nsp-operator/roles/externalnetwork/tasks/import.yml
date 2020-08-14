@@ -25,12 +25,7 @@
     var: ports
     verbosity: 3
 
-- name: Set vars for custom-netpol template generation
-  set_fact:
-    import_label: "{{ ansible_operator_meta.namespace }}-{{ ansible_operator_meta.name }}"
-    network_name: "custom-extnet-{{ ansible_operator_meta.name }}"
-
-- name: Debug Aporeto Namespaces
+- name: Debug ExternalNetwork Import Vars
   debug:
     msg:
       - "aporeto_base_namespace: {{ aporeto_base_namespace }}"
@@ -39,7 +34,7 @@
       - "network_name: {{ network_name }}"
     verbosity: 1
 
-- name: Create Or Update Policy
+- name: Create Or Update ExternalNetwork
   command: |
     apoctl api import \
     --namespace {{ aporeto_namespace }} \
