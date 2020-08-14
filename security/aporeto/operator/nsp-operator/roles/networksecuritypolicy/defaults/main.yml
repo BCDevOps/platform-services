@@ -2,3 +2,6 @@
 # defaults file for NetworkSecurityPolicy
 state: present
 aporeto_base_namespace: "{{ lookup('env', 'APORETO_BASE_NAMESPACE') }}"
+aporeto_namespace: "{{ aporeto_base_namespace }}/{{ ansible_operator_meta.namespace }}"
+policy_name: "{{ ansible_operator_meta.name }}"
+import_label: "{{ ansible_operator_meta.namespace }}-{{ ansible_operator_meta.name }}"

@@ -1,9 +1,5 @@
 ---
-- name: Set policy_name
-  set_fact:
-    policy_name: "custom-netpol-{{ ansible_operator_meta.name }}"
-
-- name: "Delete NetworkSecurityPolicy - custom-netpol-{{ ansible_operator_meta.name }}"
+- name: "Delete NetworkSecurityPolicy - {{ ansible_operator_meta.name }}"
   command: |
     apoctl api delete \
     networkaccesspolicies {{ policy_name }} \
