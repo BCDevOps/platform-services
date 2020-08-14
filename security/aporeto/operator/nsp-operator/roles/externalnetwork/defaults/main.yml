@@ -1,3 +1,4 @@
 ---
 # defaults file for ExternalNetwork
 state: present
+aporeto_base_namespace: "{{ lookup('env', 'APORETO_BASE_NAMESPACE') }}"
