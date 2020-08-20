@@ -42,7 +42,7 @@ data:
       enabled: true
       interval: 30
       log_errors: true
-      max_metrics: 1000
+      max_metrics: 3000
       histograms: false             
 
       # Filtering processes to scan. Processes not matching a rule will not
@@ -79,20 +79,33 @@ data:
             kubernetes.pod.annotation.prometheus.io/scrape: false
         - exclude:
             kubernetes.service.annotation.prometheus.io/scrape: false
-        - include:
-            kubernetes.pod.label.app: "kube-state-metrics"
-            conf:
-                host: kube-state-metrics.openshift-monitoring.svc
-                port: 8443
-                use_https: true
-                auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
-        - include:
-            kubernetes.service.label.k8s-app: "kubelet"
-            conf:
+        # - include:
+        #     kubernetes.pod.label.app: "kube-state-metrics"
+        #     conf:
+        #         host: kube-state-metrics.openshift-monitoring.svc
+        #         port: 8443
+        #         path: /metrics
+        #         use_https: true
+        #         ssl_verify: false
+        #         auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
+        # - include:
+        #     kubernetes.service.label.k8s-app: "node-exporter"
+        #     conf:
+        #         port: 10250
+        #         use_https: true
+        #         path: /metrics
+        #         path: /metrics/cadvisor
+        #         ssl_verify: false
+        #         auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
+        #         tags: 
+        #           service: node-exporter
+        - include: 
+            process.name: hyperkube
+            conf: 
                 port: 10250
                 use_https: true
                 path: /metrics
-                path: /metrics/cadvisor
+                # path: /metrics/cadvisor
                 ssl_verify: false
                 auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
 kind: ConfigMap
