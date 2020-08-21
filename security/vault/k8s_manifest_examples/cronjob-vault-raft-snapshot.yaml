@@ -1,0 +1,30 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: devops-security-vault-backup
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: vault
+            image: registry.hub.docker.com/library/vault:1.5.0
+            command:
+              - "/bin/sh"
+              - "-c"
+              - "vault operator raft snapshot save -tls-skip-verify /backup/raft.snap"
+            env:
+              - name: VAULT_ADDR
+                value: "https://vault-active:8200"
+              - name: VAULT_TOKEN
+                value: "s.dhgwio"
+            volumeMounts:
+              - name: devops-security-vault-cronjob
+                mountPath: /backup
+          restartPolicy: OnFailure
+          volumes:
+          - name: devops-security-vault-cronjob
+            persistentVolumeClaim:
+              claimName: devops-security-vault-pv-claim
