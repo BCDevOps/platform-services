@@ -74,12 +74,12 @@ output is printed on standard out.
 Execute the playbook without building the cluster:
 
 ```bash
-ansible-playbook -i inventories/lab vault_install.yml --skip-tags build -v
+ansible-playbook -i inventory/lab playbooks/vault_install.yml --skip-tags -v
 ```
 
 Execute the playbook for a full cluster build:
 
 ```bash
-ansible-playbook -i inventories/lab vault_install.yml -v
+ansible-playbook -i inventory/lab playbooks/vault_install.yml -v
 ```
 
