@@ -80,3 +80,4 @@ typings/
 # artifacts
 *.orig
 
+*.terraform*
