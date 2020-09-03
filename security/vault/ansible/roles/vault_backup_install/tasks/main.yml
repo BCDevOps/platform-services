@@ -1,0 +1,21 @@
+---
+- name: Create working directory
+  file:
+    path: "{{ vault_backup_install_working_dir }}"
+    state: directory
+
+- name: Generate Helm values file in working directory
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ vault_backup_install_working_dir }}/{{ item }}"
+  loop:
+    - cronjob-vault-raft-snapshot-pvc.yaml
+    - cronjob-vault-raft-snapshot.yaml
+
+- name: Install Vault Backup Cron on OCP cluster
+  k8s:
+    namespace: "{{ vault_install_ocp_namespace }}"
+    src: "{{ item }}"
+    state: present
+  with_fileglob:
+    - "{{ vault_backup_install_working_dir }}/*.yaml"
