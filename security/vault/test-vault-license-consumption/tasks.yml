@@ -1,0 +1,12 @@
+---
+- name: Generate X (numobjects) namespace manifests
+  template:
+    src: "namespace.yaml.j2"
+    dest: "namespaces/namespace_{{ item }}.yaml"
+  loop: "{{ query('sequence', 'start=1 end={{ numobjects }}') }}"
+
+- name: Generate X (numobjects) Vault deployment manifests
+  template:
+    src: "deployment.yaml.j2"
+    dest: "deployments/deployment_{{ item }}.yaml"
+  loop: "{{ query('sequence', 'start=1 end={{ numobjects }}') }}"

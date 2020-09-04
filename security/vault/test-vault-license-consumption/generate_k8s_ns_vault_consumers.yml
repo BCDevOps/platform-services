@@ -1,0 +1,14 @@
+---
+# Change the KUBECONFIG on the last line
+- name: Generate lots of k8s namespaces and annotated Vault deployments to test Vault license consumption
+  hosts: localhost
+  gather_facts: false
+  vars:
+    numobjects: 10
+
+  tasks:
+  - name: Import tasks
+    import_tasks: tasks.yml
+
+  - name: Run oc create for deployments
+    shell: KUBECONFIG=/home/me/auth/kubeconfig oc create -f deployments/

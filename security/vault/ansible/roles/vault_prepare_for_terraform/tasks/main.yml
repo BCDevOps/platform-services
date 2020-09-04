@@ -1,0 +1,38 @@
+---
+- name: Sanity checks
+  assert:
+    that:
+    - ansible_env['VAULT_ADDR'] is defined
+    - ansible_env['VAULT_TOKEN'] is defined
+    fail_msg: "One or more environment variables are not set."
+    success_msg: "All checks passed."
+
+- name: Write Vault Policy to be used by Terraform
+  hashivault_policy:
+    name: "{{ item.name }}"
+    rules_file: "{{ item.file }}"
+    verify: False
+  loop:
+  - { name: 'policyadmin', file: 'policyadmin_policy.hcl' }
+  - { name: 'namespaceadmin', file: 'root_ns_admin_policy.hcl' }
+
+- name: AppRole - Enable AppRole so Terraform can authenticate
+  hashivault_auth_method:
+    method_type: approle
+    verify: False
+
+- name: AppRole - Configure an AppRole role attached to Vault policies
+  hashivault_approle_role:
+    name: "{{ vault_prepare_for_terraform_approle_role_name }}"
+    token_policies: "{{ vault_prepare_for_terraform_approle_policies}} "
+    token_ttl: "{{ vault_prepare_for_terraform_token_ttl }}"
+    token_max_ttl: "{{ vault_prepare_for_terraform_token_max_ttl }}"
+
+- name: AppRole - Retrieve the Role ID from Vault
+  hashivault_approle_role_id:
+    name: "{{ vault_prepare_for_terraform_approle_role_name }}"
+    register: r_vault_approle_role_id
+
+- name: AppRole - Role ID
+  debug: msg="Vault AppRole Role ID is {{ vault_approle_role_id.id }}"
+

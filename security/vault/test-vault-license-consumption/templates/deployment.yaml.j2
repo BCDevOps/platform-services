@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaulttest
+  namespace: vclient-{{ item }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaulttest
+  template:
+    metadata:
+      labels:
+        app: vaulttest
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/tls-skip-verify: "true"
+        vault.hashicorp.com/log-level: "debug"
+        vault.hashicorp.com/agent-inject-secret-helloworld: "secret/helloworld"
+        vault.hashicorp.com/agent-inject-template-helloworld: |
+          {%raw%}{{- with secret "secret/helloworld" -}}{%endraw%}
+
+          {%raw%}postgresql://{{ .Data.data.username }}:{{ .Data.data.password }}@postgres:5432/wizard{%endraw%}
+
+          {%raw%}{{- end }}{%endraw%}
+
+        vault.hashicorp.com/role: "myapp"
+    spec:
+      serviceAccountName: app
+      containers:
+      - name: vault
+        image: registry.hub.docker.com/library/vault:1.5.0
+        command:
+          - "/bin/sh"
+        args: ["-c", "while true; do cat /vault/secrets/helloworld; sleep 10; done"]
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: app
+  namespace: vclient-{{ item }}
+  labels:
+    app: vaulttest

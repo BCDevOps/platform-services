@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaulttest
+  #namespace: devops-security-vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vaulttest
+  template:
+    metadata:
+      labels:
+        app: vaulttest
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/auth-path: "auth/gke-k8s"
+        vault.hashicorp.com/role: "postgres-client"
+        vault.hashicorp.com/agent-inject-secret-.pgpass: "database/creds/readonly"
+        vault.hashicorp.com/agent-inject-template-.pgpass: |
+          {{- with secret "database/creds/readonly" }}
+          postgres.default:5432:postgresdb:{{ .Data.username }}:{{ .Data.password }}
+          {{ end }}
+        vault.hashicorp.com/agent-inject-command-.pgpass: |
+          chmod 0600 /vault/secrets/.pgpass
+        vault.hashicorp.com/agent-inject-secret-username: "database/creds/readonly"
+        vault.hashicorp.com/agent-inject-template-username: |
+          {{- with secret "database/creds/readonly" }}
+          {{ .Data.username }}
+          {{ end }}
+    spec:
+      containers:
+      - name: vault
+        image: registry.hub.docker.com/library/vault:1.5.0
+        command:
+          - "/bin/sh"
+        args: ["-c", "while true; do cat /vault/secrets/.pgpass; sleep 10; done"]
+        volumeMounts:
+          - name: devops-security-vault-cronjob
+            mountPath: /backup
+      restartPolicy: Always
+      volumes:
+      - name: devops-security-vault-cronjob
+        persistentVolumeClaim:
+          claimName: devops-security-vault-pv-claim
