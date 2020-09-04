@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ vault_install_ocp_namespace }}-pv-claim
+  namespace: {{ vault_install_ocp_namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: {{ vault_backup_install_storage_class }}
+# storageClassName gp2 is specific to AWS Cloud
