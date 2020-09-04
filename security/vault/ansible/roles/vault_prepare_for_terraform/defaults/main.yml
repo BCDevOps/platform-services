@@ -6,10 +6,12 @@ vault_prepare_for_terraform_approle_role_name: "terraform"
 vault_prepare_for_terraform_approle_policies: "default,policyadmin,namespaceadmin"
 
 # Vault Token TTL for the AppRole issued Vault Token
-vault_prepare_for_terraform_token_ttl: "5m"
+vault_prepare_for_terraform_token_ttl: "8h" # 5m
 
 # Vault Token MaxTTL for the AppRole issued Vault Token
-vault_prepare_for_terraform_token_max_ttl: "10m"
+vault_prepare_for_terraform_token_max_ttl: "8h" # 10m
+
+vault_prepare_for_terraform_verify: False
 
 # vault_prepare_for_terraform_
 
