@@ -48,7 +48,7 @@ Kubernetes Service Accounts (KSA) from defined Kubernetes namespaces.
 | CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/myapp-nonprod | bound_service_account_names=myapp-nonprod bound_service_account_namespaces=myapp-dev,myapp-test,myapp-tools |
 | CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/myapp-prod    | bound_service_account_names=myapp-prod bound_service_account_namespaces=myapp-prod                          |
 | Silver            | /auth/k8s-silver/             | /auth/k8s-silver/role/myapp-nonprod | bound_service_account_names=myapp-nonprod bound_service_account_namespaces=myapp-dev,myapp-test,myapp-tools |
-| Silver            | /auth/k8s-silver/             | /auth/k8s-silver/role/myapp-prod    | bound_service_account_names=myapp-prod bound_service_account_namespaces=myapp-prod                          |
+| Silver-DR         | /auth/k8s-silver/             | /auth/k8s-silver/role/myapp-prod    | bound_service_account_names=myapp-prod bound_service_account_namespaces=myapp-prod                          |
 
 Each team currently has four different Kubernetes namespaces per app, i.e., `appName-tools`, `appName-dev`, `appName-test`, and `appName-prod`.
 The app name is a random ID like a license plate, e.g., `fi4Gh`.
