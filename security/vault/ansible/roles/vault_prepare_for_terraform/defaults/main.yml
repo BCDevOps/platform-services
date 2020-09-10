@@ -5,12 +5,16 @@ vault_prepare_for_terraform_approle_role_name: "terraform"
 # Vault policies attached to the AppRole used by Terraform
 vault_prepare_for_terraform_approle_policies: "default,policyadmin,namespaceadmin"
 
+# Vault AppRole SecretID number of uses (0 means infinite)
+vault_prepare_for_terraform_approle_sid_uses: "0"
+
 # Vault Token TTL for the AppRole issued Vault Token
 vault_prepare_for_terraform_token_ttl: "8h" # 5m
 
 # Vault Token MaxTTL for the AppRole issued Vault Token
 vault_prepare_for_terraform_token_max_ttl: "8h" # 10m
 
+# Certificate verification toggle
 vault_prepare_for_terraform_verify: False
 
 # vault_prepare_for_terraform_
