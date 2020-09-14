@@ -6,8 +6,8 @@
     verify: "{{ vault_prepare_for_terraform_verify }}"
     namespace: "{{ vault_prepare_for_terraform_ns1 }}"
   loop:
-  - { name: 'policyadmin', file: '../roles/vault_prepare_for_terraform/files/policyadmin_policy.hcl' }
-  - { name: 'admin', file: '../roles/vault_prepare_for_terraform/files/admin_policy.hcl' }
+  - { name: 'policyadmin', file: '{{ role_path}}/files/policyadmin_policy.hcl' }
+  - { name: 'admin', file: '{{ role_path}}/files/admin_policy.hcl' }
 
 - name: AppRole - Enable AppRole so Terraform can authenticate
   hashivault_auth_method:
