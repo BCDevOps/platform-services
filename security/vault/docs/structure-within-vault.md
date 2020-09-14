@@ -50,31 +50,31 @@ Kubernetes Service Accounts (KSA) from defined Kubernetes namespaces.
 | Silver            | /auth/k8s-silver/             | /auth/k8s-silver/role/myapp-nonprod | bound_service_account_names=myapp-nonprod bound_service_account_namespaces=myapp-dev,myapp-test,myapp-tools |
 | Silver-DR         | /auth/k8s-silver/             | /auth/k8s-silver/role/myapp-prod    | bound_service_account_names=myapp-prod bound_service_account_namespaces=myapp-prod                          |
 
-Each team currently has four different Kubernetes namespaces per app, i.e., `appName-tools`, `appName-dev`, `appName-test`, and `appName-prod`.
-The app name is a random ID like a license plate, e.g., `fi4Gh`.
-The four Kubernetes namespaces can be simplified to only two Vault mount points per app, i.e., `appName-nonprod`, and `appName-prod`.
+Each team currently has four different Kubernetes namespaces per app, i.e., `licensePlate-tools`, `licensePlate-dev`, `licensePlate-test`, and `licensePlate-prod`.
+The license plate is a random ID, for example, `fi4Gh`.
+The four Kubernetes namespaces can be simplified to only two Vault mount points per app, i.e., `licensePlate-nonprod`, and `licensePlate-prod`.
 
 Components of the naming convention:
 
-- appName: Random 5-digit alphanumeric string
+- licensePlate: Random ID
 - dash-separator: `-`
 - Kubernetes namespace indicator: tools, dev, test, or prod
 - Example: `fi4Gh-tools`
 
 When all these elements are combined, we get the following table that outlines the final structure.
 The three Kubernetes namespaces `tools`, `dev`, and `test` will use the same named Kubernetes Service Account
-that maps to one Vault role of the form `appName-nonprod`.
-Similarly, they map to one Vault policy called `appName-nonprod`.
-Additionally, they map to one Vault KV Secrets Engine mount point, also named `appName-nonprod`.
+that maps to one Vault role of the form `licensePlate-nonprod`.
+Similarly, they map to one Vault policy called `licensePlate-nonprod`.
+Additionally, they map to one Vault KV Secrets Engine mount point, also named `licensePlate-nonprod`.
 The `prod` Kubernetes namespace maps analogous with the `-prod` suffix instead of `-nonprod`.
 All teams and apps reside in the same Vault namespace, i.e., `platform-services`.
 
 | Kubernetes Namespace | Kubernetes Service Account (ns-scoped) | Vault k8s Auth Role | Vault Namespace   | Vault Policy    | Vault KV Path (KV mount before 1st /) |
 |----------------------|-----------------|---------------------|-------------------|-----------------|---------------------------------------|
-| appName-tools        | appName-nonprod | appName-nonprod     | platform-services | appName-nonprod | appName-nonprod/tools                 |
-| appName-dev          | appName-nonprod | appName-nonprod     | platform-services | appName-nonprod | appName-nonprod/dev                   |
-| appName-test         | appName-nonprod | appName-nonprod     | platform-services | appName-nonprod | appName-nonprod/test                  |
-| appName-prod         | appName-prod    | appName-prod        | platform-services | appName-prod    | appName-prod/prod                     |
+| licensePlate-tools        | licensePlate-nonprod | licensePlate-nonprod     | platform-services | licensePlate-nonprod | licensePlate-nonprod/tools                 |
+| licensePlate-dev          | licensePlate-nonprod | licensePlate-nonprod     | platform-services | licensePlate-nonprod | licensePlate-nonprod/dev                   |
+| licensePlate-test         | licensePlate-nonprod | licensePlate-nonprod     | platform-services | licensePlate-nonprod | licensePlate-nonprod/test                  |
+| licensePlate-prod         | licensePlate-prod    | licensePlate-prod        | platform-services | licensePlate-prod    | licensePlate-prod/prod                     |
 
 ### Use Case 2 - Large Consumers
 

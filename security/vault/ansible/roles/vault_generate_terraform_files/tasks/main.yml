@@ -1,0 +1,13 @@
+---
+# Generates Terraform resources that are applied to Vault
+
+- name: Generate Vault policies
+  template:
+    src: platform-services
+    dest: "{{ vault_prepare_for_terraform_verify }}"
+
+- name: Generate Terraform files
+  template:
+    src:
+    dest:
+

@@ -15,7 +15,7 @@ server:
 
         listener "tcp" {
           tls_disable = 0
-          tls_min_version = "tls12"
+          tls_min_version = "tls13"
           tls_cert_file = "/vault/userconfig/vault-tls/vault.crt"
           tls_key_file  = "/vault/userconfig/vault-tls/vault.key"
           tls_client_ca_file = "/vault/userconfig/vault-tls/vault.ca"

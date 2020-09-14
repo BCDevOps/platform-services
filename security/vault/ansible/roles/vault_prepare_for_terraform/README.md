@@ -1,6 +1,7 @@
-# Ansible Role: vault_install
+# Ansible Role: vault_prepare_for_terraform
 
 Runs a Vault cluster installation.
+See [TODO section](#todo) at the end.
 
 ## Requirements
 
@@ -74,12 +75,26 @@ output is printed on standard out.
 Execute the playbook without building the cluster:
 
 ```bash
-ansible-playbook -i inventory/lab playbooks/vault_install.yml --skip-tags build -v
+ansible-playbook -i inventory/lab playbooks/vault_install.yml --skip-tags -v
 ```
 
 Execute the playbook for a full cluster build:
 
 ```bash
 ansible-playbook -i inventory/lab playbooks/vault_install.yml -v
+```
+
+## TODO
+
+**TODO** The Ansible hashivault_ modules try to find files in the playbooks directory versus the role.
+
+Workaround:
+
+```bash
+cd playbooks/
+cp ../roles/vault_prepare_for_terraform/files/* .
+cd ..
+
+# run the playbook again
 ```
 

@@ -1,0 +1,10 @@
+---
+# OpenShift licensePlate for new application
+vault_generate_terraform_files_lp: ""
+
+# Name for nonprod Terraform and Vault resources
+vault_generate_terraform_files_lp_nonprod: "{{ vault_generate_terraform_files_lp + '-nonprod' }}"
+
+# Name for prod Terraform and Vault resources
+vault_generate_terraform_files_lp_prod: "{{ vault_generate_terraform_files_lp + '-prod' }}"
+

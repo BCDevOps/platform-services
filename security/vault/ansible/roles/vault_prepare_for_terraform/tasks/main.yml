@@ -1,41 +1,10 @@
 ---
 - name: Sanity checks
-  assert:
-    that:
-    - ansible_env['VAULT_ADDR'] is defined
-    - ansible_env['VAULT_TOKEN'] is defined
-    fail_msg: "One or more environment variables are not set."
-    success_msg: "All checks passed."
+  import_tasks: asserts.yml
 
-- name: Write Vault Policy to be used by Terraform
-  hashivault_policy:
-    name: "{{ item.name }}"
-    rules_file: "{{ item.file }}"
-    verify: "{{ vault_prepare_for_terraform_verify }}"
-  loop:
-  - { name: 'policyadmin', file: 'policyadmin_policy.hcl' }
-  - { name: 'namespaceadmin', file: 'root_ns_admin_policy.hcl' }
+- name: Vault root namespace tasks
+  import_tasks: root-namespace.yml
 
-- name: AppRole - Enable AppRole so Terraform can authenticate
-  hashivault_auth_method:
-    method_type: approle
-    verify: "{{ vault_prepare_for_terraform_verify }}"
-
-- name: AppRole - Configure an AppRole role attached to Vault policies
-  hashivault_approle_role:
-    name: "{{ vault_prepare_for_terraform_approle_role_name }}"
-    secret_id_num_uses: "{{ vault_prepare_for_terraform_approle_sid_uses }}"
-    token_policies: "{{ vault_prepare_for_terraform_approle_policies}} "
-    token_ttl: "{{ vault_prepare_for_terraform_token_ttl }}"
-    token_max_ttl: "{{ vault_prepare_for_terraform_token_max_ttl }}"
-    verify: "{{ vault_prepare_for_terraform_verify }}"
-
-- name: AppRole - Retrieve the Role ID from Vault
-  hashivault_approle_role_id:
-    name: "{{ vault_prepare_for_terraform_approle_role_name }}"
-    verify: "{{ vault_prepare_for_terraform_verify }}"
-  register: r_vault_approle_role_id
-
-- name: AppRole - Role ID
-  debug: msg="Vault AppRole Role ID is {{ r_vault_approle_role_id.id }}"
+- name: Vault platform-services namespace tasks
+  import_tasks: platform-services-namespace.yml
 
