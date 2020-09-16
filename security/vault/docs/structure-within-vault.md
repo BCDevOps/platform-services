@@ -43,12 +43,12 @@ Kubernetes Service Accounts (KSA) from defined Kubernetes namespaces.
 
 | OpenShift Cluster | Vault Kubernetes Auth Backend | Vault Auth Role Name              | Vault Auth Role Parameters                                                                                  |
 |-------------------|-------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------|
-| KLAB              | /auth/k8s-klab/               | /auth/k8s-klab/role/myapp-nonprod | bound_service_account_names=myapp-nonprod bound_service_account_namespaces=myapp-dev,myapp-test,myapp-tools |
-| KLAB              | /auth/k8s-klab/               | /auth/k8s-klab/role/myapp-prod    | bound_service_account_names=myapp-prod bound_service_account_namespaces=myapp-prod                          |
-| CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/myapp-nonprod | bound_service_account_names=myapp-nonprod bound_service_account_namespaces=myapp-dev,myapp-test,myapp-tools |
-| CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/myapp-prod    | bound_service_account_names=myapp-prod bound_service_account_namespaces=myapp-prod                          |
-| Silver            | /auth/k8s-silver/             | /auth/k8s-silver/role/myapp-nonprod | bound_service_account_names=myapp-nonprod bound_service_account_namespaces=myapp-dev,myapp-test,myapp-tools |
-| Silver-DR         | /auth/k8s-silver/             | /auth/k8s-silver/role/myapp-prod    | bound_service_account_names=myapp-prod bound_service_account_namespaces=myapp-prod                          |
+| KLAB              | /auth/k8s-klab/               | /auth/k8s-klab/role/licensePlate-nonprod | bound_service_account_names=licensePlate-nonprod bound_service_account_namespaces=licensePlate-dev,licensePlate-test,licensePlate-tools |
+| KLAB              | /auth/k8s-klab/               | /auth/k8s-klab/role/licensePlate-prod    | bound_service_account_names=licensePlate-prod bound_service_account_namespaces=licensePlate-prod                          |
+| CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/licensePlate-nonprod | bound_service_account_names=licensePlate-nonprod bound_service_account_namespaces=licensePlate-dev,licensePlate-test,licensePlate-tools |
+| CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/licensePlate-prod    | bound_service_account_names=licensePlate-prod bound_service_account_namespaces=licensePlate-prod                          |
+| Silver            | /auth/k8s-silver/             | /auth/k8s-silver/role/licensePlate-nonprod | bound_service_account_names=licensePlate-nonprod bound_service_account_namespaces=licensePlate-dev,licensePlate-test,licensePlate-tools |
+| Silver-DR         | /auth/k8s-silver/             | /auth/k8s-silver/role/licensePlate-prod    | bound_service_account_names=licensePlate-prod bound_service_account_namespaces=licensePlate-prod                          |
 
 Each team currently has four different Kubernetes namespaces per app, i.e., `licensePlate-tools`, `licensePlate-dev`, `licensePlate-test`, and `licensePlate-prod`.
 The license plate is a random ID, for example, `fi4Gh`.

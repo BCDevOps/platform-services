@@ -20,6 +20,20 @@ resource "vault_policy" "{{ vault_generate_terraform_files_lp_prod }}" {
   policy = file("policies/{{ vault_generate_terraform_files_lp_prod }}.hcl")
 }
 
-resource "vault_kubernetes_auth_role" "" {
-  
+resource "vault_kubernetes_auth_backend_role" "{{ vault_generate_terraform_files_lp_nonprod }}" {
+  backend                          = "{{ vault_generate_terraform_files_auth_backend }}"
+  role_name                        = "{{ vault_generate_terraform_files_lp_nonprod }}"
+  bound_service_account_names      = ["{{ vault_generate_terraform_files_bound_ksa }}"]
+  bound_service_account_namespaces = ["{{ vault_generate_terraform_files_lp_nonprod }}-dev", "{{ vault_generate_terraform_files_lp_nonprod }}-test", "{{ vault_generate_terraform_files_lp_nonprod }}-tools"]
+  token_ttl                        = "{{ vault_generate_terraform_files_ttl }}"
+  token_policies                   = ["default", "{{ vault_generate_terraform_files_lp_nonprod }}"]
+}
+
+resource "vault_kubernetes_auth_backend_role" "{{ vault_generate_terraform_files_lp_prod }}" {
+  backend                          = "{{ vault_generate_terraform_files_auth_backend }}"
+  role_name                        = "{{ vault_generate_terraform_files_lp_prod }}"
+  bound_service_account_names      = ["{{ vault_generate_terraform_files_bound_ksa }}"]
+  bound_service_account_namespaces = ["{{ vault_generate_terraform_files_lp_prod }}"]
+  token_ttl                        = "{{ vault_generate_terraform_files_ttl }}"
+  token_policies                   = ["default", "{{ vault_generate_terraform_files_lp_prod }}"]
 }

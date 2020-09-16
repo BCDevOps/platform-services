@@ -1,4 +1,21 @@
-path "{{ vault_generate_terraform_files_lp_nonprod }}/*"
+# List the KV folder
+path "{{ vault_generate_terraform_files_lp_nonprod }}/metadata/"
+{
+  capabilities = ["list"]
+}
+
+# Manage secrets and versions
+path "{{ vault_generate_terraform_files_lp_nonprod }}/data/*"
 {
   capabilities = ["create", "read", "update", "delete", "list"]
 }
+
+# Read own policy
+path "sys/policy/{{ vault_generate_terraform_files_lp_nonprod }}"
+{
+  capabilities = ["read", "list"]
+}
+
+path "sys/policies/acl/{{ vault_generate_terraform_files_lp_nonprod }}" {
+  capabilities = ["read", "list"]
+
