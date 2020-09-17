@@ -1,13 +1,30 @@
 ---
 # Generates Terraform resources that are applied to Vault
 
+- name: Sanity check - Verify vars are set and not empty
+  assert:
+    that:
+    - vault_generate_terraform_files_ocp_cluster is defined
+    - vault_generate_terraform_files_lp is defined
+    - vault_generate_terraform_files_ocp_cluster|length > 3
+    - vault_generate_terraform_files_lp|length > 3
+    msg: "Set the vars with Ansible extra vars."
+    fail_msg: "Set the vars with Ansible extra vars."
+    success_msg: "Vars are defined and of certain minimum length."
+
+# TODO Change the dest: to the git repository for TF files
+# If dest dir does not exist, Ansible fails
 - name: Generate Vault policies
   template:
-    src: platform-services
-    dest: "{{ vault_prepare_for_terraform_verify }}"
+    src: "{{ item }}"
+    dest: "/tmp/{{ vault_generate_terraform_files_ocp_cluster }}/{{ vault_generate_terraform_files_lp }}-{{ item | basename }}"
+  with_fileglob: './templates/*.hcl.j2'
 
-- name: Generate Terraform files
+# TODO Change the dest: to the git repository for TF files
+- name: Generate Vault resources (mount points, secrets, roles)
   template:
-    src:
-    dest:
+    src: "vault-resources.tf.j2"
+    dest: "/tmp/{{ vault_generate_terraform_files_ocp_cluster }}/{{ vault_generate_terraform_files_lp }}-resources.tf"
+
+# TODO git commit and git push 
 

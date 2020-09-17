@@ -1,9 +1,9 @@
 ---
-############## Overwritten by Ansible extra vars ##############
-# OpenShift cluster name (overwritten by Ansible extra variable)
+############## MUST be overwritten by Ansible extra vars ##############
+# OpenShift cluster name (MUST be overwritten by Ansible extra variable)
 vault_generate_terraform_files_ocp_cluster: "" # e.g., silver, klab
 
-# OpenShift licensePlate for new application (overwritten by Ansible extra variable)
+# OpenShift licensePlate for new application (MUST be overwritten by Ansible extra variable)
 vault_generate_terraform_files_lp: ""
 
 

@@ -10,6 +10,26 @@ resource "vault_mount" "{{ vault_generate_terraform_files_lp_prod }}" {
   description = "KV2 Secrets Engine for {{ vault_generate_terraform_files_lp_prod }}."
 }
 
+resource "vault_generic_secret" "{{ vault_generate_terraform_files_lp_nonprod }}" {
+  path = "{{ vault_generate_terraform_files_lp_nonprod }}/helloworld"
+
+  data_json = <<EOT
+{
+  "hello": "world"
+}
+EOT
+}
+
+resource "vault_generic_secret" "{{ vault_generate_terraform_files_lp_prod }}" {
+  path = "{{ vault_generate_terraform_files_lp_prod }}/helloworld"
+
+  data_json = <<EOT
+{
+  "hello": "world"
+}
+EOT
+}
+
 resource "vault_policy" "{{ vault_generate_terraform_files_lp_nonprod }}" {
   name   = "{{ vault_generate_terraform_files_lp_nonprod }}"
   policy = file("policies/{{ vault_generate_terraform_files_lp_nonprod }}.hcl")
