@@ -20,7 +20,7 @@ spec:
         app_group: sysdig-agent-storage
     spec:
       containers:
-      - image: sysdig/agent
+      - image: sysdig/agent:10.3.1
         imagePullPolicy: Always
         livenessProbe:
           exec:

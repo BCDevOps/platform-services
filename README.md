@@ -3,6 +3,8 @@
 This repository holds all code required to deploy and maintain applications that support the BCDevExchange community on the OpenShift Container Platform.
 
 ### Repository Index
+- Platforms
+  - Pathfinder ARO Platform - [Early Adopter Quickstart](platforms/pathfinder-aro/readme.md)
 - Apps
   - Status Page: [The BCGov Status Page](http://status.pathfinder.gov.bc.ca)
       - [Docs](apps/statuspage/readme.md)
