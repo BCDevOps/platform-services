@@ -41,12 +41,19 @@ data:
     new_k8s: true
     k8s_cluster_name: pathfinder
 
+    ##### Debug and disable undesired metrics
+    app_checks_enabled: true
+    statsd:
+      enabled: true
+    jmx:
+      enabled: true    
+      
     ### Prometheus
     prometheus:
       enabled: true
       interval: 30
       log_errors: true
-      max_metrics: 1000
+      max_metrics: 3000
       histograms: false             
 
       # Filtering processes to scan. Processes not matching a rule will not
@@ -58,45 +65,20 @@ data:
             process.name: docker-proxy
         - exclude:
             container.image: sysdig/agent
-        # special rule to exclude processes matching configured prometheus appcheck
         - exclude:
             appcheck.match: prometheus
-        # - include:
-        #     container.label.io.prometheus.scrape: "true"
-        #     conf:
-        #         # Custom path definition
-        #         # If the label doesn't exist we'll still use "/metrics"
-        #         path: "{container.label.io.prometheus.path}"
-
-        #         # Port definition
-        #         # - If the label exists, only scan the given port.
-        #         # - If it doesn't, use port_filter instead.
-        #         # - If there is no port_filter defined, skip this process
-        #         port: "{container.label.io.prometheus.port}"
-        #         port_filter:
-        #             - exclude: [9092,9200,9300]
-        #             - include: 9090-9500
-        #             - include: [9913,9984,24231,42004]
         - exclude:
             container.label.io.prometheus.scrape: "false"
         - exclude:
             kubernetes.pod.annotation.prometheus.io/scrape: false
         - exclude:
             kubernetes.service.annotation.prometheus.io/scrape: false
-        - include:
-            kubernetes.pod.label.app: "kube-state-metrics"
-            conf:
-                host: kube-state-metrics.openshift-monitoring.svc
-                port: 8443
-                use_https: true
-                auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
-        - include:
-            kubernetes.service.label.k8s-app: "kubelet"
-            conf:
+        - include: 
+            process.name: hyperkube
+            conf: 
                 port: 10250
                 use_https: true
                 path: /metrics
-                path: /metrics/cadvisor
                 ssl_verify: false
                 auth_token_path: "/run/secrets/kubernetes.io/serviceaccount/token"
 kind: ConfigMap
