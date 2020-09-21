@@ -1,14 +1,14 @@
 # Vault Consumer Guide
 
 In this guide, you will learn how to write and consume secrets from Vault.
-The guide is intended to be a living document, and will need to be reviewed at regular intervals to ensure the high accuracy.
+The guide is intended to be a living document, and will need to be reviewed at regular intervals to ensure high accuracy.
 
 ## Introduction
 
 After the project provisioning workflow has created the prerequisites for using Vault, you will find
 a new Kubernetes Service Account (KSA) in each of your app namespaces (tools, dev, test, and prod).
 The KSA is named `licensePlate-nonprod` for the namespaces tools, dev, and test, where licensePlate is the ID or
-license plate for your app, e.g., `fi4Gh`.
+license plate for your app.
 For the prod namespace, the KSA is called `licensePlate-prod`.
 
 To view the KSA in a specific namespace use the following commands. Append `-o yaml` for more details.
