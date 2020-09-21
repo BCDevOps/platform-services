@@ -63,4 +63,5 @@
       body_format: json
       status_code: 200
     register: team_host_update_output
+    ignore_errors: true
   when: team_exists == true
