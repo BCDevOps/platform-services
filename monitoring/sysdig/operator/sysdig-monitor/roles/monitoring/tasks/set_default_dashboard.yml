@@ -12,7 +12,7 @@
 
 - name: Get token from Admin user of team
   uri: 
-    url: "{{ sysdig_api_endpoint }}/api/token/{{ team_admin_username }}/{{ team_creation_output.json.team.id }}"
+    url: "{{ sysdig_api_endpoint }}/api/token/{{ team_admin_username }}/{{ team_container_creation_output.json.team.id }}"
     method: GET
     headers:
         Authorization: "Bearer {{ sysdig_token }}"
