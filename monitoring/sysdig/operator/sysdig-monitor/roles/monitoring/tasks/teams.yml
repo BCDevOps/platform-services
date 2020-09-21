@@ -2,7 +2,7 @@
 # tasks file for monitoring
 
 # Lookup Team
-- debug: msg=" Looking up {{ team_name }}"
+- debug: msg=" Looking up {{ container_team_name }}"
 - set_fact: 
     team_data: "{{ item }}"
     team_exists: true
