@@ -6,7 +6,7 @@
 - set_fact: 
     team_data: "{{ item }}"
     team_exists: true
-  when: item.name == team_name
+  when: item.name == container_team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
     
