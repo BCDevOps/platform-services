@@ -1,0 +1,23 @@
+{   
+  "canUseAwsMetrics": false,
+  "canUseCustomEvents": true,
+  "canUseSysdigCapture": false,
+  "description": "{{ team.description }} Persistent Storage",
+  "name": "{{ team_name }}-persistent-storage",
+  "id": {{ team_data.id | int }},
+  "version": {{ team_data.version | int }},
+  "show": "host",
+  "theme": "#73A1F7",
+  "filter": "namespacein ({% for namespace in namespaces  %}\"{{ namespace }}\"{% if not loop.last %},{% endif %}{% endfor %} )",
+  "userRoles": [
+{% for role in team_users_and_roles  %}
+    {
+      "userId": {{ role.userID }},
+      "role": "{{ role.role }}"
+    }
+{% if not loop.last %}
+    ,
+{% endif %}
+{% endfor %}     
+  ]
+}
