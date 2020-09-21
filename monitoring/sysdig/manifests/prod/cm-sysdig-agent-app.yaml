@@ -8,8 +8,10 @@ data:
     #### Sysdig Software related config ####
     # Agent Log priority
     log:
-      file_priority: info
+      file_priority: debug
       console_priority: warning
+      rotate: 8
+      max_size: 1000
 
     # Watchdog config fr: troubleshooting
     watchdog:
