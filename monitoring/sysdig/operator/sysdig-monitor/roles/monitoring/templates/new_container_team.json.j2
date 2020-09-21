@@ -4,14 +4,14 @@
     "canUseCustomEvents": true,
     "canUseSysdigCapture": false,
     "default": false,
-    "description": "{{ team.description }} Persistent Storage",
+    "description": "{{ team.description }}",
     "entryPoint": {
         "module": "Dashboards"
     },
-    "name": "{{ team_name }}-persistent-storage",
-    "show": "host",
+    "name": "{{ container_team_name }}",
+    "show": "container",
     "theme": "#73A1F7",
-    "filter": "namespace in ({% for namespace in namespaces  %}\"{{ namespace }}\"{% if not loop.last %},{% endif %}{% endfor %} )",
+    "filter": "kubernetes.namespace.name in ({% for namespace in namespaces  %}\"{{ namespace }}\"{% if not loop.last %},{% endif %}{% endfor %} )",
     "userRoles": [
 {% for role in team_users_and_roles  %}
       {
