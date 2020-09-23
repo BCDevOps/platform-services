@@ -1,4 +1,4 @@
-FROM quay.io/operator-framework/ansible-operator:v1.0.0
+FROM quay.io/operator-framework/ansible-operator:v0.13.0
 
 ENV PATH="/opt/ansible/.local/bin:${PATH}"
 
