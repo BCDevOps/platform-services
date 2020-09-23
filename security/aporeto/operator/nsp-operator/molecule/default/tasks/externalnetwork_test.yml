@@ -1,5 +1,5 @@
 ---
-- name: Create the security.developer.gov.bc.ca/v1alpha1.ExternalNetwork
+- name: Create the security.devops.gov.bc.ca/v1alpha1.ExternalNetwork
   k8s:
     state: present
     namespace: '{{ namespace }}'

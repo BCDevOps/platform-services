@@ -4,4 +4,6 @@
 resources:
 - bases/security.developer.gov.bc.ca_externalnetworks.yaml
 - bases/security.developer.gov.bc.ca_networksecuritypolicies.yaml
+- bases/security.devops.gov.bc.ca_externalnetworks.yaml
+- bases/security.devops.gov.bc.ca_networksecuritypolicies.yaml
 # +kubebuilder:scaffold:crdkustomizeresource

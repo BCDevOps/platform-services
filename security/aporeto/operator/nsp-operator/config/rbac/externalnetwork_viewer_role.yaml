@@ -6,6 +6,7 @@ metadata:
 rules:
 - apiGroups:
   - security.developer.gov.bc.ca
+  - security.devops.gov.bc.ca
   resources:
   - externalnetworks
   verbs:
@@ -14,6 +15,7 @@ rules:
   - watch
 - apiGroups:
   - security.developer.gov.bc.ca
+  - security.devops.gov.bc.ca
   resources:
   - externalnetworks/status
   verbs:

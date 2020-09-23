@@ -42,6 +42,7 @@ rules:
   ##
   - apiGroups:
       - security.developer.gov.bc.ca
+      - security.devops.gov.bc.ca
     resources:
       - externalnetworks
       - externalnetworks/status
@@ -58,6 +59,7 @@ rules:
   ##
   - apiGroups:
       - security.developer.gov.bc.ca
+      - security.devops.gov.bc.ca
     resources:
       - networksecuritypolicies
       - networksecuritypolicies/status

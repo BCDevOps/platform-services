@@ -1,4 +1,4 @@
-apiVersion: security.developer.gov.bc.ca/v1alpha1
+apiVersion: security.devops.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
   name: networksecuritypolicy-sample
