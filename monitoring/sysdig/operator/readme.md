@@ -81,6 +81,33 @@ These sample payloads might be useful when managing the operator templates:
     ]
 }
 ```
+## Using the sdc-cli
+The sdc-cli is a utility that can be used to manipulate Sysdig resources. It is packaged in a container[?] but can also be installed with pip.  
+
+**Note: The current version of the sdc-cli requires python3.8 - or more specifically, tatsu 5.5.0 which requires python3.8.**
+
+The sdc-cli has been included in the ansible opertor in order to manipulate dashbaord objects. 
+
+- Installing sdc-cli
+```shell
+pip3 install sdcclient sdccli 
+```
+
+- Using sdc-cli
+```shell
+export SDC_TOKEN=[sysdig-team-token] # Keep in mind that tokens are team specific
+sdc-cli dashboard list
+```
+
+### SDC-CLI Resources
+- [https://docs.sysdig.com/en/sysdig-cli-for-sysdig-monitor-and-secure.html](https://docs.sysdig.com/en/sysdig-cli-for-sysdig-monitor-and-secure.html)
+
+
+### Dashboard Template Creation Process
+1. Create a "template" dashboard that you like in Sysdig. Typically in the Platform Services team. 
+2. Use the *sdc-cli* to get the json output of this
+3. Convert into jijna template and integrate into the ansible playbook as appropriate. 
+
 
 # TODO
 - assign view? role to user without defnied role? 
@@ -91,14 +118,7 @@ These sample payloads might be useful when managing the operator templates:
 
 ## Helpful Commands
 
-- Create a dashboard
-```shell
-curl -H "Authorization: Bearer $SYSDIG_TOKEN" -H "Content-Type: application/json" -X POST -d @./dashboard_requests_and_limits.json https://app.sysdigcloud.com/api/v2/dashboards/ 
-```
-- Get a dashboard
-```shell
-curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com/api/v2/dashboards/137400 | jq .
-```
+**Note: The Dashboard v2 API is being deprecated; the proper path is to use the *sdc-cli***
 
 - Fetching a user API token (since API tokens are team scoped (ugh), this is required to add a dashboard to a specific team)
 ```shell
@@ -107,5 +127,10 @@ curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com
 ```
 - [ref](https://raw.githubusercontent.com/draios/python-sdc-client/master/sdcclient/_common.py)
 
+- Fetch an existing dashboard json 
+```shell
+sdc-cli --json dashboard get [dashboard-id]
+```
+
 ## Build Process
-GitHub Actions will create a new clean build from whatever branch changes are pushed to. This should be replaced with a method by which the lab environment is tested prior to a simple deployment into production. 
+GitHub Actions will create a new clean build in the OCP3.11 LAB from whatever branch changes are pushed to. Upon push to master, this build will take place in the OCP3.11 Pathfinder Prod Cluster. 
