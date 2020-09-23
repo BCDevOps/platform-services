@@ -1,5 +1,5 @@
 ---
-# Create / Apply default dashboard
+# Create / Apply default dashboard for Container Scope
 
 # Since API tokens are Team Scoped, we need to find an Admin 
 # user of the new team and fetch their token for the dashboard 
@@ -21,15 +21,20 @@
 
 # Add the single dashboard that each team will need
 # More dashboards can be added or modified as needed
-- name: Set Default Dashboard
-  uri: 
-    url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
-    method: POST
-    headers:
-        Authorization: "Bearer {{ team_admin_user_token.json.token.key }}"
-        Content-Type: "application/json"
-    body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
-    body_format: json
-    status_code: 200
+- name: Set Team CPU and Memory Resource Dashboard
+  # uri: 
+  #   url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
+  #   method: POST
+  #   headers:
+  #       Authorization: "Bearer {{ team_admin_user_token.json.token.key }}"
+  #       Content-Type: "application/json"
+  #   body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
+  #   body_format: json
+  #   status_code: 200
+  # register: default_dashboard_creation_output
+  command: "SDC_TOKEN={{ sysdig_token }} sdc-cli dashboard add-json {{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
   register: default_dashboard_creation_output
   when: team_exists == false
+
+# Create / Apply default dashboard for Host Scope
+
