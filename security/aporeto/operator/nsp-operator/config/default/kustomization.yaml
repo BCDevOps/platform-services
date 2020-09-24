@@ -6,11 +6,12 @@ namespace: nsp-operator-system
 # "wordpress" becomes "alices-wordpress".
 # Note that it should also match with the prefix (text before '-') of the namespace
 # field above.
-namePrefix: nsp-operator-
+# namePrefix: nsp-
 
 # Labels to add to all resources and selectors.
-#commonLabels:
-#  someName: someValue
+commonLabels:
+  control-plane: network-security-policy-operator
+  short-name: nsp-operator
 
 bases:
 - ../crd

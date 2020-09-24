@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: manager-role
+  name: network-security-policy-operator-role
 rules:
   ##
   ## Base operator rules

@@ -1,14 +1,8 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    control-plane: controller-manager
-  name: system
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: controller-manager
+  name: network-security-policy-operator
   namespace: system
   labels:
     control-plane: controller-manager
@@ -24,8 +18,34 @@ spec:
     spec:
       containers:
         - name: manager
+          volumeMounts:
+            - mountPath: /opt/creds
+              name: creds
+            - mountPath: /opt/ansible/.apoctl
+              name: config
+          env:
+            - name: APORETO_BASE_NAMESPACE
+              valueFrom:
+                configMapKeyRef:
+                  name: apoctl-configmap
+                  key: aporeto_base_namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           args:
             - "--enable-leader-election"
-            - "--leader-election-id=nsp-operator"
+            - "--leader-election-id=network-security-policy-operator"
           image: controller:latest
+      volumes:
+        - name: creds
+          secret:
+            secretName: network-security-policy-operator
+        - name: config
+          configMap:
+            name: apoctl-configmap
+            items:
+              - key: "default.yaml"
+                path: "default.yaml"
+      serviceAccountName: network-security-policy-operator
       terminationGracePeriodSeconds: 10
