@@ -12,8 +12,6 @@ spec:
     referenced by name.
   entries:
   - 0.0.0.0/0
-  protocols:
-  - tcp
-  ports:
-  - "80"
-  - "443"
+  servicePorts:
+  - tcp/80
+  - tcp/443

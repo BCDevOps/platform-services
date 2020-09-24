@@ -15,14 +15,9 @@
     var: entries
     verbosity: 3
 
-- name: Debug protocols
-  debug:
-    var: protocols
-    verbosity: 3
-
 - name: Debug ports
   debug:
-    var: ports
+    var: servicePorts
     verbosity: 3
 
 - name: Debug ExternalNetwork Import Vars
