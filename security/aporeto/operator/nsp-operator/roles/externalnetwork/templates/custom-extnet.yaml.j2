@@ -20,13 +20,11 @@ data:
 {% for entry in entries %}
     - "{{ entry }}"
 {% endfor %}
-    protocols:
+    servicePorts:
 {% for protocol in protocols %}
-    - "{{ protocol }}"
-{% endfor %}
-    ports:
 {% for port in ports %}
-    - "{{ port }}"
+    - "{{ protocol }}/{{ port }}"
+{% endfor %}
 {% endfor %}
     associatedTags:
     - uuid={{ import_label }}

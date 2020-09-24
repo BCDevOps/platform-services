@@ -4,3 +4,4 @@
     apoctl api delete \
     externalnetworks {{ network_name }} \
     --namespace {{ aporeto_namespace }}
+  ignore_errors: yes
