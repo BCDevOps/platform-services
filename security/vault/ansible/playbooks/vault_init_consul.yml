@@ -1,0 +1,39 @@
+- name: Vault - Generate CA and server certificate with Consul binary
+  hosts: all
+  gather_facts: false
+  vars:
+    dir_consul_certs: "{{lookup('env', 'HOME') }}/consul-certs"
+    consul_binary: "/Users/ma/bin/consul"
+  tasks:
+
+  - name: Create subfolder in HOME
+    file:
+      path: "{{ dir_consul_certs }}"
+      state: directory
+
+  - name: Generate Certificate Authority
+    command:
+      cmd: "{{ consul_binary }} tls ca create"
+      chdir: "{{ dir_consul_certs }}"
+    ignore_errors: True
+
+
+  - name: Create server certificate
+    command:
+      chdir: "{{ dir_consul_certs }}"
+      cmd: >
+        {{ consul_binary }} tls cert create -server
+          -additional-dnsname={{ ocp_route_fqdn }}
+          -additional-dnsname=vault-0.vault-internal
+          -additional-dnsname=vault-1.vault-internal
+          -additional-dnsname=vault-2.vault-internal
+          -additional-dnsname=vault-3.vault-internal
+          -additional-dnsname=vault-4.vault-internal
+          -additional-dnsname=vault.{{ vault_install_ocp_namespace }}.svc
+          -additional-dnsname=vault-active.{{ vault_install_ocp_namespace }}.svc
+          -additional-dnsname=vault-agent-injector-svc.{{ vault_install_ocp_namespace }}.svc
+          -additional-dnsname=vault-0.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
+          -additional-dnsname=vault-1.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
+          -additional-dnsname=vault-2.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
+          -additional-dnsname=vault-3.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
+          -additional-dnsname=vault-4.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
