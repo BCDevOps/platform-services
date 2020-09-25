@@ -24,7 +24,7 @@
     reconcilePeriod: '0'
     playbook: playbooks/networksecuritypolicy.yml
     finalizer:
-      name: finalizer.security.devops.gov.bc.ca
+      name: finalizer.security.developer.gov.bc.ca
       vars:
         state: absent
   - version: v1alpha1
@@ -33,7 +33,7 @@
     reconcilePeriod: '0'
     playbook: playbooks/externalnetwork.yml
     finalizer:
-      name: finalizer.security.devops.gov.bc.ca
+      name: finalizer.security.developer.gov.bc.ca
       vars:
         state: absent
   # +kubebuilder:scaffold:watch
