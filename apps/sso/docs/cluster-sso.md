@@ -32,3 +32,16 @@ requires manual intervention (iStore orders and HR processes).
 Currently there is no way to provide a logic layer to authorize users (a RH ticket has been opened by Shelly inquiring on this process).
 
 
+## Option 2: Use Github OAuth (same implementation as 3.11)
+
+Business as usual. We have a good POC here. It has been working well for two years. A user is added to the BCDevops Github org. Openshift leverages a Github OAuth app to authenticate users against that organization.
+
+## Pros
+- 2fa enabled
+- We can easily establish automation via the project registry to add users to the BCDevopsOrg for access to the cluster
+- You can create Github Accounts quickly
+
+## Cons
+- There is a cost associated with Github Org Memebership
+- __Not aligned__ with Gov's standards of how users access gov services
+
