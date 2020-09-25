@@ -19,57 +19,58 @@
     -  "{{ teams_output.json.teams }}"
 
 # Create Team if Doesn't Exist
-- name: Create Team
-  block: 
-  - name: Create container-scoped team
-    uri: 
-      url: "{{ sysdig_api_endpoint }}/api/teams"
-      method: POST
-      headers:
-          Authorization: "Bearer {{ sysdig_token }}"
-          Content-Type: "application/json"
-      body: "{{ lookup('template', 'templates/new_container_team.json.j2') }}"
-      body_format: json
-      status_code: 201
-    register: team_container_creation_output
-  - name: Create host-scoped team
-    uri: 
-      url: "{{ sysdig_api_endpoint }}/api/teams"
-      method: POST
-      headers:
-          Authorization: "Bearer {{ sysdig_token }}"
-          Content-Type: "application/json"
-      body: "{{ lookup('template', 'templates/new_host_team.json.j2') }}"
-      body_format: json
-      status_code: 201
-    register: team_host_creation_output
+
+- name: Create container-scoped team
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/teams"
+    method: POST
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+    body: "{{ lookup('template', 'templates/new_container_team.json.j2') }}"
+    body_format: json
+    status_code: 201
+  register: team_container_creation_output
   when: container_team_exists == false
+- name: Create host-scoped team
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/teams"
+    method: POST
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+    body: "{{ lookup('template', 'templates/new_host_team.json.j2') }}"
+    body_format: json
+    status_code: 201
+  register: team_host_creation_output
+  when: host_team_exists == false
+
 
 
 # Update Team if Exists Updates
-- name: Update Team
-  block: 
-  - name: Update Container Scoped Team
-    uri: 
-      url: "{{ sysdig_api_endpoint }}/api/teams/{{ container_team_data.id | int }}"
-      method: PUT
-      headers:
-          Authorization: "Bearer {{ sysdig_token }}"
-          Content-Type: "application/json"
-      body: "{{ lookup('template', 'templates/existing_container_team.json.j2') }}"
-      body_format: json
-      status_code: 200
-    register: team_container_update_output
-  - name: Update Host Scoped Team
-    uri: 
-      url: "{{ sysdig_api_endpoint }}/api/teams/{{ host_team_data.id | int }}"
-      method: PUT
-      headers:
-          Authorization: "Bearer {{ sysdig_token }}"
-          Content-Type: "application/json"
-      body: "{{ lookup('template', 'templates/existing_host_team.json.j2') }}"
-      body_format: json
-      status_code: 200
-    register: team_host_update_output
-    ignore_errors: true
+- name: Update Container Scoped Team
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/teams/{{ container_team_data.id | int }}"
+    method: PUT
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+    body: "{{ lookup('template', 'templates/existing_container_team.json.j2') }}"
+    body_format: json
+    status_code: 200
+  register: team_container_update_output
+  when: container_team_exists == true
+
+- name: Update Host Scoped Team
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/teams/{{ host_team_data.id | int }}"
+    method: PUT
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+    body: "{{ lookup('template', 'templates/existing_host_team.json.j2') }}"
+    body_format: json
+    status_code: 200
+  register: team_host_update_output
+  ignore_errors: true
   when: host_team_exists == true
