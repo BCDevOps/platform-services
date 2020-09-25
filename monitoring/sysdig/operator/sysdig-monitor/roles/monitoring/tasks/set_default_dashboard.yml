@@ -11,11 +11,6 @@
   with_items: "{{ team_users_and_roles }}"
 
 
-- name: debug admin username 
-  debug: msg="{{ team_admin_username }}"
-- name: debug admin output 
-  debug: msg="{{ team_container_creation_output }}"
-
 - name: Get token from Admin user of team
   uri: 
     url: "{{ sysdig_api_endpoint }}/api/token/{{ team_admin_username }}/{{ team_container_creation_output.json.team.id }}"
