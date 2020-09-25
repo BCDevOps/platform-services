@@ -23,4 +23,4 @@ COPY watches.yaml ${HOME}/watches.yaml
 COPY roles/ ${HOME}/roles/
 COPY *.yml ${HOME}/
 
-ENTRYPOINT /usr/local/bin/entrypoint
+# ENTRYPOINT /usr/local/bin/entrypoint
