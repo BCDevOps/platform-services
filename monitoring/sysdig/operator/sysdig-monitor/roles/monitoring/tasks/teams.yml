@@ -9,7 +9,6 @@
   when: item.name == container_team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
-- debug: msg="{{ container_team_data | default('') }}"
 
 - debug: msg=" Looking up {{ host_team_name }}"
 - set_fact: 
@@ -18,7 +17,6 @@
   when: item.name == host_team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
-- debug: msg="{{ host_team_data | default('')}}"
 
 # Create Team if Doesn't Exist
 - name: Create Team
