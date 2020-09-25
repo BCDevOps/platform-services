@@ -48,7 +48,7 @@
     url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
     method: POST
     headers:
-        Authorization: "Bearer {{ team_admin_user_token.json.token.key }}"
+        Authorization: "Bearer {{ container_team_admin_user_token.json.token.key }}"
         Content-Type: "application/json"
     body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
     body_format: json
@@ -64,7 +64,7 @@
     url: "{{ sysdig_api_endpoint }}/api/v3/dashboards/"
     method: POST
     headers:
-        Authorization: "Bearer {{ team_admin_user_token.json.token.key }}"
+        Authorization: "Bearer {{ host_team_admin_user_token.json.token.key }}"
         Content-Type: "application/json"
     body: "{{ lookup('template', 'templates/dashboard_persistent_volume_claims.json.j2') }}"
     body_format: json
