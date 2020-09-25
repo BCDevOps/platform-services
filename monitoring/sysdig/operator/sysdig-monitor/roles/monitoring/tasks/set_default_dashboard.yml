@@ -27,6 +27,11 @@
 
 # Add the single dashboard that each team will need
 # More dashboards can be added or modified as needed
+- name: Creates output directory
+  file:
+    path: output
+    state: directory
+
 - name: Template the dashboard file
   template: 
     src: templates/dashboard_requests_and_limits.json.j2
