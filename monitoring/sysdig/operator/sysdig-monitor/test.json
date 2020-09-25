@@ -1,7 +1,7 @@
 {
   "dashboard": {
-    "teamId": {{ team_host_creation_output.json.team.id | int }},
-    "name": "Persistent Volume Storage",
+    "teamId": 21060,
+    "name": "TEST - Persistent Volume Storage",
     "panels": [
       {
         "id": 1,
