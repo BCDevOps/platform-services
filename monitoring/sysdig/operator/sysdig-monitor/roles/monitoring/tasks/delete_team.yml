@@ -2,14 +2,14 @@
 - debug: msg=" Looking up {{ container_team_name }}"
 - set_fact: 
     team_container_data: "{{ item }}"
-    team_exists: true
+    container_team_exists: true
   when: item.name == container_team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
 
 - set_fact: 
     team_host_data: "{{ item }}"
-    team_exists: true
+    host_team_exists: true
   when: item.name == host_team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
@@ -37,5 +37,5 @@
       body_format: json
       status_code: 200
     register: team_host_update_output
-  when: team_exists == true
+  when: container_team_exists == true
   ignore_errors: true
