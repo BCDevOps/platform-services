@@ -6,10 +6,59 @@ Operator initilizalization with the operator-sdk:
 operator-sdk new sysdig-monitor --type ansible --kind Monitoring --api-version ops.gov.bc.ca/v1alpha1 --generate-playbook
 ```
 
+### Operator Build Details
+The operator is running at a version (0.19) that "isn't supported for OCP 3.11", but has been modified to function based on the following examples: 
+- [https://github.com/konveyor/mig-operator/blob/master/build/Dockerfile](https://github.com/konveyor/mig-operator/blob/master/build/Dockerfile)
+- [https://github.com/konveyor/mig-operator/blob/master/build/entrypoint](https://github.com/konveyor/mig-operator/blob/master/build/entrypoint)
+
+When running in OCP4, this can be refactored into the standard operator-sdk dockerfile. 
+
+
 ## Development Approach
 There is a python client if desired, found here: https://github.com/draios/python-sdc-client
 
 We decided to leverage the native API with Ansible for building the Operator functions. The following code can be helful when creating the Ansible URI tasks: https://github.com/draios/python-sdc-client/blob/master/sdcclient/_common.py
+
+### Build Process
+The build process is a combination of GitHub Actions and OpenShift Builds. 
+
+1. Any push to a non-master branch will trigger a GitHub Action to trigger a build in the OCP 3.11 Lab cluster. A new deployment must be manually triggered once the build is complete. 
+2. A merge into master with any file changes in the sysdig-operator folder will trigger a build in the OCP 3.11 Pathfinder Production cluster. A new deployment must be manually triggered once the build is complete. 
+
+Example GitHub Action: 
+```shell
+name: sysdig-teams-operator-build-lab
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+    paths: 
+    - 'monitoring/sysdig/operator/sysdig-monitor/**'
+    - '.github/workflows/**'
+ 
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get the current branch name
+      shell: bash
+      run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+      id: branchref
+    - uses: actions/checkout@v1
+      with:
+        ref: ${{ github.ref }}
+    - name: OpenShift Action
+      uses: redhat-developer/openshift-actions@v1.1
+      with:
+        version: '3.11.235'
+        openshift_server_url: ${{ secrets.LAB_SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
+        parameters: '{"apitoken": "${{ secrets.LAB_SYSDIG_OPERATOR_SA_TOKEN }}"}'
+        cmd: |
+          'project ${{ secrets.LAB_SYSDIG_OPERATOR_PROJECT }}'
+          'delete is,bc -l build=gh-actions'
+          'new-build https://github.com/BCDevOps/platform-services#${{ steps.branchref.outputs.branch }} --context-dir=monitoring/sysdig/operator/sysdig-monitor --name sysdig-monitor-operator -l build=gh-actions'
+```
 
 ## Usage
 - Custom Resources must be created in the `*-tools` namespace
@@ -115,6 +164,8 @@ sdc-cli dashboard list
 - validate that the user has access to the desired namespaces
 - test and validate that OIDC is the only option? not sure if this will invite regular sysdig users via email. 
 - need to create a bot account
+- check on the stability of the swaggar API (which is in development)
+
 
 ## Helpful Commands
 
