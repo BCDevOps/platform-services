@@ -27,6 +27,11 @@
 
 # Add the single dashboard that each team will need
 # More dashboards can be added or modified as needed
+- name: Template the dashboard file
+  template: 
+    src: templates/dashboard_requests_and_limits.json.j2
+    dest: output/dashboard_requests_and_limits.json
+  when: container_team_exists == false
 - name: Set Team CPU and Memory Resource Dashboard
   # uri: 
   #   url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
@@ -38,7 +43,7 @@
   #   body_format: json
   #   status_code: 200
   # register: default_dashboard_creation_output
-  command: "SDC_TOKEN={{ sysdig_token }} sdc-cli dashboard add-json {{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
+  command: "SDC_TOKEN={{ sysdig_token }} sdc-cli dashboard add-json  output/dashboard_requests_and_limits.json"
   register: default_dashboard_creation_output
   when: container_team_exists == false
 
