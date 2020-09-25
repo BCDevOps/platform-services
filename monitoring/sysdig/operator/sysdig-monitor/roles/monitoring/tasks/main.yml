@@ -24,4 +24,4 @@
 
 # Add a default dashboard if the team is new 
 - include_tasks: set_default_dashboard.yml
-  when: team_exists == false
+  when: container_team_exists == false
