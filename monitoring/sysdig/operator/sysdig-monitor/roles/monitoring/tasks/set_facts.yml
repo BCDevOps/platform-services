@@ -9,3 +9,5 @@
     namespaces: ["{{ ns_prefix}}-tools", "{{ ns_prefix}}-dev","{{ ns_prefix }}-test", "{{ ns_prefix }}-prod"]
     container_team_name:  "{{ ns_prefix }}-team"
     host_team_name: "{{ ns_prefix }}-team-persistent-storage"
+    container_team_exists: false
+    host_team_exists: false
