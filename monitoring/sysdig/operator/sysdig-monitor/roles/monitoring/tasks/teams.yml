@@ -4,12 +4,20 @@
 # Lookup Team
 - debug: msg=" Looking up {{ container_team_name }}"
 - set_fact: 
-    team_data: "{{ item }}"
-    team_exists: true
+    container_team_data: "{{ item }}"
+    container_team_exists: true
   when: item.name == container_team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
-    
+
+- debug: msg=" Looking up {{ host_team_name }}"
+- set_fact: 
+    host_team_data: "{{ item }}"
+    host_team_exists: true
+  when: item.name == host_team_name
+  with_items: 
+    -  "{{ teams_output.json.teams }}"
+
 # Create Team if Doesn't Exist
 - name: Create Team
   block: 
@@ -35,7 +43,7 @@
       body_format: json
       status_code: 201
     register: team_host_creation_output
-  when: team_exists == false
+  when: container_team_exists == false
 
 
 # Update Team if Exists Updates
@@ -43,7 +51,7 @@
   block: 
   - name: Update Container Scoped Team
     uri: 
-      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_data.id | int }}"
+      url: "{{ sysdig_api_endpoint }}/api/teams/{{ container_team_data.id | int }}"
       method: PUT
       headers:
           Authorization: "Bearer {{ sysdig_token }}"
@@ -54,7 +62,7 @@
     register: team_container_update_output
   - name: Update Host Scoped Team
     uri: 
-      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_data.id | int }}"
+      url: "{{ sysdig_api_endpoint }}/api/teams/{{ host_team_data.id | int }}"
       method: PUT
       headers:
           Authorization: "Bearer {{ sysdig_token }}"
@@ -64,4 +72,4 @@
       status_code: 200
     register: team_host_update_output
     ignore_errors: true
-  when: team_exists == true
+  when: host_team_exists == true
