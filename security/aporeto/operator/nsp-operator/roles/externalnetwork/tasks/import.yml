@@ -17,7 +17,7 @@
 
 - name: Debug ports
   debug:
-    var: servicePorts
+    var: service_ports
     verbosity: 3
 
 - name: Debug ExternalNetwork Import Vars

@@ -21,8 +21,8 @@ data:
     - "{{ entry }}"
 {% endfor %}
     servicePorts:
-{% for servicePort in servicePorts %}
-    - "{{ servicePort }}"
+{% for service_port in service_ports %}
+    - "{{ service_port }}"
 {% endfor %}
     associatedTags:
     - uuid={{ import_label }}
