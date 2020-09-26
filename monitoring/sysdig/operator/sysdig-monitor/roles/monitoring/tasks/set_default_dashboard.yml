@@ -50,7 +50,7 @@
     headers:
         Authorization: "Bearer {{ container_team_admin_user_token.json.token.key }}"
         Content-Type: "application/json"
-    body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
+    body: "{{ lookup('template', 'templates/dashboard_requests_and_limits_v3.json.j2') }}"
     body_format: json
     status_code: 200
   register: default_dashboard_creation_output
