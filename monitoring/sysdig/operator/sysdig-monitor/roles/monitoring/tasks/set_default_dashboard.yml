@@ -45,14 +45,14 @@
 #   when: container_team_exists == false
 - name: Set Team CPU and Memory Resource Dashboard
   uri: 
-    url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
+    url: "{{ sysdig_api_endpoint }}/api/v3/dashboards/"
     method: POST
     headers:
         Authorization: "Bearer {{ container_team_admin_user_token.json.token.key }}"
         Content-Type: "application/json"
     body: "{{ lookup('template', 'templates/dashboard_requests_and_limits_v3.json.j2') }}"
     body_format: json
-    status_code: 200
+    status_code: 201
   register: default_dashboard_creation_output
   # command: "SDC_TOKEN={{ sysdig_token }} sdc-cli dashboard add-json  output/dashboard_requests_and_limits.json"
   register: default_dashboard_creation_output
