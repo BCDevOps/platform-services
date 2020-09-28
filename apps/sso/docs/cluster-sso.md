@@ -25,7 +25,7 @@ There are a few pros/cons with this approach.
 
 
 ### Cons
-- IDIR does not allow for 2fa
+- IDIR does not currently support 2fa
 - Creates (as of now) a blocker for non government teams to access a cluster. They would need to procure IDIRs in order to authentication. This process
 requires manual intervention (iStore orders and HR processes). 
 - Unable to use Github as an IDP. Github oidc does not provide a way to scope users to a particular Github Org. All github users would be authenticated.
@@ -44,4 +44,3 @@ Business as usual. We have a good POC here. It has been working well for two yea
 ## Cons
 - There is a cost associated with Github Org Memebership
 - __Not aligned__ with Gov's standards of how users access gov services
-
