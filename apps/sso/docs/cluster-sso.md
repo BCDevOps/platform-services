@@ -36,6 +36,7 @@ Currently there is no way to provide a logic layer to authorize users (a RH tick
 
 Business as usual. We have a good POC here. It has been working well for two years. A user is added to the BCDevops Github org. Openshift leverages a Github OAuth app to authenticate users against that organization.
 
+We could also add a second OAuth provider (SSO) to provide IDIR auth without leveraging the SSO-GitHub provider.  This would allow both IDIR as well as a scoped GitHub as authentication providers.
 ## Pros
 - 2fa enabled (for GitHub identities)
 - We can easily establish automation via the project registry to add users to the BCDevopsOrg for access to the cluster
