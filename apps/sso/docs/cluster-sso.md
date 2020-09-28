@@ -28,7 +28,7 @@ There are a few pros/cons with this approach.
 - IDIR does not currently support 2fa
 - Creates (as of now) a blocker for non government teams to access a cluster. They would need to procure IDIRs in order to authentication. This process
 requires manual intervention (iStore orders and HR processes). 
-- Unable to use Github as an IDP. Github oidc does not provide a way to scope users to a particular Github Org. All github users would be authenticated.
+- Leveraging Github as an IDP via SSO does not provide the scoped authentication that the current Github provider does.  All github users would be authenticated.
 Currently there is no way to provide a logic layer to authorize users (a RH ticket has been opened by Shelly inquiring on this process).
 
 
