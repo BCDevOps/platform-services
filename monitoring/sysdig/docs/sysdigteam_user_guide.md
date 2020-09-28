@@ -123,7 +123,11 @@ In order to access the Sysdig Monitor application and your team resources:
 ### Dashboards
 - A simple resource dashboard has been created to provide and overview of limits and requests across all team namespaces
 ![](assets/sysdigteams_dashboard_nav.png)
-![](assets/sysdigteams_resources_dashboard.png)
+![](assets/sysdigteams_resource_overview.png)
+
+- A simple persistent storage dashbaord has been created to provide an overview of all Persistent Volume Claim utilization. 
+**Note: PVC's must be attached to a running pod for their metrics to be displayed on this dashboard.**
+![](assets/sysdigteams_persistent_storage.png)
 
 
 - A series of pre-defined dashboards exist for general usage or to assist in creating custom dashboards; with a user that has an appropriate permissions
