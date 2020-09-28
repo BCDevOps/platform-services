@@ -1,9 +1,16 @@
 # Lookup Team
-- debug: msg=" Looking up {{ team_name }}"
+- debug: msg=" Looking up {{ container_team_name }}"
 - set_fact: 
-    team_data: "{{ item }}"
-    team_exists: true
-  when: item.name == team_name
+    team_container_data: "{{ item }}"
+    container_team_exists: true
+  when: item.name == container_team_name
+  with_items: 
+    -  "{{ teams_output.json.teams }}"
+
+- set_fact: 
+    team_host_data: "{{ item }}"
+    host_team_exists: true
+  when: item.name == host_team_name
   with_items: 
     -  "{{ teams_output.json.teams }}"
 
@@ -12,12 +19,23 @@
   block: 
   - name: Delete Team
     uri: 
-      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_data.id | int }}"
+      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_container_data.id | int }}"
       method: DELETE
       headers:
           Authorization: "Bearer {{ sysdig_token }}"
           Content-Type: "application/json"
       body_format: json
       status_code: 200
-    register: team_update_output
-  when: team_exists == true
+    register: team_container_update_output
+  - name: Delete Team
+    uri: 
+      url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_host_data.id | int }}"
+      method: DELETE
+      headers:
+          Authorization: "Bearer {{ sysdig_token }}"
+          Content-Type: "application/json"
+      body_format: json
+      status_code: 200
+    register: team_host_update_output
+  when: container_team_exists == true
+  ignore_errors: true

@@ -81,3 +81,6 @@ typings/
 *.orig
 
 *.terraform*
+
+# ansible output files for sysdig
+monitoring/sysdig/operator/sysdig-monitor/output/*

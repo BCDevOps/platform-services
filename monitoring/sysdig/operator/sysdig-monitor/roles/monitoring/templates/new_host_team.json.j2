@@ -1,17 +1,17 @@
 
 {   
     "canUseAwsMetrics": false,
-    "canUseCustomEvents": true,
+    "canUseCustomEvents": false,
     "canUseSysdigCapture": false,
     "default": false,
-    "description": "{{ team.description }}",
+    "description": "{{ team.description }} Persistent Storage",
     "entryPoint": {
         "module": "Dashboards"
     },
-    "name": "{{ team_name }}",
-    "show": "container",
+    "name": "{{ host_team_name }}",
+    "show": "host",
     "theme": "#73A1F7",
-    "filter": "kubernetes.namespace.name in ({% for namespace in namespaces  %}\"{{ namespace }}\"{% if not loop.last %},{% endif %}{% endfor %} )",
+    "filter": "namespace in ({% for namespace in namespaces  %}\"{{ namespace }}\"{% if not loop.last %},{% endif %}{% endfor %} )",
     "userRoles": [
 {% for role in team_users_and_roles  %}
       {

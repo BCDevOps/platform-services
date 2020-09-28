@@ -1,0 +1,733 @@
+{
+  "dashboard": {
+    "teamId": 21060,
+    "name": "TEST - Persistent Volume Storage",
+    "panels": [
+      {
+        "id": 1,
+        "type": "advancedTimechart",
+        "name": "Persistent Volume Claims Utilization - Top 50",
+        "description": "",
+        "advancedQueries": [
+          {
+            "enabled": true,
+            "displayInfo": {
+              "displayName": "",
+              "timeSeriesDisplayNameTemplate": "",
+              "type": "lines"
+            },
+            "format": {
+              "unit": "%",
+              "inputFormat": "0-1",
+              "displayFormat": "auto",
+              "decimals": null,
+              "yAxis": "auto"
+            },
+            "query": "avg(kubelet_volume_stats_used_bytes/kubelet_volume_stats_capacity_bytes) by (persistentvolumeclaim)"
+          }
+        ],
+        "legendConfiguration": {
+          "enabled": true,
+          "position": "right",
+          "layout": "table",
+          "showCurrent": true,
+          "width": null,
+          "height": null
+        },
+        "axesConfiguration": {
+          "bottom": {
+            "enabled": true
+          },
+          "left": {
+            "enabled": true,
+            "displayName": null,
+            "unit": "auto",
+            "displayFormat": "auto",
+            "decimals": null,
+            "minValue": 0,
+            "maxValue": null,
+            "minInputFormat": "0-100",
+            "maxInputFormat": "0-100",
+            "scale": "linear"
+          },
+          "right": {
+            "enabled": true,
+            "displayName": null,
+            "unit": "auto",
+            "displayFormat": "auto",
+            "decimals": null,
+            "minValue": 0,
+            "maxValue": null,
+            "minInputFormat": "1",
+            "maxInputFormat": "1",
+            "scale": "linear"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "type": "basicNumber",
+        "name": "Total Persistent Volume Storage Provisioned",
+        "description": "",
+        "basicQueries": [
+          {
+            "enabled": true,
+            "displayInfo": {
+              "displayName": "",
+              "timeSeriesDisplayNameTemplate": "",
+              "type": "lines"
+            },
+            "format": {
+              "unit": "byte",
+              "inputFormat": "B",
+              "displayFormat": "auto",
+              "decimals": null,
+              "yAxis": "auto"
+            },
+            "scope": {
+              "expressions": [],
+              "extendsDashboardScope": true
+            },
+            "compareTo": {
+              "enabled": false,
+              "delta": 1,
+              "timeFormat": "day"
+            },
+            "metrics": [
+              {
+                "id": "kubelet_volume_stats_capacity_bytes",
+                "timeAggregation": "avg",
+                "groupAggregation": "sum",
+                "descriptor": {
+                  "documentId": "kubelet_volume_stats_capacity_bytes",
+                  "id": "kubelet_volume_stats_capacity_bytes",
+                  "metricType": "gauge",
+                  "type": "byte",
+                  "scale": 1,
+                  "name": "kubelet_volume_stats_capacity_bytes",
+                  "category": "prometheus",
+                  "namespaces": [
+                    "host",
+                    "host.process",
+                    "host.container",
+                    "cloudProvider",
+                    "mesos",
+                    "ecs",
+                    "kubernetes.cluster",
+                    "kubernetes.namespace",
+                    "kubernetes.deployment",
+                    "kubernetes.job",
+                    "kubernetes.daemonSet",
+                    "kubernetes.service",
+                    "kubernetes.node",
+                    "kubernetes.replicaSet",
+                    "kubernetes.statefulSet",
+                    "kubernetes.resourcequota",
+                    "kubernetes.persistentvolume",
+                    "kubernetes.persistentvolumeclaim",
+                    "kubernetes.pod"
+                  ],
+                  "scopes": [],
+                  "timeAggregations": [
+                    "avg",
+                    "min",
+                    "max"
+                  ],
+                  "groupAggregations": [
+                    "avg",
+                    "sum",
+                    "min",
+                    "max"
+                  ],
+                  "aggregationForGroup": "avg",
+                  "hidden": false,
+                  "experimental": false,
+                  "deferred": false,
+                  "identity": false,
+                  "canMonitor": false,
+                  "canGroupBy": false,
+                  "canFilter": false,
+                  "generatedFrom": "com.draios.model.metrics.custom.PrometheusRawMetric",
+                  "segment": false,
+                  "documentTimestamp": 1601074584262,
+                  "heuristic": false,
+                  "documentType": "metric",
+                  "routingInfo": {
+                    "customerId": null,
+                    "routing": null
+                  }
+                },
+                "sorting": null
+              }
+            ]
+          }
+        ],
+        "numberThresholds": {
+          "values": [],
+          "base": {
+            "severity": "none",
+            "displayText": ""
+          },
+          "useDefaults": null
+        }
+      },
+      {
+        "id": 3,
+        "type": "basicNumber",
+        "name": "Total Persistent Volume Storage Used",
+        "description": "",
+        "basicQueries": [
+          {
+            "enabled": true,
+            "displayInfo": {
+              "displayName": "",
+              "timeSeriesDisplayNameTemplate": "",
+              "type": "lines"
+            },
+            "format": {
+              "unit": "byte",
+              "inputFormat": "B",
+              "displayFormat": "auto",
+              "decimals": null,
+              "yAxis": "auto"
+            },
+            "scope": {
+              "expressions": [],
+              "extendsDashboardScope": true
+            },
+            "compareTo": {
+              "enabled": false,
+              "delta": 1,
+              "timeFormat": "day"
+            },
+            "metrics": [
+              {
+                "id": "kubelet_volume_stats_used_bytes",
+                "timeAggregation": "avg",
+                "groupAggregation": "sum",
+                "descriptor": {
+                  "documentId": "kubelet_volume_stats_used_bytes",
+                  "id": "kubelet_volume_stats_used_bytes",
+                  "metricType": "gauge",
+                  "type": "byte",
+                  "scale": 1,
+                  "name": "kubelet_volume_stats_used_bytes",
+                  "category": "prometheus",
+                  "namespaces": [
+                    "host",
+                    "host.process",
+                    "host.container",
+                    "cloudProvider",
+                    "mesos",
+                    "ecs",
+                    "kubernetes.cluster",
+                    "kubernetes.namespace",
+                    "kubernetes.deployment",
+                    "kubernetes.job",
+                    "kubernetes.daemonSet",
+                    "kubernetes.service",
+                    "kubernetes.node",
+                    "kubernetes.replicaSet",
+                    "kubernetes.statefulSet",
+                    "kubernetes.resourcequota",
+                    "kubernetes.persistentvolume",
+                    "kubernetes.persistentvolumeclaim",
+                    "kubernetes.pod"
+                  ],
+                  "scopes": [],
+                  "timeAggregations": [
+                    "avg",
+                    "min",
+                    "max"
+                  ],
+                  "groupAggregations": [
+                    "avg",
+                    "sum",
+                    "min",
+                    "max"
+                  ],
+                  "aggregationForGroup": "avg",
+                  "hidden": false,
+                  "experimental": false,
+                  "deferred": false,
+                  "identity": false,
+                  "canMonitor": false,
+                  "canGroupBy": false,
+                  "canFilter": false,
+                  "generatedFrom": "com.draios.model.metrics.custom.PrometheusRawMetric",
+                  "segment": false,
+                  "documentTimestamp": 1601074584263,
+                  "heuristic": false,
+                  "documentType": "metric",
+                  "routingInfo": {
+                    "customerId": null,
+                    "routing": null
+                  }
+                },
+                "sorting": null
+              }
+            ]
+          }
+        ],
+        "numberThresholds": {
+          "values": [],
+          "base": {
+            "severity": "none",
+            "displayText": ""
+          },
+          "useDefaults": null
+        }
+      },
+      {
+        "id": 4,
+        "type": "basicNumber",
+        "name": "Total Persistent Volume Storage Free",
+        "description": "",
+        "basicQueries": [
+          {
+            "enabled": true,
+            "displayInfo": {
+              "displayName": "",
+              "timeSeriesDisplayNameTemplate": "",
+              "type": "lines"
+            },
+            "format": {
+              "unit": "byte",
+              "inputFormat": "B",
+              "displayFormat": "auto",
+              "decimals": null,
+              "yAxis": "auto"
+            },
+            "scope": {
+              "expressions": [],
+              "extendsDashboardScope": true
+            },
+            "compareTo": {
+              "enabled": false,
+              "delta": 1,
+              "timeFormat": "day"
+            },
+            "metrics": [
+              {
+                "id": "kubelet_volume_stats_available_bytes",
+                "timeAggregation": "avg",
+                "groupAggregation": "sum",
+                "descriptor": {
+                  "documentId": "kubelet_volume_stats_available_bytes",
+                  "id": "kubelet_volume_stats_available_bytes",
+                  "metricType": "gauge",
+                  "type": "byte",
+                  "scale": 1,
+                  "name": "kubelet_volume_stats_available_bytes",
+                  "category": "prometheus",
+                  "namespaces": [
+                    "host",
+                    "host.process",
+                    "host.container",
+                    "cloudProvider",
+                    "mesos",
+                    "ecs",
+                    "kubernetes.cluster",
+                    "kubernetes.namespace",
+                    "kubernetes.deployment",
+                    "kubernetes.job",
+                    "kubernetes.daemonSet",
+                    "kubernetes.service",
+                    "kubernetes.node",
+                    "kubernetes.replicaSet",
+                    "kubernetes.statefulSet",
+                    "kubernetes.resourcequota",
+                    "kubernetes.persistentvolume",
+                    "kubernetes.persistentvolumeclaim",
+                    "kubernetes.pod"
+                  ],
+                  "scopes": [],
+                  "timeAggregations": [
+                    "avg",
+                    "min",
+                    "max"
+                  ],
+                  "groupAggregations": [
+                    "avg",
+                    "sum",
+                    "min",
+                    "max"
+                  ],
+                  "aggregationForGroup": "avg",
+                  "hidden": false,
+                  "experimental": false,
+                  "deferred": false,
+                  "identity": false,
+                  "canMonitor": false,
+                  "canGroupBy": false,
+                  "canFilter": false,
+                  "generatedFrom": "com.draios.model.metrics.custom.PrometheusRawMetric",
+                  "segment": false,
+                  "documentTimestamp": 1601074584263,
+                  "heuristic": false,
+                  "documentType": "metric",
+                  "routingInfo": {
+                    "customerId": null,
+                    "routing": null
+                  }
+                },
+                "sorting": null
+              }
+            ]
+          }
+        ],
+        "numberThresholds": {
+          "values": [],
+          "base": {
+            "severity": "none",
+            "displayText": ""
+          },
+          "useDefaults": null
+        }
+      },
+      {
+        "id": 5,
+        "type": "basicTable",
+        "name": "PVC Provisioning and Utilization by Namespace",
+        "description": "",
+        "basicQueries": [
+          {
+            "enabled": true,
+            "displayInfo": {
+              "displayName": "Total Capacity",
+              "timeSeriesDisplayNameTemplate": "",
+              "type": "lines"
+            },
+            "format": {
+              "unit": "byte",
+              "inputFormat": "B",
+              "displayFormat": "auto",
+              "decimals": null,
+              "yAxis": "auto"
+            },
+            "scope": {
+              "expressions": [],
+              "extendsDashboardScope": true
+            },
+            "compareTo": {
+              "enabled": false,
+              "delta": 1,
+              "timeFormat": "day"
+            },
+            "metrics": [
+              {
+                "id": "kubelet_volume_stats_capacity_bytes",
+                "timeAggregation": "avg",
+                "groupAggregation": "sum",
+                "descriptor": {
+                  "documentId": "kubelet_volume_stats_capacity_bytes",
+                  "id": "kubelet_volume_stats_capacity_bytes",
+                  "metricType": "gauge",
+                  "type": "byte",
+                  "scale": 1,
+                  "name": "kubelet_volume_stats_capacity_bytes",
+                  "category": "prometheus",
+                  "namespaces": [
+                    "host",
+                    "host.process",
+                    "host.container",
+                    "cloudProvider",
+                    "mesos",
+                    "ecs",
+                    "kubernetes.cluster",
+                    "kubernetes.namespace",
+                    "kubernetes.deployment",
+                    "kubernetes.job",
+                    "kubernetes.daemonSet",
+                    "kubernetes.service",
+                    "kubernetes.node",
+                    "kubernetes.replicaSet",
+                    "kubernetes.statefulSet",
+                    "kubernetes.resourcequota",
+                    "kubernetes.persistentvolume",
+                    "kubernetes.persistentvolumeclaim",
+                    "kubernetes.pod"
+                  ],
+                  "scopes": [],
+                  "timeAggregations": [
+                    "avg",
+                    "min",
+                    "max"
+                  ],
+                  "groupAggregations": [
+                    "avg",
+                    "sum",
+                    "min",
+                    "max"
+                  ],
+                  "aggregationForGroup": "avg",
+                  "hidden": false,
+                  "experimental": false,
+                  "deferred": false,
+                  "identity": false,
+                  "canMonitor": false,
+                  "canGroupBy": false,
+                  "canFilter": false,
+                  "generatedFrom": "com.draios.model.metrics.custom.PrometheusRawMetric",
+                  "segment": false,
+                  "documentTimestamp": 1601074584263,
+                  "heuristic": false,
+                  "documentType": "metric",
+                  "routingInfo": {
+                    "customerId": null,
+                    "routing": null
+                  }
+                },
+                "sorting": null
+              }
+            ],
+            "segmentation": {
+              "labels": [
+                {
+                  "id": "namespace",
+                  "descriptor": {
+                    "documentId": "namespace",
+                    "id": "namespace",
+                    "metricType": "tag",
+                    "type": "string",
+                    "scale": 0,
+                    "name": "namespace",
+                    "description": "namespace",
+                    "namespaces": [
+                      "cloudProvider",
+                      "host.container",
+                      "ecs",
+                      "host.fs",
+                      "host.file",
+                      "host",
+                      "kubernetes",
+                      "kubernetes.cluster",
+                      "kubernetes.daemonSet",
+                      "kubernetes.deployment",
+                      "kubernetes.job",
+                      "kubernetes.namespace",
+                      "kubernetes.node",
+                      "kubernetes.pod",
+                      "kubernetes.replicaSet",
+                      "kubernetes.service",
+                      "kubernetes.statefulSet",
+                      "kubernetes.resourcequota",
+                      "kubernetes.hpa",
+                      "link",
+                      "mesos",
+                      "host.net",
+                      "host.process",
+                      "prometheus",
+                      "swarm"
+                    ],
+                    "scopes": [],
+                    "timeAggregations": [
+                      "concat",
+                      "distinct",
+                      "count"
+                    ],
+                    "groupAggregations": [
+                      "concat",
+                      "distinct",
+                      "count"
+                    ],
+                    "aggregationForGroup": "none",
+                    "hidden": false,
+                    "experimental": false,
+                    "deferred": false,
+                    "identity": false,
+                    "canMonitor": false,
+                    "canGroupBy": false,
+                    "canFilter": true,
+                    "generatedFrom": "com.draios.model.metrics.custom.CustomMetric$Tag",
+                    "segment": false,
+                    "documentTimestamp": 1601074584263,
+                    "heuristic": false,
+                    "documented": true,
+                    "documentType": "metric",
+                    "routingInfo": {
+                      "customerId": null,
+                      "routing": null
+                    }
+                  },
+                  "displayName": "Namespace",
+                  "sorting": null
+                }
+              ],
+              "limit": 10,
+              "direction": "desc"
+            }
+          },
+          {
+            "enabled": true,
+            "displayInfo": {
+              "displayName": "Used Capacity",
+              "timeSeriesDisplayNameTemplate": "",
+              "type": "lines"
+            },
+            "format": {
+              "unit": "byte",
+              "inputFormat": "B",
+              "displayFormat": "auto",
+              "decimals": null,
+              "yAxis": "auto"
+            },
+            "scope": {
+              "expressions": [],
+              "extendsDashboardScope": true
+            },
+            "compareTo": {
+              "enabled": false,
+              "delta": 1,
+              "timeFormat": "day"
+            },
+            "metrics": [
+              {
+                "id": "kubelet_volume_stats_used_bytes",
+                "timeAggregation": "avg",
+                "groupAggregation": "sum",
+                "descriptor": {
+                  "documentId": "kubelet_volume_stats_used_bytes",
+                  "id": "kubelet_volume_stats_used_bytes",
+                  "metricType": "gauge",
+                  "type": "byte",
+                  "scale": 1,
+                  "name": "kubelet_volume_stats_used_bytes",
+                  "category": "prometheus",
+                  "namespaces": [
+                    "host",
+                    "host.process",
+                    "host.container",
+                    "cloudProvider",
+                    "mesos",
+                    "ecs",
+                    "kubernetes.cluster",
+                    "kubernetes.namespace",
+                    "kubernetes.deployment",
+                    "kubernetes.job",
+                    "kubernetes.daemonSet",
+                    "kubernetes.service",
+                    "kubernetes.node",
+                    "kubernetes.replicaSet",
+                    "kubernetes.statefulSet",
+                    "kubernetes.resourcequota",
+                    "kubernetes.persistentvolume",
+                    "kubernetes.persistentvolumeclaim",
+                    "kubernetes.pod"
+                  ],
+                  "scopes": [],
+                  "timeAggregations": [
+                    "avg",
+                    "min",
+                    "max"
+                  ],
+                  "groupAggregations": [
+                    "avg",
+                    "sum",
+                    "min",
+                    "max"
+                  ],
+                  "aggregationForGroup": "avg",
+                  "hidden": false,
+                  "experimental": false,
+                  "deferred": false,
+                  "identity": false,
+                  "canMonitor": false,
+                  "canGroupBy": false,
+                  "canFilter": false,
+                  "generatedFrom": "com.draios.model.metrics.custom.PrometheusRawMetric",
+                  "segment": false,
+                  "documentTimestamp": 1601074584264,
+                  "heuristic": false,
+                  "documentType": "metric",
+                  "routingInfo": {
+                    "customerId": null,
+                    "routing": null
+                  }
+                },
+                "sorting": null
+              }
+            ],
+            "segmentation": {
+              "labels": [],
+              "limit": 10,
+              "direction": "desc"
+            }
+          }
+        ]
+      }
+    ],
+    "eventDisplaySettings": {
+      "enabled": true,
+      "queryParams": {
+        "severities": [],
+        "alertStatuses": [],
+        "categories": [],
+        "filter": "",
+        "teamScope": false
+      }
+    },
+    "shared": true,
+    "public": false,
+    "description": "",
+    "layout": [
+      {
+        "panelId": 1,
+        "x": 0,
+        "y": 4,
+        "w": 24,
+        "h": 8
+      },
+      {
+        "panelId": 2,
+        "x": 0,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      {
+        "panelId": 3,
+        "x": 8,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      {
+        "panelId": 4,
+        "x": 16,
+        "y": 0,
+        "w": 8,
+        "h": 4
+      },
+      {
+        "panelId": 5,
+        "x": 0,
+        "y": 12,
+        "w": 24,
+        "h": 6
+      }
+    ],
+    "sharingSettings": [
+      {
+        "role": "ROLE_RESOURCE_EDIT",
+        "member": {
+          "type": "USER_TEAMS",
+          "id": null,
+          "name": null,
+          "teamTheme": null
+        }
+      }
+    ],
+    "publicToken": "48e098b1228f40d2857533b291fd6000",
+    "favorite": false,
+    "schema": 3,
+    "username": "shea.stewart+bcgov@arctiq.ca",
+    "permissions": [
+      "dashboards.transfer",
+      "dashboards.delete",
+      "dashboards.sharing",
+      "dashboards.edit",
+      "dashboards.read"
+    ]
+  }
+}

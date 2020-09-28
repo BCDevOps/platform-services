@@ -1,5 +1,5 @@
 ---
-# Create / Apply default dashboard
+# Create / Apply default dashboard for Container Scope
 
 # Since API tokens are Team Scoped, we need to find an Admin 
 # user of the new team and fetch their token for the dashboard 
@@ -10,26 +10,64 @@
   when: item.role == "ROLE_TEAM_MANAGER"
   with_items: "{{ team_users_and_roles }}"
 
-- name: Get token from Admin user of team
+
+- name: Get token from Admin user of container team
   uri: 
-    url: "{{ sysdig_api_endpoint }}/api/token/{{ team_admin_username }}/{{ team_creation_output.json.team.id }}"
+    url: "{{ sysdig_api_endpoint }}/api/token/{{ team_admin_username }}/{{ team_container_creation_output.json.team.id }}"
     method: GET
     headers:
         Authorization: "Bearer {{ sysdig_token }}"
         Content-Type: "application/json"
-  register: team_admin_user_token
+  register: container_team_admin_user_token
+  when: container_team_exists == false
+
+- name: Get token from Admin user of host team
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/token/{{ team_admin_username }}/{{ team_host_creation_output.json.team.id }}"
+    method: GET
+    headers:
+        Authorization: "Bearer {{ sysdig_token }}"
+        Content-Type: "application/json"
+  register: host_team_admin_user_token
+  when: host_team_exists == false
 
 # Add the single dashboard that each team will need
 # More dashboards can be added or modified as needed
-- name: Set Default Dashboard
+# - name: Creates output directory
+#   file:
+#     path: output
+#     state: directory
+
+# - name: Template the dashboard file
+#   template: 
+#     src: templates/dashboard_requests_and_limits.json.j2
+#     dest: output/dashboard_requests_and_limits.json
+#   when: container_team_exists == false
+- name: Set Team CPU and Memory Resource Dashboard
   uri: 
-    url: "{{ sysdig_api_endpoint }}/api/v2/dashboards/"
+    url: "{{ sysdig_api_endpoint }}/api/v3/dashboards/"
     method: POST
     headers:
-        Authorization: "Bearer {{ team_admin_user_token.json.token.key }}"
+        Authorization: "Bearer {{ container_team_admin_user_token.json.token.key }}"
         Content-Type: "application/json"
-    body: "{{ lookup('template', 'templates/dashboard_requests_and_limits.json.j2') }}"
+    body: "{{ lookup('template', 'templates/dashboard_requests_and_limits_v3.json.j2') }}"
     body_format: json
-    status_code: 200
+    status_code: 201
   register: default_dashboard_creation_output
-  when: team_exists == false
+  # command: "SDC_TOKEN={{ sysdig_token }} sdc-cli dashboard add-json  output/dashboard_requests_and_limits.json"
+  register: default_dashboard_creation_output
+  when: container_team_exists == false
+
+# Create / Apply default dashboard for Host Scope
+- name: Set Team Persistent Volume Claim Dashboard
+  uri: 
+    url: "{{ sysdig_api_endpoint }}/api/v3/dashboards/"
+    method: POST
+    headers:
+        Authorization: "Bearer {{ host_team_admin_user_token.json.token.key }}"
+        Content-Type: "application/json"
+    body: "{{ lookup('template', 'templates/dashboard_persistent_volume_claims.json.j2') }}"
+    body_format: json
+    status_code: 201
+  register: storage_dashboard_creation_output
+  when: host_team_exists == false
