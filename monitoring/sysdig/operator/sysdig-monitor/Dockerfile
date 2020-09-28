@@ -1,5 +1,6 @@
 FROM quay.io/operator-framework/ansible-operator:v0.13.0
 
+## All commented out logic was tested to support 0.19.0 in an OpenShift 3.11 environment (which works, but ultimately wasn't required.)
 # USER 0 
 # RUN echo -ne "[centos-8-appstream]\nname = CentOS 8 (RPMs) - AppStream\nbaseurl = http://mirror.centos.org/centos-8/8/AppStream/x86_64/os/\nenabled = 1\ngpgcheck = 0" > /etc/yum.repos.d/centos.repo
 
