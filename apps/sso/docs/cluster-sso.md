@@ -15,6 +15,14 @@ authentication/authorization mechanism is highlighted for the general audience O
 - Openshift usernames map directly to a github username.
 
 ## Option 1: Use SSO IDIR for Authentication/Authorization
+> Notes on SSO IDIR and multi-factor-auth:
+>
+>We have had a discussion with the IDIR MFA team and are aware that IDIR Multi-Factor-Auth is
+currently used in production apps for a small set of users (things like Teams).
+> - The Platform Services Team (ShellyXueHan, patricksimonian, Nick c) will be beta testing MFA in general against Keycloak late Sept.
+> - The process to get onboarded with MFA is manual and requires sending an email with a list of names you would like to have MFA enabled
+> - This rollout can take approx. 1 week from what I've gather
+> - General MFA rollout will not be available until early next year
 
 Ditch the usage of the Github OAuth App. Users will authenticate with the IDIRs via SSO. 
 
@@ -46,3 +54,6 @@ We could also add a second OAuth provider (SSO) to provide IDIR auth without lev
 ## Cons
 - There is a cost associated with Github Org Memebership
 - __Not aligned__ with Gov's standards of how users access gov services
+- Creates potentially non-uniform access within the cluster where userID's could be of 2 formats: 
+eg: jefkel and jefkel@idir  - the github access would not contain the @provider syntax unless we are able to create a filtered provider within SSO.
+
