@@ -40,6 +40,7 @@ Business as usual. We have a good POC here. It has been working well for two yea
 - 2fa enabled (for GitHub identities)
 - We can easily establish automation via the project registry to add users to the BCDevopsOrg for access to the cluster
 - You can create Github Accounts quickly
+- Addition of IDIR as an optional provider
 
 ## Cons
 - There is a cost associated with Github Org Memebership
