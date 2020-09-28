@@ -139,7 +139,6 @@ In order to access the Sysdig Monitor application and your team resources:
 
 ## Alert Channels
 Currently Alert Channels can be created manually through the Sysdig Monitor UI. 
-> :warning: **All Alert Channels Can be Enabled / Disabled By All Teams**: Be very careful here and only modify your own!
 
 ### Creating a Rocket.Chat Alert Channel
 The following walkthrough provides a sample for integrating Sysdig Alerts with Rocket.Chat. Both Sysdig Monitor and Rocket.Chat require configurations. 
@@ -207,15 +206,19 @@ class Script {
 ![](assets/sysdigteams_add_alert_to_panel.png)
 ![](assets/sysdigteams_sample_alert.png)
 
+#### Creating a PromQL Based Alert
+Some of the dashboard panels may be leveraging PromQL to display the metrics. PromQL can be used in Alerts as well. The following example shows an alert for the **Persistent Volume Utilization** when hitting 80% full. 
+
+- Sample PromQL Query: `((avg(kubelet_volume_stats_used_bytes/kubelet_volume_stats_capacity_bytes) by (persistentvolumeclaim)) * 100) >= 80`  
+![](assets/sysdigteams_alert_promql_pvc_usage.png)
+
+
 # Additional Resources
 - [Sysdig Monitor](https://docs.sysdig.com/en/sysdig-monitor.html)
 - [Sysdig Monitor Dashboards](https://docs.sysdig.com/en/dashboards.html)
 - [Sysdig Alerts](https://docs.sysdig.com/en/alerts.html)
+- [Sysdig Alerts with Kubernetes and PromQL](https://sysdig.com/blog/alerting-kubernetes/)
 - [Sysdig Teams Blog](https://sysdig.com/blog/introducing-sysdig-teams/)
 - [Sysdig Teams Docs ](https://docs.sysdig.com/en/grouping,-scoping,-and-segmenting-metrics.html#al_UUID-c54169b7-c8f5-4990-6b63-dd2e25b96cce_UUID-3dc7a7aa-2549-23a2-94e2-cee57bdd538f)
 - [Sysdig User Management Docs](https://docs.sysdig.com/en/manage-teams-and-roles.html)
 - [Sysdig User Roles](https://docs.sysdig.com/en/user-and-team-administration.html)
-
-## High Level Feature Backlog
-- [ ] Custom Dashboard Backup / Export 
-- [ ] Custom Alert Configuration from Custom Resource within OpenShift
