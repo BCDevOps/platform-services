@@ -16,15 +16,19 @@ This documentation does not provide a comprehensive overview of the Sysdig Monit
 # Sysdig Teams Feature Description
 Sysdig Monitor is a SaaS service that provides system level monitoring of Kubernetes hosts. This solution provides the ability to create custom dashboards, alerts, and operational level captures to help diagnose application or platform level issues. 
 
-The Sysdig Teams Operator that is operating in the cluster enables a team to create and manage access control to a **dedicated Sysdig Team account** for BC Government OpenShift platform users. The team is scoped specifically to the OpenShift namespaces that belong to a specific team, and also provides a high-level default dashboard to identify system resources, limits, and actual usage. 
+The Sysdig Teams Operator that is running in the cluster enables a team to create and manage access control to a **dedicated Sysdig Team account** for BC Government OpenShift platform users. The team is scoped specifically to the OpenShift namespaces that belong to a specific team, and also provides a high-level default dashboard to identify system resources, limits, and actual usage. 
+
 
 ## The Sysdig Team Custom Resource
 In order to create a Sysdig Team; 
 - Create a Custom Resource in your project *Tools* namespace 
 - Create a an access control list within the Custom Resource that identifies users by the email address that is registered in KeyCloak
   - *Note* Only GitHub ID's are currently configured in this realm
+- Upon creating the CR, **TWO** teams will be created; 
+  - **[license-plate]-team** - All Kubernetes realted objects can be monitored here, with the exception of persistent volume claim utilization. 
+  - **[license-plate]-team-persistent storage** - Persistent Volume Claim utilization can be monitored here. 
 
-The following sample custom resource can be used as a reference model; 
+The following sample custom resource can be used for reference; 
 
 ```yaml
 apiVersion: ops.gov.bc.ca/v1alpha1
