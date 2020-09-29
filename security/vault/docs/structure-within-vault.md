@@ -5,8 +5,6 @@
 HashiCorp Vault offers multiple solutions to structure its stored secrets and provide access to
 different teams.
 
-**TODO** give consumer examples
-
 The following structure is flexible such that large consumers can be onboarded to the same
 underlying Vault infrastructure without further constraints to how they consume Vault,
 and teams and apps within BCgov Platform Services, for instance, utilize the same Vault Authentication Methods,
@@ -15,7 +13,7 @@ naming convention, base structure, Vault roles, and Vault policies.
 We will refer to those as use cases, as follows:
 
 1. Use-Case (1): Teams/Apps, e.g., within BCgov Platform Services
-2. Use-Case (2): Large consumers, e.g., **TODO give examples** jurisdiction?
+2. Use-Case (2): Large consumers, e.g., separate ministry
 
 ## Structure Explained
 
@@ -45,8 +43,8 @@ Kubernetes Service Accounts (KSA) from defined Kubernetes namespaces.
 |-------------------|-------------------------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------|
 | KLAB              | /auth/k8s-klab/               | /auth/k8s-klab/role/licensePlate-nonprod | bound_service_account_names=licensePlate-nonprod bound_service_account_namespaces=licensePlate-dev,licensePlate-test,licensePlate-tools |
 | KLAB              | /auth/k8s-klab/               | /auth/k8s-klab/role/licensePlate-prod    | bound_service_account_names=licensePlate-prod bound_service_account_namespaces=licensePlate-prod                          |
-| CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/licensePlate-nonprod | bound_service_account_names=licensePlate-nonprod bound_service_account_namespaces=licensePlate-dev,licensePlate-test,licensePlate-tools |
-| CLAB              | /auth/k8s-clab/               | /auth/k8s-clab/role/licensePlate-prod    | bound_service_account_names=licensePlate-prod bound_service_account_namespaces=licensePlate-prod                          |
+| CLAB (KLAB DR)    | /auth/k8s-clab/               | /auth/k8s-clab/role/licensePlate-nonprod | bound_service_account_names=licensePlate-nonprod bound_service_account_namespaces=licensePlate-dev,licensePlate-test,licensePlate-tools |
+| CLAB (KLAB DR)    | /auth/k8s-clab/               | /auth/k8s-clab/role/licensePlate-prod    | bound_service_account_names=licensePlate-prod bound_service_account_namespaces=licensePlate-prod                          |
 | Silver            | /auth/k8s-silver/             | /auth/k8s-silver/role/licensePlate-nonprod | bound_service_account_names=licensePlate-nonprod bound_service_account_namespaces=licensePlate-dev,licensePlate-test,licensePlate-tools |
 | Silver-DR         | /auth/k8s-silver/             | /auth/k8s-silver/role/licensePlate-prod    | bound_service_account_names=licensePlate-prod bound_service_account_namespaces=licensePlate-prod                          |
 
