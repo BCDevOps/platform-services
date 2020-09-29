@@ -12,6 +12,12 @@
     fail_msg: "Set the vars with Ansible extra vars."
     success_msg: "Vars are defined and of certain minimum length."
 
+# Create temporary folder
+- name: Create temporary folder
+  file:
+    path: "/tmp/{{ vault_generate_terraform_files_ocp_cluster }}"
+    state: directory
+
 # TODO Change the dest: to the git repository for TF files
 # If dest dir does not exist, Ansible fails
 - name: Generate Vault policies
@@ -28,3 +34,8 @@
 
 # TODO git commit and git push 
 
+- name: Remove temporary folder
+  file:
+    path: "/tmp/{{ vault_generate_terraform_files_ocp_cluster }}"
+    state: absent
+  tags: always

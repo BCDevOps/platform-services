@@ -9,7 +9,7 @@ vault_generate_terraform_files_lp: ""
 
 ############## role vars ##############
 # Vault Kubernetes Auth Backend
-vault_generate_terraform_files_auth_backend: "{{ 'auth/k8s-' + vault_generate_terraform_files_ocp_cluster }}"
+vault_generate_terraform_files_auth_backend: "{{ 'k8s-' + vault_generate_terraform_files_ocp_cluster }}"
 
 # Name for nonprod Terraform and Vault resources
 vault_generate_terraform_files_lp_nonprod: "{{ vault_generate_terraform_files_lp + '-nonprod' }}"

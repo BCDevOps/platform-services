@@ -1,3 +1,21 @@
+# Manage auth methods broadly across Vaults
+path "auth/*"
+{
+  capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+}
+
+# Create, update, and delete auth methods
+path "sys/auth/*"
+{
+  capabilities = ["create", "update", "delete", "sudo"]
+}
+
+# List auth methods
+path "sys/auth"
+{
+  capabilities = ["read"]
+}
+
 # Terraform issues itself a new token that is a child of the one given
 path "auth/token/create"
 {
@@ -26,4 +44,16 @@ path "sys/mounts/*"
 path "sys/mounts"
 {
   capabilities = ["read"]
+}
+
+# List any KV folder/mount
+path "+/metadata/"
+{
+  capabilities = ["list"]
+}
+
+# Manage secrets and versions on any KV folder/mount
+path "+/data/*"
+{
+  capabilities = ["create", "read", "update", "delete", "list"]
 }

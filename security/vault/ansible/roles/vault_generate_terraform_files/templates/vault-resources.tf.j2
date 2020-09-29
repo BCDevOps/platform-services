@@ -1,16 +1,19 @@
 resource "vault_mount" "{{ vault_generate_terraform_files_lp_nonprod }}" {
+  provider    = vault.platform-services
   path        = "{{ vault_generate_terraform_files_lp_nonprod }}"
   type        = "kv-v2"
   description = "KV2 Secrets Engine for {{ vault_generate_terraform_files_lp_nonprod }}."
 }
 
 resource "vault_mount" "{{ vault_generate_terraform_files_lp_prod }}" {
+  provider    = vault.platform-services
   path        = "{{ vault_generate_terraform_files_lp_prod }}"
   type        = "kv-v2"
   description = "KV2 Secrets Engine for {{ vault_generate_terraform_files_lp_prod }}."
 }
 
 resource "vault_generic_secret" "{{ vault_generate_terraform_files_lp_nonprod }}" {
+  provider    = vault.platform-services
   path = "{{ vault_generate_terraform_files_lp_nonprod }}/helloworld"
 
   data_json = <<EOT
@@ -21,6 +24,7 @@ EOT
 }
 
 resource "vault_generic_secret" "{{ vault_generate_terraform_files_lp_prod }}" {
+  provider    = vault.platform-services
   path = "{{ vault_generate_terraform_files_lp_prod }}/helloworld"
 
   data_json = <<EOT
@@ -31,16 +35,19 @@ EOT
 }
 
 resource "vault_policy" "{{ vault_generate_terraform_files_lp_nonprod }}" {
+  provider    = vault.platform-services
   name   = "{{ vault_generate_terraform_files_lp_nonprod }}"
   policy = file("policies/{{ vault_generate_terraform_files_lp_nonprod }}.hcl")
 }
 
 resource "vault_policy" "{{ vault_generate_terraform_files_lp_prod }}" {
+  provider    = vault.platform-services
   name   = "{{ vault_generate_terraform_files_lp_prod }}"
   policy = file("policies/{{ vault_generate_terraform_files_lp_prod }}.hcl")
 }
 
 resource "vault_kubernetes_auth_backend_role" "{{ vault_generate_terraform_files_lp_nonprod }}" {
+  provider    = vault.platform-services
   backend                          = "{{ vault_generate_terraform_files_auth_backend }}"
   role_name                        = "{{ vault_generate_terraform_files_lp_nonprod }}"
   bound_service_account_names      = ["{{ vault_generate_terraform_files_bound_ksa }}"]
@@ -50,6 +57,7 @@ resource "vault_kubernetes_auth_backend_role" "{{ vault_generate_terraform_files
 }
 
 resource "vault_kubernetes_auth_backend_role" "{{ vault_generate_terraform_files_lp_prod }}" {
+  provider    = vault.platform-services
   backend                          = "{{ vault_generate_terraform_files_auth_backend }}"
   role_name                        = "{{ vault_generate_terraform_files_lp_prod }}"
   bound_service_account_names      = ["{{ vault_generate_terraform_files_bound_ksa }}"]

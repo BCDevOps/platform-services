@@ -4,6 +4,10 @@
   vars:
     dir_consul_certs: "{{lookup('env', 'HOME') }}/consul-certs"
     consul_binary: "{{lookup('env', 'HOME') }}/bin/consul"
+    fqdn1: "one.vault-lab.developer.gov.bc.ca"
+    fqdn2: "two.vault-lab.developer.gov.bc.ca"
+    fqdn3: "one.vault.developer.gov.bc.ca"
+    fqdn4: "two.vault.developer.gov.bc.ca"
   tasks:
 
   - name: Create subfolder in HOME
@@ -23,7 +27,10 @@
       chdir: "{{ dir_consul_certs }}"
       cmd: >
         {{ consul_binary }} tls cert create -server
-          -additional-dnsname={{ ocp_route_fqdn }}
+          -additional-dnsname={{ fqdn1 }}
+          -additional-dnsname={{ fqdn2 }}
+          -additional-dnsname={{ fqdn3 }}
+          -additional-dnsname={{ fqdn4 }}
           -additional-dnsname=vault-0.vault-internal
           -additional-dnsname=vault-1.vault-internal
           -additional-dnsname=vault-2.vault-internal

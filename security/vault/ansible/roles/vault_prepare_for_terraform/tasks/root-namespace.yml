@@ -1,7 +1,7 @@
 ---
 - name: Create Vault Namespace platform-services
   hashivault_namespace:
-    name: platform-services
+    name: "{{ vault_prepare_for_terraform_ns1 }}"
     verify: "{{ vault_prepare_for_terraform_verify }}"
 
 - name: Write Vault Policy to be used by Terraform
