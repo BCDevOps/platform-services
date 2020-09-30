@@ -38,10 +38,9 @@ rules:
       - update
       - watch
   ##
-  ## Rules for security.developer.gov.bc.ca/v1alpha1, Kind: ExternalNetwork
+  ## Rules for security.devops.gov.bc.ca/v1alpha1, Kind: ExternalNetwork
   ##
   - apiGroups:
-      - security.developer.gov.bc.ca
       - security.devops.gov.bc.ca
     resources:
       - externalnetworks
@@ -55,10 +54,9 @@ rules:
       - update
       - watch
   ##
-  ## Rules for security.developer.gov.bc.ca/v1alpha1, Kind: NetworkSecurityPolicy
+  ## Rules for security.devops.gov.bc.ca/v1alpha1, Kind: NetworkSecurityPolicy
   ##
   - apiGroups:
-      - security.developer.gov.bc.ca
       - security.devops.gov.bc.ca
     resources:
       - networksecuritypolicies

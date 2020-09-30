@@ -1,4 +1,4 @@
-domain: developer.gov.bc.ca
+domain: devops.gov.bc.ca
 layout: ansible.sdk.operatorframework.io/v1
 projectName: nsp-operator
 resources:

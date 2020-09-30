@@ -18,22 +18,4 @@
       name: finalizer.security.devops.gov.bc.ca
       vars:
         state: absent
-  - version: v1alpha1
-    group: security.developer.gov.bc.ca
-    kind: NetworkSecurityPolicy
-    reconcilePeriod: '0'
-    playbook: playbooks/networksecuritypolicy.yml
-    finalizer:
-      name: finalizer.security.developer.gov.bc.ca
-      vars:
-        state: absent
-  - version: v1alpha1
-    group: security.developer.gov.bc.ca
-    kind: ExternalNetwork
-    reconcilePeriod: '0'
-    playbook: playbooks/externalnetwork.yml
-    finalizer:
-      name: finalizer.security.developer.gov.bc.ca
-      vars:
-        state: absent
   # +kubebuilder:scaffold:watch
