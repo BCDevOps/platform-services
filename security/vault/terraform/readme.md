@@ -29,3 +29,11 @@ export SUBSCRIPTION=[subscription]
 az login --username $USERNAME -t $TENANT
 ```
 
+- Using Remote State and Execution with Terraform, set the following ENV vars in the workspace
+
+```
+ARM_CLIENT_ID
+ARM_CLIENT_SECRET
+ARM_SUBSCRIPTION_ID
+ARM_TENANT_ID
+```
