@@ -1,0 +1,52 @@
+---
+- name: Sanity check - oc CLI installed?
+  command: which oc
+  changed_when: false
+  failed_when: r_oc_installed.rc not in [0]
+  register: r_oc_installed
+
+- name: Sanity check - vault CLI installed?
+  command: which vault
+  changed_when: false
+  failed_when: r_vault_installed.rc not in [0]
+  register: r_vault_installed
+
+- name: Sanity checks - environment variables set?
+  assert:
+    that:
+    - ansible_env['VAULT_ADDR'] is defined
+    - ansible_env['VAULT_TOKEN'] is defined
+    fail_msg: "One or more environment variables are not set."
+    success_msg: "All checks passed."
+
+- name: Retrieve the token for the vault Kubernetes service account
+  command: oc serviceaccounts get-token vault -n {{ vault_enable_kubernetes_auth_ns }}
+  register: r_sa_jwt_token
+
+- debug:
+    var: r_sa_jwt_token.stdout
+
+- name: "[Block] - Retrieve CA cert for Vault, enable, and configure"
+  block:
+    - name: Retrieve the OpenShift Certificate Authority certificate from the Vault pod
+      shell: oc exec -n {{ vault_enable_kubernetes_auth_ns }} vault-0 -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt >> "{{ vault_enable_kubernetes_auth_ca }}"
+      register: r_ca_cert
+    
+    - debug:
+        var: r_ca_cert.stdout
+    
+    - name: Enable Vault Kubernetes Authentication Backend
+      command: vault auth enable -tls-skip-verify -path=k8s-{{ vault_enable_kubernetes_auth_cluster }} kubernetes
+      ignore_errors: true
+    
+    - name: Configure Vault Kubernetes Authentication Backend
+      command: vault write -tls-skip-verify auth/k8s-{{ vault_enable_kubernetes_auth_cluster }}/config token_reviewer_jwt={{ r_ca_cert.stdout }} kubernetes_host="https://kubernetes.default.svc.cluster.local:443" kubernetes_ca_cert=@"{{ vault_enable_kubernetes_auth_ca }}"
+  always:
+    - name: Cleanup
+      file:
+        path: "{{ vault_enable_kubernetes_auth_ca }}"
+        state: absent
+      tags: always
+
+- meta: end_play
+

@@ -1,0 +1,12 @@
+---
+# Kubernetes namespace / OpenShift project where Vault is installed
+vault_enable_kubernetes_auth_ns: "devops-security-vault"
+
+# Kubernetes/OpenShift cluster to enable for Vault Kubernetes Authentication
+vault_enable_kubernetes_auth_cluster: "" # klab, clab, silver, silver-dr (provide via Ansible inventory)
+
+# Temporary file for Kubernetes/OpenShift Certificate Authority certificate
+vault_enable_kubernetes_auth_ca: "/tmp/ca_for_vault.crt"
+
+#vault_enable_kubernetes_auth_
+

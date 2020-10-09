@@ -1,7 +1,0 @@
----
-- name: "[WARNING] Install insecure Vault cluster"
-  hosts: all
-  gather_facts: false
-
-  roles:
-  - vault_insecure_install

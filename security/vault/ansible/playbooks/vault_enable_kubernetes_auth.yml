@@ -1,0 +1,7 @@
+---
+- name: Enable Vault Kubernetes Auth 
+  hosts: all
+  gather_facts: true
+
+  roles:
+  - vault_enable_kubernetes_auth
