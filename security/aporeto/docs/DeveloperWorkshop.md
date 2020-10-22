@@ -150,7 +150,7 @@ requests.
 Example: 
 ```
 - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/ v1alpha
+    apiVersion: security.devops.gov.bc.ca/v1alpha
     metadata:
         name: intra-namespace-comms-uwsgva-dev
         labels:
@@ -172,7 +172,7 @@ Replace with custom policy for each required pod to pod communication.
 Example:
 ```
 - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/ v1alpha
+    apiVersion: security.devops.gov.bc.ca/v1alpha
     metadata:
         name: intra-namespace-comms-uwsgva-dev
         labels:
@@ -212,7 +212,7 @@ other namespaces
 Example:
 ```
 - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha
+    apiVersion: security.devops.gov.bc.ca/v1alpha
     metadata:
         name: namespace-to-external-network-aajsw-dev
         labels:
@@ -232,7 +232,7 @@ Example:
 
 ```
 - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha
+    apiVersion: security.devops.gov.bc.ca/v1alpha
     metadata:
         name: pod-to-external-network-aajsw-dev
         labels:
@@ -265,7 +265,7 @@ thorough testing
 Example:
 ```
 - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha
+    apiVersion: security.devops.gov.bc.ca/v1alpha
     metadata:
         name: int-cluster-k8s-api-comms-aajsw-dev
     labels:
@@ -284,7 +284,7 @@ Replace with a custom policy for each pod that is required to connect to interna
 Example:
 ```
 - kind: NetworkSecurityPolicy
-    apiVersion: secops.pathfinder.gov.bc.ca/v1alpha
+    apiVersion: security.devops.gov.bc.ca/v1alpha
     metadata:
         name: int-cluster-k8s-api-comms-aajsw-dev
     labels:
