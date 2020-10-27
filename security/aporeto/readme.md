@@ -17,7 +17,7 @@ Users with [appropriate permissions](./architecture/design_decisions.md#access-t
 - URL: https://console.aporeto.com
 - Select the sign in options (three dots) and select *Sign in with OIDC*
   - Namespace: /bcgov
-  - Provider: pathfinder-sso-prod
+  - Provider: oidc
 
 **:point_up: Note**
 
