@@ -12,6 +12,8 @@ tags:
 
 # NetworkSecurityPolicy: Quick Start
 
+> ***NOTE:** For OCP3 Aporetto is not enforcing `NetworkSecurtyPolicy` (NSP) Objects.  You will see NSP object in your namespaces on OCP3.  The do nothing.*
+
 ## Introduction
 
 New applications deployed to the Platform after Oct 9, 2019 will automatically have Zero-Trust Security Model enabled which means that **all communications for the application components are disabled by default** and only communications explicitely listed in a application's custom network security policy are allowed (with the exception of communications included in the platform-level [base policies](../architecture/design_decisions.md#base-policies)). 
@@ -45,7 +47,7 @@ The sections below will guide you through adding network security policies to yo
 * Allow all Pods to talk to one another within a namespace;
 * Allow your namespace to talk to the OpenShift Container Platform (OCP) API.
 
-These 3 base policies combined allow application deployed to Openshift 3.11 Platform to keep the same communication open as it was prior to the enablement of the Zero-Trust Security Model on the Platform.
+These 3 base policies combined allow applications deployed to Openshift 3.11 Platform to keep the same communication open as it was prior to activation of the Zero-Trust Security Model on the Platform.
 
 Sample configuration to enable the 3 above mentioned policies can be found in the [quickstart-nsp.yaml](./sample/quickstart-nsp.yaml) file in [samples](./sample) directory accompanying this document. Samples of other network security policies can be found [here](./CustomPolicy.md).
 
