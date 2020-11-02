@@ -30,8 +30,15 @@
     --values "{{ vault_install_working_dir }}/{{ vault_install_chart_value_file }}"
     | awk -vout="{{ vault_install_working_dir }}" -F": " '$0~/^# Source: /{file=out"/"$2; print "Creating "file; system ("mkdir -p $(dirname "file"); echo -n "" > "file)} $0!~/^#/ && $0!="---"{print $0 >> file}'
     
-- name: Bug fix - fix ^M line endings in OpenShift Route object
+- name: Bug fix - fix ^M line endings in OpenShift Route object (sed on Linux)
   shell: sed -i'' 's/\r$//g' "{{ vault_install_working_dir }}/vault/templates/server-route.yaml"
+  when:
+  - not ansible_facts['distribution'] == "MacOSX"
+
+- name: Bug fix - fix ^M line endings in OpenShift Route object (gsed on MacOSX)
+  shell: gsed -i'' 's/\r$//g' "{{ vault_install_working_dir }}/vault/templates/server-route.yaml"
+  when:
+  - ansible_facts['distribution'] == "MacOSX"
 
 - name: Bug fix - fix missing namespace in OpenShift Route object
   lineinfile:

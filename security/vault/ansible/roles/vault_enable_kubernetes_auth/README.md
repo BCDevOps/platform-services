@@ -17,10 +17,9 @@ Ansible role variables are listed below, along with default values (see `default
 
 ```yaml
 vault_enable_kubernetes_auth_helm_repo_url: "https://helm.releases.hashicorp.com"
-vault_enable_kubernetes_auth_chart_version: "0.6.0"
+vault_enable_kubernetes_auth_chart_version: "0.8.0"
 vault_enable_kubernetes_auth_chart_values: "values-minimal.yaml"
 vault_enable_kubernetes_auth_ocp_namespace: "devops-security-vault"
-vault_enable_kubernetes_auth_k8s_manifests: "vault-all.yaml"
 
 vault_enable_kubernetes_auth_working_dir: "/tmp/vault_enable_kubernetes_auth/"
 ```
@@ -32,7 +31,7 @@ vault_enable_kubernetes_auth_helm_repo_url: "https://helm.releases.hashicorp.com
 The helm repository URL.
 
 ```yaml
-vault_enable_kubernetes_auth_chart_version: "0.6.0"
+vault_enable_kubernetes_auth_chart_version: "0.8.0"
 ```
 
 Helm Chart version.
@@ -42,10 +41,6 @@ vault_enable_kubernetes_auth_chart_values: "values-minimal.yaml"
 ```
 
 YAML file containing override values for the Helm Chart.
-
-```yaml
-vault_enable_kubernetes_auth_k8s_manifests: "vault-all.yaml"
-```
 
 ## Dependencies
 

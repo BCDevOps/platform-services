@@ -1,0 +1,12 @@
+---
+# File: main.yml - Main tasks for Consul
+
+- name: Include checks/asserts
+  import_tasks: asserts.yml
+
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: always
+
+- name: Install Consul binary
+  import_tasks: install.yml

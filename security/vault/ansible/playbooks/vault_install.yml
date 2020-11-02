@@ -1,7 +1,7 @@
 ---
 - name: Install Vault cluster
   hosts: all
-  gather_facts: false
+  gather_facts: True # for sed and gsed (MacOS) detection
 
   roles:
   - vault_install

@@ -1,0 +1,5 @@
+---
+# File: Darwin.yml - Darwin OS variables for Consul
+
+consul_os_packages:
+  - unzip

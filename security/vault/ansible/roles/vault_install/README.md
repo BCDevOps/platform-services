@@ -15,10 +15,9 @@ Ansible role variables are listed below, along with default values (see `default
 
 ```yaml
 vault_install_helm_repo_url: "https://helm.releases.hashicorp.com"
-vault_install_chart_version: "0.6.0"
+vault_install_chart_version: "0.8.0"
 vault_install_chart_values: "values-minimal.yaml"
 vault_install_ocp_namespace: "devops-security-vault"
-vault_install_k8s_manifests: "vault-all.yaml"
 
 vault_install_working_dir: "/tmp/vault_install/"
 ```
@@ -30,7 +29,7 @@ vault_install_helm_repo_url: "https://helm.releases.hashicorp.com"
 The helm repository URL.
 
 ```yaml
-vault_install_chart_version: "0.6.0"
+vault_install_chart_version: "0.8.0"
 ```
 
 Helm Chart version.
@@ -40,10 +39,6 @@ vault_install_chart_values: "values-minimal.yaml"
 ```
 
 YAML file containing override values for the Helm Chart.
-
-```yaml
-vault_install_k8s_manifests: "vault-all.yaml"
-```
 
 ## Dependencies
 

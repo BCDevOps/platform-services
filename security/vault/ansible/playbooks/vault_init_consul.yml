@@ -1,11 +1,15 @@
 - name: Vault - Generate CA and server certificate with Consul binary
   hosts: all
-  gather_facts: false
-  vars:
-    dir_consul_certs: "{{lookup('env', 'HOME') }}/consul-certs"
-    consul_binary: "{{lookup('env', 'HOME') }}/bin/consul"
-  tasks:
+  gather_facts: True
 
+  roles:
+  - get_consul_binary
+
+- name: Vault - Generate CA and server certificate with Consul binary
+  hosts: all
+  gather_facts: false
+
+  tasks:
   - name: Create subfolder in HOME
     file:
       path: "{{ dir_consul_certs }}"
@@ -16,7 +20,6 @@
       cmd: "{{ consul_binary }} tls ca create"
       chdir: "{{ dir_consul_certs }}"
     ignore_errors: True
-
 
   - name: Create server certificate
     command:

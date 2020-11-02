@@ -1,0 +1,29 @@
+---
+### Package
+consul_version: "{{ lookup('env','CONSUL_VERSION') | default('1.8.2', true) }}"
+consul_architecture_map:
+  # this first entry seems redundant
+  # (but it's required for reasons)
+  amd64: amd64
+  x86_64: amd64
+  # todo: arm32 / armelv5
+  armv6l: armhfv6
+  armv7l: armhfv6
+  aarch64: arm64
+  32-bit: "386"
+  64-bit: amd64
+consul_architecture: "{{ consul_architecture_map[ansible_architecture] }}"
+consul_os: "\
+  {% if ansible_os_family == 'Windows' %}\
+    {{ 'windows' }}\
+  {% else %}\
+    {{ ansible_system | lower }}\
+  {% endif %}"
+consul_pkg: "consul_{{ consul_version }}_{{ consul_os }}_{{ consul_architecture }}.zip"
+consul_zip_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_{{ consul_os }}_{{ consul_architecture }}.zip"
+consul_checksum_file_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version}}_SHA256SUMS"
+
+### Paths
+# consul_bin_path: "/usr/local/bin"
+consul_bin_path: "{{lookup('env', 'HOME') }}/bin"
+consul_binary: "{{ consul_bin_path }}/consul"

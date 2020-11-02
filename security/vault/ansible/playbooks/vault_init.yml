@@ -8,6 +8,11 @@
       msg: "'VAULT_LICENSE' ENV Variable Must Be Set."
     when: lookup('env', 'VAULT_LICENSE') | length == 0 
 
+  - name: Ensure Vault Address is Set
+    fail:
+      msg: "'VAULT_ADDR' ENV Variable Must Be Set."
+    when: lookup('env', 'VAULT_ADDR') | length == 0 
+
   - name: Apply Vault License
     hashivault_write:
       secret: /sys/license
