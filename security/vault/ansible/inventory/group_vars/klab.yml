@@ -1,0 +1,13 @@
+---
+# OpenShift Route FQDN to template Helm values file
+ocp_route_fqdn: "one.vault-lab.developer.gov.bc.ca"
+
+# Vault config: Toggle to add fourth and fifth replica in retry_join stanza
+is_prod: False
+
+# used by role vault_install
+vault_install_ocp_namespace: "devops-security-vault"
+vault_install_replicas: 3 # has to be 5 for production
+
+# used by role vault_enable_kubernetes_auth
+vault_enable_kubernetes_auth_cluster: "klab"
