@@ -9,4 +9,11 @@ vault_install_version: "1.5.5"
 
 vault_install_working_dir: "/tmp/vault_install/"
 
+# For Auto-Unseal with Azure Key Vault (AKV)
+vault_install_akv_client_id: "{{ lookup('env', 'AKV_CLIENT_ID') | default('') }}"
+vault_install_akv_client_secret: "{{ lookup('env', 'AKV_CLIENT_SECRET') | default('') }}"
+vault_install_akv_tenant_id: "{{ lookup('env', 'AKV_TENANT_ID') | default('') }}"
+vault_install_akv_vault_name: "{{ lookup('env', 'AKV_VAULT_NAME') | default('') }}"
+vault_install_akv_key_name: "{{ lookup('env', 'AKV_KEY_NAME') | default('') }}"
+
 #vault_install_

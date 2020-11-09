@@ -5,6 +5,15 @@ ocp_route_fqdn: "one.vault-lab.developer.gov.bc.ca"
 # Vault config: Toggle to add fourth and fifth replica in retry_join stanza
 is_prod: False
 
+# Vault config: Toggle to add Azure Key Vault stanza 
+# when True define BASH environment vars:
+# AKV_CLIENT_ID
+# AKV_CLIENT_SECRET
+# AKV_TENANT_ID
+# AKV_VAULT_NAME
+# AKV_KEY_NAME
+has_akv: True
+
 # used by role vault_install
 vault_install_ocp_namespace: "devops-security-vault"
 vault_install_replicas: 3 # has to be 5 for production
