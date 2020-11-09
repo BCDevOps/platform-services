@@ -11,3 +11,7 @@ vault_install_replicas: 3 # has to be 5 for production
 
 # used by role vault_enable_kubernetes_auth
 vault_enable_kubernetes_auth_cluster: "klab"
+vault_enable_kubernetes_auth_host: "https://kubernetes.default.svc.cluster.local:443"
+vault_enable_kubernetes_auth_sa: "vault"
+vault_enable_kubernetes_auth_pod: "vault-0"
+

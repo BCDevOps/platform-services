@@ -1,18 +1,17 @@
+# New Play
+#- name: Vault - Download Consul OSS binary for CA and server certificate creation
+#  hosts: all
+#  gather_facts: True
+#
+#  roles:
+#  - get_consul_binary
+
+# New Play
 - name: Vault - Generate CA and server certificate with Consul binary
   hosts: all
-  gather_facts: True
-
-  roles:
-  - get_consul_binary
-
-- name: Vault - Generate CA and server certificate with Consul binary
-  hosts: all
-  gather_facts: false
-  vars:
-    fqdn1: "one.vault-lab.developer.gov.bc.ca"
-    fqdn2: "two.vault-lab.developer.gov.bc.ca"
-    fqdn3: "one.vault.developer.gov.bc.ca"
-    fqdn4: "two.vault.developer.gov.bc.ca"
+  gather_facts: True # for environment PATH
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ lookup('env','HOME') }}/bin"
 
   tasks:
   - name: Create subfolder in HOME
@@ -32,10 +31,7 @@
       chdir: "{{ dir_consul_certs }}"
       cmd: >
         {{ consul_binary }} tls cert create -server
-          -additional-dnsname={{ fqdn1 }}
-          -additional-dnsname={{ fqdn2 }}
-          -additional-dnsname={{ fqdn3 }}
-          -additional-dnsname={{ fqdn4 }}
+          -additional-dnsname={{ ocp_route_fqdn }}
           -additional-dnsname=vault-0.vault-internal
           -additional-dnsname=vault-1.vault-internal
           -additional-dnsname=vault-2.vault-internal
@@ -49,3 +45,24 @@
           -additional-dnsname=vault-2.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
           -additional-dnsname=vault-3.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
           -additional-dnsname=vault-4.vault-internal.{{ vault_install_ocp_namespace }}.svc.cluster.local
+
+  - name:
+    command:
+      chdir: "{{ dir_consul_certs }}"
+      cmd: >
+        oc create secret generic {{ vault_secret }}
+          --namespace {{ vault_install_ocp_namespace }}
+          --from-file=vault.key={{ dir_consul_certs }}/dc1-server-consul-0-key.pem
+          --from-file=vault.crt={{ dir_consul_certs }}/dc1-server-consul-0.pem
+          --from-file=vault.ca={{ dir_consul_certs }}/consul-agent-ca.pem
+
+# New Play
+- name: Install Vault cluster
+  hosts: all
+  gather_facts: True # for sed and gsed (MacOS) detection
+
+#  pre_tasks:
+#  - meta: end_play
+
+  roles:
+  - vault_install

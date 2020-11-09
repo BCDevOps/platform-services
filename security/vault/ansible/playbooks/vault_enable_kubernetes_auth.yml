@@ -2,6 +2,8 @@
 - name: Enable Vault Kubernetes Auth 
   hosts: all
   gather_facts: true
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ lookup('env','HOME') }}/bin"
 
   roles:
   - vault_enable_kubernetes_auth

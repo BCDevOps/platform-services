@@ -8,5 +8,14 @@ vault_enable_kubernetes_auth_cluster: "" # klab, clab, silver, silver-dr (provid
 # Temporary file for Kubernetes/OpenShift Certificate Authority certificate
 vault_enable_kubernetes_auth_ca: "/tmp/ca_for_vault.crt"
 
+# Kubernetes API URL (internal or external) for Vault to reach out to (include TCP port at all times)
+vault_enable_kubernetes_auth_host: "" # https://kubernetes.default.svc.cluster.local:443
+
+# Kubernetes Service Account for Vault
+vault_enable_kubernetes_auth_sa: "vault"
+
+# Kubernetes pod to retrieve Kubernetes CA certificate from
+vault_enable_kubernetes_auth_pod: "" 
+
 #vault_enable_kubernetes_auth_
 

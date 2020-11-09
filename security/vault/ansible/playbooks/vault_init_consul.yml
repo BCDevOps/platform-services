@@ -1,4 +1,4 @@
-- name: Vault - Generate CA and server certificate with Consul binary
+- name: Vault - Download Consul OSS binary for CA and server certificate creation
   hosts: all
   gather_facts: True
 
@@ -15,6 +15,7 @@
       path: "{{ dir_consul_certs }}"
       state: directory
 
+  # Ignore errors because the CA might have been generated on a previous playbook run
   - name: Generate Certificate Authority
     command:
       cmd: "{{ consul_binary }} tls ca create"

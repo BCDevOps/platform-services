@@ -11,3 +11,8 @@ vault_install_replicas: 3 # has to be 5 for production
 
 # used by role vault_enable_kubernetes_auth
 vault_enable_kubernetes_auth_cluster: "clab"
+vault_enable_kubernetes_auth_host: "https://api.cluster-957e.957e.sandbox519.opentlc.com:6443"
+vault_enable_kubernetes_auth_sa: "vault"
+vault_enable_kubernetes_auth_ns: "default"
+vault_enable_kubernetes_auth_pod: "vault-0"
+
