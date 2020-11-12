@@ -61,8 +61,6 @@
   hosts: all
   gather_facts: True # for sed and gsed (MacOS) detection
 
-#  pre_tasks:
-#  - meta: end_play
-
   roles:
   - vault_install
+
