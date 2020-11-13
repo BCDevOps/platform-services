@@ -55,7 +55,6 @@
     - name: Cleanup
       file:
         path: "{{ vault_enable_kubernetes_auth_ca }}"
-        state: file
-        #state: absent
+        state: absent
       tags: always
 
