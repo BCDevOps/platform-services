@@ -24,6 +24,16 @@ server:
           cluster_address = "[::]:8201"
         }
 
+      {% if has_akv %}
+        seal "azurekeyvault" {
+          client_id      = "{{ vault_install_akv_client_id }}"
+          client_secret  = "{{ vault_install_akv_client_secret }}"
+          tenant_id      = "{{ vault_install_akv_tenant_id }}"
+          vault_name     = "{{ vault_install_akv_vault_name }}"
+          key_name       = "{{ vault_install_akv_key_name }}"
+        }
+      {% endif %}
+
         storage "raft" {
           path = "/vault/data"
           retry_join {
@@ -59,17 +69,6 @@ server:
             leader_client_key_file = "/vault/userconfig/vault-tls/vault.key"
           }
         {% endif %}
-        {% if has_akv %}
-
-          seal "azurekeyvault" {
-            client_id      = "{{ vault_install_akv_client_id }}"
-            client_secret  = "{{ vault_install_akv_client_secret }}"
-            tenant_id      = "{{ vault_install_akv_tenant_id }}"
-            vault_name     = "{{ vault_install_akv_vault_name }}"
-            key_name       = "{{ vault_install_akv_key_name }}"
-          }
-        {% endif %}
-
         }
 
         service_registration "kubernetes" {}
