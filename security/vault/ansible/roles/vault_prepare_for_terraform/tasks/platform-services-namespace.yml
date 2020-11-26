@@ -19,7 +19,7 @@
   hashivault_approle_role:
     name: "{{ vault_prepare_for_terraform_approle_role_name }}"
     secret_id_num_uses: "{{ vault_prepare_for_terraform_approle_sid_uses }}"
-    token_policies: "{{ vault_prepare_for_terraform_approle_policies}} "
+    token_policies: "{{ vault_prepare_for_terraform_approle_policies }}"
     token_ttl: "{{ vault_prepare_for_terraform_token_ttl }}"
     token_max_ttl: "{{ vault_prepare_for_terraform_token_max_ttl }}"
     verify: "{{ vault_prepare_for_terraform_verify }}"

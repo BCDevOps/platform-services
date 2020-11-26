@@ -59,6 +59,12 @@ Done! Terraform Cloud is now connected to the GitHub organization so that TFC ca
 
 **Note:** TFC expects the GitHub repositories holding Terraform modules to follow its naming convention `terraform-<PROVIDER>-<NAME>`.
 
+## Add Module to Your Organization
+
+Now that Terraform Cloud is connected to your GitHub organization, continue with adding a module.
+
+
+
 ## References
 
 [https://www.terraform.io/docs/cloud/vcs/github.html](https://www.terraform.io/docs/cloud/vcs/github.html)

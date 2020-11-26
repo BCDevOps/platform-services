@@ -1,4 +1,4 @@
-- name: Prepare Vault for future configuration via Terraform
+- name: Prepare Vault for future configuration via Terraform with AppRole
   hosts: all
   gather_facts: True # required for assert module to check shell environment variables
 
