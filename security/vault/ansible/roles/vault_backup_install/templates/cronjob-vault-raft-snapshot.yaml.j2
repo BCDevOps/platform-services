@@ -9,14 +9,18 @@ spec:
     spec:
       template:
         spec:
+          concurrencyPolicy: Forbid
           containers:
           - name: vault
             image: registry.hub.docker.com/library/vault:{{ vault_install_version }}
             command:
               - "/bin/sh"
               - "-c"
+            args:
+              # Only Keep Backups for 10 Days
               # Always Backup even if certificates are expired
-              - "vault operator raft snapshot save -tls-skip-verify /backup/raft-$(date +%Y-%m-%d_%H%M%S).snap"
+              - find /backup -mtime +10 -type f -delete;
+                vault operator raft snapshot save -tls-skip-verify /backup/raft-$(date +%Y-%m-%d_%H%M%S).snap;
             env:
               - name: VAULT_ADDR
                 value: "https://vault-active:8200"
