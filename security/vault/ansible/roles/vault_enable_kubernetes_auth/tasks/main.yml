@@ -23,26 +23,15 @@
   command: oc serviceaccounts get-token {{ vault_enable_kubernetes_auth_sa }} -n {{ vault_enable_kubernetes_auth_ns }}
   register: r_sa_jwt_token
 
-- debug:
-    var: r_sa_jwt_token
-
 # Block to use rescue: to always execute the local file-system cleanup
 - name: "[Block] - Retrieve CA cert for Vault, enable, and configure"
   block:
     - name: Retrieve the OpenShift Certificate Authority certificate from the Vault pod
       shell: oc exec -n {{ vault_enable_kubernetes_auth_ns }} {{ vault_enable_kubernetes_auth_pod }} -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt > "{{ vault_enable_kubernetes_auth_ca }}"
-      #shell: oc get secret -o jsonpath="{.items[?(@.type==\"kubernetes.io/service-account-token\")].data['ca\.crt']}" | base64 --decode > "{{ vault_enable_kubernetes_auth_ca }}"
-      #shell: oc get secret -n {{ vault_enable_kubernetes_auth_ns }} -o jsonpath="{.items[?(@.type==\"kubernetes.io/service-account-token\")].data['ca\.crt']}" | base64 --decode > "{{ vault_enable_kubernetes_auth_ca }}"
       register: r_ca_cert
 
-    - debug:
-        var: r_ca_cert
-
-    - debug:
-        var: vault_enable_kubernetes_auth_ca
-
     - name: Enable Vault Kubernetes Authentication Backend
-      command: vault auth enable -tls-skip-verify -path=k8s-{{ vault_enable_kubernetes_auth_cluster }} kubernetes
+      command: vault auth enable -tls-skip-verify -namespace={{ vault_ns1 }} -path=k8s-{{ vault_enable_kubernetes_auth_cluster }} kubernetes
       ignore_errors: true
       register: r_enable
       failed_when: >-
@@ -50,7 +39,7 @@
         not '"path is already in use at" in r_enable.stderr|default("")'
 
     - name: Configure Vault Kubernetes Authentication Backend
-      command: vault write -tls-skip-verify auth/k8s-{{ vault_enable_kubernetes_auth_cluster }}/config token_reviewer_jwt={{ r_ca_cert.stdout }} kubernetes_host="{{ vault_enable_kubernetes_auth_host }}" kubernetes_ca_cert=@"{{ vault_enable_kubernetes_auth_ca }}"
+      command: vault write -tls-skip-verify -namespace={{ vault_ns1 }} auth/k8s-{{ vault_enable_kubernetes_auth_cluster }}/config token_reviewer_jwt={{ r_ca_cert.stdout }} kubernetes_host="{{ vault_enable_kubernetes_auth_host }}" kubernetes_ca_cert=@"{{ vault_enable_kubernetes_auth_ca }}"
   always:
     - name: Cleanup
       file:

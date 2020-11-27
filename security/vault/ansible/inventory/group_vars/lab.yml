@@ -14,6 +14,9 @@ is_prod: False
 # AKV_KEY_NAME
 has_akv: True
 
+# Vault namespace to be created
+vault_ns1: "platform-services"
+
 # used by role vault_install
 vault_install_ocp_namespace: "devops-security-vault"
 vault_install_replicas: 3 # has to be 5 for production
