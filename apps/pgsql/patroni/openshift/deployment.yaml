@@ -17,7 +17,36 @@ labels:
   app.kubernetes.io/component: database
   app.kubernetes.io/name: patroni  
   app.kubernetes.io/managed-by: template
+  app.openshift.io/runtime: postgresql
 objects:
+# OCP4 tuned Network Security Policies
+# - apiVersion: security.devops.gov.bc.ca/v1alpha1
+#   kind: NetworkSecurityPolicy
+#   metadata:
+#     name: "${NAME}${SUFFIX}-sa-${NAME}${SUFFIX}-k8s-api-comms"
+#   spec:
+#     description: |
+#       Allow patroni cluster to talk to the internal k8s api
+#     source:
+#       - - "$namespace=${NAMESPACE}"
+#         - "@app:k8s:serviceaccountname=${NAME}${SUFFIX}"
+#     destination:
+#       - - int:network=internal-cluster-api-endpoint
+# - kind: NetworkSecurityPolicy
+#   apiVersion: security.devops.gov.bc.ca/v1alpha1
+#   metadata:
+#     name: "${NAME}${SUFFIX}-cluster-comms"
+#   spec:
+#     description: |
+#       Allow patroni pods to open connections to other cluster pods
+#     source:
+#       - - "$namespace=${NAMESPACE}"
+#         - "cluster-name=${NAME}${SUFFIX}"
+#         - "statefulset=${NAME}${SUFFIX}"
+#     destination:
+#       - - "$namespace=${NAMESPACE}"
+#         - "cluster-name=${NAME}${SUFFIX}"
+#         - "statefulset=${NAME}${SUFFIX}"
 # It doesn't seem to be used/needed - remote it?
 #- apiVersion: v1
 #  kind: Service
@@ -200,6 +229,25 @@ objects:
           # Because we are using image reference to a tag, we need to always pull the image otherwise
           #   we end up with outdated/out-of-sync image depending on the node where it is running
           imagePullPolicy: Always
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /usr/bin/env
+                  - bash
+                  - -c
+                  - |
+                    # switch leader pod if the current pod is the leader
+                    if curl --fail http://localhost:8008/read-write; then
+                      patronictl switchover --force
+                    fi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8008
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
           name: postgresql
           ports:
           - containerPort: 8008
@@ -216,12 +264,15 @@ objects:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           readinessProbe:
-            initialDelaySeconds: 5
-            timeoutSeconds: 5
-            failureThreshold: 4
             exec:
               command:
-                - /usr/share/scripts/patroni/health_check.sh
+                - /usr/bin/env
+                - bash
+                - -c
+                - pg_isready -q
+            initialDelaySeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
           volumeMounts:
           - mountPath: /home/postgres/pgdata
             name: postgresql
@@ -230,7 +281,6 @@ objects:
         schedulerName: default-scheduler
         securityContext: {}
         serviceAccountName: ${NAME}${SUFFIX}
-        terminationGracePeriodSeconds: 0
     updateStrategy:
       type: RollingUpdate
     volumeClaimTemplates:
@@ -267,10 +317,14 @@ parameters:
   displayName: REPLICAS
   description: The number of statefulSet replicas to use.
   value: '3'
+# This parameter is only required if you are using the OCP4 NSPs
+# - name: NAMESPACE
+#   description: Target namespace reference (i.e. '012345-dev')
+#   displayName: Target Namespace
 - description: Starting amount of CPU the container can use.
   displayName: CPU REQUEST
   name: CPU_REQUEST
-  value: '250m'
+  value: '50m'
 - description: Maximum amount of CPU the container can use.
   displayName: CPU Limit
   name: CPU_LIMIT
@@ -278,7 +332,7 @@ parameters:
 - description: Starting amount of memory the container can use.
   displayName: Memory Request
   name: MEMORY_REQUEST
-  value: 512Mi
+  value: 256Mi
 - description: Maximum amount of memory the container can use.
   displayName: Memory Limit
   name: MEMORY_LIMIT
@@ -290,7 +344,7 @@ parameters:
   value: "bcgov"
 - name: IMAGE_STREAM_TAG
   description: Patroni ImageTag
-  value: patroni:v11-stable
+  value: patroni-postgres:12.4-latest
 - description: The size of the persistent volume to create.
   displayName: Persistent Volume Size
   name: PVC_SIZE
