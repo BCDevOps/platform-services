@@ -8,4 +8,7 @@ resources:
 - group: security
   kind: NetworkSecurityPolicy
   version: v1alpha1
+- group: security
+  kind: ConsoleAuthorizationPolicy
+  version: v1alpha1
 version: 3-alpha

@@ -4,4 +4,5 @@
 resources:
 - bases/security.devops.gov.bc.ca_externalnetworks.yaml
 - bases/security.devops.gov.bc.ca_networksecuritypolicies.yaml
+- bases/security.devops.gov.bc.ca_consoleauthorizationpolicies.yaml
 # +kubebuilder:scaffold:crdkustomizeresource

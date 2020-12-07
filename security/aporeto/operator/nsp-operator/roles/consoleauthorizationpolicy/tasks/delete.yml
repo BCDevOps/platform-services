@@ -1,0 +1,7 @@
+---
+- name: "Delete ConsoleAuthorizationPolicy - {{ import_label }}"
+  command: |
+    apoctl api delete \
+    apiauthorizationpolicy {{ import_label }} \
+    --namespace {{ aporeto_base_namespace }}
+  ignore_errors: yes

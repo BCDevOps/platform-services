@@ -8,5 +8,5 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-edit: "true" 
 rules:
 - apiGroups: ["security.devops.gov.bc.ca"]
-  resources: ["networksecuritypolicies", "externalnetworks"] 
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"] 
+  resources: ["networksecuritypolicies", "externalnetworks", "consoleauthorizationpolicies"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "deletecollection"]

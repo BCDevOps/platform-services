@@ -1,0 +1,7 @@
+---
+# tasks file for ConsoleAuthorizationPolicy
+- include_tasks: import.yml
+  when: state == 'present'
+
+- include_tasks: delete.yml
+  when: state == 'absent'

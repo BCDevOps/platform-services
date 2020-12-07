@@ -2,6 +2,15 @@
   # Use the 'create api' subcommand to add watches to this file.
   - version: v1alpha1
     group: security.devops.gov.bc.ca
+    kind: ConsoleAuthorizationPolicy
+    reconcilePeriod: '0'
+    playbook: playbooks/consoleauthorizationpolicy.yml
+    finalizer:
+      name: finalizer.security.devops.gov.bc.ca
+      vars:
+        state: absent
+  - version: v1alpha1
+    group: security.devops.gov.bc.ca
     kind: NetworkSecurityPolicy
     reconcilePeriod: '0'
     playbook: playbooks/networksecuritypolicy.yml

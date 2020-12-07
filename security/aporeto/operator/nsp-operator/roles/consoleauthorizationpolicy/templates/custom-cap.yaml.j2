@@ -1,0 +1,23 @@
+APIVersion: 0
+{#
+    The `label` field is used by the import routine to determine the
+    uniqueness of an object. If the label is unique it will create
+    new objects; if the label matches an existing import it will
+    update / replace existing objects.
+#}
+label: "{{ import_label }}" 
+data:
+  apiauthorizationpolicies:
+    - authorizedIdentities:
+        - '@auth:role=namespace.viewer'
+      associatedTags:
+        - uuid={{ import_label }}
+      authorizedNamespace: {{ aporeto_namespace }}
+      description: View-Only Access
+      name: {{ import_label }}
+      subject:
+{% for user in users %}
+        - - '@auth:subject={{ user }}'
+          - '@auth:namespace=/bcgov'
+          - '@auth:realm=oidc'
+{% endfor %}

@@ -1,0 +1,8 @@
+---
+# defaults file for ConsoleAuthorizationPolicy
+state: present
+aporeto_base_namespace: "{{ lookup('env', 'APORETO_BASE_NAMESPACE') }}"
+aporeto_namespace: "{{ aporeto_base_namespace }}/{{ ansible_operator_meta.namespace }}"
+authorization_policy_name: "{{ ansible_operator_meta.name }}"
+import_label: "{{ ansible_operator_meta.namespace }}-{{ ansible_operator_meta.name }}"
+static_authorization_policy_name: viewers

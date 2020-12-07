@@ -45,6 +45,7 @@ rules:
     resources:
       - externalnetworks
       - externalnetworks/status
+      - externalnetworks/finalizers
     verbs:
       - create
       - delete
@@ -61,6 +62,24 @@ rules:
     resources:
       - networksecuritypolicies
       - networksecuritypolicies/status
+      - networksecuritypolicies/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for security.devops.gov.bc.ca/v1, Kind: ConsoleAuthorizationPolicy
+  ##
+  - apiGroups:
+      - security.devops.gov.bc.ca
+    resources:
+      - consoleauthorizationpolicies
+      - consoleauthorizationpolicies/status
+      - consoleauthorizationpolicies/finalizers
     verbs:
       - create
       - delete

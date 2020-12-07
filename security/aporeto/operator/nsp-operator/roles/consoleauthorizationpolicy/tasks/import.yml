@@ -1,0 +1,31 @@
+---
+# tasks file for ExternalNetwork Create / Update
+- name: Debug metadata
+  debug:
+    var: ansible_operator_meta
+    verbosity: 3
+
+- meta: end_play
+  when: authorization_policy_name != static_authorization_policy_name
+
+- name: Debug description
+  debug:
+    var: viewers
+    verbosity: 3
+
+- name: Debug ConsoleAuthorizationPolicy Import Vars
+  debug:
+    msg:
+      - "aporeto_base_namespace: {{ aporeto_base_namespace }}"
+      - "aporeto_namespace: {{ aporeto_namespace }}"
+      - "import_label(DisplayName): {{ import_label }}"
+      - "authorization_policy_name: {{ authorization_policy_name }}"
+    verbosity: 1
+
+- name: Create Or Update ConsoleAuthorizationPolicy
+  command: |
+    apoctl api import \
+    --namespace {{ aporeto_base_namespace }} \
+    -f -
+  args:
+    stdin: "{{ lookup('template', 'custom-cap.yaml.j2') }}"
