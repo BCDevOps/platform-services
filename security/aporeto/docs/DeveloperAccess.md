@@ -85,7 +85,6 @@ Take the `Aporeto Base Namespace` for the `Cluster` your OpenShift Namespace is 
 
 * You can also bookmark the links to your aporeto namespaces but you may need to go to `https://console.aporeto.com/` to login before accessing the links.
 
-
 ### What now?
 
 `NetworkSecurityPolicies` (`nsp`) and `ExternalNetworks` (`en`) can be viewed by expanding the Network authorization menu in the sidebar and selecting either Network Policies or External Networks. `NetworkSecurityPolicies` and `ExternalNetworks` defined within OpenShift 4 will appear here when the NSP Operator has processed them successfully. If you don't see your `nsp` or `en` listed please check the status of the Custom Resources with an
@@ -94,7 +93,6 @@ Take the `Aporeto Base Namespace` for the `Cluster` your OpenShift Namespace is 
 oc -n ${NAMESPACE} describe nsp <resource_name>
 oc -n ${NAMESPACE} describe en <resource_name>
 ```
-
 
 Processing Units (PUs), which represent your pods or applications, can be viewed either from the Platform or Processing units menu items in the sidebar. You can select any PU to view the tags and metadata associated with it. These tags can be used when writing your `NetworkSecurityPolicies` to give you greater control and flexibility to meet your application's security requirements.
 
