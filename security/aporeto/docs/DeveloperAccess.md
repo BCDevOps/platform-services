@@ -65,7 +65,7 @@ Take the `Aporeto Base Namespace` for the `Cluster` your OpenShift Namespace is 
 #### Example
 
 **OpenShift Cluster:** Silver  
-**OpenShift Namespace:** \<licensePlate\>-tools
+**OpenShift Namespace:** \<licensePlate\>-tools  
 **Aporeto Base Namespace:** /bcgov/platform-services/production/kamloops/silver  
 **Aporeto Namespace:** /bcgov/platform-services/production/kamloops/silver/\<licensePlate\>-tools
 
