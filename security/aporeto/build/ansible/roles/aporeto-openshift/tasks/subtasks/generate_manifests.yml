@@ -94,6 +94,10 @@
             tolerations:
             - key: node-role.kubernetes.io/master
               effect: NoSchedule
+            - key: advsol
+              operator: Equal
+              value: quarantine
+              effect: NoExecute
   loop_control:
     loop_var: enforcerd
     label: "{{ enforcerd.name }}"
