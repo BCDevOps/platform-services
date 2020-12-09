@@ -17,6 +17,7 @@
   k8s:
     state: "{{ aporeto_state }}"
     src: "{{ aporeto_cluster_files}}/{{ enforcerd.name }}/enforcerd/templates/ds.yaml"
+    apply: yes
   loop_control:
     loop_var: enforcerd
     label: "{{ enforcerd.name }}"
