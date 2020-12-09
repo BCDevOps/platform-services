@@ -22,17 +22,13 @@
     helm fetch
     --destination {{ aporeto_cluster_files }}/
     --repo {{ aporeto_helm_repo }}
-    --version {{ chart.version }}
-    {{ chart.name }}
+    {{ chart }}
   loop_control:
     loop_var: chart
   loop:
-    - name: aporeto-crds
-      version: "{{ aporeto_crd_chart_version }}"
-    - name: aporeto-operator
-      version: "{{ aporeto_operator_chart_version }}"
-    - name: enforcerd
-      version: "{{ aporeto_enforcerd_chart_version }}"
+    - aporeto-crds
+    - aporeto-operator
+    - enforcerd
 
 - name: Generate Aporeto CRDs Manifest
   shell: >

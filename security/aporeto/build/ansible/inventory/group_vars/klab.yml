@@ -1,11 +1,8 @@
 ---
 cluster_name: klab
 aporeto_cluster_namespace: "/bcgov/platform-services/non-production/kamloops/{{ cluster_name }}"
-aporeto_crd_chart_version: 1.122.2
-aporeto_operator_chart_version: 1.122.2
 aporeto_operator_cpu_limit: "1"
 aporeto_operator_memory_limit: "512Mi"
-aporeto_enforcerd_chart_version: 1.1039.22
 aporeto_enforcerd_config:
 - name: enforcerd-master
   memory_limit: 4Gi
