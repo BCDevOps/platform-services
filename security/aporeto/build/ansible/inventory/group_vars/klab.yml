@@ -1,6 +1,7 @@
 ---
 cluster_name: klab
 aporeto_cluster_namespace: "/bcgov/platform-services/non-production/kamloops/{{ cluster_name }}"
+openshift_project_prefix: openshift-advsol-aporeto
 aporeto_operator_cpu_limit: "1"
 aporeto_operator_memory_limit: "512Mi"
 aporeto_enforcerd_config:

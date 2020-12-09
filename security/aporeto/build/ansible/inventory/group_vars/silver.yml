@@ -1,6 +1,7 @@
 ---
 cluster_name: silver
 aporeto_cluster_namespace: "/bcgov/platform-services/production/kamloops/{{ cluster_name }}"
+openshift_project_prefix: openshift-advsol-aporeto
 aporeto_operator_cpu_limit: "4"
 aporeto_operator_memory_limit: "2048Mi"
 aporeto_enforcerd_config:
