@@ -2,10 +2,11 @@
 - include_tasks: set-facts.yml
 
 - include_tasks: drain.yml
-  when: >
-    ((aporeto_enforcerd_enabled and activity == 'uninstall') or
-    (not aporeto_enforcerd_enabled and activity == 'install') or
-    activity == 'upgrade') and not aporeto_node_skip_drain
+  when: not aporeto_node_skip_drain
+  # when: >
+  #   ((aporeto_enforcerd_enabled and activity == 'uninstall') or
+  #   (not aporeto_enforcerd_enabled and activity == 'install') or
+  #   activity == 'upgrade') and not aporeto_node_skip_drain
 
 - include_tasks: label.yml
 

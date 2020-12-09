@@ -14,7 +14,7 @@
   ignore_errors: true
 
 - name: Create enforcerd appcred
-  when: lookup('k8s', kind='Secret', namespace=aporeto_project.enforcers , resource_name='enforcerd') | length <= 0
+  when: lookup('k8s', kind='Secret', namespace=aporeto_project.enforcers , resource_name='enforcerd-{{ aporeto_project.enforcers }}') | length <= 0
   shell: > 
     apoctl appcred create enforcerd-"{{ aporeto_project.enforcers }}"
     --namespace="{{ aporeto_cluster_namespace }}"
@@ -23,7 +23,7 @@
     | oc apply -f - -n "{{ aporeto_project.enforcers }}"
 
 - name: Create aporeto-operator appcred
-  when: lookup('k8s', kind='Secret', namespace=aporeto_project.operators , resource_name='aporeto-operator') | length <= 0
+  when: lookup('k8s', kind='Secret', namespace=aporeto_project.operators , resource_name='aporeto-operator-{{ aporeto_project.operators }}') | length <= 0
   shell: > 
     apoctl appcred create aporeto-operator-"{{ aporeto_project.operators }}"
     --namespace="{{ aporeto_cluster_namespace }}"

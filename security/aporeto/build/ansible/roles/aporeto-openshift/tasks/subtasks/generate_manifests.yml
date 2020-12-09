@@ -41,6 +41,7 @@
     helm template aporeto-operator
     {{ aporeto_cluster_files }}/aporeto-operator-*.tgz
     --namespace {{ aporeto_project.operators }}
+    --set credentialsSecretName=aporeto-operator-{{ aporeto_project.operators }}
     --set options.baseNamespace={{ aporeto_project.enforcers }}
     --set resources.enabled=true
     --set resources.limits.cpu={{ aporeto_operator_cpu_limit }}
@@ -53,7 +54,8 @@
     helm template {{ enforcerd.name }}
     {{ aporeto_cluster_files }}/enforcerd-*.tgz
     --namespace {{ aporeto_project.enforcers }}
-    --set-string nodeSelector."aporeto-enforcerd"=true
+    --set appCredentialSecretName=enforcerd-{{ aporeto_project.enforcers }}
+    --set-string nodeSelector."aporeto"=true
     --set nodeAffinity.enabled=true
     --set nodeAffinity.key={{ enforcerd.affinity_label }}
     --set nodeAffinity.value=''

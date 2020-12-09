@@ -10,10 +10,10 @@
       name: aporeto-openshift
       tasks_from: install
 
-  - name: Drain, Label, and Update DaemonSets
-    include_role:
-      name: aporeto-node
-    loop: "{{ node_list }}"
-    loop_control:
-      loop_var: node_name
-      extended: yes
+  # - name: Drain, Label, and Update DaemonSets
+  #   include_role:
+  #     name: aporeto-node
+  #   loop: "{{ node_list }}"
+  #   loop_control:
+  #     loop_var: node_name
+  #     extended: yes
