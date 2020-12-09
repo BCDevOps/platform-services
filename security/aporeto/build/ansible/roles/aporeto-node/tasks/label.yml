@@ -2,7 +2,7 @@
 - name: Perform enforcerd namespace migration
   when: lookup('env', 'APORETO_NAMESPACE_MIGRATION')
   block:
-  - name: Label {{ node_name }}
+  - name: Remove aporeto-enforcerd Label - {{ node_name }}
     k8s:
       state: present
       definition:
@@ -31,7 +31,7 @@
     retries: 25
     delay: 30
 
-- name: Label {{ node_name }}
+- name: Update aporeto Label - {{ node_name }}
   k8s:
     state: present
     definition:
