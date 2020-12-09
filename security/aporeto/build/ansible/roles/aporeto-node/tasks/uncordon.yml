@@ -1,0 +1,5 @@
+---
+- name: Set {{ node_name | lower }} schedulability (uncordon)
+  command: >
+    oc adm uncordon {{ node_name | lower }}
+  delay: 90

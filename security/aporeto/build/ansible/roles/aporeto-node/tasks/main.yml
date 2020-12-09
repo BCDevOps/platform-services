@@ -1,0 +1,27 @@
+---
+- include_tasks: set-facts.yml
+
+- include_tasks: drain.yml
+  when: >
+    ((aporeto_enforcerd_enabled and activity == 'uninstall') or
+    (not aporeto_enforcerd_enabled and activity == 'install') or
+    activity == 'upgrade') and not aporeto_node_skip_drain
+
+- include_tasks: label.yml
+
+- name: upgrade - onDelete enforcerd pod
+  include_tasks: delete-pod.yml
+  when: activity == 'upgrade'
+
+- include_tasks: validate.yml
+
+- name: uncordon node
+  include_tasks: uncordon.yml
+  when: not aporeto_node_skip_drain
+
+  # Maybe this should go before the uncordon?
+- pause:
+    prompt: "Continue to next node? (Return/ctrl+c) - {{ ansible_loop.nextitem	}}"
+  when:
+  - not ansible_loop.last
+  - not aporeto_node_skip_pause

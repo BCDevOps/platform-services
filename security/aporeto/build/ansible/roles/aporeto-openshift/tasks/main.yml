@@ -1,0 +1,6 @@
+---
+- include_tasks: install.yml
+  when: activity == 'install' or activity == 'upgrade'
+
+- include_tasks: uninstall.yml
+  when: activity == 'uninstall'

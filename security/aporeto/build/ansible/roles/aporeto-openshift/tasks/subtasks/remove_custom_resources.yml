@@ -1,0 +1,12 @@
+---
+- name: Remove Aporeto CR/CRDs
+  block: 
+    - name: Disable Aporeto operator syncing
+      command: "oc annotate namespace {{ openshift_project_prefix }}-enforcers aporeto.io/disable-aporeto-ctrls='true' --overwrite"
+      ignore_errors: true
+
+    - name: Remove all custom resources created by the Aporeto Operator
+      shell: "for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc delete $crd -n {{ openshift_project_prefix }}-enforcers --all ; done"
+
+    - name: Validate that no resources are left
+      shell: "for crd in $(oc api-resources --api-group=api.aporeto.io -o name); do oc get $crd --all-namespaces -o name; done"

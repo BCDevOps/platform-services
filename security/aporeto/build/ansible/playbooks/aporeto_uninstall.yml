@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+  become: false
+  gather_facts: no
+  vars:
+    activity: uninstall
+  tasks:
+  - name: Drain, Label, and Update DaemonSets
+    include_role:
+      name: aporeto-node
+    loop: "{{ node_list }}"
+    loop_control:
+      loop_var: node_name
+      extended: yes
+  
+  - include_role:
+      name: aporeto-openshift
+      tasks_from: uninstall

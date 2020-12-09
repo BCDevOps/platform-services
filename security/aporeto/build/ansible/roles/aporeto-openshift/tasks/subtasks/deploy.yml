@@ -1,0 +1,33 @@
+---
+- name: "Aporeto CRDs - activity={{ activity }}"
+  k8s:
+    state: "{{ aporeto_state }}"
+    src: "{{ aporeto_cluster_files}}/aporeto-crds/templates/crds.yaml"
+
+- name: "Aporeto Enforcerd RBAC - activity={{ activity }}"
+  k8s:
+    state: "{{ aporeto_state }}"
+    src: "{{ aporeto_cluster_files}}/{{ enforcerd.name }}/enforcerd/templates/rbac.yaml"
+  loop_control:
+    loop_var: enforcerd
+    label: "{{ enforcerd.name }}"
+  loop: "{{ aporeto_enforcerd_config }}"
+
+- name: "Aporeto Enforcerd DaemonSets - activity={{ activity }}"
+  k8s:
+    state: "{{ aporeto_state }}"
+    src: "{{ aporeto_cluster_files}}/{{ enforcerd.name }}/enforcerd/templates/ds.yaml"
+  loop_control:
+    loop_var: enforcerd
+    label: "{{ enforcerd.name }}"
+  loop: "{{ aporeto_enforcerd_config }}"
+
+- name: "Aporeto Operator RBAC - activity={{ activity }}"
+  k8s:
+    state: "{{ aporeto_state }}"
+    src: "{{ aporeto_cluster_files }}/aporeto-operator/templates/rbac.yaml"
+
+- name: "Aporeto Operator - activity={{ activity }}"
+  k8s:
+    state: "{{ aporeto_state }}"
+    src: "{{ aporeto_cluster_files }}/aporeto-operator/templates/deployment.yaml"

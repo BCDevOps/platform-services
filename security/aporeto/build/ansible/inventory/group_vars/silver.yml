@@ -1,0 +1,59 @@
+---
+cluster_name: silver
+aporeto_cluster_namespace: "/bcgov/platform-services/production/kamloops/{{ cluster_name }}"
+aporeto_crd_chart_version: 1.122.2
+aporeto_operator_chart_version: 1.122.2
+aporeto_operator_cpu_limit: "2"
+aporeto_operator_memory_limit: "1024Mi"
+aporeto_enforcerd_chart_version: 1.1039.22
+aporeto_enforcerd_config:
+- name: enforcerd-master
+  memory_limit: 8Gi
+  affinity_label: node-role.kubernetes.io/master
+- name: enforcerd-infra
+  memory_limit: 16Gi
+  tx_queue_count: 4
+  rx_queue_count: 4
+  affinity_label: node-role.kubernetes.io/infra
+- name: enforcerd-worker
+  memory_limit: 8Gi
+  affinity_label: node-role.kubernetes.io/worker
+
+node_list:
+- mcs-silver-master-01.dmz
+- mcs-silver-master-02.dmz
+- mcs-silver-master-03.dmz
+- mcs-silver-infra-01.dmz
+- mcs-silver-infra-02.dmz
+- mcs-silver-infra-03.dmz
+- mcs-silver-app-01.dmz
+- mcs-silver-app-02.dmz
+- mcs-silver-app-03.dmz
+- mcs-silver-app-04.dmz
+- mcs-silver-app-05.dmz
+- mcs-silver-app-06.dmz
+- mcs-silver-app-07.dmz
+- mcs-silver-app-08.dmz
+- mcs-silver-app-09.dmz
+- mcs-silver-app-36.dmz
+- mcs-silver-app-37.dmz
+- mcs-silver-app-38.dmz
+- mcs-silver-app-39.dmz
+- mcs-silver-app-40.dmz
+- mcs-silver-app-41.dmz
+- mcs-silver-app-42.dmz
+- mcs-silver-app-43.dmz
+- mcs-silver-app-44.dmz
+
+# # BCGov Operator Details
+# bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"
+
+# # Aporeto Policy Backup CronJob
+# job_name: secops-apobak
+# secops_utils_image_namespace: devops-security-tools
+# secops_utils_image_name: secops-utils:latest
+# schedule: '08 13 * * *' # 1:13 AM (Pacific Time) daily
+# success_job_history: '3'
+# failed_job_history_limit: '3'
+# job_backoff_limit: '4'
+# secops_utils_secret_name: backup-cronjob-creds

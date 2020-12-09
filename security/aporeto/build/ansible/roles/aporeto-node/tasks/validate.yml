@@ -1,0 +1,14 @@
+---
+- name: Validate {{ node_name | lower }} enforcerd pod state
+  k8s_info:
+    kind: Pod
+    namespace: "{{ aporeto_project.enforcers }}"
+    field_selectors:
+      - spec.nodeName={{ node_name }}
+      - status.phase=Running
+    label_selectors:
+      - app = enforcerd
+  register: pod_running
+  until: pod_running.resources | length == (0 if activity == 'uninstall' else 1)
+  retries: 25
+  delay: 30

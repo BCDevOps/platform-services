@@ -1,0 +1,3 @@
+---
+aporeto_node_skip_drain: true
+aporeto_node_skip_pause: false

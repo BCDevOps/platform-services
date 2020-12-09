@@ -1,0 +1,8 @@
+---
+openshift_project_prefix: devops-security-aporeto
+openshift_project_editors: 
+  - jleach@github
+  - stewartshea@github
+  - j-pye@github
+  - sbarre-esit@github
+  - wmhutchison@github

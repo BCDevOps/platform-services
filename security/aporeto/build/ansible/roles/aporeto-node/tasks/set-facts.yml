@@ -1,0 +1,22 @@
+---
+- name: Check if enforcerd enabled on {{ node_name }}
+  k8s_info:
+    kind: Node
+    label_selectors:
+    - aporeto-enforcerd = true
+    - "kubernetes.io/hostname = {{ node_name }}"
+  register: k8s_node_object
+
+- name: Debug k8s_node_object
+  debug:
+    msg: "{{ k8s_node_object }}"
+    verbosity: 2
+
+- name: Set fact - aporeto_enforcerd_enabled
+  set_fact:
+    aporeto_enforcerd_enabled: "{{ k8s_node_object.resources | length == 1 | bool }}"
+
+- name: Set fact - aporeto_enforcerd_state
+  set_fact:
+    aporeto_enforcerd_state: 0
+  when: activity == 'uninstall'

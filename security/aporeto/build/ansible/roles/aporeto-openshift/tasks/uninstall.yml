@@ -1,0 +1,5 @@
+---
+- include_tasks: subtasks/set_facts.yml
+- include_tasks: subtasks/remove_custom_resources.yml
+- include_tasks: subtasks/deploy.yml
+# - include_tasks: subtasks/cleanup_namespace.yml

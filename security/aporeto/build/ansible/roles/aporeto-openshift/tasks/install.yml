@@ -1,0 +1,5 @@
+---
+- include_tasks: subtasks/set_facts.yml
+- include_tasks: subtasks/generate_manifests.yml
+- include_tasks: subtasks/namespace_preparation.yml
+- include_tasks: subtasks/deploy.yml

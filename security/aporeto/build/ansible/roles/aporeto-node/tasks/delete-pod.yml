@@ -1,0 +1,16 @@
+---
+- name: Get enforcerd pod by app label
+  k8s_info:
+    kind: Pod
+    namespace: "{{ aporeto_project.enforcers }}"
+    field_selectors:
+      - spec.nodeName={{ node_name }}
+    label_selectors:
+      - app = enforcerd
+  register: k8s_pod_objects
+
+- name: Restart (delete existing) pod
+  k8s:
+    state: absent
+    definition: "{{ item }}"
+  loop: "{{ k8s_pod_objects.resources }}"

@@ -1,0 +1,11 @@
+---
+- name: Label {{ node_name }}
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Node
+      metadata:
+        name: "{{ node_name }}"
+        labels:
+          aporeto-enforcerd: "{{ 'false' if activity == 'uninstall' else 'true' }}"

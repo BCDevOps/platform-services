@@ -1,0 +1,45 @@
+---
+cluster_name: klab
+aporeto_cluster_namespace: "/bcgov/platform-services/non-production/kamloops/{{ cluster_name }}"
+aporeto_crd_chart_version: 1.122.2
+aporeto_operator_chart_version: 1.122.2
+aporeto_operator_cpu_limit: "1"
+aporeto_operator_memory_limit: "512Mi"
+aporeto_enforcerd_chart_version: 1.1039.22
+aporeto_enforcerd_config:
+- name: enforcerd-master
+  memory_limit: 4Gi
+  affinity_label: node-role.kubernetes.io/master
+- name: enforcerd-infra
+  memory_limit: 8Gi
+  tx_queue_count: 4
+  rx_queue_count: 4
+  affinity_label: node-role.kubernetes.io/infra
+- name: enforcerd-worker
+  memory_limit: 4Gi
+  affinity_label: node-role.kubernetes.io/worker
+
+node_list:
+- mcs-klab-master-01.dmz
+- mcs-klab-master-02.dmz
+- mcs-klab-master-03.dmz
+- mcs-klab-infra-01.dmz
+- mcs-klab-infra-02.dmz
+- mcs-klab-infra-03.dmz
+- mcs-klab-app-01.dmz
+- mcs-klab-app-02.dmz
+- mcs-klab-app-03.dmz
+- mcs-klab-app-04.dmz
+
+# # BCGov Operator Details
+# bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"
+
+# # Aporeto Policy Backup CronJob
+# job_name: secops-apobak
+# secops_utils_image_namespace: devops-security-tools
+# secops_utils_image_name: secops-utils:latest
+# schedule: '08 13 * * *' # 1:13 AM (Pacific Time) daily
+# success_job_history: '3'
+# failed_job_history_limit: '3'
+# job_backoff_limit: '4'
+# secops_utils_secret_name: backup-cronjob-creds

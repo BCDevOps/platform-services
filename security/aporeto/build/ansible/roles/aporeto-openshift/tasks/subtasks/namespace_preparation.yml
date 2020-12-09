@@ -1,0 +1,37 @@
+---
+- name: Ensure Namespaces (OpenShift Projects) Exist
+  k8s:
+    state: present
+    src: "{{ aporeto_cluster_files }}/{{ namespace_manifest }}"
+  loop_control:
+    loop_var: namespace_manifest
+  loop:
+    - namespace-{{ aporeto_project.enforcers }}.yml
+    - namespace-{{ aporeto_project.operators }}.yml
+
+- name: Remove Aporeto aporeto.io/disable-aporeto-ctrls Annotation 
+  command: "oc annotate namespace {{ aporeto_project.enforcers }} aporeto.io/disable-aporeto-ctrls-"
+  ignore_errors: true
+
+- name: Create enforcerd appcred
+  when: lookup('k8s', kind='Secret', namespace=aporeto_project.enforcers , resource_name='enforcerd') | length <= 0
+  shell: > 
+    apoctl appcred create enforcerd
+    --namespace="{{ aporeto_cluster_namespace }}"
+    --token="{{ aporeto_temp_token }}"
+    --type k8s --role "@auth:role=enforcer"
+    | oc apply -f - -n "{{ aporeto_project.enforcers }}"
+
+- name: Create aporeto-operator appcred
+  when: lookup('k8s', kind='Secret', namespace=aporeto_project.operators , resource_name='aporeto-operator') | length <= 0
+  shell: > 
+    apoctl appcred create aporeto-operator
+    --namespace="{{ aporeto_cluster_namespace }}"
+    --token="{{ aporeto_temp_token }}" 
+    --type k8s --role "@auth:role=aporeto-operator"
+    | oc apply -f - -n "{{ aporeto_project.operators }}"
+
+- name: Add OpenShift editor roles to operator namespace
+  command: 
+    "oc policy add-role-to-user edit {{ item }} -n {{ aporeto_project.operators }}"
+  loop: "{{ openshift_project_editors }}"

@@ -1,0 +1,5 @@
+---
+aporeto_temp_token: "{{ lookup('env', 'APOCTL_TOKEN')}}"
+aporeto_helm_repo: https://charts.aporeto.com/clients
+aporeto_enforcerd_activate_kube_pus: true
+aporeto_enforcerd_activate_openshift_pus: true

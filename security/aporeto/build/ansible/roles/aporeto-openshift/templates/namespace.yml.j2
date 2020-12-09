@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    "openshift.io/node-selector": {{ node_selector | default('') | quote }}
+  name: {{ project }}
+  labels:
+    name: {{ project }}
+    project_type: infra

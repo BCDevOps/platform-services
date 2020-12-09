@@ -1,0 +1,19 @@
+---
+- name: Drain {{ node_name | lower }}
+  command: >
+    oc adm drain {{ node_name | lower }} --force --delete-local-data --ignore-daemonsets
+  register: drain_result
+  until: drain_result is not failed
+  retries: 120
+  delay: 30
+
+- name: Validate {{ node_name | lower }} has no pods stuck terminating
+  k8s_info:
+    kind: Pod
+    field_selectors:
+      - spec.nodeName={{ node_name }}
+      - status.phase=Terminating
+  register: drain_validation
+  until: drain_validation.resources | length == 0
+  retries: 25
+  delay: 15

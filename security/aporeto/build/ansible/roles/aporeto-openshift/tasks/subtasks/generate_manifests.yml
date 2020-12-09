@@ -1,0 +1,144 @@
+---
+- name: "Create Cluster Specific Files Dir - {{ cluster_name }}"
+  file:
+    path: "{{ aporeto_cluster_files }}"
+    state: directory
+    recurse: yes
+
+- name: Create Namespace Manifests
+  template:
+    src: "{{ role_path }}/templates/namespace.yml.j2"
+    dest: "{{ aporeto_cluster_files }}/namespace-{{ project }}.yml"
+  vars:
+    project: "{{ item.project }}"
+    node_selector: "{{ item.node_selector | default('') }}"
+  loop:
+    - project: "{{ aporeto_project.enforcers }}"
+    - project: "{{ aporeto_project.operators }}"
+      node_selector: node-role.kubernetes.io/worker=
+
+- name: Fetch Aporeto Helm Charts (CRDs,Operator,Enforcerd)
+  command: >
+    helm fetch
+    --destination {{ aporeto_cluster_files }}/
+    --repo {{ aporeto_helm_repo }}
+    --version {{ chart.version }}
+    {{ chart.name }}
+  loop_control:
+    loop_var: chart
+  loop:
+    - name: aporeto-crds
+      version: "{{ aporeto_crd_chart_version }}"
+    - name: aporeto-operator
+      version: "{{ aporeto_operator_chart_version }}"
+    - name: enforcerd
+      version: "{{ aporeto_enforcerd_chart_version }}"
+
+- name: Generate Aporeto CRDs Manifest
+  shell: >
+    helm template aporeto-crds
+    {{ aporeto_cluster_files }}/aporeto-crds-*.tgz
+    --output-dir {{ aporeto_cluster_files }}
+
+- name: Generate Aporeto Operator Manifests
+  shell: >
+    helm template aporeto-operator
+    {{ aporeto_cluster_files }}/aporeto-operator-*.tgz
+    --namespace {{ aporeto_project.operators }}
+    --set options.baseNamespace={{ aporeto_project.enforcers }}
+    --set resources.enabled=true
+    --set resources.limits.cpu={{ aporeto_operator_cpu_limit }}
+    --set resources.limits.memory={{ aporeto_operator_memory_limit }}
+    --output-dir {{ aporeto_cluster_files }}
+
+## Consider templating a helm values file for the enforcer
+- name: Generate Aporeto Enforcerd Manifests
+  shell: >
+    helm template {{ enforcerd.name }}
+    {{ aporeto_cluster_files }}/enforcerd-*.tgz
+    --namespace {{ aporeto_project.enforcers }}
+    --set-string nodeSelector."aporeto-enforcerd"=true
+    --set nodeAffinity.enabled=true
+    --set nodeAffinity.key={{ enforcerd.affinity_label }}
+    --set nodeAffinity.value=''
+    --set resources.enabled=true
+    --set resources.limits.memory={{ enforcerd.memory_limit | default("512Mi") }}
+    --set resources.requests.cpu={{ enforcerd.cpu_request | default("500m") }}
+    --set resources.requests.memory={{ enforcerd.memory_request | default("128Mi") }}
+    --set options.activateKubeSystemPUs={{ aporeto_enforcerd_activate_kube_pus }}
+    --set options.activateOpenShiftPUs={{ aporeto_enforcerd_activate_openshift_pus }}
+    --set options.enableCompressedTags=1
+    --set options.rxQueueCount={{ enforcerd.tx_queue_count | default(2) }}
+    --set options.txQueueCount={{ enforcerd.tx_queue_count | default(2) }}
+    --release-name
+    --output-dir {{ aporeto_cluster_files }}
+  loop_control:
+    loop_var: enforcerd
+    label: "{{ enforcerd.name }}"
+  loop: "{{ aporeto_enforcerd_config }}"
+
+## Note: Consider switching to yedit for lineinfile and blockinfile
+- name: Change Enforcerd Update Strategy To OnDelete
+  lineinfile:
+    path: "{{ aporeto_cluster_files }}/{{ enforcerd.name }}/enforcerd/templates/ds.yaml"
+    regexp: '^    type: RollingUpdate'
+    line: '    type: OnDelete'
+  loop_control:
+    loop_var: enforcerd
+    label: "{{ enforcerd.name }}"
+  loop: "{{ aporeto_enforcerd_config }}"
+
+- name: Add tolerations to enforcer daemonsets
+  blockinfile:
+    state: present
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - tolerations"
+    path: "{{ aporeto_cluster_files }}/{{ enforcerd.name }}/enforcerd/templates/ds.yaml"
+    insertbefore: '^      affinity:'
+    block: |2
+            tolerations:
+            - key: node-role.kubernetes.io/master
+              effect: NoSchedule
+  loop_control:
+    loop_var: enforcerd
+    label: "{{ enforcerd.name }}"
+  loop: "{{ aporeto_enforcerd_config }}"
+
+- name: Add '--disable-ebpf' to enforcer daemonsets
+  blockinfile:
+    state: present
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - ebpf"
+    path: "{{ aporeto_cluster_files }}/{{ enforcerd.name }}/enforcerd/templates/ds.yaml"
+    insertbefore: '^          env:'
+    block: |2
+                args:
+                - --disable-ebpf
+  loop_control:
+    loop_var: enforcerd
+    label: "{{ enforcerd.name }}"
+  loop: "{{ aporeto_enforcerd_config }}"
+
+- name: Add 'privileged' RBAC to Enforcerd Service Accounts
+  blockinfile:
+    state: present
+    path: "{{ aporeto_cluster_files }}/{{ enforcerd.name }}/enforcerd/templates/rbac.yaml"
+    insertafter: EOF
+    block: "{{ lookup('template', 'enforcerd_privileged_rbac.yml.j2') }}"
+  loop_control:
+    loop_var: enforcerd
+    label: "{{ enforcerd.name }}"
+  loop: "{{ aporeto_enforcerd_config }}"
+
+- name: Find Helm Chart files to remove
+  find:
+    paths: "{{ aporeto_cluster_files }}"
+    patterns: "*.tgz"
+  register: find_result
+
+- name: Remove Helm Chart files (*.tgz)
+  file:
+    path: "{{ tgz_file.path }}"
+    state: absent
+  loop_control:
+    loop_var: tgz_file
+    label: "{{ tgz_file.path | basename }}"
+  loop: "{{ find_result.files }}"

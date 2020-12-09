@@ -1,0 +1,14 @@
+---
+- name: Maintain Nodes
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+  tasks: 
+  - name: Drain, Label, and Update DaemonSets
+    include_role:
+      name: aporeto-node
+    loop: "{{ node_list }}"
+    loop_control:
+      loop_var: node_name
+      extended: yes

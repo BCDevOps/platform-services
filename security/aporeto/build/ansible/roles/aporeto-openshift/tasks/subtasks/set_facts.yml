@@ -1,0 +1,8 @@
+---
+- name: Set Role Facts (Cluster Specific Vars)
+  set_fact:
+    aporeto_cluster_files: "{{ role_path }}/output/{{ cluster_name }}"
+    aporeto_project:
+      enforcers: "{{ openshift_project_prefix }}-enforcers"
+      operators: "{{ openshift_project_prefix }}-operators"
+    aporeto_state: "{{ 'absent' if activity == 'uninstall' else 'present' }}"
