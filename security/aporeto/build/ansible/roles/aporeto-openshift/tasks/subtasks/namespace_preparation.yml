@@ -16,7 +16,7 @@
 - name: Create enforcerd appcred
   when: lookup('k8s', kind='Secret', namespace=aporeto_project.enforcers , resource_name='enforcerd') | length <= 0
   shell: > 
-    apoctl appcred create enforcerd
+    apoctl appcred create enforcerd-"{{ aporeto_project.enforcers }}"
     --namespace="{{ aporeto_cluster_namespace }}"
     --token="{{ aporeto_temp_token }}"
     --type k8s --role "@auth:role=enforcer"
@@ -25,7 +25,7 @@
 - name: Create aporeto-operator appcred
   when: lookup('k8s', kind='Secret', namespace=aporeto_project.operators , resource_name='aporeto-operator') | length <= 0
   shell: > 
-    apoctl appcred create aporeto-operator
+    apoctl appcred create aporeto-operator-"{{ aporeto_project.operators }}"
     --namespace="{{ aporeto_cluster_namespace }}"
     --token="{{ aporeto_temp_token }}" 
     --type k8s --role "@auth:role=aporeto-operator"
