@@ -12,8 +12,11 @@
     msg: "{{ k8s_node_object }}"
     verbosity: 2
 
-- name: Set fact - aporeto_enforcerd_enabled
+- name: Set fact - aporeto_enforcerd_enabled + projects
   set_fact:
+    aporeto_project:
+      enforcers: "{{ openshift_project_prefix }}-enforcers"
+      operators: "{{ openshift_project_prefix }}-operators"
     aporeto_enforcerd_enabled: "{{ k8s_node_object.resources | length == 1 | bool }}"
 
 - name: Set fact - aporeto_enforcerd_state

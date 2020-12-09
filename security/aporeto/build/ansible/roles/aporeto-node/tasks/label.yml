@@ -1,4 +1,36 @@
 ---
+- name: Perform enforcerd namespace migration
+  when: lookup('env', 'APORETO_NAMESPACE_MIGRATION')
+  block:
+  - name: Label {{ node_name }}
+    k8s:
+      state: present
+      definition:
+        apiVersion: v1
+        kind: Node
+        metadata:
+          name: "{{ node_name }}"
+          labels:
+            aporeto-enforcerd: NULL
+
+  - name: Pause to give the enforcer time to completely shutdown
+    pause:
+      seconds: 90
+
+  - name: Validate {{ node_name | lower }} enforcerd pod state
+    k8s_info:
+      kind: Pod
+      namespace: "devops-security-aporeto-enforcers"
+      field_selectors:
+        - spec.nodeName={{ node_name }}
+        - status.phase=Running
+      label_selectors:
+        - app = enforcerd
+    register: pod_running
+    until: pod_running.resources | length == 0
+    retries: 25
+    delay: 30
+
 - name: Label {{ node_name }}
   k8s:
     state: present
