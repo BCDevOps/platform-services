@@ -70,7 +70,7 @@ We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to aut
 
 #### RocketChat Deployment
 
-All of the OpenShift objects are wrapped up in three template files: **template-sa-linked-image-pull-secrets.yaml**, **template-mongodb.yaml**, and **template-rocketchat.yaml**
+All of the OpenShift objects are wrapped up in three template files.
 
 First, create a secret with your docker account information `oc create secret docker-registry <secret-name> --docker-server=docker.io --docker-username=<docker-username> --docker-password=<docker-password> --docker-email=unused`
 
