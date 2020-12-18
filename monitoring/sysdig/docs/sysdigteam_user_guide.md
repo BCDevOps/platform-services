@@ -1,5 +1,5 @@
 ---
-description: This is the Team User Guide for using Sysdig for monitoring the utilization metrics of your containerized application deployments in the BCGov OpenShift platform. 
+description: This is the Team User Guide for using Sysdig for monitoring the utilization metrics of your containerized application deployments in the BCGov OpenShift 4 platform. 
 tags:
 - Sysdig
 - monitoring
@@ -8,9 +8,8 @@ tags:
 - team guide
 title: OpenShift User Guide to Creating and Using a Sysdig Team for Monitoring
 ---
-# EARLY ACCESS FEATURE
-This feature is in Early Access mode with specific teams that have been selected for testing and feeback contribution. 
-For those teams, please provide feedback in the Rocket.Chat `#sysdigteams-earlyaccess-feedback` channel.
+# SYSDIG IN OCP4 SILVER CLUSTER
+The Sysdig service is currenly available to product teams developing in SILVER production cluster of the OCP 4 Platform. The teams using Sysdig are encouraged to connect with each other and with the Platform Services Team in `#devops-sysdig` channel in RocketChat.
 This documentation does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.  
 
 # Sysdig Teams Feature Description
