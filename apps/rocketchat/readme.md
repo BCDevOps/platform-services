@@ -74,7 +74,7 @@ All of the OpenShift objects are wrapped up in three template files.
 
 First, create a secret with your docker account information `oc create secret docker-registry <secret-name> --docker-server=docker.io --docker-username=<docker-username> --docker-password=<docker-password> --docker-email=unused`
 
-Then link your secret `oc process -f ./apps/documize/openshift/template-sa-linked-image-pull-secrets.yaml -p NAMESPACE=<namespace> -p SECRET_NAME=<secret-name> | oc apply -f - -n <namespace>`
+Then link your secret `oc process -f ./apps/rocketchat/template-sa-linked-image-pull-secrets.yaml -p NAMESPACE=<namespace> -p SECRET_NAME=<secret-name> | oc apply -f - -n <namespace>`
 
 You can then load the other templates into OpenShift and deploy the template through the web console `oc create -f template-rocketchat.yaml && oc create -f template-mongodb.yaml`.
 
