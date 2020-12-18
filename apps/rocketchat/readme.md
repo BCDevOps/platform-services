@@ -70,7 +70,13 @@ We will need to create a client in RH-SSO (KeyCloak) to allow Rocket Chat to aut
 
 #### RocketChat Deployment
 
-All of the OpenShift objects are wrapped up in two template files. You can load the templates into OpenShift and deploy the template through the web console `oc create -f template-rocketchat.yaml && oc create -f template-mongodb.yaml`.
+All of the OpenShift objects are wrapped up in three template files: **template-sa-linked-image-pull-secrets.yaml**, **template-mongodb.yaml**, and **template-rocketchat.yaml**
+
+First, create a secret with your docker account information `oc create secret docker-registry <secret-name> --docker-server=docker.io --docker-username=<docker-username> --docker-password=<docker-password> --docker-email=unused`
+
+Then link your secret `oc process -f ./apps/documize/openshift/template-sa-linked-image-pull-secrets.yaml -p NAMESPACE=<namespace> -p SECRET_NAME=<secret-name> | oc apply -f - -n <namespace>`
+
+You can then load the other templates into OpenShift and deploy the template through the web console `oc create -f template-rocketchat.yaml && oc create -f template-mongodb.yaml`.
 
 All of the template parameters are defined in environment files specific to the environment to deploy Rocket Chat into, dev, test, and prod.
 
