@@ -8,6 +8,7 @@
   loop:
   - { name: 'policyadmin', file: '{{ role_path}}/files/policyadmin_policy.hcl' }
   - { name: 'admin', file: '{{ role_path}}/files/admin_policy.hcl' }
+  - { name: 'approle-secret-id', file: '{{ role_path}}/files/approle-pull-secret-id.hcl' }
 
 - name: AppRole - Enable AppRole so Terraform can authenticate
   hashivault_auth_method:
