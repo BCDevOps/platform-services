@@ -184,4 +184,5 @@ sdc-cli --json dashboard get [dashboard-id]
 ```
 
 ## Build Process
-GitHub Actions will create a new clean build in the OCP3.11 LAB from whatever branch changes are pushed to. Upon push to master, this build will take place in the OCP3.11 Pathfinder Prod Cluster. 
+GitHub Actions will create a new clean build in the OCP3.11 LAB from whatever branch changes are pushed to. Upon push to master, this build will take place in the OCP3.11 Pathfinder Prod Cluster.
+

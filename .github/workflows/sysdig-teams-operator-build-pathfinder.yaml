@@ -20,7 +20,7 @@ jobs:
     - name: OpenShift Action
       uses: redhat-developer/openshift-actions@v1.1
       with:
-        version: '3.11.235'
+        version: '4.6'
         openshift_server_url: ${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
         parameters: '{"apitoken": "${{ secrets.SYSDIG_OPERATOR_SA_TOKEN }}"}'
         cmd: |
