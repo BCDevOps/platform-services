@@ -14,6 +14,9 @@ spec:
         app: vaulttest
       annotations:
         vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/tls-secret: "vault-tls-client"
+        vault.hashicorp.com/ca-cert: "/vault/tls/vault.ca"
+        vault.hashicorp.com/namespace: "platform-services"
         vault.hashicorp.com/auth-path: "auth/k8s-klab"
         vault.hashicorp.com/role: "helloworld"
         vault.hashicorp.com/agent-inject-secret-helloworld: "secrets/helloworld"
