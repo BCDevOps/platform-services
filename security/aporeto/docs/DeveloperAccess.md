@@ -94,7 +94,7 @@ oc -n ${NAMESPACE} describe nsp <resource_name>
 oc -n ${NAMESPACE} describe en <resource_name>
 ```
 
-Processing Units (PUs), which represent your pods or applications, can be viewed either from the Platform or Processing units menu items in the sidebar. You can select any PU to view the tags and metadata associated with it. These tags can be used when writing your `NetworkSecurityPolicies` to give you greater control and flexibility to meet your application's security requirements.
+Processing Units (PUs) represent your pods or applications.  PU details can be viewed with a graphical representation of traffic flow through the **Platform** menu section, or as a list with individual status detail in the **Processing units** menu section. You can select any PU  in the **Processing units** section to view the tags and metadata associated with it. These tags can be used when writing your `NetworkSecurityPolicies` to give you greater control and flexibility to meet your application's security requirements.  When you select a specific PU in the **Platform** section a sidebar pops up with several more detailed sections of information including: General tags and metadata, Network Statistics, Event Logs and more.
 
 ## Demo
 
