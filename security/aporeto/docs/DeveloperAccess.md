@@ -49,7 +49,7 @@ oc -n ${NAMESPACE} describe -f ${NAMESPACE}-cap.yaml
 
 ## Logging into the Aporeto Console
 
-Browse to https://console.aporeto.com and Select "Sign-in with OIDC" from the drop down menu. Enter `bcgov` in the "Account or namespace" field.
+Browse to https://console.aporeto.com and Select "Sign-in with OIDC" from the drop down menu. Enter `/bcgov` in the "Account or namespace" field.
 
 ![Aporeto Console Login](assets/aporeto-login.gif)
 
