@@ -1,0 +1,9 @@
+---
+- name: Sanity checks
+  assert:
+    that:
+    - ansible_env['VAULT_ADDR'] is defined
+    - ansible_env['VAULT_TOKEN'] is defined
+    fail_msg: "One or more environment variables are not set."
+    success_msg: "All checks passed."
+
