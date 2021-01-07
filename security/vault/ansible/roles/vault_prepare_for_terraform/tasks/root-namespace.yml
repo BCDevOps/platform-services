@@ -13,6 +13,7 @@
   - { name: 'policyadmin', file: '{{ role_path}}/files/policyadmin_policy.hcl' }
   - { name: 'namespaceadmin', file: '{{ role_path}}/files/root_ns_admin_policy.hcl' }
   - { name: 'approle-secret-id', file: '{{ role_path}}/files/approle-pull-secret-id.hcl' }
+  - { name: 'backup', file: '{{ role_path}}/files/raft_backup_policy.hcl' }
 
 - name: AppRole - Enable AppRole so Terraform can authenticate
   hashivault_auth_method:
