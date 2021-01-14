@@ -28,9 +28,9 @@ jobs:
     #   id: vars
     #   run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
     - name: Build the tagged Docker image
-      run: cd monitoring/sysdig/operator/sysdig-monitor && docker build . --file Dockerfile --tag bcdevopscluster/sysdig-teams-operator:${{TAG}}
+      run: cd monitoring/sysdig/operator/sysdig-monitor && docker build . --file Dockerfile --tag bcdevopscluster/sysdig-teams-operator:${{ env.TAG }}
     - name: Push the tagged Docker image
-      run: docker push bcdevopscluster/sysdig-teams-operator:${{TAG}}
+      run: docker push bcdevopscluster/sysdig-teams-operator:${{ env.TAG }}
     # - name: OpenShift Action
     #   uses: redhat-developer/openshift-actions@v1.1
     #   with:
