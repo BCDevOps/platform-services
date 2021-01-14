@@ -24,10 +24,8 @@ jobs:
     # - name: Get the version
     #   id: vars
     #   run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
-    - name: Change Context
-      run: cd monitoring/sysdig/operator/sysdig-monitor
     - name: Build the tagged Docker image
-      run: docker build . --file Dockerfile --tag sysdig-teams-operator:lab
+      run: cd monitoring/sysdig/operator/sysdig-monitor && docker build . --file Dockerfile --tag sysdig-teams-operator:lab
     - name: Push the tagged Docker image
       run: docker push sysdig-teams-operator:lab
     # - name: OpenShift Action
