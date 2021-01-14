@@ -7,7 +7,10 @@ on:
     paths: 
     - 'monitoring/sysdig/operator/sysdig-monitor/**'
     - '.github/workflows/**'
- 
+
+env: 
+  TAG: "${{ secrets.LAB_SYSDIG_OPERATOR_SA_TOKEN }}"
+
 jobs:
   build: 
     runs-on: ubuntu-latest
@@ -25,9 +28,9 @@ jobs:
     #   id: vars
     #   run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
     - name: Build the tagged Docker image
-      run: cd monitoring/sysdig/operator/sysdig-monitor && docker build . --file Dockerfile --tag sysdig-teams-operator:lab
+      run: cd monitoring/sysdig/operator/sysdig-monitor && docker build . --file Dockerfile --tag bcdevopscluster/sysdig-teams-operator:${TAG}
     - name: Push the tagged Docker image
-      run: docker push sysdig-teams-operator:lab
+      run: docker push bcdevopscluster/sysdig-teams-operator:${TAG}
     # - name: OpenShift Action
     #   uses: redhat-developer/openshift-actions@v1.1
     #   with:
