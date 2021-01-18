@@ -5,6 +5,7 @@ on:
     - 'master'
     paths: 
     - 'monitoring/sysdig/operator/sysdig-monitor/**'
+    - '.github/workflows/**'
  
 jobs:
   build: 
