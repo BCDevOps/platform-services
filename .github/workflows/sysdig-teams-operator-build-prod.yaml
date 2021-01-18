@@ -5,7 +5,7 @@ on:
     - 'master'
     paths: 
     - 'monitoring/sysdig/operator/sysdig-monitor/**'
-    - '.github/workflows/**'
+    - '.github/workflows/sysdig-teams-operator-build-prod.yaml'
  
 jobs:
   build: 
