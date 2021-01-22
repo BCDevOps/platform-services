@@ -10,7 +10,7 @@ title: OpenShift User Guide to Creating and Using a Sysdig Team for Monitoring
 ---
 # EARLY ACCESS FEATURE
 This feature is in Early Access mode with specific teams that have been selected for testing and feeback contribution. 
-For those teams, please provide feedback in the Rocket.Chat `#sysdigteams-earlyaccess-feedback` channel.
+For those teams, please provide feedback in the Rocket.Chat `#devops-sysdig` channel.
 This documentation does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.  
 
 # Sysdig Teams Feature Description
