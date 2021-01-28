@@ -20,7 +20,7 @@ In order to gain access to the Aporeto Console to view `NetworkSecurityPolicies`
 
 ```sh
 oc -n ${NAMESPACE} get consoleauthorizationpolicies
-oc -n ${NAMESPACE} get caps
+oc -n ${NAMESPACE} get cap
 ```
 
 ### Create a `cap` using the template below or by modifying the existing resource:  
