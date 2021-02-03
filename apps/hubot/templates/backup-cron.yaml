@@ -14,9 +14,9 @@ spec:
         spec:
           containers:
           - name: backup
-            image: redis:3.2
+            image: redis:6.10
             command: ["/bin/bash"]
-            args: ["-c", "cp /var/lib/redis/data/dump.rdb /var/lib/redis/data/dump.rdb.$(date +%F)", "find /var/lib/redis/data -name '*.rdb.*' -type f -mtime +30 -exec rm -f {} ';'"]
+            args: ["-c", "cp /data/dump.rdb /data/dump.rdb.$(date +%F); find /data -name '*.rdb.*' -type f -mtime +30 -exec rm -f {} ';'"]
             volumeMounts:
               - mountPath: /var/lib/redis/data
                 name: redis-backup-data
@@ -24,5 +24,4 @@ spec:
           volumes:
             - name: redis-backup-data
               persistentVolumeClaim:
-                claimName: redis
-
+                claimName: hubot-redis
