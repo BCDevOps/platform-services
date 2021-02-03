@@ -3,5 +3,6 @@ openshift_project_editors:
   - jleach@github
   - stewartshea@github
   - j-pye@github
-  - sbarre-esit@github
+  - stevenbarre@github
   - wmhutchison@github
+aporeto_operator_workers: 8

@@ -40,4 +40,4 @@
       metadata:
         name: "{{ node_name }}"
         labels:
-          aporeto: "{{ 'false' if activity == 'uninstall' else 'true' }}"
+          aporeto-enforcerd: "{{ 'false' if activity == 'uninstall' else 'true' }}"

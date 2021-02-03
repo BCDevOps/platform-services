@@ -1,4 +1,4 @@
 ---
 aporeto_node_skip_drain: false
 aporeto_node_skip_pause: false
-openshift_project_prefix: openshift-aporeto
+openshift_project_prefix: devops-security-aporeto

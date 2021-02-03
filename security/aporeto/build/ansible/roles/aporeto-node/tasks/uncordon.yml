@@ -1,4 +1,7 @@
 ---
+- pause:
+    prompt: "Uncordon Node? (Return/ctrl+c) - {{ node_name | lower	}}"
+
 - name: Set {{ node_name | lower }} schedulability (uncordon)
   command: >
     oc adm uncordon {{ node_name | lower }}

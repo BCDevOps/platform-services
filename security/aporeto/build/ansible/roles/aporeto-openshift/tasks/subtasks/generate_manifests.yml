@@ -43,6 +43,18 @@
     --namespace {{ aporeto_project.operators }}
     --set credentialsSecretName=aporeto-operator-{{ aporeto_project.operators }}
     --set options.baseNamespace={{ aporeto_project.enforcers }}
+    --set options.numControllerWorkersCorenamespace={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersCoreservice={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersCorenetworkpolicy={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersTokenscopepolicy={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersServicemapping={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersHttpresourcespec={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersNetworkaccesspolicy={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersNamespacemappingpolicy={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersNamespace={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersExternalnetwork={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersService={{ aporeto_operator_workers }}
+    --set options.numControllerWorkersServicedependency={{ aporeto_operator_workers }}
     --set resources.enabled=true
     --set resources.limits.cpu={{ aporeto_operator_cpu_limit }}
     --set resources.limits.memory={{ aporeto_operator_memory_limit }}
@@ -55,7 +67,7 @@
     {{ aporeto_cluster_files }}/enforcerd-*.tgz
     --namespace {{ aporeto_project.enforcers }}
     --set appCredentialSecretName=enforcerd-{{ aporeto_project.enforcers }}
-    --set-string nodeSelector."aporeto"=true
+    --set-string nodeSelector."aporeto-enforcerd"=true
     --set nodeAffinity.enabled=true
     --set nodeAffinity.key={{ enforcerd.affinity_label }}
     --set nodeAffinity.value=''

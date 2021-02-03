@@ -1,7 +1,7 @@
 ---
 - name: Drain {{ node_name | lower }}
   command: >
-    oc adm drain {{ node_name | lower }} --force --delete-local-data --ignore-daemonsets
+    oc adm drain {{ node_name | lower }} --force --delete-local-data --ignore-daemonsets --grace-period=600 --timeout=900s
   register: drain_result
   until: drain_result is not failed
   retries: 120
