@@ -23,6 +23,12 @@ This documentation outlines the HashiCorp Vault Architecture and Design on OpenS
 
 - [Folder structure](#folder-structure)
 
+## Diagrams
+
+The diagrams.net source files with file extension **.drawio** are located here:
+
+- [Diagrams (drawio)](./assets/drawio/)
+
 ## Folder structure
 
 Below is a snapshot of this folder's structure.

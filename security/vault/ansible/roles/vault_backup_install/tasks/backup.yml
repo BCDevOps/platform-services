@@ -7,7 +7,7 @@
 - name: Create Vault Kubernetes Auth Role for the backup
   hashivault_k8s_auth_role:
     name: "backup"
-    namespace: "platform-services"
+    # namespace: "platform-services"
     mount_point: "k8s-klab"
     policies: ["default","backup"]
     bound_service_account_names: ["default"]

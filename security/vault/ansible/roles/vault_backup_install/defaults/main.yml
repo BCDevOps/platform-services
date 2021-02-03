@@ -1,5 +1,6 @@
 ---
 vault_backup_install_storage_class: netapp-file-backup
-vault_backup_install_cron_schedule: "0 * * * *"
+vault_backup_install_cron_schedule: "*/3 * * * *"
+#vault_backup_install_cron_schedule: "0 * * * *"
 vault_backup_install_token: "{{ lookup('env', 'VAULT_TOKEN') }}"
 vault_backup_install_working_dir: "/tmp/vault_backup_install/"

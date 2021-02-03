@@ -4,6 +4,7 @@ metadata:
   name: {{ vault_install_ocp_namespace }}-backup
   namespace: {{ vault_install_ocp_namespace }}
 spec:
+  concurrencyPolicy: Forbid
   schedule: "{{ vault_backup_install_cron_schedule }}" # Replace with Hourly Backups
   jobTemplate:
     spec:
@@ -12,9 +13,10 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: "true"
             vault.hashicorp.com/agent-inject-token: "true"
+            vault.hashicorp.com/agent-pre-populate-only: "true"
             # vault.hashicorp.com/tls-secret: "vault-tls"
             # vault.hashicorp.com/ca-cert: "/vault/tls/vault.ca"
-            vault.hashicorp.com/namespace: "platform-services"
+            # vault.hashicorp.com/namespace: "platform-services"
             vault.hashicorp.com/auth-path: "auth/k8s-klab"
             vault.hashicorp.com/role: "backup"
         spec:
@@ -29,7 +31,8 @@ spec:
               # Only Keep Backups for 10 Days
               # Always Backup even if certificates are expired
               - find /backup -mtime +10 -type f -delete;
-                env VAULT_TOKEN=$(cat /vault/secrets/token); vault operator raft snapshot save -tls-skip-verify /backup/raft-$(date +%Y-%m-%d_%H%M%S).snap;
+                export VAULT_TOKEN=$(cat /vault/secrets/token);
+                vault operator raft snapshot save -tls-skip-verify /backup/raft-$(date +%Y-%m-%d_%H%M%S).snap;
             env:
               - name: VAULT_ADDR
                 value: "https://vault-active:8200"

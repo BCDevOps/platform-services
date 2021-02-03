@@ -30,6 +30,17 @@
       shell: oc exec -n {{ vault_enable_kubernetes_auth_ns }} {{ vault_enable_kubernetes_auth_pod }} -- cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt > "{{ vault_enable_kubernetes_auth_ca }}"
       register: r_ca_cert
 
+    - name: Enable Vault Kubernetes Authentication Backend (root namespace for the backup)
+      command: vault auth enable -tls-skip-verify -path=k8s-{{ vault_enable_kubernetes_auth_cluster }} kubernetes
+      ignore_errors: true
+      register: r_enable
+      failed_when: >-
+        r_enable is failed and
+        not '"path is already in use at" in r_enable.stderr|default("")'
+
+    - name: Configure Vault Kubernetes Authentication Backend (root namespace for the backup)
+      command: vault write -tls-skip-verify auth/k8s-{{ vault_enable_kubernetes_auth_cluster }}/config token_reviewer_jwt={{ r_ca_cert.stdout }} kubernetes_host="{{ vault_enable_kubernetes_auth_host }}" kubernetes_ca_cert=@"{{ vault_enable_kubernetes_auth_ca }}"
+
     - name: Enable Vault Kubernetes Authentication Backend
       command: vault auth enable -tls-skip-verify -namespace={{ vault_ns1 }} -path=k8s-{{ vault_enable_kubernetes_auth_cluster }} kubernetes
       ignore_errors: true
