@@ -172,7 +172,7 @@ module.exports = function(robot) {
     let prevLength = reminders.cache.length;
     reminders.cache = _.reject(reminders.cache, {
       action: action_query,
-      name: user_query
+      username: user_query
     });
     reminders.queue();
     if (reminders.cache.length !== prevLength) {
