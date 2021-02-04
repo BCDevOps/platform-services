@@ -172,7 +172,7 @@ module.exports = function(robot) {
     let prevLength = reminders.cache.length;
     reminders.cache = _.reject(reminders.cache, {
       action: action_query,
-      msg_envelope: { user: {name: user_query }}
+      name: user_query
     });
     reminders.queue();
     if (reminders.cache.length !== prevLength) {
@@ -214,6 +214,6 @@ module.exports = function(robot) {
     }
     reminder = new Reminder(options);
     reminders.add(reminder);
-    return msg.send("I'll remind " + msg.envelope.user.name + " to " + action + " " + (reminder.formatDue()));
+    return msg.send("I'll remind " + name + " to " + action + " " + (reminder.formatDue()));
   });
 };
