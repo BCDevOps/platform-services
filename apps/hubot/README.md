@@ -5,8 +5,8 @@
 1. Create a redis deployment from a standard template: `helm install hubot-redis bitnami/redis -f redis-helm-values.yaml`
 1. Create Hubot user on rocket.chat (if one doesn't exist already)
 1. Create a secret containing the password of Hubot's rocket.chat account (if one doesn't exist already) with the name "rocketchat-bot-account-password" and the key "BOT_PASSWORD"
-1. Use bc.yaml to create a build
-1. Deploy with dc.yaml
+1. Use bc.yaml to create a build: `oc process -f bc.yaml --param-file=test.env --ignore-unknown-parameters | oc apply -f -`
+1. Deploy with dc.yaml: `oc process -f dc.yaml --param-file=test.env --ignore-unknown-parameters | oc apply -f -`
 
 ## Quick Start
 
