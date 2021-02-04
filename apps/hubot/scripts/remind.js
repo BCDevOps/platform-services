@@ -66,6 +66,7 @@ let Reminders = (function() {
         reminder.msg_envelope.user.room = reminder.room;
         reminder.msg_envelope.user.roomID = reminder.roomID;
         reminder.msg_envelope.user.username = reminder.username;
+        reminder.msg_envelope.user.id = reminder.userID;
 
         _this.robot.reply(reminder.msg_envelope, 'reminder to ' + reminder.action);
         return _this.queue();
@@ -98,7 +99,7 @@ Reminder = (function() {
   function Reminder(data) {
     var matches, pattern, period, periods;
 
-    this.msg_envelope = data.msg_envelope, this.roomID = data.roomID, this.username = data.username, this.action = data.action, this.time = data.time, this.due = data.due;
+    this.msg_envelope = data.msg_envelope, this.roomID = data.roomID, this.username = data.username, this.userID = data.userID, this.action = data.action, this.time = data.time, this.due = data.due;
 
     if (this.time && !this.due) {
       this.time.replace(/^\s+|\s+$/g, '');
@@ -187,11 +188,14 @@ module.exports = function(robot) {
     let time = msg.match[4];
     let action = msg.match[5];
 
+    console.log(msg.envelope);
     let name = msg.envelope.user.name;
 
     if (who !== 'me') {
       name = who.replace('@', '');
     }
+
+    let user = _.reject(robot.brain.data.users, {name: name});
 
     options = {
       msg_envelope: msg.envelope,
@@ -199,8 +203,10 @@ module.exports = function(robot) {
       time: time,
       roomID: msg.envelope.user.roomID,
       room: msg.envelope.room,
-      username: name
+      username: name,
+      userID: user.id
     };
+
     if (type === 'on') {
       due = chrono.parseDate(time).getTime();
       if (due.toString() !== 'Invalid Date') {
