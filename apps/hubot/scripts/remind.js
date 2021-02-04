@@ -6,6 +6,7 @@
 //   hubot show reminders - Show active reminders
 //   hubot delete reminder owner: <username> action: <action> - Remove a given reminder, queried by the reminder message.
 //
+// TODO: clarify the delete reminder action because it looks like you should be able to type "make a coffee in 10 minutes" or whatever, which doesn't work.
 
 
 let _ = require('lodash');
@@ -64,6 +65,7 @@ let Reminders = (function() {
 
         reminder.msg_envelope.user.room = reminder.room;
         reminder.msg_envelope.user.roomID = reminder.roomID;
+        reminder.msg_envelope.user.username = reminder.username;
 
         _this.robot.reply(reminder.msg_envelope, 'reminder to ' + reminder.action);
         return _this.queue();
@@ -96,7 +98,7 @@ Reminder = (function() {
   function Reminder(data) {
     var matches, pattern, period, periods;
 
-    this.msg_envelope = data.msg_envelope, this.roomID = data.roomID, this.action = data.action, this.time = data.time, this.due = data.due;
+    this.msg_envelope = data.msg_envelope, this.roomID = data.roomID, this.username = data.username, this.action = data.action, this.time = data.time, this.due = data.due;
 
     if (this.time && !this.due) {
       this.time.replace(/^\s+|\s+$/g, '');
@@ -159,7 +161,7 @@ module.exports = function(robot) {
     let _ref = reminders.cache;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       reminder = _ref[_i];
-      text += reminder.msg_envelope.user.name + ": " + reminder.action + " " + reminder.formatDue() +  "\n";
+      text += reminder.username + ": " + reminder.action + " " + reminder.formatDue() +  "\n";
     }
     return msg.send(text);
   });
@@ -185,8 +187,6 @@ module.exports = function(robot) {
     let time = msg.match[4];
     let action = msg.match[5];
 
-    console.log(msg.envelope);
-
     if (who !== 'me') {
       msg.envelope.user.name = who.replace('@', '');
     }
@@ -194,7 +194,9 @@ module.exports = function(robot) {
       msg_envelope: msg.envelope,
       action: action,
       time: time,
-      roomID: msg.envelope.user.roomID
+      roomID: msg.envelope.user.roomID,
+      room: msg.envelope.room,
+      username: msg.envelope.user.name
     };
     if (type === 'on') {
       due = chrono.parseDate(time).getTime();
