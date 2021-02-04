@@ -14,7 +14,7 @@ oc new-project devops-sysdig --description='BC Gov DevOps Platform Sysdig Monito
 oc create serviceaccount sysdig-agent
 oc adm policy add-scc-to-user privileged -n devops-sysdig -z sysdig-agent
 oc adm policy add-cluster-role-to-user cluster-reader -n devops-sysdig -z sysdig-agent
-oc create secret docker-registry bcgov-docker-hub --docker-server=docker.io --docker-username=bcdevopscluster --docker-password=<your sysdig access key> --docker-email=unused
+oc create secret docker-registry bcgov-docker-hub --docker-server=docker.io --docker-username=bcdevopscluster --docker-password=<docker password> --docker-email=unused
 oc secrets link default bcgov-docker-hub --for=pull
 oc label node --all "sysdig-agent=true"
 
