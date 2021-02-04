@@ -1,5 +1,4 @@
 [
   "hubot-redis-brain",
-  "hubot-help",
-  "hubot-group"
+  "hubot-help"
 ]

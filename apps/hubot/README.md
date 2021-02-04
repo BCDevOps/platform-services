@@ -1,16 +1,4 @@
-# hubot-rocketchat-boilerplate
-Create and run a Rocket.Chat bot in under two minutes. 
-
-[hubot]: https://github.com/hubotio/hubot
-[hubot-rocketchat]: https://github.com/rocketchat/hubot-rocketchat
-[sdk]: https://github.com/rocketchat/Rocket.Chat.js.SDK
-[contributing]: https://rocket.chat/docs/contributing/developing/
-[issues]: https://github.com/RocketChat/hubot-rocketchat-boilerplate/issues
-[generator]: https://github.com/hubotio/generator-hubot
-[deployment]: https://hubot.github.com/docs/deploying/
-[dotenv]: https://www.npmjs.com/package/dotenv
-[newrepo]: https://help.github.com/articles/creating-a-new-repository/
-[env]: https://github.com/RocketChat/hubot-rocketchat#configuring-your-bot
+# BCBot
 
 ## Installing on BCGOV Openshift
 
