@@ -13,12 +13,14 @@ spec:
           annotations:
             vault.hashicorp.com/agent-inject: "true"
             vault.hashicorp.com/agent-inject-token: "true"
+            # pre-populate-only so that the init container terminates and oc cronjob reports COMPLETED
             vault.hashicorp.com/agent-pre-populate-only: "true"
             # vault.hashicorp.com/tls-secret: "vault-tls"
             # vault.hashicorp.com/ca-cert: "/vault/tls/vault.ca"
-            # vault.hashicorp.com/namespace: "platform-services"
             vault.hashicorp.com/auth-path: "auth/k8s-klab"
             vault.hashicorp.com/role: "backup"
+            # change Vault server address for injected init/sidercar container 
+            vault.hashicorp.com/service: "https://vault-lab.developer.gov.bc.ca"
         spec:
           concurrencyPolicy: Forbid
           containers:
