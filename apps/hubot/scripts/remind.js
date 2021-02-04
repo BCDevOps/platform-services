@@ -187,16 +187,19 @@ module.exports = function(robot) {
     let time = msg.match[4];
     let action = msg.match[5];
 
+    let name = msg.envelope.user.name;
+
     if (who !== 'me') {
-      msg.envelope.user.name = who.replace('@', '');
+      name = who.replace('@', '');
     }
+
     options = {
       msg_envelope: msg.envelope,
       action: action,
       time: time,
       roomID: msg.envelope.user.roomID,
       room: msg.envelope.room,
-      username: msg.envelope.user.name
+      username: name
     };
     if (type === 'on') {
       due = chrono.parseDate(time).getTime();
