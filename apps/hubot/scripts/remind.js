@@ -188,7 +188,6 @@ module.exports = function(robot) {
     let time = msg.match[4];
     let action = msg.match[5];
 
-    console.log(msg.envelope);
     let name = msg.envelope.user.name;
 
     if (who !== 'me') {
@@ -196,6 +195,7 @@ module.exports = function(robot) {
     }
 
     let user = _.reject(robot.brain.data.users, {name: name});
+    console.log(user);
 
     options = {
       msg_envelope: msg.envelope,
