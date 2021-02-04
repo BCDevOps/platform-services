@@ -4,7 +4,7 @@
 // Commands:
 //   hubot remind [me|<username>] ((in <number> [m|h|d]) | (on <date> [at <time>])) to <something to remind> - remind to do something on a given date/time or in X min/hours/days.
 //   hubot show reminders - Show active reminders
-//   hubot forget|rm reminder <message> - Remove a given reminder, queried by the reminder message.
+//   hubot delete reminder owner: <username> action: <action> - Remove a given reminder, queried by the reminder message.
 //
 
 
