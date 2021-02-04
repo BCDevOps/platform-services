@@ -65,8 +65,7 @@ let Reminders = (function() {
 
         reminder.msg_envelope.user.room = reminder.room;
         reminder.msg_envelope.user.roomID = reminder.roomID;
-        reminder.msg_envelope.user.username = reminder.username;
-        reminder.msg_envelope.user.id = reminder.userID;
+        reminder.msg_envelope.user.name = reminder.username;
 
         _this.robot.reply(reminder.msg_envelope, 'reminder to ' + reminder.action);
         return _this.queue();
