@@ -61,7 +61,6 @@ let Reminders = (function() {
     trigger = (function(_this) {
       return function() {
         let reminder = _this.removeFirst();
-        console.log(reminder.msg_envelope);
 
         // reminder.msg_envelope.user.room = reminder.room;
         // reminder.msg_envelope.user.roomID = reminder.roomID;
