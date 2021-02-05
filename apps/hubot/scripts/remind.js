@@ -63,11 +63,31 @@ let Reminders = (function() {
         let reminder = _this.removeFirst();
         console.log(reminder.msg_envelope);
 
-        reminder.msg_envelope.user.room = reminder.room;
-        reminder.msg_envelope.user.roomID = reminder.roomID;
-        reminder.msg_envelope.user.name = reminder.username;
+        // reminder.msg_envelope.user.room = reminder.room;
+        // reminder.msg_envelope.user.roomID = reminder.roomID;
+        // reminder.msg_envelope.user.name = reminder.username;
+        let envelope = {
+                          room: reminder.room,
+                          user: {
+                            name: reminder.username,
+                            roomID: reminder.roomID,
+                            room: reminder.room
+                          },
+                          message: {
+                            user: {
+                              name: reminder.username,
+                              roomID: reminder.roomID,
+                              room: reminder.room
+                            },
+                            done: false,
+                            room: reminder.room,
+                            text: reminder.msg_envelope.message.text,
+                            id: reminder.msg_envelope.message.id
+                          }
+                        };
 
-        _this.robot.reply(reminder.msg_envelope, 'reminder to ' + reminder.action);
+
+        _this.robot.send(envelope, '@' + reminder.username + ' - reminder to ' + reminder.action);
         return _this.queue();
       };
     })(this);
@@ -98,7 +118,12 @@ Reminder = (function() {
   function Reminder(data) {
     var matches, pattern, period, periods;
 
-    this.msg_envelope = data.msg_envelope, this.roomID = data.roomID, this.username = data.username, this.userID = data.userID, this.action = data.action, this.time = data.time, this.due = data.due;
+    this.msg_envelope = data.msg_envelope,
+        this.roomID = data.roomID,
+        this.username = data.username,
+        this.action = data.action,
+        this.time = data.time,
+        this.due = data.due;
 
     if (this.time && !this.due) {
       this.time.replace(/^\s+|\s+$/g, '');
@@ -121,7 +146,7 @@ Reminder = (function() {
         },
         seconds: {
           value: 0,
-          regex: "seconds?|secs?|s"
+          regex: "seconds?|secs?|sec|s"
         }
       };
       for (period in periods) {
@@ -193,9 +218,6 @@ module.exports = function(robot) {
       name = who.replace('@', '');
     }
 
-    let user = _.reject(robot.brain.data.users, {name: name});
-    console.log(user);
-
     options = {
       msg_envelope: msg.envelope,
       action: action,
@@ -203,7 +225,6 @@ module.exports = function(robot) {
       roomID: msg.envelope.user.roomID,
       room: msg.envelope.room,
       username: name,
-      userID: user.id
     };
 
     if (type === 'on') {

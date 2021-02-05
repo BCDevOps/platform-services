@@ -1,13 +1,13 @@
 
 
-  const enterReplies = ['Hi!', 'Welcome!', 'Hello friend!'];
-  const leaveReplies = ['See you later!'];
+const enterReplies = ['Hi!', 'Welcome!', 'Hello friend!'];
+const leaveReplies = ['See you later!'];
 
-  module.exports = function(robot) {
-    robot.enter(function(res) {
+module.exports = function(robot) {
+robot.enter(function(res) {
 
-    });
-    return robot.leave(function(res) {
+});
+return robot.leave(function(res) {
 
-    });
-  };
+});
+};
