@@ -19,33 +19,29 @@
   },
   "scripts": {
     "start": "bin/hubot -a rocketchat --name rocketbot",
-    "debug": "node --inspect --inspect-brk -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat",
     "shell": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a shell",
-    "local": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat",
-    "test:lint": "eslint --fix ./scripts/github.js"
+    "local": "node -r dotenv/config node_modules/hubot/bin/hubot.js -a rocketchat"
   },
   "dependencies": {
-    "base64-url": "^2.3.2",
-    "chrono-node": "^1.3.11",
-    "coffeescript": "^2.2.2",
+    "base64-url": "^2.3.3",
+    "chrono-node": "^1.4.8",
+    "coffeescript": "^2.5.1",
     "hubot": "3",
-    "hubot-group": "^1.8.2",
     "hubot-help": "^1.0.1",
     "hubot-mongodb-3-brain": "^0.1.2",
     "hubot-mongodb-brain": "^0.1.1",
     "hubot-redis-brain": "^1.0.0",
-    "hubot-remind": "^0.1.5",
     "hubot-rocketchat": "^2.0.0",
     "hubot-scripts": "^2.17.2",
-    "lodash": "^4.17.15",
-    "moment": "^2.24.0"
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "dotenv": "^5.0.1",
-    "eslint": "^6.5.1",
-    "eslint-config-prettier": "^6.4.0",
-    "eslint-plugin-prettier": "^3.1.1",
-    "prettier": "^1.18.2"
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^1.19.1"
   }
 }

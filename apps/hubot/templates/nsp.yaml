@@ -1,0 +1,33 @@
+---
+apiVersion: security.devops.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: egress-internet
+spec:
+  description: "allow namespace to talk to the internet."
+  source:
+    - - $namespace=6e2f55-prod
+  destination:
+    - - ext:network=any
+---
+apiVersion: security.devops.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: intra-namespace-comms
+spec:
+  description: "allow namespace to talk to itself"
+  source:
+    - - $namespace=6e2f55-prod
+  destination:
+    - - $namespace=6e2f55-prod
+---
+apiVersion: security.devops.gov.bc.ca/v1alpha1
+kind: NetworkSecurityPolicy
+metadata:
+  name: int-cluster-k8s-api-comms
+spec:
+  description: "allow pods to talk to the k8s api"
+  destination:
+  - - int:network=internal-cluster-api-endpoint
+  source:
+  - - $namespace=6e2f55-prod

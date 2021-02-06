@@ -1,0 +1,11 @@
+cluster:
+  enabled: false
+securityContext:
+  enabled: false
+containerSecurityContext:
+  enabled: false
+master:
+  persistence:
+    size: 1Gi
+configmap: |-
+  appendonly no

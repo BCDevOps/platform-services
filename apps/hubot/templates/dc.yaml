@@ -46,6 +46,12 @@ objects:
               cpu: '100m'
             limits:
               cpu: '150m'
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 60
+            timeoutSeconds: 10
           env:
           - name: ROCKETCHAT_PASSWORD
             valueFrom:
@@ -55,8 +61,8 @@ objects:
           - name: REDIS_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: redis
-                key: database-password
+                name: hubot-redis
+                key: redis-password
           - name: ROCKETCHAT_URL
             value: ${ROCKETCHAT_URL_VALUE}
           - name: ROCKETCHAT_USER
@@ -68,7 +74,7 @@ objects:
           - name: ROCKETCHAT_ROOM
             value: ${ROCKETCHAT_ROOM_VALUE}
           - name: REDIS_URL
-            value: 'redis://:$(REDIS_PASSWORD)@$(REDIS_SERVICE_HOST)'
+            value: redis://:$(REDIS_PASSWORD)@hubot-redis-master.${NAMESPACE}.svc.cluster.local
           - name: TZ
             value: America/Vancouver
           - name: HUBOT_LOG_LEVEL
@@ -82,7 +88,7 @@ objects:
         - hubot
         from:
           kind: ImageStreamTag
-          namespace: e5imao-tools
+          namespace: ${NAMESPACE}
           name: ${NAME}:${VERSION}
       type: ImageChange
 - apiVersion: v1
@@ -116,6 +122,11 @@ objects:
       weight: 100
     wildcardPolicy: None
 parameters:
+- description: Installation namespace
+  displayName: Namespace
+  name: NAMESPACE
+  required: true
+  value: 6e2f55-test
 - description: A name used for all objects
   displayName: Name
   name: NAME
