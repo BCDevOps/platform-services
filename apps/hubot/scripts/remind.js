@@ -6,7 +6,7 @@
 //   hubot show reminders - Show active reminders
 //   hubot delete reminder owner: <username> action: <action> - Remove a given reminder, queried by the reminder message.
 //
-// TODO: clarify the delete reminder action because it looks like you should be able to type "make a coffee in 10 minutes" or whatever, which doesn't work.
+//
 
 
 let _ = require('lodash');
