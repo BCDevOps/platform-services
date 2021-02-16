@@ -1,7 +1,7 @@
 ---
 cluster_name: silver
 aporeto_cluster_namespace: "/bcgov/platform-services/production/kamloops/{{ cluster_name }}"
-openshift_project_prefix: openshift-advsol-aporeto
+openshift_project_prefix: devops-security-aporeto
 aporeto_operator_cpu_limit: "4"
 aporeto_operator_memory_limit: "2048Mi"
 aporeto_enforcerd_config:
@@ -33,6 +33,12 @@ node_list:
 - mcs-silver-app-07.dmz
 - mcs-silver-app-08.dmz
 - mcs-silver-app-09.dmz
+- mcs-silver-app-10.dmz
+- mcs-silver-app-11.dmz
+- mcs-silver-app-12.dmz
+- mcs-silver-app-13.dmz
+- mcs-silver-app-14.dmz
+- mcs-silver-app-16.dmz
 - mcs-silver-app-36.dmz
 - mcs-silver-app-37.dmz
 - mcs-silver-app-38.dmz
@@ -42,6 +48,12 @@ node_list:
 - mcs-silver-app-42.dmz
 - mcs-silver-app-43.dmz
 - mcs-silver-app-44.dmz
+- mcs-silver-app-45.dmz
+- mcs-silver-app-46.dmz
+- mcs-silver-app-47.dmz
+- mcs-silver-app-48.dmz
+- mcs-silver-app-49.dmz
+- mcs-silver-app-50.dmz
 
 # # BCGov Operator Details
 # bcgov_networksecuritypolicy_operator_image: "docker-registry.default.svc:5000/devops-security-tools/networksecuritypolicy-operator:latest"
