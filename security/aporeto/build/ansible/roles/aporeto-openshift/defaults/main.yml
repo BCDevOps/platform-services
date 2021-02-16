@@ -3,4 +3,4 @@ aporeto_temp_token: "{{ lookup('env', 'APOCTL_TOKEN')}}"
 aporeto_helm_repo: https://charts.aporeto.com/releases/release-3.14.9/clients
 aporeto_enforcerd_activate_kube_pus: true
 aporeto_enforcerd_activate_openshift_pus: true
-openshift_project_prefix: openshift-aporeto
+openshift_project_prefix: devops-security-aporeto

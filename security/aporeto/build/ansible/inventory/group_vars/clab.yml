@@ -2,6 +2,7 @@
 cluster_name: clab
 aporeto_cluster_namespace: "/bcgov/platform-services/non-production/calgary/{{ cluster_name }}"
 openshift_project_prefix: devops-security-aporeto
+aporeto_helm_repo: https://charts.aporeto.com/releases/release-3.14.9/clients
 aporeto_operator_cpu_limit: "1"
 aporeto_operator_memory_limit: "512Mi"
 aporeto_enforcerd_config:
