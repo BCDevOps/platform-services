@@ -12,6 +12,8 @@ tags:
 - networksecuritypolicy
 ---
 
+**The Aporeto SDN has been replaced with Openshft 4 Built-In SDN Capability in all clusters of the BC Gov's Openshift 4.x Platform. Teams should now be using Kubernetes Network Policies instead of Aporeto Network Security Policies to implement network security in their namespaces. This page is now ARCHIVED.**
+
 # Developer Guide to Zero Trust Security Model on the Platform
 
 With the addition of new [security components](../readme.md) BCDevExchange's Platform Services is able to offer product teams the ability to operate in a Zero Trust security model; Zero Trust is a security model where you don't trust anything outside of your own components (pods), even pods don't trust each other!
