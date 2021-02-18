@@ -7,6 +7,9 @@ tags:
 - Developer Access
 
 ---
+
+**The Aporeto SDN has been replaced with Openshft 4 Built-In SDN Capability in all clusters of the BC Gov's Openshift 4.x Platform. Teams should now be using Kubernetes Network Policies instead of Aporeto Network Security Policies to implement network security in their namespaces. This page is now ARCHIVED.**
+
 # Developer Access to the Aporeto Console
 
 ## Introduction 
