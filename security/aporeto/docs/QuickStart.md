@@ -10,6 +10,9 @@ tags:
 - networksecuritypolicy
 ---
 
+
+**The Aporeto SDN has been replaced with Openshft 4 Built-In SDN Capability in all clusters of the BC Gov's Openshift 4.x Platform. Teams should now be using Kubernetes Network Policies instead of Aporeto Network Security Policies to implement network security in their namespaces. This page is now ARCHIVED.**
+
 # NetworkSecurityPolicy: Quick Start
 
 > ***NOTE:** For OCP3 Aporetto is not enforcing `NetworkSecurtyPolicy` (NSP) Objects.  You will see NSP object in your namespaces on OCP3.  The do nothing.*
