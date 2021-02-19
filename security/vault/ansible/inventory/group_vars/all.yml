@@ -1,7 +1,7 @@
 ---
 #ansible_python_interpreter: /usr/local/bin/python3.8
 ansible_python_interpreter: /usr/bin/python3
-vault_install_version: "1.6.0"
+vault_install_version: "1.6.2"
 
 # Path to consul (OSS) binary
 consul_binary: "{{ lookup('env', 'HOME') }}/bin/consul"

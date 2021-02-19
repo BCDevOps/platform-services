@@ -8,10 +8,11 @@
   hashivault_k8s_auth_role:
     name: "backup"
     # namespace: "platform-services"
-    mount_point: "k8s-klab"
+    mount_point: "k8s-{{ vault_enable_kubernetes_auth_cluster }}"
     policies: ["default","backup"]
     bound_service_account_names: ["default"]
-    bound_service_account_namespaces: ["devops-security-vault"]
+    bound_service_account_namespaces:
+    - openshift-bcgov-vault
   tags: k8srole
 
 - name: Generate Helm values file in working directory

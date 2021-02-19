@@ -1,0 +1,28 @@
+---
+# OpenShift Route FQDN to template Helm values file
+ocp_route_fqdn: "one.vault.developer.gov.bc.ca"
+
+# Vault config: Toggle to add fourth and fifth replica in retry_join stanza
+is_prod: True
+
+# Vault config: Toggle to add Azure Key Vault stanza 
+# when True define BASH environment vars:
+# AKV_CLIENT_ID
+# AKV_CLIENT_SECRET
+# AKV_TENANT_ID
+# AKV_VAULT_NAME
+# AKV_KEY_NAME
+has_akv: True
+
+# Vault namespace to be created
+vault_ns1: "platform-services"
+
+# used by role vault_install
+vault_install_ocp_namespace: "openshift-bcgov-vault"
+vault_install_replicas: 5 # has to be 5 for production
+
+# used by role vault_enable_kubernetes_auth
+vault_enable_kubernetes_auth_cluster: "silver"
+vault_enable_kubernetes_auth_host: "https://kubernetes.default.svc.cluster.local:443"
+vault_enable_kubernetes_auth_sa: "vault"
+vault_enable_kubernetes_auth_pod: "vault-0"
