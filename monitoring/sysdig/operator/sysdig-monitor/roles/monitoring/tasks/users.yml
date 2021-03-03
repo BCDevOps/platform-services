@@ -9,7 +9,7 @@
   set_fact: 
     user_data: "{{ item }}"
     user_exists: true
-  when: item.username == team_user.name
+  when: item.username|lower == team_user.name|lower
   with_items: 
     -  "{{ users_output.json.users }}"
 
