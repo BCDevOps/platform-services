@@ -5,7 +5,7 @@ This section describes how a new Vault consumer is onboarded through the project
 ## Introduction
 
 Before a new Vault consumer can be onboarded, certain objects must be created in Vault.
-The relevant Vault objects are a new Secrets Engine mount points, roles, and policies, see [structure-within-vault.md](./structure-within-vault.md).
+The relevant Vault objects are new Secrets Engine mount points, roles, and policies, see [structure-within-vault.md](./structure-within-vault.md).
 
 The premise is to automate this process.
 

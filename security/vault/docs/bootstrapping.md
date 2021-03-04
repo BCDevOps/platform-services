@@ -12,6 +12,10 @@ Set the Kubernetes namespace for Vault as an environment variable for convenienc
 following commands.
 
 ```bash
+# new (desired) name used in silver
+export NAMESPACE=openshift-bcgov-vault
+
+# klab (old) for reference only
 export NAMESPACE=devops-security-vault
 ```
 
@@ -34,6 +38,7 @@ Initial Root Token: s.4DVvqIlgfoGsb9vQLZvGW05S
 ```
 
 Now that Vault is initialized, we can continue with the unseal procedure in the next section.
+When using Auto-Unseal, Vault is automatically unsealed through, for example, Azure Key Vault.
 
 ## Unsealing Vault
 
@@ -65,11 +70,15 @@ HA Enabled               true
 
 ## Joining Pods to the Vault Cluster
 
-The currently only unsealed Vault pod is becoming the cluster leader within seconds. Once this occurred,
+The first unsealed Vault pod becomes the cluster leader within seconds. Once this occurred,
 the remaining Vault pods can join the cluster as follows.
+
+The commands below are to demonstrate the process.
+Other Vault pods in the StatefulSet will automatically join the leader by specifying `retry_join` in the `vault.hcl` configuration file.
 
 ```bash
 export NAMESPACE=devops-security-vault
+export NAMESPACE=openshift-bcgov-vault
 
 kubectl exec -ti vault-1 -n ${NAMESPACE} --  vault operator raft join -leader-ca-cert="$(cat ./tls/vault.ca)" --address "https://vault-1.vault-internal:8200" "https://vault-0.vault-internal:8200"
 

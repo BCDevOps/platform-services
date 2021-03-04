@@ -19,7 +19,7 @@ Ansible role variables are listed below, along with default values (see `default
 vault_enable_kubernetes_auth_helm_repo_url: "https://helm.releases.hashicorp.com"
 vault_enable_kubernetes_auth_chart_version: "0.8.0"
 vault_enable_kubernetes_auth_chart_values: "values-minimal.yaml"
-vault_enable_kubernetes_auth_ocp_namespace: "devops-security-vault"
+vault_enable_kubernetes_auth_ocp_namespace: "openshift-bcgov-vault"
 
 vault_enable_kubernetes_auth_working_dir: "/tmp/vault_enable_kubernetes_auth/"
 ```
@@ -57,9 +57,11 @@ localhost ansible_connection=local
 
 ```yaml
 ---
-- name: Install Vault cluster
+- name: Enable Vault Kubernetes Auth 
   hosts: all
-  gather_facts: false
+  gather_facts: true
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ lookup('env','HOME') }}/bin"
 
   roles:
   - vault_enable_kubernetes_auth
@@ -68,15 +70,8 @@ localhost ansible_connection=local
 Always include a `-v` for more verbose output when running `ansible-playbook`. This ensures diagnostic
 output is printed on standard out.
 
-Execute the playbook without building the cluster:
+Execute the playbook:
 
 ```bash
-ansible-playbook -i inventory/lab playbooks/vault_enable_kubernetes_auth.yml --skip-tags build -v
+ansible-playbook -i inventory/lab playbooks/02-post_install_enable_kubernetes_auth.yml -v
 ```
-
-Execute the playbook for a full cluster build:
-
-```bash
-ansible-playbook -i inventory/lab playbooks/vault_enable_kubernetes_auth.yml -v
-```
-

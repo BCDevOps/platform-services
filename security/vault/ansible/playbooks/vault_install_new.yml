@@ -1,12 +1,4 @@
-# New Play
-#- name: Vault - Download Consul OSS binary for CA and server certificate creation
-#  hosts: all
-#  gather_facts: True
-#
-#  roles:
-#  - get_consul_binary
-
-# New Play
+---
 - name: Vault - Generate CA and server certificate with Consul binary
   hosts: all
   gather_facts: True # for environment PATH
@@ -56,11 +48,9 @@
           --from-file=vault.crt={{ dir_consul_certs }}/dc1-server-consul-0.pem
           --from-file=vault.ca={{ dir_consul_certs }}/consul-agent-ca.pem
 
-# New Play
 - name: Install Vault cluster
   hosts: all
   gather_facts: True # for sed and gsed (MacOS) detection
 
   roles:
   - vault_install
-

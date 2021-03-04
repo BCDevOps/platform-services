@@ -13,19 +13,27 @@ Inside the `spec:` change these sections accordingly.
 
 The `host:` line specifies the fully qualified domain name for the OpenShift route.
 
+The `caCertificate:` is the CA certificate that issued the external certificate (Entrust CA).
+
 The `certificate:` and `key:` sections are for the externally reachable part of the OpenShift route
 issued by a public certificate authority (CA).
 
-The `destinationCACertificate:` section is the manually self-created CA that signs the server
+The `destinationCACertificate:` section is the manually self-created CA (e.g., created with `consul` binary) that signs the server
 certificates used by the Vault pods.
 
 ```yaml
 ...
+spec:
   host: <Insert_FQDN>
+  port:
+    targetPort: 8200
 ...
   tls:
     termination: reencrypt
     insecureEdgeTerminationPolicy: Redirect
+    caCertificate: |-
+      -----BEGIN CERTIFICATE-----
+      -----END CERTIFICATE-----
     certificate: |-
       -----BEGIN CERTIFICATE-----
       -----END CERTIFICATE-----
@@ -35,6 +43,11 @@ certificates used by the Vault pods.
     destinationCACertificate: |-
       -----BEGIN CERTIFICATE-----
       -----END CERTIFICATE-----
+  to:
+    kind: Service
+    name: vault-active
+    weight: 100
+  wildcardPolicy: None
 ...
 ```
 

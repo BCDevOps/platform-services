@@ -6,7 +6,7 @@ vault_prepare_for_terraform_approle_role_name: "terraform"
 vault_prepare_for_terraform_approle_policies: "default,policyadmin,namespaceadmin"
 
 # Vault AppRole SecretID number of uses (0 means infinite)
-vault_prepare_for_terraform_approle_sid_uses: "1"
+vault_prepare_for_terraform_approle_sid_uses: "3"
 
 # Vault Token TTL for the AppRole issued Vault Token
 vault_prepare_for_terraform_token_ttl: "5m" # 5m

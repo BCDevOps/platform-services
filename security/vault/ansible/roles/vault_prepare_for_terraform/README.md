@@ -1,7 +1,6 @@
 # Ansible Role: vault_prepare_for_terraform
 
-Runs a Vault cluster installation.
-See [TODO section](#todo) at the end.
+Set up Vault with AppRole and appropriate policies.
 
 ## Requirements
 
@@ -15,31 +14,27 @@ See [TODO section](#todo) at the end.
 Ansible role variables are listed below, along with default values (see `defaults/main.yml`).
 
 ```yaml
-vault_install_helm_repo_url: "https://helm.releases.hashicorp.com"
-vault_install_chart_version: "0.8.0"
-vault_install_chart_values: "values-minimal.yaml"
-vault_install_ocp_namespace: "devops-security-vault"
+# Vault AppRole Role name used by Terraform
+vault_prepare_for_terraform_approle_role_name: "terraform"
 
-vault_install_working_dir: "/tmp/vault_install/"
+# Vault policies attached to the AppRole used by Terraform
+vault_prepare_for_terraform_approle_policies: "default,policyadmin,namespaceadmin"
+
+# Vault AppRole SecretID number of uses (0 means infinite)
+vault_prepare_for_terraform_approle_sid_uses: "3"
+
+# Vault Token TTL for the AppRole issued Vault Token
+vault_prepare_for_terraform_token_ttl: "5m" # 5m
+
+# Vault Token MaxTTL for the AppRole issued Vault Token
+vault_prepare_for_terraform_token_max_ttl: "10m" # 10m
+
+# Certificate verification toggle
+vault_prepare_for_terraform_verify: False
+
+# Vault Namespace to create
+vault_prepare_for_terraform_ns1: "platform-services"
 ```
-
-```yaml
-vault_install_helm_repo_url: "https://helm.releases.hashicorp.com"
-```
-
-The helm repository URL.
-
-```yaml
-vault_install_chart_version: "0.8.0"
-```
-
-Helm Chart version.
-
-```yaml
-vault_install_chart_values: "values-minimal.yaml"
-```
-
-YAML file containing override values for the Helm Chart.
 
 ## Dependencies
 
@@ -56,40 +51,19 @@ localhost ansible_connection=local
 
 ```yaml
 ---
-- name: Install Vault cluster
+- name: Prepare Vault for future configuration via Terraform with AppRole
   hosts: all
-  gather_facts: false
+  gather_facts: True # required for assert module to check shell environment variables
 
   roles:
-  - vault_install
+  - vault_prepare_for_terraform
 ```
 
 Always include a `-v` for more verbose output when running `ansible-playbook`. This ensures diagnostic
 output is printed on standard out.
 
-Execute the playbook without building the cluster:
+Execute the playbook:
 
 ```bash
-ansible-playbook -i inventory/lab playbooks/vault_install.yml --skip-tags -v
+ansible-playbook -i inventory/lab playbooks/01-post_install_prepare_for_terraform.yml -v
 ```
-
-Execute the playbook for a full cluster build:
-
-```bash
-ansible-playbook -i inventory/lab playbooks/vault_install.yml -v
-```
-
-## TODO
-
-**TODO** The Ansible hashivault_ modules try to find files in the playbooks directory versus the role.
-
-Workaround:
-
-```bash
-cd playbooks/
-cp ../roles/vault_prepare_for_terraform/files/* .
-cd ..
-
-# run the playbook again
-```
-

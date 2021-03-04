@@ -1,5 +1,8 @@
 # Use-Case 1 Multi-Tenancy with Namespaces <!-- omit in toc -->
 
+**Note:** This is not deployed at BCgov. The main Vault namespace is called `platform-services`.
+However, there is educational material here, especially under [Day2-Operations](#day-2-operations)
+
 ## Table of contents <!-- omit in toc -->
 
 - [Introduction](#introduction)
