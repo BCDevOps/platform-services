@@ -9,7 +9,7 @@ tags:
 title: OpenShift User Guide to Creating and Using a Sysdig Team for Monitoring
 ---
 # EARLY ACCESS FEATURE
-This feature is in Early Access mode with specific teams that have been selected for testing and feeback contribution. 
+This feature is in Early Access mode with specific teams that have been selected for testing and feedback contribution. 
 For those teams, please provide feedback in the Rocket.Chat `#devops-sysdig` channel.
 This documentation does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.  
 
@@ -22,11 +22,12 @@ The Sysdig Teams Operator that is running in the cluster enables a team to creat
 ## The Sysdig Team Custom Resource
 In order to create a Sysdig Team; 
 - Create a Custom Resource in your project *Tools* namespace 
-- Create a an access control list within the Custom Resource that identifies users by the email address that is registered in KeyCloak
+- Create a an access control list within the Custom Resource that *identifies users by the ***email address*** that is registered in KeyCloak*
   - *Note* Only GitHub ID's are currently configured in this realm
 - Upon creating the CR, **TWO** teams will be created; 
-  - **[license-plate]-team** - All Kubernetes realted objects can be monitored here, with the exception of persistent volume claim utilization. 
-  - **[license-plate]-team-persistent storage** - Persistent Volume Claim utilization can be monitored here. 
+  - **[license-plate]-team** - All Kubernetes related objects can be monitored here, with the exception of persistent volume claim metrics. 
+  - **[license-plate]-team-persistent-storage** - Persistent Volume Claim utilization can be monitored here. 
+  - *Note* PVC metrics are now scraped from kubelet services which is not longer available from `kubernetes.*` scope
 
 The following sample custom resource can be used for reference; 
 
@@ -56,7 +57,7 @@ The following roles are available for use:
 - **ROLE_TEAM_READ (View-only User)** - Read access to the environment within team scope, but cannot create, edit, or delete dashboards, alerts, or other content.
 - **ROLE_TEAM_MANAGER (Team Manager)** - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions.
 
-**Note** Role Updates should be applied to the CR, and **NOT** in the Sysdig Monitor UI. Reconcilliation of the SysdigTeams Operator will overwrite any UI changes to the team roles. 
+**Note** Role Updates should be applied to the CR, and **NOT** in the Sysdig Monitor UI. Reconciliation of the SysdigTeams Operator will overwrite any UI changes to the team roles. 
 
 ### Creating the Sysdig Team
 - Using `oc apply` with the above example custom resource yaml in your `-tools` namespace, the Sysdig Team will be created by the operator as outlined in the below example; 
@@ -114,7 +115,7 @@ The following roles are available for use:
 ## Logging Into A Sysdig Team
 In order to access the Sysdig Monitor application and your team resources: 
 - Navigate to the BCDevOps Sysdig Monitor URL [https://app.sysdigcloud.com/api/oauth/openid/bcdevops](https://app.sysdigcloud.com/api/oauth/openid/bcdevops)
-  - Alternatively, navitage to [https://app.sysdigcloud.com](https://app.sysdigcloud.com), select OpenID, and type in `BCDevOps` as the company
+  - Alternatively, navigate to [https://app.sysdigcloud.com](https://app.sysdigcloud.com), select OpenID, and type in `BCDevOps` as the company
 - Upon login, you will be presented with a default page. You may be directed to the **Catchall Team** which has access to no resources
 - Navigate to the bottom left hand of the page to switch your team
 ![](assets/sysdigteams_switch.png)
@@ -141,7 +142,7 @@ In order to access the Sysdig Monitor application and your team resources:
 Currently Alert Channels can be created manually through the Sysdig Monitor UI. 
 
 ### Creating a Rocket.Chat Alert Channel
-The following walkthrough provides a sample for integrating Sysdig Alerts with Rocket.Chat. Both Sysdig Monitor and Rocket.Chat require configurations. 
+The following walk through provides a sample for integrating Sysdig Alerts with Rocket.Chat. Both Sysdig Monitor and Rocket.Chat require configurations. 
 - Sysdig Monitor will create a **Webhook** notification channel
 - Rocket.Chat will create an **incoming webhook** with a custom script
 
@@ -202,7 +203,7 @@ class Script {
 - Input the webhook URL generated from RocketChat and configure the notification channel
 ![](assets/sysdigteams_nc_webhook_config.png)
 
-- Select Save and either navigate to the `Alerts` section on the left hand navigation bar, or start adding custom alerts to any of your configured dasboards. 
+- Select Save and either navigate to the `Alerts` section on the left hand navigation bar, or start adding custom alerts to any of your configured dashboards. 
 ![](assets/sysdigteams_add_alert_to_panel.png)
 ![](assets/sysdigteams_sample_alert.png)
 
