@@ -18,6 +18,9 @@ git clone https://github.com/openshift-scale/cerberus /root/cerberus && \
 mkdir -p /root/.kube && cd /root/cerberus && \
 pip3 install -r requirements.txt
 
+# get rid of the need for privileged user:
+RUN chmod +x /root/cerberus
+
 WORKDIR /root/cerberus
 
 ENTRYPOINT python3 start_cerberus.py --config=config/config.yaml
