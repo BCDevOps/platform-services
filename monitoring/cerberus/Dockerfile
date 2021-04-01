@@ -19,7 +19,7 @@ mkdir -p /root/.kube && cd /root/cerberus && \
 pip3 install -r requirements.txt
 
 # get rid of the need for privileged user:
-RUN chmod +x /root/cerberus
+RUN touch /root/cerberus/cerberus.report && chmod +x /root/cerberus/cerberus.report
 
 WORKDIR /root/cerberus
 
