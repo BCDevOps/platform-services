@@ -1,0 +1,32 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: cerberus
+  labels:
+    app: cerberus
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: cerberus
+  name: cerberus
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: cerberus:latest
+  source:
+    contextDir: monitoring/cerberus
+    git:
+      ref: cerberus-monitoring
+      # ref: master
+      uri: https://github.com/BCDevOps/platform-services
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: centos:7
+    type: Docker
