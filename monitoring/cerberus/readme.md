@@ -14,7 +14,7 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
 ### TODO:
 - turn into CCM
 - update `quay.io/openshift/origin-tests:latest` tag
-- update Dockerfile to take in custom checks
+- work on dc and configmaps for custom checks
 
 ### Build and Deploy Cerberus
 
