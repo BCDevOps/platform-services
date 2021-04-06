@@ -11,6 +11,8 @@ title: Next Gen Application Security Project Overview
 ---
 **Next Gen Application Security Project**
 
+**The Next Gen Application Security Project has come to its end with the set of security tools that have been ideentified for the BC Gov's Openshift Platform, been implemented as part of the Openshift 4 Platform Build-Out. This page is now archived.**
+
 **The B I G Idea**
 
 ![raccon](aporeto/docs/assets/racoon.png)

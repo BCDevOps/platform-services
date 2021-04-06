@@ -121,7 +121,7 @@ See the [`samples` file](./sample/quickstart-nsp.yaml) accompanying these instru
 The Kubernetes has an internal API that your environment needs to communicate with to run deployments and for other internal mechanics to work. Change the source namespace in the sample below and apply it.
 
 ```yaml
-apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+apiVersion: security.devops.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
   name: custom-pods-to-k8s-api-[APP_NAME]
@@ -142,7 +142,7 @@ This sample policy is used to allow pods to communicate within a given namespace
 * API to Database
 
 ```yaml
-apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+apiVersion: security.devops.gov.bc.ca/v1alpha1
 kind: NetworkSecurityPolicy
 metadata:
   name: custom-web2api-permit-[APP_NAME]
@@ -167,7 +167,7 @@ The sample below allows the Web pod(s) to accept connections to from the Interne
 
 ```yaml
 kind: NetworkSecurityPolicy
-apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+apiVersion: security.devops.gov.bc.ca/v1alpha1
 metadata:
   name: custom-external-ingress-[APP_NAME]
 spec:
@@ -193,7 +193,7 @@ The sample below allows the API pod(s) to open connections to any system on the 
 
 ```yaml
 kind: NetworkSecurityPolicy
-apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+apiVersion: security.devops.gov.bc.ca/v1alpha1
 metadata:
   name: custom-internal-egress-[APP_NAME]
 spec:
@@ -219,7 +219,7 @@ The sample below allows the API pod(s) to open connections to a specific pod(s) 
 
 ```yaml
 kind: NetworkSecurityPolicy
-apiVersion: secops.pathfinder.gov.bc.ca/v1alpha1
+apiVersion: security.devops.gov.bc.ca/v1alpha1
 metadata:
   name: custom-ns2ns-comms-[APP_NAME]
 spec:

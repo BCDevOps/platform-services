@@ -1,24 +1,12 @@
-# hubot-rocketchat-boilerplate
-Create and run a Rocket.Chat bot in under two minutes. 
-
-[hubot]: https://github.com/hubotio/hubot
-[hubot-rocketchat]: https://github.com/rocketchat/hubot-rocketchat
-[sdk]: https://github.com/rocketchat/Rocket.Chat.js.SDK
-[contributing]: https://rocket.chat/docs/contributing/developing/
-[issues]: https://github.com/RocketChat/hubot-rocketchat-boilerplate/issues
-[generator]: https://github.com/hubotio/generator-hubot
-[deployment]: https://hubot.github.com/docs/deploying/
-[dotenv]: https://www.npmjs.com/package/dotenv
-[newrepo]: https://help.github.com/articles/creating-a-new-repository/
-[env]: https://github.com/RocketChat/hubot-rocketchat#configuring-your-bot
+# BCBot
 
 ## Installing on BCGOV Openshift
 
-1. Create a redis deployment from a standard template and save the password as a secret with the name "redis" and the key "database-password" (these are the standard values from the base redis template) - the password must not have symbols!
-2. Create Hubot user on rocket.chat (if one doesn't exist already)
-3. Create a secret containing the password of Hubot's rocket.chat account (if one doesn't exist already) with the name "rocketchat-bot-account-password" and the key "BOT_PASSWORD"
-4. Use bc.yaml to create a build
-5. Deploy with dc.yaml
+1. Create a redis deployment from a standard template: `helm install hubot-redis bitnami/redis -f redis-helm-values.yaml`
+1. Create Hubot user on rocket.chat (if one doesn't exist already)
+1. Create a secret containing the password of Hubot's rocket.chat account (if one doesn't exist already) with the name "rocketchat-bot-account-password" and the key "BOT_PASSWORD"
+1. Use bc.yaml to create a build: `oc process -f bc.yaml --param-file=test.env --ignore-unknown-parameters | oc apply -f -`
+1. Deploy with dc.yaml: `oc process -f dc.yaml --param-file=test.env --ignore-unknown-parameters | oc apply -f -`
 
 ## Quick Start
 

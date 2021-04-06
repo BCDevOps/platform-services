@@ -10,7 +10,12 @@ tags:
 - networksecuritypolicy
 ---
 
+
+**The Aporeto SDN has been replaced with Openshft 4 Built-In SDN Capability in all clusters of the BC Gov's Openshift 4.x Platform. Teams should now be using Kubernetes Network Policies instead of Aporeto Network Security Policies to implement network security in their namespaces. This page is now ARCHIVED.**
+
 # NetworkSecurityPolicy: Quick Start
+
+> ***NOTE:** For OCP3 Aporetto is not enforcing `NetworkSecurtyPolicy` (NSP) Objects.  You will see NSP object in your namespaces on OCP3.  The do nothing.*
 
 ## Introduction
 
@@ -45,7 +50,7 @@ The sections below will guide you through adding network security policies to yo
 * Allow all Pods to talk to one another within a namespace;
 * Allow your namespace to talk to the OpenShift Container Platform (OCP) API.
 
-These 3 base policies combined allow application deployed to Openshift 3.11 Platform to keep the same communication open as it was prior to the enablement of the Zero-Trust Security Model on the Platform.
+These 3 base policies combined allow applications deployed to Openshift 3.11 Platform to keep the same communication open as it was prior to activation of the Zero-Trust Security Model on the Platform.
 
 Sample configuration to enable the 3 above mentioned policies can be found in the [quickstart-nsp.yaml](./sample/quickstart-nsp.yaml) file in [samples](./sample) directory accompanying this document. Samples of other network security policies can be found [here](./CustomPolicy.md).
 

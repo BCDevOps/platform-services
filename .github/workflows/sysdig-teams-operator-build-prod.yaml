@@ -1,0 +1,36 @@
+name: sysdig-teams-operator-build-pathfinder
+on:
+  push:
+    branches: 
+    - 'master'
+    paths: 
+    - 'monitoring/sysdig/operator/sysdig-monitor/**'
+    - '.github/workflows/sysdig-teams-operator-build-prod.yaml'
+ 
+jobs:
+  build: 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get the current branch name
+      shell: bash
+      run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+      id: branchref
+    - uses: actions/checkout@v1
+      with:
+        ref: ${{ github.ref }}
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    - name: Build the tagged Docker image
+      run: cd monitoring/sysdig/operator/sysdig-monitor && docker build . --file Dockerfile --tag bcdevopscluster/sysdig-teams-operator:prod
+    - name: Push the tagged Docker image
+      run: docker push bcdevopscluster/sysdig-teams-operator:prod
+    # - name: OpenShift Action
+    #   uses: redhat-developer/openshift-actions@v1.1
+    #   with:
+    #     version: '4.6'
+    #     openshift_server_url: ${{ secrets.SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
+    #     parameters: '{"apitoken": "${{ secrets.SYSDIG_OPERATOR_SA_TOKEN }}"}'
+    #     cmd: |
+    #       'project ${{ secrets.SYSDIG_OPERATOR_PROJECT }}'
+    #       'delete is,bc -l build=gh-actions'
+    #       'new-build https://github.com/BCDevOps/platform-services#${{ steps.branchref.outputs.branch }} --context-dir=monitoring/sysdig/operator/sysdig-monitor --name sysdig-monitor-operator -l build=gh-actions'
