@@ -15,7 +15,7 @@ spec:
       labels:
         tool: Cerberus
     spec:
-      # serviceAccountName: cerberus
+      serviceAccountName: cerberus
       containers:
         - name: cerberus
           imagePullPolicy: Always

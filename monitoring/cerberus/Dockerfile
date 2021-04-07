@@ -6,7 +6,7 @@ FROM centos:7
 
 MAINTAINER Red Hat OpenShift Performance and Scale
 
-ENV KUBECONFIG /root/.kube/config
+# ENV KUBECONFIG /root/.kube/config
 
 # Copy OpenShift CLI, Kubernetes CLI from origin-tests image
 COPY --from=origintests /usr/bin/oc /usr/bin/oc
