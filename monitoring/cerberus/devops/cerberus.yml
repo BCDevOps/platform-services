@@ -28,7 +28,8 @@ spec:
           ports:
             - containerPort: 8080
           volumeMounts:
-            - mountPath: "/root/.kube"
+            # default path for ~/.kube/config
+            - mountPath: "/.kube"
               name: config
             - mountPath: "/root/cerberus/config"
               name: cerberus-config
