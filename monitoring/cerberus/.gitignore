@@ -1,2 +1,5 @@
 # ignore kube cofig file
 config/config
+
+# ignore local entitlement secret and config for build:
+entitlement.yaml
