@@ -1,14 +1,28 @@
 ---
 apiVersion: v1
-imagePullSecrets:
-- name: cerberus-dockercfg-jn7ck
 kind: ServiceAccount
 metadata:
   name: cerberus
   labels:
     app: cerberus
-  namespace: openshift-monitoring
+  namespace: shellyxuehan-dev
 ---
+# image pull:
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: system:image-puller
+  namespace: shellyxuehan-dev
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:image-puller
+subjects:
+- kind: ServiceAccount
+  name: cerberus
+  namespace: shellyxuehan-dev
+---
+# need Prometheus token from openshift-monitoring
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
@@ -20,12 +34,12 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - serviceaccounts
+  # - serviceaccounts
   - secrets
   verbs:
   - get
   - list
-  - patch
+  # - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -38,18 +52,20 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: cerberus-role
+  namespace: openshift-monitoring
 subjects:
 - kind: ServiceAccount
   name: cerberus
-  namespace: openshift-monitoring
+  namespace: shellyxuehan-dev
 ---
+# cluster read
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: cerberus-cluster-reader
   labels:
     app: cerberus
-  namespace: openshift-monitoring
+  namespace: shellyxuehan-dev
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -57,4 +73,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: cerberus
-  namespace: openshift-monitoring
+  namespace: shellyxuehan-dev
