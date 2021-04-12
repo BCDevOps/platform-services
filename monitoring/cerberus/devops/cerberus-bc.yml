@@ -13,20 +13,35 @@ metadata:
     app: cerberus
   name: cerberus
 spec:
+  resources:
+    limits:
+      cpu: '1'
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   output:
     to:
       kind: ImageStreamTag
       name: cerberus:latest
   source:
+    secrets:
+    - secret:
+        name: platform-services-controlled-etc-pki-entitlement
+      destinationDir: etc-pki-entitlement
+    configMaps:
+    - configMap:
+        name: platform-services-controlled-rhsm-ca
+      destinationDir: rhsm-ca
+    - configMap:
+        name: platform-services-controlled-rhsm-conf
+      destinationDir: rhsm-conf
     contextDir: monitoring/cerberus
     git:
-      ref: cerberus-monitoring
-      # ref: master
+      ref: master
       uri: https://github.com/BCDevOps/platform-services
     type: Git
   strategy:
-    dockerStrategy:
-      from:
-        kind: ImageStreamTag
-        name: centos:7
     type: Docker
+    dockerStrategy:
+      imageOptimizationPolicy: SkipLayers
