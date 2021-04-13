@@ -5,72 +5,67 @@ metadata:
   name: cerberus
   labels:
     app: cerberus
-  namespace: shellyxuehan-dev
+  namespace: openshift-bcgov-cerberus
 ---
-# image pull:
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRole
 metadata:
-  name: system:image-puller
-  namespace: shellyxuehan-dev
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: system:image-puller
-subjects:
-- kind: ServiceAccount
-  name: cerberus
-  namespace: shellyxuehan-dev
----
-# need Prometheus token from openshift-monitoring
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: cerberus-role
-  labels:
-    app: cerberus
-  namespace: openshift-monitoring
+  name: cerberus-cluster-reader
 rules:
 - apiGroups:
   - ""
   resources:
-  # - serviceaccounts
-  - secrets
+  - nodes
+  - namespaces
+  - pods
+  - services
   verbs:
   - get
   - list
-  # - patch
+  - watch
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - apiservers
+  - clusterversions
+  - clusteroperators
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - ""
+  - route.openshift.io
+  resources:
+  - routes
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - apiregistration.k8s.io
+  resources:
+  - apiservices
+  - apiservices/status
+  verbs:
+  - get
+  - list
+  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: cerberus-rolebinding
-  labels:
-    app: cerberus
-  namespace: openshift-monitoring
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: cerberus-role
-  namespace: openshift-monitoring
-subjects:
-- kind: ServiceAccount
-  name: cerberus
-  namespace: shellyxuehan-dev
----
-# cluster read
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding  
 metadata:
   name: cerberus-cluster-reader
-  labels:
-    app: cerberus
-  namespace: shellyxuehan-dev
 roleRef:
-  apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: cluster-reader
+  name: cerberus-cluster-reader
+  apiGroup: rbac.authorization.k8s.io
 subjects:
 - kind: ServiceAccount
   name: cerberus
-  namespace: shellyxuehan-dev
+  namespace: openshift-bcgov-cerberus
