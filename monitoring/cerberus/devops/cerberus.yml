@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cerberus-deployment
+  namespace: openshift-bcgov-cerberus
+  labels:
+    app: cerberus
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      tool: Cerberus
+  template:
+    metadata:
+      labels:
+        tool: Cerberus
+    spec:
+      serviceAccountName: cerberus
+      containers:
+        - name: cerberus
+          imagePullPolicy: Always
+          # NOTE: Dockerfile changes filesystem permission for monitoring output storage. otherwise we'll need to use privileged account
+          # securityContext:
+          #   privileged: true
+          image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
+          command: ["/bin/sh", "-c"]
+          args: ["python3 start_cerberus.py -c config/config.yaml"]
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            # default path for ~/.kube/config
+            - mountPath: "/.kube"
+              name: config
+            - mountPath: "/root/cerberus/config"
+              name: cerberus-config
+      volumes:
+        - name: config
+          configMap:
+            name: kube-config
+        - name: cerberus-config
+          configMap:
+            name: cerberus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cerberus-service
+  namespace: openshift-bcgov-cerberus
+  labels:
+    app: cerberus
+spec:
+  type: NodePort
+  selector:
+    tool: Cerberus
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30000
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: cerberus-service
+  namespace: openshift-bcgov-cerberus
+  labels:
+    app: cerberus
+spec:
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: cerberus-service
+    weight: 100
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
