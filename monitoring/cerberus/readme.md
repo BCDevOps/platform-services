@@ -12,19 +12,19 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
   - etcdHighNumberOfLeaderChanges
 
 ### TODO:
-- turn into CCM
-- update `quay.io/openshift/origin-tests:latest` tag
+- turn into CCM and create template for configs
 - work on dc and configmaps for custom checks
 
 ### Build and Deploy Cerberus
 
 ```shell
-# create a Service Account with cluster-read:
-oc -n openshift-monitoring create -f ./devops/cerberus-sa.yml
+# expected namespace for cerberus build and deploy to be openshift-bcgov-cerberus
+# create a Service Account with custom cluster-reader and rolebinding:
+oc -n [namespace] create -f ./devops/cerberus-sa.yml
 
 # get the kube-config locally from the Service Account:
 # NOTE: we need the token for kubernetes client.CoreV1Api() authorization
-oc -n openshift-monitoring serviceaccounts create-kubeconfig cerberus > config/config
+oc -n [namespace] serviceaccounts create-kubeconfig cerberus > config/config
 
 # create configmaps:
 oc -n [namespace] create configmap kube-config --from-file=./config/config
@@ -40,6 +40,7 @@ oc -n [namespace] create -f ./devops/cerberus.yml
 ### Get Cerberus Monitoring Result:
 ```shell
 # Poke the exposed endpoint -> should get TRUE
+oc -n [namespace] get route cerberus-service
 curl -i <cerberus_url>
 
 # get monitoring statistics:
@@ -50,8 +51,8 @@ curl -i <cerberus_url>/analyze
 ### Troubleshooting:
 ```shell
 # Prometheus Requests failures:
-# 1. test if SA has access to obtain prometheus token:
-oc -n openshift-monitoring sa get-token prometheus-k8s
+# 1. get the token from SA (prometheus okay with SA that can list namespaces):
+oc -n [namespace] sa get-token cerberus
 # 2. then use the token to test query prometheus
 
 # cerberus statistics not returning:

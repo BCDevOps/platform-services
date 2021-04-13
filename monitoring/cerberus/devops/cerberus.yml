@@ -22,7 +22,7 @@ spec:
           # NOTE: Dockerfile changes filesystem permission for monitoring output storage. otherwise we'll need to use privileged account
           # securityContext:
           #   privileged: true
-          image: image-registry.openshift-image-registry.svc:5000/shellyxuehan-dev/cerberus:latest
+          image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
           command: ["/bin/sh", "-c"]
           args: ["python3 start_cerberus.py -c config/config.yaml"]
           ports:
