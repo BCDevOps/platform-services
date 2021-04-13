@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cerberus-deployment
+  namespace: openshift-bcgov-cerberus
   labels:
     app: cerberus
 spec:
@@ -45,6 +46,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cerberus-service
+  namespace: openshift-bcgov-cerberus
   labels:
     app: cerberus
 spec:
@@ -60,6 +62,7 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: cerberus-service
+  namespace: openshift-bcgov-cerberus
   labels:
     app: cerberus
 spec:
