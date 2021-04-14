@@ -13,7 +13,7 @@ COPY ./etc-pki-entitlement /etc/pki/entitlement
 COPY ./rhsm-conf /etc/rhsm
 COPY ./rhsm-ca /etc/rhsm/ca
 
-RUN INSTALL_PKGS="git python36 python3-pip gcc python3-devel" && \
+RUN INSTALL_PKGS="python36 python3-pip gcc python3-devel" && \
     # Initialize /etc/yum.repos.d/redhat.repo
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
@@ -27,11 +27,11 @@ RUN INSTALL_PKGS="git python36 python3-pip gcc python3-devel" && \
     rm -rf /etc/pki/entitlement && \
     rm -rf /etc/rhsm
 
-RUN git clone https://github.com/openshift-scale/cerberus /root/cerberus && \
-    cd /root/cerberus && \
-    pip3 install -r requirements.txt && \
-    # to get rid of the need for privileged user:
+RUN pip3 install cerberus-client && \
+    # # to get rid of the need for privileged user:
+    mkdir /root/cerberus && \
     touch /root/cerberus/cerberus.report && \
+    touch /root/cerberus/history && \
     chmod -R 775 /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
 
@@ -39,4 +39,4 @@ USER 1001
 
 WORKDIR /root/cerberus
 
-ENTRYPOINT python3 start_cerberus.py --config=config/config.yaml
+ENTRYPOINT cerberus_client --config=config/config.yaml
