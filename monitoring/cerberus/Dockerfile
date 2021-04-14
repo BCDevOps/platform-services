@@ -1,6 +1,6 @@
-FROM image-registry.openshift-image-registry.svc:5000/openshift/cli
+# FROM image-registry.openshift-image-registry.svc:5000/openshift/cli
 # Use this when building off cluster
-#FROM registry.redhat.io/openshift4/ose-cli:v4.5
+FROM registry.redhat.io/openshift4/ose-cli:v4.5
 
 LABEL maintainer="Shelly Han <Shelly.Han@gov.bc.ca>" \
       io.k8s.display-name="Cerberus Monitoring" \
