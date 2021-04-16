@@ -28,7 +28,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get remove -y git build-essential python3-dev python3-pip python3-wheel python3-setuptools \
     && apt-get autoremove -y \
     && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* /root/.cache
+    && rm -rf /var/lib/apt/lists/* /root/.cache \
+    && apt -y install gnupg2 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - \
+    && apt install postgis postgresql-11-postgis-3
 
 COPY contrib/root /
 
