@@ -23,16 +23,17 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && mkdir -p $PGHOME/pgdata/pgroot \
     && chgrp -R 0 $PGHOME \
     && chown -R postgres $PGHOME \
-    && chmod -R 775 $PGHOME \
-    && echo 'Cleaning up' \
-    && apt-get remove -y git build-essential python3-dev python3-pip python3-wheel python3-setuptools \
-    && apt-get autoremove -y \
-    && apt-get clean -y \
-    && rm -rf /var/lib/apt/lists/* /root/.cache
+    && chmod -R 775 $PGHOME
 
 RUN apt install wget \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt-get update
+
+RUN echo 'Cleaning up' \
+    && apt-get remove -y git build-essential python3-dev python3-pip python3-wheel python3-setuptools \
+    && apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/* /root/.cache
 
 COPY contrib/root /
 
