@@ -27,7 +27,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 RUN apt install wget \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && apt-get update
+    && apt-get update \
+    && apt install postgis postgresql-11-postgis-3
 
 RUN echo 'Cleaning up' \
     && apt-get remove -y git build-essential python3-dev python3-pip python3-wheel python3-setuptools \
