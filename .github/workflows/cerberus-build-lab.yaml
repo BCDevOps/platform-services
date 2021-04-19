@@ -13,15 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Get the current branch name
-      shell: bash
-      run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-      id: branchref
-    - uses: actions/checkout@v1
-      with:
-        ref: ${{ github.ref }}
-    - name: Login to DockerHub Registry
-      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-    - name: Build the tagged Docker image
-      run: cd monitoring/cerberus && docker build . --file Dockerfile --tag bcdevopscluster/cerberus:lab
-    - name: Push the tagged Docker image
-      run: docker push bcdevopscluster/cerberus:lab
+      run: echo "Not building as missing entitlement certs"
+    # - name: Get the current branch name
+    #   shell: bash
+    #   run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
+    #   id: branchref
+    # - uses: actions/checkout@v1
+    #   with:
+    #     ref: ${{ github.ref }}
+    # - name: Login to DockerHub Registry
+    #   run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    # - name: Build the tagged Docker image
+    #   run: cd monitoring/cerberus && docker build . --file Dockerfile --tag bcdevopscluster/cerberus:lab
+    # - name: Push the tagged Docker image
+    #   run: docker push bcdevopscluster/cerberus:lab
