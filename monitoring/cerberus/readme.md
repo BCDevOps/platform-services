@@ -15,6 +15,21 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
 - turn into CCM and create template for configs
 - work on dc and configmaps for custom checks
 
+### Docker Image Build (temporary)
+```shell
+# login:
+docker login -u [bcdevops_account]
+# make sure subscription entitlement certs exist:
+etc-pki-entitlement/
+rhsm-ca/
+rhsm-conf/
+
+# build and push to specific tag
+docker build . --file Dockerfile --tag [bcdevops_account]/cerberus:[lab/prod]
+docker push [bcdevops_account]/cerberus:[lab/prod]
+```
+
+
 ### Build and Deploy Cerberus
 
 ```shell
