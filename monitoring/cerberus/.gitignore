@@ -3,3 +3,6 @@ config/config
 
 # ignore local entitlement secret and config for build:
 entitlement.yaml
+etc-pki-entitlement/
+rhsm-ca/
+rhsm-conf/
