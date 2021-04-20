@@ -1,6 +1,6 @@
 cerberus:
     distribution: openshift                              # Distribution can be kubernetes or openshift
-    # kubeconfig_path: /.kube/config                      # Path to kubeconfig
+    kubeconfig_path: /tmp/kubeconfig                      # Path to kubeconfig
     port: 8080                                           # http server port where cerberus status is published
     watch_nodes: True                                    # Set to True for the cerberus to monitor the cluster nodes
     watch_cluster_operators: True                        # Set to True for cerberus to monitor cluster operators
@@ -20,7 +20,7 @@ cerberus:
                                                          # When enabled, cerberus collects logs, events and metrics of failed components
 
     prometheus_url:                                      # The prometheus url/route is automatically obtained in case of OpenShift, please set it when the distribution is Kubernetes.
-    prometheus_bearer_token:                             # The bearer token is automatically obtained in case of OpenShift, please set it when the distribution is Kubernetes. This is needed to authenticate with prometheus.
+    prometheus_bearer_token: SA_TOKEN                            # The bearer token is automatically obtained in case of OpenShift, please set it when the distribution is Kubernetes. This is needed to authenticate with prometheus.
                                                          # This enables Cerberus to query prometheus and alert on observing high Kube API Server latencies. 
 
     slack_integration: False                             # When enabled, cerberus reports the failed iterations in the slack channel
