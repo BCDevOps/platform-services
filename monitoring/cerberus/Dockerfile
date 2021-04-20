@@ -31,12 +31,17 @@ RUN pip3 install cerberus-client && \
     # # to get rid of the need for privileged user:
     mkdir /root/cerberus && \
     touch /root/cerberus/cerberus.report && \
-    touch /root/cerberus/history && \
+    mkdir /root/cerberus/history && \
     chmod -R 775 /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
+
+# Copy entrypoint command
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/entrypoint.sh \
+    && chgrp 0 /usr/local/bin/entrypoint.sh
 
 USER 1001
 
 WORKDIR /root/cerberus
 
-ENTRYPOINT cerberus_client --config=config/config.yaml
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
