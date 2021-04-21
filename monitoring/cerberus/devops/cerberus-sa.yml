@@ -74,7 +74,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: cerberus-namespace-reader
-  namespace: shellyxuehan-dev
+  namespace: openshift-bcgov-cerberus
 rules:
 - apiGroups:
   - ""
