@@ -25,7 +25,7 @@ rhsm-ca/
 rhsm-conf/
 
 # build and push to specific tag
-docker build . --file Dockerfile --tag [bcdevops_account]/cerberus:[lab/prod]
+docker build . --file Dockerfile --tag [bcdevops_account]/cerberus:[lab/prod] --squash
 docker push [bcdevops_account]/cerberus:[lab/prod]
 ```
 
