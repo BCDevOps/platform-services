@@ -18,8 +18,6 @@ RUN INSTALL_PKGS="python36 python3-pip gcc python3-devel" && \
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
     yum repolist --disablerepo='*' && \
-    # python3-devel is avaible from rhel-7-server-optional-rpms
-    subscription-manager repos --enable "rhel-7-server-optional-rpms" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*' && \
     rm -rf /var/cache/yum && \
