@@ -1,6 +1,6 @@
-FROM image-registry.openshift-image-registry.svc:5000/openshift/cli
+# FROM image-registry.openshift-image-registry.svc:5000/openshift/cli
 # Use this when building off cluster
-#FROM registry.redhat.io/openshift4/ose-cli:v4.5
+FROM registry.redhat.io/openshift4/ose-cli:v4.6
 
 LABEL maintainer="Shelly Han <Shelly.Han@gov.bc.ca>" \
       io.k8s.display-name="Cerberus Monitoring" \
@@ -18,8 +18,6 @@ RUN INSTALL_PKGS="python36 python3-pip gcc python3-devel" && \
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
     yum repolist --disablerepo='*' && \
-    # python3-devel is avaible from rhel-7-server-optional-rpms
-    subscription-manager repos --enable "rhel-7-server-optional-rpms" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*' && \
     rm -rf /var/cache/yum && \
@@ -31,12 +29,17 @@ RUN pip3 install cerberus-client && \
     # # to get rid of the need for privileged user:
     mkdir /root/cerberus && \
     touch /root/cerberus/cerberus.report && \
-    touch /root/cerberus/history && \
+    mkdir /root/cerberus/history && \
     chmod -R 775 /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
+
+# Copy entrypoint command
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/entrypoint.sh \
+    && chgrp 0 /usr/local/bin/entrypoint.sh
 
 USER 1001
 
 WORKDIR /root/cerberus
 
-ENTRYPOINT cerberus_client --config=config/config.yaml
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]

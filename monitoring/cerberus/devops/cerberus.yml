@@ -23,19 +23,28 @@ spec:
           # NOTE: Dockerfile changes filesystem permission for monitoring output storage. otherwise we'll need to use privileged account
           # securityContext:
           #   privileged: true
-          image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
+          image: docker.io/bcdevopscluster/cerberus:lab
+          # image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
           command: ["/bin/sh", "-c"]
-          args: ["cerberus_client -c config/config.yaml"]
+          args: ["/usr/local/bin/entrypoint.sh"]
           ports:
             - containerPort: 8080
+          resources:
+            limits:
+              cpu: '1'
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
           volumeMounts:
-            # default path for ~/.kube/config
-            - mountPath: "/.kube"
-              name: config
-            - mountPath: "/root/cerberus/config"
+            - mountPath: "/tmp/kubeconfig-template"
+              subPath: kubeconfig-template
+              name: kubeconfig
+            - mountPath: "/tmp/cerberus-config-template.yaml"
+              subPath: cerberus-config-template.yaml
               name: cerberus-config
       volumes:
-        - name: config
+        - name: kubeconfig
           configMap:
             name: kube-config
         - name: cerberus-config
