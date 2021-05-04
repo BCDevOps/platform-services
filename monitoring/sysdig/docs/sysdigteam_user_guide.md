@@ -52,10 +52,10 @@ spec:
 
 ### Available Roles
 The following roles are available for use: 
-- **ROLE_TEAM_EDIT (Advanced User)** - Can create/edit/delete dashboards, alerts, or other content.
-- **ROLE_TEAM_STANDARD (Standard User)** - An Advanced User with no access to the Explore page (e.g. for developers who are not interested in Monitoring information).
-- **ROLE_TEAM_READ (View-only User)** - Read access to the environment within team scope, but cannot create, edit, or delete dashboards, alerts, or other content.
-- **ROLE_TEAM_MANAGER (Team Manager)** - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions.
+- `ROLE_TEAM_EDIT (Advanced User)` - Can create/edit/delete dashboards, alerts, or other content.
+- `ROLE_TEAM_STANDARD (Standard User)` - An Advanced User with no access to the Explore page (e.g. for developers who are not interested in Monitoring information).
+- `ROLE_TEAM_READ (View-only User)` - Read access to the environment within team scope, but cannot create, edit, or delete dashboards, alerts, or other content.
+- `ROLE_TEAM_MANAGER (Team Manager)` - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions.
 
 **Note** Role Updates should be applied to the CR, and **NOT** in the Sysdig Monitor UI. Reconciliation of the SysdigTeams Operator will overwrite any UI changes to the team roles. 
 
