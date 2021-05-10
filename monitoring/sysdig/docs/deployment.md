@@ -24,13 +24,13 @@ oc label node --all "sysdig-agent=true"
 
 echo "--- Lab cluster - skipping storage region"
 for region in master infra app; do
-oc apply -f manifests/lab/cm-sysdig-agent-${region}.yml
+oc apply -f openshift/lab/cm-sysdig-agent-${region}.yml
 oc process -f openshift/sysdig-agent-tmpl.yaml --param=REGION=${region} -o yaml | oc apply -f -
 done
 
 echo "--- Prod cluster - Adjust default limits and requests"
 for region in master infra storage app; do
-oc apply -f manifests/prod/cm-sysdig-agent-${region}.yaml
+oc apply -f openshift/prod/cm-sysdig-agent-${region}.yaml
 oc process -f openshift/sysdig-agent-tmpl.yaml --param=REGION=${region} --param-file=openshift/prod.env -o yaml | oc apply -f -
 done
 ```
