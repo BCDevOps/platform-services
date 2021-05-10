@@ -1,5 +1,7 @@
 ## Agent Deployment
-Deploying sysdig requires the following k8s components:
+Currently Sysdig Agents are deployed with Cluster Config Management (CCM). To manually deploy Sysdig to a cluster, see the following requirements and steps.
+
+Deploying Sysdig requires the following k8s components:
 
 - project/namespace with additional privileges
 - serviceaccount
@@ -7,15 +9,16 @@ Deploying sysdig requires the following k8s components:
 - configMap
 - secret
 
-*note: currently there are 38 nodes licensed (of our total 42), disabling agents on lab:storage nodes to get the most coverage.*
+*note: disabling agents on lab:storage nodes to get the most coverage (also not enabled in production clusters at the moment)*
 
 ``` bash
 oc new-project devops-sysdig --description='BC Gov DevOps Platform Sysdig Monitoring Platform'
 oc create serviceaccount sysdig-agent
 oc adm policy add-scc-to-user privileged -n devops-sysdig -z sysdig-agent
 oc adm policy add-cluster-role-to-user cluster-reader -n devops-sysdig -z sysdig-agent
-oc create secret generic sysdig-agent --from-literal=access-key=<your sysdig access key> -n devops-sysdig
-oc create secret docker-registry bcgov-docker-hub --docker-server=docker.io --docker-username=bcdevopscluster --docker-password=<docker password> --docker-email=unused
+oc create secret generic sysdig-agent --from-literal=access-key=<your_sysdig_access_key> -n devops-sysdig
+# currently using docker image from account called bcdevopscluster, will switch to artifactory when ready:
+oc create secret docker-registry bcgov-docker-hub --docker-server=docker.io --docker-username=bcdevopscluster --docker-password=<docker_password> --docker-email=unused
 oc secrets link default bcgov-docker-hub --for=pull
 oc label node --all "sysdig-agent=true"
 
@@ -32,7 +35,7 @@ oc process -f openshift/sysdig-agent-tmpl.yaml --param=REGION=${region} --param-
 done
 ```
 
-Once this is complete, update the `devops-sysdig` project to allow for agents to be deployed across the infra, master, and gluster nodes as well.
+Once this is complete, update the `devops-sysdig` project to allow for agents to be deployed across the infra, master, and storage nodes as well.
 
 - Edit the namespace:
 
