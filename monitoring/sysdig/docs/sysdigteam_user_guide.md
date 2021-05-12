@@ -8,16 +8,15 @@ tags:
 - team guide
 title: OpenShift User Guide to Creating and Using a Sysdig Team for Monitoring
 ---
-# EARLY ACCESS FEATURE
-This feature is in Early Access mode with specific teams that have been selected for testing and feedback contribution. 
-For those teams, please provide feedback in the Rocket.Chat `#devops-sysdig` channel.
-This documentation does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.  
+# Get Started with Sysdig Monitoring
 
-# Sysdig Teams Feature Description
 Sysdig Monitor is a SaaS service that provides system level monitoring of Kubernetes hosts. This solution provides the ability to create custom dashboards, alerts, and operational level captures to help diagnose application or platform level issues. 
 
-The Sysdig Teams Operator that is running in the cluster enables a team to create and manage access control to a **dedicated Sysdig Team account** for BC Government OpenShift platform users. The team is scoped specifically to the OpenShift namespaces that belong to a specific team, and also provides a high-level default dashboard to identify system resources, limits, and actual usage. 
+The Sysdig Teams Operator that is running in the cluster enables a team to create and manage access control to a **dedicated Sysdig Team account** for BC Government OpenShift platform users. The team is scoped specifically to the OpenShift namespaces that belong to a specific team, and also provides a high-level default dashboard to identify system resources, limits, and actual usage.
 
+You can find the overall Sysdig monitoring service described [here](https://developer.gov.bc.ca/BC-Government-Sysdig-Monitoring-Service-Definition).
+
+> Please note that this does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.  
 
 ## The Sysdig Team Custom Resource
 In order to create a Sysdig Team; 
@@ -52,10 +51,10 @@ spec:
 
 ### Available Roles
 The following roles are available for use: 
-- **ROLE_TEAM_EDIT (Advanced User)** - Can create/edit/delete dashboards, alerts, or other content.
-- **ROLE_TEAM_STANDARD (Standard User)** - An Advanced User with no access to the Explore page (e.g. for developers who are not interested in Monitoring information).
-- **ROLE_TEAM_READ (View-only User)** - Read access to the environment within team scope, but cannot create, edit, or delete dashboards, alerts, or other content.
-- **ROLE_TEAM_MANAGER (Team Manager)** - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions.
+- `ROLE_TEAM_EDIT (Advanced User)` - Can create/edit/delete dashboards, alerts, or other content.
+- `ROLE_TEAM_STANDARD (Standard User)` - An Advanced User with no access to the Explore page (e.g. for developers who are not interested in Monitoring information).
+- `ROLE_TEAM_READ (View-only User)` - Read access to the environment within team scope, but cannot create, edit, or delete dashboards, alerts, or other content.
+- `ROLE_TEAM_MANAGER (Team Manager)` - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions.
 
 **Note** Role Updates should be applied to the CR, and **NOT** in the Sysdig Monitor UI. Reconciliation of the SysdigTeams Operator will overwrite any UI changes to the team roles. 
 

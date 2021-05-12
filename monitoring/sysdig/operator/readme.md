@@ -1,6 +1,6 @@
 ## Sysdig Monitor Operator
 
-Operator initilizalization with the operator-sdk: 
+Operator initialization with the operator-sdk: 
 
 ```
 operator-sdk new sysdig-monitor --type ansible --kind Monitoring --api-version ops.gov.bc.ca/v1alpha1 --generate-playbook
@@ -17,7 +17,7 @@ When running in OCP4, this can be refactored into the standard operator-sdk dock
 ## Development Approach
 There is a python client if desired, found here: https://github.com/draios/python-sdc-client
 
-We decided to leverage the native API with Ansible for building the Operator functions. The following code can be helful when creating the Ansible URI tasks: https://github.com/draios/python-sdc-client/blob/master/sdcclient/_common.py
+We decided to leverage the native API with Ansible for building the Operator functions. The following code can be helpful when creating the Ansible URI tasks: https://github.com/draios/python-sdc-client/blob/master/sdcclient/_common.py
 
 ### Build Process
 The build process is a combination of GitHub Actions and OpenShift Builds. 
@@ -135,7 +135,7 @@ The sdc-cli is a utility that can be used to manipulate Sysdig resources. It is 
 
 **Note: The current version of the sdc-cli requires python3.8 - or more specifically, tatsu 5.5.0 which requires python3.8.**
 
-The sdc-cli has been included in the ansible opertor in order to manipulate dashbaord objects. 
+The sdc-cli has been included in the ansible operator in order to manipulate dashboard objects. 
 
 - Installing sdc-cli
 ```shell
@@ -155,11 +155,11 @@ sdc-cli dashboard list
 ### Dashboard Template Creation Process
 1. Create a "template" dashboard that you like in Sysdig. Typically in the Platform Services team. 
 2. Use the *sdc-cli* to get the json output of this
-3. Convert into jijna template and integrate into the ansible playbook as appropriate. 
+3. Convert into jinja template and integrate into the ansible playbook as appropriate. 
 
 
 # TODO
-- assign view? role to user without defnied role? 
+- assign view? role to user without defined role? 
 - add in protected teams in validation
 - validate that the user has access to the desired namespaces
 - test and validate that OIDC is the only option? not sure if this will invite regular sysdig users via email. 
