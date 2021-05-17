@@ -1,0 +1,53 @@
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: github-backups
+  namespace: gitops-tools
+spec:
+  schedule: '5 5 * * *'
+  startingDeadlineSeconds: 3600
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: github-backups-s3-creds-volume
+              secret:
+                secretName: github-backups-s3-creds
+            - name: github-backups-repo-creds-volume
+              secret:
+                secretName: github-backups-repo-creds
+                defaultMode: 420
+            - name: github-repos-to-back-up-volume
+              configMap:
+                name: github-repos-to-back-up
+                defaultMode: 416
+            - name: github-backups-cronjob
+              persistentVolumeClaim:
+                claimName: github-backups-pvc
+          containers:
+            - name: github-backups
+              image: >-
+                image-registry.openshift-image-registry.svc:5000/iankwatts-tools/utility-server@sha256:4e471ab608e16c99b5879fc42512417c675c93ec8c6e4bc8c8d038e706a49bb5
+              args:
+                - /bin/sh
+                - '-c'
+                - /scripts/github_backup.sh
+              volumeMounts:
+                - name: github-backups-s3-creds-volume
+                  mountPath: /etc/github-backups-s3-creds
+                  readOnly: true
+                  mountPath: /etc/github-backups-s3-creds
+                - name: github-backups-repo-creds-volume
+                  readOnly: true
+                  mountPath: /etc/github-backups-repo-creds
+                - name: github-repos-to-back-up-volume
+                  readOnly: true
+                  mountPath: /etc/github-repos-to-back-up
+                - name: github-backups-cronjob
+                  mountPath: /backups
+          restartPolicy: OnFailure
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
