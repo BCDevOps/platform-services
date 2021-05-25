@@ -17,7 +17,7 @@ spec:
                 secretName: github-backups-s3-creds
             - name: github-backups-repo-creds-volume
               secret:
-                secretName: github-backups-repo-creds
+                secretName: github-credentials
                 defaultMode: 420
             - name: github-repos-to-back-up-volume
               configMap:
