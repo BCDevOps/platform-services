@@ -37,13 +37,10 @@ if [ ! -d $LOGDIR ]; then mkdir -p $LOGDIR; fi
 # Read the repo list and S3 credentials
 # -------------------------------------
 source /etc/github-repos-to-back-up/github-repos-to-back-up.sh
-S3_ID=`cat /etc/github-backups-s3-creds/id`
-S3_URL=`cat /etc/github-backups-s3-creds/URL`
-S3_SECRET=`cat /etc/github-backups-s3-creds/secret`
-REPO_TOKEN=`cat /etc/github-backups-repo-creds/GITHUB_TOKEN`
 
 log() {
-  echo "--> $1" | tee >> ${LOGFILE}
+  echo "--> $1"
+  echo "--> $1" >> ${LOGFILE}
 }
 
 do_backup() {
@@ -98,7 +95,7 @@ cd ${BASEDIR}/owners/
 for OWNER in `ls`; do
   log "archiving $OWNER"
   if [ -z "$DRYRUN" ]; then
-    tar czfp ${ARCHIVE_DIR}/${OWNER}.tar.gz $OWNER
+    tar czfp ${THIS_ARCHIVE_DIR}/${OWNER}-${DATE}.tar.gz $OWNER
   fi
 done
 
@@ -108,8 +105,6 @@ log "Configuring mc for S3"
 /usr/local/bin/mc --config-dir $BASEDIR/.mc alias set s3 $S3_URL $S3_ID $S3_SECRET
 log ""
 log "Mirroring to S3..."
-# Should we include the "--remove" option?  If not, we'll probably have to do
-# manual cleanup from time to time.
 if [ -z "$DRYRUN" ]; then
   mc --config-dir $BASEDIR/.mc mirror --overwrite $ARCHIVE_DIR/ s3/$BUCKET
 fi
@@ -119,4 +114,4 @@ log ""
 # ---------------
 END_TIME=`date "+%H:%M:%S"`
 log "End time: $END_TIME"
-
+log "Done"
