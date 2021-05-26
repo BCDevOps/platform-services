@@ -14,7 +14,6 @@ DATE=`date "+%Y-%m-%d"`
 LOGDIR="${BASEDIR}/logs"
 LOGFILE="${LOGDIR}/github_backup_${DATE}"
 ARCHIVE_DIR="${BASEDIR}/archive"
-BACKUP_DIR="${BASEDIR}/owners"
 
 # Process any command line arguments
 #   -i	Incremental backup
@@ -52,6 +51,7 @@ do_backup() {
   MODE=`echo $ITEM | cut -d ":" -f 2`
   OWNER=`echo $OWNER_REPO | cut -d "/" -f 1`
   REPO=`echo $OWNER_REPO | cut -d "/" -f 2`
+  BACKUP_DIR="$BASEDIR/owners/$OWNER"
 
   if [ "$TYPE" == "user" ]; then TYPEARG=""; else TYPEARG="--organization"; fi
   if [ "$MODE" == "full" ]; then QUALIFIER="--all"; else QUALIFIER="--repositories"; MODE="partial"; fi
