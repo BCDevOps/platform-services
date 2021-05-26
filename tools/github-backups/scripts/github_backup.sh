@@ -14,6 +14,7 @@ DATE=`date "+%Y-%m-%d"`
 LOGDIR="${BASEDIR}/logs"
 LOGFILE="${LOGDIR}/github_backup_${DATE}"
 ARCHIVE_DIR="${BASEDIR}/archive"
+BACKUP_DIR="${BASEDIR}/owners"
 
 # Process any command line arguments
 #   -i	Incremental backup
@@ -51,11 +52,6 @@ do_backup() {
   MODE=`echo $ITEM | cut -d ":" -f 2`
   OWNER=`echo $OWNER_REPO | cut -d "/" -f 1`
   REPO=`echo $OWNER_REPO | cut -d "/" -f 2`
-  THIS_BACKUP_DIR="${BASEDIR}/owners/${OWNER}"
-  THIS_ARCHIVE_DIR="${ARCHIVE_DIR}/${OWNER}"
-  if [ ! -d $THIS_BACKUP_DIR ]; then mkdir -p $THIS_BACKUP_DIR; fi
-  if [ ! -d $THIS_ARCHIVE_DIR ]; then mkdir -p $THIS_ARCHIVE_DIR; fi
-  if [ ! -d ${THIS_BACKUP_DIR}/tmp ]; then mkdir -p ${THIS_BACKUP_DIR}/tmp; fi
 
   if [ "$TYPE" == "user" ]; then TYPEARG=""; else TYPEARG="--organization"; fi
   if [ "$MODE" == "full" ]; then QUALIFIER="--all"; else QUALIFIER="--repositories"; MODE="partial"; fi
@@ -64,9 +60,9 @@ do_backup() {
 
   # Make the backup
   # ---------------
-  log "github-backup -t \$REPO_TOKEN $OWNER $TYPEARG --output-directory $THIS_BACKUP_DIR $QUALIFIER --private --repository $REPO $INCREMENTAL"
+  log "github-backup -t \$REPO_TOKEN $OWNER $TYPEARG --output-directory $BACKUP_DIR $QUALIFIER --private --repository $REPO $INCREMENTAL"
   if [ -z "$DRYRUN" ]; then
-    github-backup -t $REPO_TOKEN $OWNER $TYPEARG --output-directory $THIS_BACKUP_DIR $QUALIFIER --private --repository $REPO $INCREMENTAL
+    github-backup -t $REPO_TOKEN $OWNER $TYPEARG --output-directory $BACKUP_DIR $QUALIFIER --private --repository $REPO $INCREMENTAL
   else
     log "* (dry run - no backup)"
   fi
@@ -94,8 +90,9 @@ done
 cd ${BASEDIR}/owners/
 for OWNER in `ls`; do
   log "archiving $OWNER"
+  if [ ! -d ${ARCHIVE_DIR}/${OWNER} ]; then mkdir ${ARCHIVE_DIR}/${OWNER}; fi
   if [ -z "$DRYRUN" ]; then
-    tar czfp ${THIS_ARCHIVE_DIR}/${OWNER}-${DATE}.tar.gz $OWNER
+    tar czfp ${ARCHIVE_DIR}/${OWNER}/${OWNER}-${DATE}.tar.gz $OWNER
   fi
 done
 
