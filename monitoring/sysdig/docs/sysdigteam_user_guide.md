@@ -21,8 +21,9 @@ You can find the overall Sysdig monitoring service described [here](https://deve
 ## The Sysdig Team Custom Resource
 In order to create a Sysdig Team; 
 - Create a Custom Resource in your project *Tools* namespace 
-- Create a an access control list within the Custom Resource that *identifies users by the ***email address*** that is registered in KeyCloak*
-  - *Note* Only GitHub ID's are currently configured in this realm
+- Create an access control list within the Custom Resource that *identifies users by the ***email address*** *
+  - *Note* all team members will need to login to Sysdig first, the email address can be found by each user from [Sydig User Profile](https://app.sysdigcloud.com/#/settings/user)
+  - Only GitHub ID's are currently configured from SSO
 - Upon creating the CR, **TWO** teams will be created; 
   - **[license-plate]-team** - All Kubernetes related objects can be monitored here, with the exception of persistent volume claim metrics. 
   - **[license-plate]-team-persistent-storage** - Persistent Volume Claim utilization can be monitored here. 
