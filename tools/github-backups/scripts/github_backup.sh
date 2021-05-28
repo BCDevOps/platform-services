@@ -18,14 +18,18 @@ ARCHIVE_DIR="${BASEDIR}/archive"
 # Process any command line arguments
 #   -i	Incremental backup
 #   -d	Dry run - do not do backup or copy to S3
-# ----------------------------------------------
-while getopts id arg; do
+#   -r <org_repo_spec> as used in the config map
+#      Wrap in quotes if more than one repo, separated by a space, e.g.
+#      "bcgov-c/platform-gitops-gen:full BCDevOps/developer-experience:full"
+#   -u <user_repo_spec> as used in the config map
+#      Same as -r
+# --------------------------------------------------------------------------
+while getopts idr:u: arg; do
   case "$arg" in
     i) INCREMENTAL="--incremental";;
     d) DRYRUN="true";;
-    *) INCREMENTAL=""
-       DRYRUN=""
-       ;;
+    r) ORG_REPOS_TO_BACK_UP=( $OPTARG );;
+    u) USER_REPOS_TO_BACK_UP=( $OPTARG );;
   esac
 done
 
@@ -34,9 +38,11 @@ done
 if [ ! -d $ARCHIVE_DIR ]; then mkdir -p $ARCHIVE_DIR; fi
 if [ ! -d $LOGDIR ]; then mkdir -p $LOGDIR; fi
 
-# Read the repo list and S3 credentials
-# -------------------------------------
-source /etc/github-repos-to-back-up/github-repos-to-back-up.sh
+# Read the repo list
+# ------------------
+if [ ! $ORG_REPOS_TO_BACK_UP ] && [ ! $USER_REPOS_TO_BACK_UP ]; then
+  source /etc/github-repos-to-back-up/github-repos-to-back-up.sh
+fi
 
 log() {
   echo "--> $1"
@@ -87,14 +93,14 @@ done
 
 # Make compressed archives
 # ------------------------
-cd ${BASEDIR}/owners/
-for OWNER in `ls`; do
-  log "archiving $OWNER"
-  if [ ! -d ${ARCHIVE_DIR}/${OWNER} ]; then mkdir ${ARCHIVE_DIR}/${OWNER}; fi
-  if [ -z "$DRYRUN" ]; then
-    tar czfp ${ARCHIVE_DIR}/${OWNER}/${OWNER}-${DATE}.tar.gz $OWNER
-  fi
-done
+#cd ${BASEDIR}/owners/
+#for OWNER in `ls`; do
+#  log "archiving $OWNER"
+#  if [ ! -d ${ARCHIVE_DIR}/${OWNER} ]; then mkdir ${ARCHIVE_DIR}/${OWNER}; fi
+#  if [ -z "$DRYRUN" ]; then
+#    tar czfp ${ARCHIVE_DIR}/${OWNER}/${OWNER}-${DATE}.tar.gz $OWNER
+#  fi
+#done
 
 # Initialize minio and synchronize with the S3 bucket
 # ---------------------------------------------------
@@ -103,7 +109,7 @@ log "Configuring mc for S3"
 log ""
 log "Mirroring to S3..."
 if [ -z "$DRYRUN" ]; then
-  mc --config-dir $BASEDIR/.mc mirror --overwrite $ARCHIVE_DIR/ s3/$BUCKET
+  mc --config-dir $BASEDIR/.mc mirror --overwrite --remove $BASEDIR/owners/ s3/$BUCKET
 fi
 log ""
 
