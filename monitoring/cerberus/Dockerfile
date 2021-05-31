@@ -33,6 +33,11 @@ RUN pip3 install httplib2 cerberus-client && \
     chmod -R 775 /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
 
+# Copy Cerberus custom checks
+COPY custom_checks/custom_checks.py /usr/local/bin/custom_checks/custom_checks.py
+RUN chmod 755 /usr/local/bin/custom_checks/custom_checks.py \
+    && chgrp 0 /usr/local/bin/custom_checks/custom_checks.py
+
 # Copy entrypoint command
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/entrypoint.sh \
