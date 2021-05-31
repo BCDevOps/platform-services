@@ -23,7 +23,9 @@ spec:
           # NOTE: Dockerfile changes filesystem permission for monitoring output storage. otherwise we'll need to use privileged account
           # securityContext:
           #   privileged: true
+          # For testing:
           image: docker.io/bcdevopscluster/cerberus:lab
+          # switch to artifactory:
           # image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
           command: ["/bin/sh", "-c"]
           args: ["/usr/local/bin/entrypoint.sh"]
@@ -43,6 +45,9 @@ spec:
             - mountPath: "/tmp/cerberus-config-template.yaml"
               subPath: cerberus-config-template.yaml
               name: cerberus-config
+            # - mountPath: "/usr/local/bin/custom_checks/custom_checks.py"
+            #   subPath: custom_checks.py
+            #   name: cerberus-custom-check              
       volumes:
         - name: kubeconfig
           configMap:
@@ -50,6 +55,10 @@ spec:
         - name: cerberus-config
           configMap:
             name: cerberus-config
+        # Add custom check as configmap:
+        # - name: cerberus-custom-check
+        #   configMap:
+        #     name: cerberus-custom-check
 ---
 apiVersion: v1
 kind: Service

@@ -1,6 +1,6 @@
 # FROM image-registry.openshift-image-registry.svc:5000/openshift/cli
 # Use this when building off cluster
-FROM registry.redhat.io/openshift4/ose-cli:v4.6
+FROM registry.redhat.io/openshift4/ose-cli:v4.7.0
 
 LABEL maintainer="Shelly Han <Shelly.Han@gov.bc.ca>" \
       io.k8s.display-name="Cerberus Monitoring" \
@@ -25,13 +25,18 @@ RUN INSTALL_PKGS="python36 python3-pip gcc python3-devel" && \
     rm -rf /etc/pki/entitlement && \
     rm -rf /etc/rhsm
 
-RUN pip3 install cerberus-client && \
+RUN pip3 install httplib2 cerberus-client && \
     # # to get rid of the need for privileged user:
     mkdir /root/cerberus && \
     touch /root/cerberus/cerberus.report && \
     mkdir /root/cerberus/history && \
     chmod -R 775 /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
+
+# Copy Cerberus custom checks
+COPY custom_checks/custom_checks.py /usr/local/bin/custom_checks/custom_checks.py
+RUN chmod 755 /usr/local/bin/custom_checks/custom_checks.py \
+    && chgrp 0 /usr/local/bin/custom_checks/custom_checks.py
 
 # Copy entrypoint command
 COPY entrypoint.sh /usr/local/bin/
