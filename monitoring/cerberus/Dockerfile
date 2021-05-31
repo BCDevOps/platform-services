@@ -25,7 +25,7 @@ RUN INSTALL_PKGS="python36 python3-pip gcc python3-devel" && \
     rm -rf /etc/pki/entitlement && \
     rm -rf /etc/rhsm
 
-RUN pip3 install cerberus-client && \
+RUN pip3 install httplib2 cerberus-client && \
     # # to get rid of the need for privileged user:
     mkdir /root/cerberus && \
     touch /root/cerberus/cerberus.report && \
