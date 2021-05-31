@@ -32,6 +32,8 @@ def check_image_registry():
   return True
 
 def main():
+  logging.info("------------------- Start Custom Checks -------------------")
+
   # set http client:
   global h
   h = httplib2.Http(disable_ssl_certificate_validation=True)
@@ -43,5 +45,6 @@ def main():
   check1 = check_nodes()
   check2 = check_cluster_readyz()
   check3 = check_image_registry()
+  logging.info("------------------- Finished Custom Checks -------------------")
 
   return check1 & check2 & check3
