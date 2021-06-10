@@ -49,7 +49,7 @@ There are different types of announcements you will see from Uptime Robot:
 - whenever there is a service downtime detected by Uptime Robot, it will auto generate an announcement with the timestamp and duration
 - there is no much details included in this
 
-**2. Custom Announcement:**
+**2. Custom Announcements:**
 - this will be created by a team member with some messages explaining what has happen during a previous major outage
 - for any persistent messages for the community, an custom announcement will be pinned at the top of the status page
 
