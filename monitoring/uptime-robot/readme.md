@@ -14,8 +14,8 @@ Please also note that in addition to Uptime Robot monitoring, there are more sop
 | Klab / Clab / ARO Cluster | readyz & Cerberus** | 1 min | RC |
 | SSO (prod/test/dev) | service URL | 1 min | RC |
 | RocketChat | service URL | 1 min | RC / MSTeams |
-| Artifactory | service API ping | 1 min | RC / MSTeams |
-| Aqua | TBD | TBD | TBD |
+| Artifactory | service API ping | 1 min | RC |
+| Aqua | api URL | 1 min | RC |
 | Vault | TBD | TBD | TBD |
 
 ***Please note*** that 1 minute interval (shortest available from Uptime Robot) sometime is considered a bit frequent for busy services. But for statistic purpose, we'd like to keep is as short as possible to not mistakenly record each brief downtime including the long wait time util next monitoring round. To address this problem, with a 1 minute interval, we will only receive alerts when service is down for 5 minutes. This is okay as Platform Services Team is not replying solely on Uptime Robot for monitoring. At the time when team gets notified from Uptime Robot, there would be other monitoring mechanism triggered already, such as Sysdig dashboards and alerts.
