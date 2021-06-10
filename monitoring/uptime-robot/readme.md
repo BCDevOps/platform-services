@@ -46,7 +46,7 @@ When a service is down for more than 5 minutes, the pre-configured alerts will b
 There are different types of announcements you will see from Uptime Robot:
 
 **1. Automatic Announcement:**
-- whenever there is a downtime detected by Uptime Robot, it will auto generate an announcement with the timestamp and duration
+- whenever there is a service downtime detected by Uptime Robot, it will auto generate an announcement with the timestamp and duration
 - there is no much details included in this
 
 **2. Custom Announcement:**
