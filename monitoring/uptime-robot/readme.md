@@ -51,7 +51,7 @@ There are different types of announcements you will see from Uptime Robot:
 
 **2. Custom Announcements:**
 - Custom announcements will be posted manually by the Platform Services Team following a service outage explaining the root cause and the impact of the service disruption as well as what was done to troubleshoot and restore the service.
-- for any persistent messages for the community, an custom announcement will be pinned at the top of the status page
+- Very important announcements will be pinned to the top of the Dashboard page.
 
 **3. Maintenance Window:**
 - when there is a scheduled maintenance, details can be provided in a Maintenance Window message and the uptime statistic of the service will not be affected during those time
