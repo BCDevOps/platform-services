@@ -2,7 +2,7 @@
 
 Monitoring status page can be found here: https://status.developer.gov.bc.ca/
 
-This is a high level monitoring aiming to provide the community with a sense of our service reliability. Monitored services include the DevOps OpenShift 4 Platforms and the shared services. Uptime Robot tracks a history of service uptime and incidence list for each of them. In addition, there will be announcements regarding each major service downtime and maintenance window.
+This is a high level monitoring aiming to provide the community with a sense of our service reliability. Monitored services include the DevOps OpenShift 4 Platform Clusters and the shared services (also knows as Next Gen Security tools). Uptime Robot tracks the history of service uptime and outages for each of the monitored service. In the future, there will be announcements regarding each major service planned downtime and maintenance as well as updates during outages.
 
 Please also note that in addition to Uptime Robot monitoring, there are more sophisticated metrics and checks that the team is using for each individual shared services and OCP clusters.
 
