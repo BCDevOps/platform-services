@@ -12,8 +12,8 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
   - etcdHighNumberOfLeaderChanges
 
 ### TODO:
-- turn into CCM and create template for configs
-- work on dc and configmaps for custom checks
+- create custom checks for cluster reliability checks
+- add PVC for monitoring history
 
 ### Docker Image Build (temporary)
 ```shell
@@ -23,6 +23,8 @@ docker login -u [bcdevops_account]
 etc-pki-entitlement/
 rhsm-ca/
 rhsm-conf/
+# make sure the custom checks exist:
+custom_checks/custom_checks.py
 
 # build and push to specific tag
 docker build . --file Dockerfile --tag [bcdevops_account]/cerberus:[lab/prod] --squash
@@ -43,7 +45,9 @@ oc -n [namespace] serviceaccounts create-kubeconfig cerberus > config/config
 
 # create configmaps:
 oc -n [namespace] create configmap kube-config --from-file=./config/config
-oc -n [namespace] create configmap cerberus-config --from-file=./config/config.yaml
+oc create configmap cerberus-config --from-file=./config/cerberus-config-template.yaml
+# Optional, for local testing only (included in docker image already)
+oc create configmap cerberus-custom-check --from-file=./custom_checks/custom_checks.py
 
 # build:
 oc -n [namespace] create -f ./devops/cerberus-bc.yml
@@ -76,5 +80,6 @@ ls -al /root/cerberus/history
 ```
 
 ### References:
-- https://gexperts.com/wp/building-a-simple-up-down-status-dashboard-for-openshift/
-- https://github.com/cloud-bulldozer/cerberus/tree/master/containers
+- setup: https://gexperts.com/wp/building-a-simple-up-down-status-dashboard-for-openshift/
+- deploy containerized version: https://github.com/cloud-bulldozer/cerberus/tree/master/containers
+- custom checks: https://github.com/cloud-bulldozer/cerberus#bring-your-own-checks
