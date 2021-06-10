@@ -26,7 +26,7 @@ We use 1 minute intervals (shortest available from Uptime Robot) to ping availab
 
 ## Alert Integrations
 
-When a service is down for more than 5 minutes, the preset alerts will be fire off. Here are some major types of alert we are currently using:
+When a service is down for more than 5 minutes, the pre-configured alerts will be fired off. Here are some major types of alerts we are currently using:
 
 **1. RocketChat and MSTeams:**
 - webhook setup in a notification channel
