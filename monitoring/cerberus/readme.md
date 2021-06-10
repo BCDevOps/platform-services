@@ -10,9 +10,16 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
 - critical alerts from prometheus:
   - KubeAPILatencyHigh
   - etcdHighNumberOfLeaderChanges
+- custom checks:
+  - monitoring on the 5 major cluster services identified here: https://miro.com/app/board/o9J_kgyjm_k=/
+  - image registry / Artifactory
+  - ingress service
+  - API service
+  - worker nodes
+  - NetApp storage (To be added)
 
 ### TODO:
-- create custom checks for cluster reliability checks
+- add more detailed custom checks for cluster reliability checks
 - add PVC for monitoring history
 
 ### Docker Image Build (temporary)
