@@ -54,7 +54,7 @@ There are different types of announcements you will see from Uptime Robot:
 - Very important announcements will be pinned to the top of the Dashboard page.
 
 **3. Maintenance Window:**
-- when there is a scheduled maintenance, details can be provided in a Maintenance Window message and the uptime statistic of the service will not be affected during those time
+- when there is a scheduled maintenance, details can be provided in a Maintenance Window message and the uptime statistic of the service will not be gathered during those periods.
 
 
 ## Monitoring Config as Code
