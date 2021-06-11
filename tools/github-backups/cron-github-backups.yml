@@ -12,13 +12,6 @@ spec:
       template:
         spec:
           volumes:
-            - name: github-backups-s3-creds-volume
-              secret:
-                secretName: github-backups-s3-creds
-            - name: github-backups-repo-creds-volume
-              secret:
-                secretName: github-credentials
-                defaultMode: 420
             - name: github-repos-to-back-up-volume
               configMap:
                 name: github-repos-to-back-up
@@ -29,7 +22,7 @@ spec:
           containers:
             - name: github-backups
               image: >-
-                image-registry.openshift-image-registry.svc:5000/iankwatts-tools/utility-server@sha256:4e471ab608e16c99b5879fc42512417c675c93ec8c6e4bc8c8d038e706a49bb5
+                image-registry.openshift-image-registry.svc:5000/iankwatts-tools/utility-server@sha256:e9d6e21a963cd105ba4ef03f36d109e53720b8584d90d3b949dbdb04a7802c24
               args:
                 - /bin/sh
                 - '-c'

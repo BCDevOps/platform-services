@@ -109,7 +109,7 @@ log "Configuring mc for S3"
 log ""
 log "Mirroring to S3..."
 if [ -z "$DRYRUN" ]; then
-  mc --config-dir $BASEDIR/.mc mirror --overwrite --remove $BASEDIR/owners/ s3/$BUCKET
+  mc --config-dir $BASEDIR/.mc mirror --preserve --overwrite --remove $BASEDIR/owners/ s3/$BUCKET
 fi
 log ""
 
