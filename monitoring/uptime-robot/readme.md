@@ -31,7 +31,7 @@ The monitoring relies on a combination of the built-in Uptime Robot monitoring f
 
 We use 1 minute intervals (shortest available from Uptime Robot) to ping availability endpoints set up for each service. Ocassionaly when a service is extremely busy, the response may timeout and 1 min downtime is recorded. However, we feel that this small error is better than setting the ping intervals to a lower frequency (e.g. 5 mins) and getting a 5 min outage window when the response is not returned due to the network issues between the Uptime Robot and the BC Gov network.  
 
- In order to address the problem of false positives that can occur with high frequency pings, the Platform Services Team will only receive alerts when a service is down for 5 consequtive attempts.  The Platform Services Team uses a suite of monitoring tools in addition to the  Uptime Robot for monitoring such as Sysdig and Naggios which allows us to detect issues early and narrow down the problem to a specific service or a component.
+ In order to address the problem of false positives that can occur with high frequency pings, the Platform Services Team will only receive alerts when a service is down for 5 consecutive attempts.  The Platform Services Team uses a suite of monitoring tools in addition to the  Uptime Robot for monitoring such as Sysdig and Nagios which allows us to detect issues early and narrow down the problem to a specific service or a component.
 
 ** Cerberus: is a RedHat suggested monitoring tool for OCP cluster general healthiness. For more details, see doc [here](../cerberus/readme.md).
 
