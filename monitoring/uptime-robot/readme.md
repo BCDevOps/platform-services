@@ -1,3 +1,14 @@
+---
+description: This is a high level monitoring aiming to provide the community with a sense of our service reliability. Monitored services include the DevOps OpenShift 4 Platform Clusters and the shared services (also knows as Next Gen Security tools). Uptime Robot tracks the history of service uptime and outages for each of the monitored service.
+tags:
+- uptime
+- service
+- monitor
+- outage
+- downtime
+- maintenance
+title: Openshift 4 Platform Services Reliability Dashboard with Uptime Robot
+---
 # Openshift 4 Platform Services Reliability Dashboard with Uptime Robot
 
 Monitoring status page can be found here: https://status.developer.gov.bc.ca/
