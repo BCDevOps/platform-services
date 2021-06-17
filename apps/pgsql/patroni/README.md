@@ -1,21 +1,35 @@
-# Source & Credit
+---
+title: Patroni Cluster Setup in Openshift 4
+description: This resource provides instructions for setting up a Patroni cluster in the Openshift 4 environment.
+tags:
+  - openshift
+  - patroni
+  - postgresql
+  - ha
+  - database
+  - high availability cluster
+---
+
+# Patroni Cluster Setup in Openshift 4
+
+## Source & Credit
 Contributed to and copied from https://github.com/zalando/patroni
 
-# Additional Information
+## Additional Information
 This documentation contains primarily examples on how to get patroni running on our Openshift cluster. For full documentation on Patroni, please see https://patroni.readthedocs.io/en/latest/
 
-# Patroni OpenShift Configuration
+## Patroni OpenShift Configuration
 Patroni can be run in OpenShift. Based on the kubernetes configuration, the Dockerfile and Entrypoint has been modified to support the dynamic UID/GID configuration that is applied in OpenShift. This can be run under the standard `restricted` SCC.
 
-# Examples
+## Examples
 
-## Create test project
+### Create test project
 
 ```
 oc new-project patroni-test
 ```
 
-## Build the image
+### Build the image
 
 > Note: Update the references when merged upstream.
 >
@@ -51,7 +65,7 @@ oc process -f openshift/build.yaml \
 
 > Note: `oc create` is used for the build explicitly to avoid overwriting/updating the postgres imageStream object.  Additional postgres imageStream Tags are added as long as the PG_VERSION tag does not exist in the imageStream.
 
-## Deploy the statefulSet
+### Deploy the statefulSet
 
 > Note: `oc create` is used for the pre-requisites to avoid re-generating secrets accidentally
 
@@ -84,7 +98,7 @@ oc delete all -l cluster-name=patroni-001
 oc delete pvc,secret,configmap,rolebinding,role -l cluster-name=patroni-001
 ```
 
-## Template Options
+### Template Options
 
 Two configuration templates exist in [templates](templates) directory:
 - Patroni Ephemeral
@@ -92,7 +106,7 @@ Two configuration templates exist in [templates](templates) directory:
 
 The only difference is whether or not the statefulset requests persistent storage.
 
-## Create the Template
+### Create the Template
 Install the template into the `openshift` namespace if this should be shared across projects:
 
 ``` bash
@@ -115,7 +129,7 @@ patroniocp-config   0         1m
 patroniocp-leader   0         1m
 ```
 
-## Development
+### Development
 
 Install minishift and use the scripts in `test/*` to build/deploy/test
 
@@ -125,11 +139,15 @@ Install minishift and use the scripts in `test/*` to build/deploy/test
    - `test/patroni.sh`: Test Patroni
    - `test/psql.sh`: Test PostgreSQL
 
-## TODO
+### Troubleshooting
+
+Find tips for troubleshooting problems with a Patroni cluster [here](https://github.com/bcgov/nr-get-token/wiki/Patroni-Troubleshooting)
+
+### TODO
 
 - [x] Need to add anti-affinity rules
 - [ ] Investigate using redhat postgres image as base image
 
-## References
+### References
 - https://github.com/sclorg/postgresql-container/blob/generated/10/root/usr/bin/run-postgresql
 - https://github.com/sclorg/postgresql-container/blob/generated/10/root/usr/share/container-scripts/postgresql/common.sh
