@@ -12,3 +12,5 @@
     - include_tasks: tasks/login.yaml
     - include_tasks: tasks/enable_oidc.yaml
     - include_tasks: tasks/create_scanner_user.yaml
+    - include_tasks: tasks/enable_enforcers.yaml
+    
