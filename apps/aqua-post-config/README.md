@@ -20,7 +20,17 @@ This tool is a set of ansible playbooks to automate the post deployment steps ne
 |aqua_sso_client|| env|the aqua sso client name (env is `AQUA_SSO_CLIENT`)|
 |aqua_scanner_password||env|the password for the aqua scanner user account (env is `AQUA_SCANNER_PASSWORD`)|
 |aqua_scanner_username||env|the username for the aqua scanner user account (env is `AQUA_SCANNER_USERNAME`)|
+
 ## How to use
 
-TBD 
+Locally you can run the playbook like so
+```sh
+# env
+# AQUA_ADMIN_PASSWORD
+# AQUA_SSO_CLIENT
+# AQUA_SSO_CLIENT_SECRET
+# AQUA_SCANNER_USERNAME
+# AQUA_SCANNER_PASSWORD
 
+ansible-playbook -e aqua_url='...' post_config.yaml
+```
