@@ -24,6 +24,8 @@ This tool is a set of ansible playbooks to automate the post deployment steps ne
 ## How to use
 
 Locally you can run the playbook like so
+> take note that the group vars defaults to clab cluster, if you want to override then add extra vars using `-e`
+
 ```sh
 # env
 # AQUA_ADMIN_PASSWORD
@@ -32,10 +34,13 @@ Locally you can run the playbook like so
 # AQUA_SCANNER_USERNAME
 # AQUA_SCANNER_PASSWORD
 
+
 ansible-playbook -e aqua_url='...' post_config.yaml
 ```
 
 You can also build and run the docker image
 `docker build -t aqua-post-config:latest .`
+
+`docker run -e aqua_url=... -e aqua_sso_url=... -e AQUA_ADMIN_CLIENT=... ... aqua-post-config:latest`
 
 
