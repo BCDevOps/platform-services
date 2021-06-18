@@ -34,3 +34,8 @@ Locally you can run the playbook like so
 
 ansible-playbook -e aqua_url='...' post_config.yaml
 ```
+
+You can also build and run the docker image
+`docker build -t aqua-post-config:latest .`
+
+
