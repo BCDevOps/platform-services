@@ -1,0 +1,25 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: utility-server
+  namespace: gitops-tools
+spec:
+  nodeSelector: null
+  source:
+    type: Git
+    git:
+      uri: https://github.com/BCDevOps/platform-services/
+      ref: master
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: tools/github-backups/Dockerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: 'utility-server:latest'
+  resources: {}
+  successfulBuildsHistoryLimit: 5
+  failedBuildsHistoryLimit: 2
+  postCommit: {}
+  runPolicy: Serial
