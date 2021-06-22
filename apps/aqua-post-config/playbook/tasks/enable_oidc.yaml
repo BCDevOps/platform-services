@@ -25,3 +25,4 @@
       secret: "{{ aqua_sso_client_secret }}"
       user: "email"
       user_role: "groups"
+      

@@ -14,3 +14,4 @@
 - name: Setting Token
   set_fact:
     auth_token: "{{ result.json.token }}"
+    
