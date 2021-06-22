@@ -1,0 +1,17 @@
+---
+- name: Login to Aqua as administrator
+  register: result
+  uri:
+    url: "{{ aqua_url }}/api/v1/login"
+    method: POST
+    body_format: json
+    return_content: true
+    body:
+      id: "{{ aqua_admin }}"
+      password: "{{ aqua_admin_password }}"
+  failed_when: result.status != 200
+
+- name: Setting Token
+  set_fact:
+    auth_token: "{{ result.json.token }}"
+    
