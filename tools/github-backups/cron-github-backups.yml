@@ -1,0 +1,60 @@
+kind: CronJob
+apiVersion: batch/v1beta1
+metadata:
+  name: github-backups
+  namespace: gitops-tools
+spec:
+  schedule: '5 5 * * *'
+  startingDeadlineSeconds: 3600
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - name: github-repos-to-back-up-volume
+              configMap:
+                name: github-repos-to-back-up
+                defaultMode: 416
+            - name: github-backups-cronjob
+              persistentVolumeClaim:
+                claimName: github-backups-pvc
+          containers:
+            - name: github-backups
+              image: >-
+                image-registry.openshift-image-registry.svc:5000/iankwatts-tools/utility-server@sha256:e9d6e21a963cd105ba4ef03f36d109e53720b8584d90d3b949dbdb04a7802c24
+              args:
+                - /bin/sh
+                - '-c'
+                - /scripts/github_backup.sh
+              env:
+                - name: S3_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: github-backups-s3-creds
+                      key: id
+                - name: S3_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: github-backups-s3-creds
+                      key: secret
+                - name: S3_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: github-backups-s3-creds
+                      key: URL
+                - name: REPO_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: github-backups-repo-creds
+                      key: GITHUB_TOKEN
+              volumeMounts:
+                - name: github-repos-to-back-up-volume
+                  readOnly: true
+                  mountPath: /etc/github-repos-to-back-up
+                - name: github-backups-cronjob
+                  mountPath: /backups
+          restartPolicy: OnFailure
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 1
+
