@@ -5,4 +5,11 @@ plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: sysdig-monitor
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: ops.gov.bc.ca
+  kind: SysdigTeam
+  version: v1alpha1
 version: "3"

@@ -1,0 +1,7 @@
+apiVersion: ops.gov.bc.ca/v1alpha1
+kind: SysdigTeam
+metadata:
+  name: sysdigteam-sample
+spec:
+  # Add fields here
+  foo: bar

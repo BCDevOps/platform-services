@@ -37,4 +37,21 @@ rules:
       - patch
       - update
       - watch
+  ##
+  ## Rules for ops.gov.bc.ca/v1alpha1, Kind: SysdigTeam
+  ##
+  - apiGroups:
+      - ops.gov.bc.ca
+    resources:
+      - sysdigteams
+      - sysdigteams/status
+      - sysdigteams/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
 #+kubebuilder:scaffold:rules

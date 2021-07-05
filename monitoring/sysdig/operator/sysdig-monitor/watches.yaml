@@ -1,3 +1,7 @@
 ---
 # Use the 'create api' subcommand to add watches to this file.
+- version: v1alpha1
+  group: ops.gov.bc.ca
+  kind: SysdigTeam
+  playbook: playbooks/sysdigteam.yml
 #+kubebuilder:scaffold:watch
