@@ -1,13 +1,13 @@
-# permissions for end users to view sysdigteams.
+# permissions for end users to view sysdig-teams.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: sysdigteam-viewer-role
+  name: sysdig-team-viewer-role
 rules:
 - apiGroups:
   - ops.gov.bc.ca
   resources:
-  - sysdigteams
+  - sysdig-teams
   verbs:
   - get
   - list
@@ -15,6 +15,6 @@ rules:
 - apiGroups:
   - ops.gov.bc.ca
   resources:
-  - sysdigteams/status
+  - sysdig-teams/status
   verbs:
   - get

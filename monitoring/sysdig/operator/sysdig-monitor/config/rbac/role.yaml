@@ -43,9 +43,9 @@ rules:
   - apiGroups:
       - ops.gov.bc.ca
     resources:
-      - sysdigteams
-      - sysdigteams/status
-      - sysdigteams/finalizers
+      - sysdig-teams
+      - sysdig-teams/status
+      - sysdig-teams/finalizers
     verbs:
       - create
       - delete
