@@ -3,5 +3,9 @@
 - version: v1alpha1
   group: ops.gov.bc.ca
   kind: SysdigTeam
+  reconcilePeriod: 24h
   playbook: playbooks/sysdigteam.yml
+  finalizer:
+    name: finalizer.ops.gov.bc.ca
+    playbook: playbooks/sysdigteam-destroy.yml
 #+kubebuilder:scaffold:watch
