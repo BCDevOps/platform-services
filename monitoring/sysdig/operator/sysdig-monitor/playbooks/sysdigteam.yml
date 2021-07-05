@@ -4,4 +4,6 @@
   collections:
     - community.kubernetes
     - operator_sdk.util
-  tasks: []
+  tasks:
+    - import_role:
+        name: "sysdigteam"
