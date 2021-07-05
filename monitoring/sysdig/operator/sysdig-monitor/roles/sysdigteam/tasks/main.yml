@@ -1,2 +1,27 @@
 ---
-# tasks file for SysdigTeam
+# Fail if this is placed in the wrong namespace
+# The CR must be deployed in a namespace that ends in `-tools`
+- name: Check if this is in the Tools namespace
+  fail: 
+    msg: "Object was not created in the Tools namespace. Please place your sysdig-team object there."
+  when: (meta.namespace.split("-")[1] | lower) != "tools"
+
+# Set facts for team namespaces
+- include_tasks: set_facts.yml
+
+# Get list of existing teams and users
+- include_tasks: fetch_data.yml
+
+# Find existing users or create new as required
+- include_tasks: users.yml
+  with_items: 
+    - "{{ team.users }}"
+  loop_control: 
+    loop_var: team_user
+
+# Create or update the team as required
+- include_tasks: teams.yml
+
+# Add a default dashboard if the team is new 
+- include_tasks: set_default_dashboard.yml
+  # when: container_team_exists == false

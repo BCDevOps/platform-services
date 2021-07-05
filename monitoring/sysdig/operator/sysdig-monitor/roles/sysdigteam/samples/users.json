@@ -1,0 +1,564 @@
+curl -X GET -H "Authorization: Bearer ${SYSDIG_TOKEN}" -H "Content-Type: application/json"   https://app.sysdigcloud.com/api/users | jq
+
+
+{
+  "users": [
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/7960ed49e89b30960531f87d1336613e",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": false
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 21060,
+          "teamName": "Platform Services",
+          "teamTheme": "#73A1F7",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 23604,
+          "teamName": "test-team",
+          "teamTheme": "#73A1F7",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 25956,
+          "userName": "shea.stewart+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        }
+      ],
+      "lastUpdated": 1550010433000,
+      "dateActivated": 1545250324000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 27,
+      "enabled": true,
+      "id": 25956,
+      "dateCreated": 1545249739000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_CUSTOMER",
+      "lastSeen": 1570636722000,
+      "status": "confirmed",
+      "username": "shea.stewart+bcgov@arctiq.ca",
+      "firstName": "Shea",
+      "lastName": "Stewart"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/c38c1abb22d8fdaf4be1d6520f0f58a7",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": true
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 21060,
+          "teamName": "Platform Services",
+          "teamTheme": "#73A1F7",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 23604,
+          "teamName": "test-team",
+          "teamTheme": "#73A1F7",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 26461,
+          "userName": "phil.thomson+bcgov@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        }
+      ],
+      "lastUpdated": 1555105208000,
+      "dateActivated": 1548899254000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 13,
+      "enabled": true,
+      "id": 26461,
+      "dateCreated": 1548898959000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_CUSTOMER",
+      "lastSeen": 1571425832000,
+      "status": "confirmed",
+      "username": "phil.thomson+bcgov@arctiq.ca",
+      "firstName": "Phil",
+      "lastName": "Thomson"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/0a0edd0b6b464070475d29604672d1f3",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "resetPassword": true,
+        "OpenID Connect profile id": "e1948a08-08e8-46e9-9a05-1f05ac9db528",
+        "openid": true,
+        "has_been_invited": true
+      },
+      "resetPassword": true,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 26462,
+          "userName": "husker@arctiq.ca",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        }
+      ],
+      "lastUpdated": 1554122553000,
+      "dateActivated": 1549080241000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 36,
+      "enabled": true,
+      "id": 26462,
+      "dateCreated": 1548899008000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_USER",
+      "lastSeen": 1554122553000,
+      "status": "confirmed",
+      "username": "husker@arctiq.ca",
+      "firstName": "William",
+      "lastName": "Adama"
+    },
+    {
+      "termsAndConditions": false,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/636782800c6e9c65a757711c516432f1",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": true
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27002,
+          "userName": "boomer@arctiq.ca",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        }
+      ],
+      "lastUpdated": 1551334124000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 0,
+      "enabled": false,
+      "id": 27002,
+      "dateCreated": 1551334124000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_USER",
+      "status": "registered",
+      "username": "boomer@arctiq.ca"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/c90cdbacdab9ede2151447180aaccc3d",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": true
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 21060,
+          "teamName": "Platform Services",
+          "teamTheme": "#73A1F7",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        },
+        {
+          "teamId": 23604,
+          "teamName": "test-team",
+          "teamTheme": "#73A1F7",
+          "userId": 27709,
+          "userName": "jeff.kelly@arctiq.ca",
+          "role": "ROLE_TEAM_MANAGER",
+          "admin": true
+        }
+      ],
+      "lastUpdated": 1555105219000,
+      "dateActivated": 1554305089000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 15,
+      "enabled": true,
+      "id": 27709,
+      "dateCreated": 1554296214000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_CUSTOMER",
+      "lastSeen": 1567030950000,
+      "status": "confirmed",
+      "username": "jeff.kelly@arctiq.ca",
+      "firstName": "Jeff",
+      "lastName": "Kelly"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/17706e9d8095bc5ba0bc59bac4afcaf1",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "resetPassword": true,
+        "OpenID Connect profile id": "ebc6378f-4f9f-4289-9e86-d0a8d3b00f39",
+        "openid": true,
+        "has_been_invited": true
+      },
+      "resetPassword": true,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 27714,
+          "userName": "thomson.p@gmail.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27714,
+          "userName": "thomson.p@gmail.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        }
+      ],
+      "lastUpdated": 1562259870000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 13,
+      "enabled": true,
+      "id": 27714,
+      "dateCreated": 1554307833000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_USER",
+      "lastSeen": 1562259870000,
+      "status": "confirmed",
+      "username": "thomson.p@gmail.com",
+      "firstName": "Phil",
+      "lastName": "Thomson"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/d493a2c83d967efa45145987272319c0",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": true
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 27889,
+          "userName": "steven.barre@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 27889,
+          "userName": "steven.barre@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        }
+      ],
+      "lastUpdated": 1559934896000,
+      "dateActivated": 1555110319000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 17,
+      "enabled": true,
+      "id": 27889,
+      "dateCreated": 1555110265000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_USER",
+      "lastSeen": 1570636365000,
+      "status": "confirmed",
+      "username": "steven.barre@dxcas.com",
+      "firstName": "Steven",
+      "lastName": "Barre"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/237edd815a6e948a62d57deee2c1620a",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": true
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 29063,
+          "userName": "dan.deane@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 29063,
+          "userName": "dan.deane@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        }
+      ],
+      "lastUpdated": 1559677256000,
+      "dateActivated": 1559677256000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 4,
+      "enabled": true,
+      "id": 29063,
+      "dateCreated": 1559670426000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_USER",
+      "lastSeen": 1570639441000,
+      "status": "confirmed",
+      "username": "dan.deane@dxcas.com",
+      "firstName": "Dan",
+      "lastName": "Deane"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/1921ff786d4edbdc0d1dde1a8515da73",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": true
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 29475,
+          "userName": "shea.stewart+sysdigreader@arctiq.ca",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        },
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 29475,
+          "userName": "shea.stewart+sysdigreader@arctiq.ca",
+          "role": "ROLE_TEAM_READ",
+          "admin": false
+        }
+      ],
+      "lastUpdated": 1561495387000,
+      "dateActivated": 1561495387000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 3,
+      "enabled": true,
+      "id": 29475,
+      "dateCreated": 1561495283000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_USER",
+      "lastSeen": 1561495523000,
+      "status": "confirmed",
+      "username": "shea.stewart+sysdigreader@arctiq.ca",
+      "firstName": "Reader",
+      "lastName": "Account"
+    },
+    {
+      "termsAndConditions": true,
+      "timezone": "+00:00",
+      "pictureUrl": "http://www.gravatar.com/avatar/1266db91f5acdcadaaef97e9d3d18d83",
+      "customer": {
+        "id": 23935,
+        "name": "BCDevOps",
+        "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8"
+      },
+      "oauth": false,
+      "properties": {
+        "has_been_invited": true
+      },
+      "resetPassword": false,
+      "additionalRoles": [],
+      "teamRoles": [
+        {
+          "teamId": 20008,
+          "teamName": "Monitor Operations",
+          "teamTheme": "#7BB0B2",
+          "userId": 29853,
+          "userName": "william.hutchison@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        },
+        {
+          "teamId": 20652,
+          "teamName": "Catchall",
+          "teamTheme": "#73A1F7",
+          "userId": 29853,
+          "userName": "william.hutchison@dxcas.com",
+          "role": "ROLE_TEAM_EDIT",
+          "admin": false
+        }
+      ],
+      "lastUpdated": 1563400991000,
+      "dateActivated": 1563400991000,
+      "accessKey": "a654ec58-6e2d-44fa-9854-bd45618643a8",
+      "version": 8,
+      "enabled": true,
+      "id": 29853,
+      "dateCreated": 1563398195000,
+      "products": [
+        "SDC"
+      ],
+      "systemRole": "ROLE_USER",
+      "lastSeen": 1570634111000,
+      "status": "confirmed",
+      "username": "william.hutchison@dxcas.com",
+      "firstName": "William",
+      "lastName": "Hutchison"
+    }
+  ]
+}
