@@ -1,4 +1,4 @@
-domain: operators.bcgov
+domain: ops.gov.bc.ca
 layout:
 - ansible.sdk.operatorframework.io/v1
 plugins:
