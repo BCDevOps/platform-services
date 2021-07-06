@@ -1,8 +1,9 @@
 name: aqua-post-deploy
+on:
   push:
     branches:
-      - '**'
-      - '!master'
+    - '**'
+    - '!master'
     paths: 
     - 'apps/aqua-post-config'
     - '.github/workflows/aqua-post-deploy-build.yaml'
