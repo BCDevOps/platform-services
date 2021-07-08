@@ -18,7 +18,7 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
   - NetApp storage (To be added)
 
 
-Here is an example of the monitoring output that reflects the enable monitors:
+Here is an example of the monitoring output that reflects the above monitors:
 ```
 10.97.84.1 - - [07/Jul/2021 22:47:28] "GET / HTTP/1.1" 200 -
 2021-07-07 22:48:13,528 [INFO] -------------------------- Iteration Stats ---------------------------
