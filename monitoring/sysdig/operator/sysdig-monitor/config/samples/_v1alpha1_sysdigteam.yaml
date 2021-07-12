@@ -2,6 +2,14 @@ apiVersion: ops.gov.bc.ca/v1alpha1
 kind: SysdigTeam
 metadata:
   name: sysdigteam-sample
+  namespace: shellyxuehan-tools
 spec:
-  # Add fields here
-  foo: bar
+  team:
+    description: The Sysdig Team for the testing changes
+    users:
+    - name: shelly.han@gov.bc.ca
+      role: ROLE_TEAM_MANAGER
+    - name: shelly123@gov.bc.ca
+      role: ROLE_TEAM_EDIT
+    - name: shelly456@gov.bc.ca
+      role: ROLE_TEAM_READ
