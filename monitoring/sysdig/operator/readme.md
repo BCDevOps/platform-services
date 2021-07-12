@@ -111,7 +111,7 @@ sdc-cli dashboard list
 2. Use the *sdc-cli* to get the json output of this
 3. Convert into jinja template and integrate into the ansible playbook as appropriate. 
 
-**NOTE: The Dashboard v2 API is being deprecated; the proper path is to use the *sdc-cli***
+**NOTE: The Dashboard v2 API is being deprecated (https://docs.sysdig.com/en/dashboard-apis.html); the proper path is to use the *sdc-cli***
 
 - Fetching a user API token (since API tokens are team scoped (ugh), this is required to add a dashboard to a specific team)
 ```shell
