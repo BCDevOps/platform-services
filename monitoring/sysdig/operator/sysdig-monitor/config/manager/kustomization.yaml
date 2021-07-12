@@ -1,6 +1,9 @@
 resources:
 - manager.yaml
 
+patches:
+- manager-patch.yaml
+
 generatorOptions:
   disableNameSuffixHash: true
 
