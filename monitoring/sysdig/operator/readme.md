@@ -1,139 +1,97 @@
-## Sysdig Monitor Operator
+# Sysdig Team Operator
 
-Operator initialization with the operator-sdk: 
+For each new app team onboarding to Sysdig, we leverage the `Sysdig Team Operator` to automatically create the team scopes and default dashboards on Sysdig, based on specifications set from the Custom Resource. There is an Ansible Operator installed in each OpenShift Cluster. Currently this is considered as part of the Cluster Configuration, so all changes go thought the standard CCM process.
 
-```
-operator-sdk new sysdig-monitor --type ansible --kind Monitoring --api-version ops.gov.bc.ca/v1alpha1 --generate-playbook
-```
+## Operational Approaches:
 
-### Operator Build Details
-The operator is running at a version (0.19) that "isn't supported for OCP 3.11", but has been modified to function based on the following examples: 
-- [https://github.com/konveyor/mig-operator/blob/master/build/Dockerfile](https://github.com/konveyor/mig-operator/blob/master/build/Dockerfile)
-- [https://github.com/konveyor/mig-operator/blob/master/build/entrypoint](https://github.com/konveyor/mig-operator/blob/master/build/entrypoint)
+### Build
+Ideally the build process would be a combination of GitHub Actions and OpenShift Builds, where the OpenShift build pushes the image to Artifactory. Due to some limitation, we are currently using a Docker account deployment is based on the build docker image from docker.io directly.
 
-When running in OCP4, this can be refactored into the standard operator-sdk dockerfile. 
+1. Any push to a non-master branch will trigger a GitHub Action to trigger a build in the OCP Lab cluster. A new deployment must be manually triggered once the build is complete. 
+2. A merge into master with any file changes in the sysdig/operator folder will trigger a build in the OCP Production cluster. A new deployment must be manually triggered once the build is complete. 
+
+Example GitHub Action can be found [here](../../../.github/workflows/sysdig-teams-operator-build-lab.yaml).
+
+### Development
+The output manifest from kustomize build are copied over to CCM repo for the actual operator deployment. For any changes in the operator, please follow the next part.
+
+### Operator Update Steps:
+- Preparation:
+  ```shell
+  brew install operator-sdk
+  brew install python3
+  pip3 install ansible ansible-runner ansible-runner-http
+  ```
+
+- Init:
+  ```shell
+  operator-sdk init --plugins=ansible --domain ops.gov.bc.ca
+  operator-sdk create api --help
+  operator-sdk create api --version=v1alpha1 --kind=SysdigTeam --generate-playbook --generate-role
+  ```
+  NOTE: we'll need to switch the CRD name from sysdigteam to sysdig-team to match existing CRs
+
+- Ansible playbook:
+  - copy over the original playbooks and roles (mind the path update)
+  - update watches.yaml and add finalizers
+  - would run locally to test out (remember to set local env vars for the sysdig token)
+
+- Building docker image:
+  ```shell
+  docker login -u bcdevopscluster
+  docker build . --file Dockerfile --tag bcdevopscluster/sysdig-teams-operator:lab
+  docker push bcdevopscluster/sysdig-teams-operator:lab
+  # NOTE: would use Makefile or start a PR and leverage Github action for build
+  ```
+
+- Operator manifest with Kustomize:
+  - add patches in manager/rbac/default for deployment and SA updates
+  - include patch files in corresponding `kustomization.yaml`
+  - generate the manifest:
+  ```shell
+  kustomize build config/default > manifest.yaml
+  ```
+
+- Manual testing:
+  - in a lab cluster, turn off argoCD auto sync
+  - apply the `manifest.yaml`
+  - create/edit/delete sample sysdig team
+  - verify operator logs and sysdig team status from Sysdig console
 
 
-## Development Approach
-There is a python client if desired, found here: https://github.com/draios/python-sdc-client
+## Operator Usage:
 
-We decided to leverage the native API with Ansible for building the Operator functions. The following code can be helpful when creating the Ansible URI tasks: https://github.com/draios/python-sdc-client/blob/master/sdcclient/_common.py
-
-### Build Process
-The build process is a combination of GitHub Actions and OpenShift Builds. 
-
-1. Any push to a non-master branch will trigger a GitHub Action to trigger a build in the OCP 3.11 Lab cluster. A new deployment must be manually triggered once the build is complete. 
-2. A merge into master with any file changes in the sysdig-operator folder will trigger a build in the OCP 3.11 Pathfinder Production cluster. A new deployment must be manually triggered once the build is complete. 
-
-Example GitHub Action: 
-```shell
-name: sysdig-teams-operator-build-lab
-on:
-  push:
-    branches:
-      - '**'
-      - '!master'
-    paths: 
-    - 'monitoring/sysdig/operator/sysdig-monitor/**'
-    - '.github/workflows/**'
- 
-jobs:
-  build: 
-    runs-on: ubuntu-latest
-    steps:
-    - name: Get the current branch name
-      shell: bash
-      run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-      id: branchref
-    - uses: actions/checkout@v1
-      with:
-        ref: ${{ github.ref }}
-    - name: OpenShift Action
-      uses: redhat-developer/openshift-actions@v1.1
-      with:
-        version: '3.11.235'
-        openshift_server_url: ${{ secrets.LAB_SYSDIG_OPERATOR_OPENSHIFT_SERVER_URL }}
-        parameters: '{"apitoken": "${{ secrets.LAB_SYSDIG_OPERATOR_SA_TOKEN }}"}'
-        cmd: |
-          'project ${{ secrets.LAB_SYSDIG_OPERATOR_PROJECT }}'
-          'delete is,bc -l build=gh-actions'
-          'new-build https://github.com/BCDevOps/platform-services#${{ steps.branchref.outputs.branch }} --context-dir=monitoring/sysdig/operator/sysdig-monitor --name sysdig-monitor-operator -l build=gh-actions'
-```
-
-## Usage
 - Custom Resources must be created in the `*-tools` namespace
-- Users need to specify the users (by email address) 
-- The playbook will automatically add all `tools`, `dev`, and `prod` namespaces into the team scope (there is no need to specify this)
+- Users need to specify the users (by email address that's associated with the user account) 
+- The playbook will automatically add all `tools`, `dev`, `test` and `prod` namespaces into the team scope (there is no need to specify this)
+
+### Samples:
+
+You can see some samples for the following resources:
+
+- the Sysdig-team [Custom Resource](sysdig-monitor/config/samples/_v1alpha1_sysdigteam.yaml)
+- Sysdig [teams](sysdig-monitor/roles/sysdigteam/samples/teams.json) and [users](sysdig-monitor/roles/sysdigteam/samples/users.json) payload from API requests
+
+## Ansible Playbook Usage:
+
+We decided to leverage the native Sysdig API with Ansible for building the Operator functions for now.
+
+### Sysdig API:
+Please note an admin access REAL user account is required to run the API requests from the Ansible playbooks, the token can be obtained from https://app.sysdigcloud.com/#/settings/user -> Sysdig Monitor API. It would be better to consider a service account on Sysdig if possible.
+
+Some references:
+- https://docs.sysdig.com/en/sysdig-rest-api-conventions.html
+- the following code can be helpful when creating the Ansible URI tasks: https://github.com/draios/python-sdc-client/blob/master/sdcclient/_common.py
 
 
-## Sample Custom Resource
-The following variables are used to define the Sysdig Team:
+### Alternative: Using the sdc-cli
+The sdc-cli is a utility that can be used to manipulate Sysdig resources. It is packaged in a container[?] but can also be installed with pip.
 
-```
-apiVersion: ops.gov.bc.ca/v1alpha1
-kind: SysdigTeam
-metadata:
-  name: example-monitoring
-spec:
-  team: 
-    description: some silly description here 
-    users:
-    - name: husker@arctiq.ca
-      role: ROLE_TEAM_READ 
-    - name: shea.stewart+bcgov@arctiq.ca
-      role: ROLE_TEAM_MANAGER
-    - name: shea.stewart+tester@arctiq.ca
-      role: ROLE_TEAM_EDIT
-    - name: boomer@arctiq.ca
-      role: ROLE_TEAM_READ 
+Some references:
+- https://github.com/draios/python-sdc-client
+- https://docs.sysdig.com/en/sysdig-cli-for-sysdig-monitor-and-secure.html
 
-```
-## Sample Payloads
-These sample payloads might be useful when managing the operator templates: 
-
-- Sample Sysdig Team JSON Structure
-```
-{   
-    "canUseAwsMetrics": false,
-    "canUseCustomEvents": true,
-    "canUseSysdigCapture": true,
-    "default": false,
-    "description": "some silly description here",
-    "entryPoint": {
-        "module": "Dashboards"
-    },
-    "name": "test-team",
-    "show": "container",
-    "theme": "#73A1F7",
-    "filter": "kubernetes.namespace.name in (\"usage-cost\")",
-    "userRoles": [
-      {
-        "userId": "26462",
-        "role": "ROLE_TEAM_READ"
-      }
-        ,
-        {
-        "userId": "25956",
-        "role": "ROLE_TEAM_MANAGER"
-      }
-        ,
-        {
-        "userId": "31736",
-        "role": "ROLE_TEAM_EDIT"
-      }
-        ,
-        {
-        "userId": "27002",
-        "role": "ROLE_TEAM_READ"
-      }
-       
-    ]
-}
-```
-## Using the sdc-cli
-The sdc-cli is a utility that can be used to manipulate Sysdig resources. It is packaged in a container[?] but can also be installed with pip.  
-
-**Note: The current version of the sdc-cli requires python3.8 - or more specifically, tatsu 5.5.0 which requires python3.8.**
+**NOTE: The current version of the sdc-cli requires python3.8 - or more specifically, tatsu 5.5.0 which requires python3.8.**
 
 The sdc-cli has been included in the ansible operator in order to manipulate dashboard objects. 
 
@@ -148,28 +106,12 @@ export SDC_TOKEN=[sysdig-team-token] # Keep in mind that tokens are team specifi
 sdc-cli dashboard list
 ```
 
-### SDC-CLI Resources
-- [https://docs.sysdig.com/en/sysdig-cli-for-sysdig-monitor-and-secure.html](https://docs.sysdig.com/en/sysdig-cli-for-sysdig-monitor-and-secure.html)
-
-
 ### Dashboard Template Creation Process
 1. Create a "template" dashboard that you like in Sysdig. Typically in the Platform Services team. 
 2. Use the *sdc-cli* to get the json output of this
 3. Convert into jinja template and integrate into the ansible playbook as appropriate. 
 
-
-# TODO
-- assign view? role to user without defined role? 
-- add in protected teams in validation
-- validate that the user has access to the desired namespaces
-- test and validate that OIDC is the only option? not sure if this will invite regular sysdig users via email. 
-- need to create a bot account
-- check on the stability of the swaggar API (which is in development)
-
-
-## Helpful Commands
-
-**Note: The Dashboard v2 API is being deprecated; the proper path is to use the *sdc-cli***
+**NOTE: The Dashboard v2 API is being deprecated; the proper path is to use the *sdc-cli***
 
 - Fetching a user API token (since API tokens are team scoped (ugh), this is required to add a dashboard to a specific team)
 ```shell
@@ -183,5 +125,12 @@ curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com
 sdc-cli --json dashboard get [dashboard-id]
 ```
 
-## Build Process
-GitHub Actions will create a new clean build and push it to the Platform Services DockerHub Account with a `lab` tag  from whatever branch changes are pushed to. Upon push to master, github actions will build a new copy with a `prod` tag and push the image to the Platform Services DockerHub Account.
+
+# TODO
+- migrate API to sdc-cli for team template management
+- assign view? role to user without defined role? 
+- add in protected teams in validation
+- validate that the user has access to the desired namespaces
+- test and validate that OIDC is the only option? not sure if this will invite regular sysdig users via email. 
+- need to create a bot account
+- check on the stability of the swaggar API (which is in development)
