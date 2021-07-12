@@ -2,9 +2,9 @@
 
 For each new app team onboarding to Sysdig, we leverage the `Sysdig Team Operator` to automatically create the team scopes and default dashboards on Sysdig, based on specifications set from the Custom Resource. There is an Ansible Operator installed in each OpenShift Cluster. Currently this is considered as part of the Cluster Configuration, so all changes go thought the standard CCM process.
 
-## Operational Approaches:
+# Operational Approaches:
 
-### Build
+## Build
 Ideally the build process would be a combination of GitHub Actions and OpenShift Builds, where the OpenShift build pushes the image to Artifactory. Due to some limitation, we are currently using a Docker account deployment is based on the build docker image from docker.io directly.
 
 1. Any push to a non-master branch will trigger a GitHub Action to trigger a build in the OCP Lab cluster. A new deployment must be manually triggered once the build is complete. 
@@ -12,10 +12,10 @@ Ideally the build process would be a combination of GitHub Actions and OpenShift
 
 Example GitHub Action can be found [here](../../../.github/workflows/sysdig-teams-operator-build-lab.yaml).
 
-### Development
+## Development
 The output manifest from kustomize build are copied over to CCM repo for the actual operator deployment. For any changes in the operator, please follow the next part.
 
-### Operator Update Steps:
+## Operator Update Steps:
 - Preparation:
   ```shell
   brew install operator-sdk
@@ -58,8 +58,9 @@ The output manifest from kustomize build are copied over to CCM repo for the act
   - create/edit/delete sample sysdig team
   - verify operator logs and sysdig team status from Sysdig console
 
+# Usage:
 
-## Operator Usage:
+## Operator:
 
 - Custom Resources must be created in the `*-tools` namespace
 - Users need to specify the users (by email address that's associated with the user account) 
@@ -67,12 +68,10 @@ The output manifest from kustomize build are copied over to CCM repo for the act
 
 ### Samples:
 
-You can see some samples for the following resources:
+You can see a sample Custom Resource for Sysdig-team [here](sysdig-monitor/config/samples/_v1alpha1_sysdigteam.yaml)
 
-- the Sysdig-team [Custom Resource](sysdig-monitor/config/samples/_v1alpha1_sysdigteam.yaml)
-- Sysdig [teams](sysdig-monitor/roles/sysdigteam/samples/teams.json) and [users](sysdig-monitor/roles/sysdigteam/samples/users.json) payload from API requests
 
-## Ansible Playbook Usage:
+## Ansible Playbook:
 
 We decided to leverage the native Sysdig API with Ansible for building the Operator functions for now.
 
@@ -125,6 +124,9 @@ curl -H "Authorization: Bearer $SYSDIG_TOKEN" -X GET https://app.sysdigcloud.com
 sdc-cli --json dashboard get [dashboard-id]
 ```
 
+### Samples:
+
+Sysdig [teams](sysdig-monitor/roles/sysdigteam/samples/teams.json) and [users](sysdig-monitor/roles/sysdigteam/samples/users.json) payload from API requests
 
 # TODO
 - migrate API to sdc-cli for team template management
