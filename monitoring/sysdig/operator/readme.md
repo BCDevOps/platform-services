@@ -52,7 +52,7 @@ The output manifest from kustomize build are copied over to CCM repo for the act
   kustomize build config/default > manifest.yaml
   ```
 
-- Manual testing:
+- Manual testing: (soon to be automated)
   - in a lab cluster, turn off argoCD auto sync
   - apply the `manifest.yaml`
   - create/edit/delete sample sysdig team
