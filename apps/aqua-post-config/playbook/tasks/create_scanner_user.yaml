@@ -19,5 +19,5 @@
       email: ""
   failed_when:
   - response.status != 204
-  - "'User with username ' + aqua_scanner_username + ' already exists' not in response.content"
+  - "'User with username {{ aqua_scanner_username }} already exists' not in response.json.message"
       
