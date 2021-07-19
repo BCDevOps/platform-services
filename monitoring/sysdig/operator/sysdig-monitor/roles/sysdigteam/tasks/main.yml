@@ -5,7 +5,7 @@
 - name: Check if this is in the Tools namespace
   fail: 
     msg: "Object was not created in the Tools namespace. Please place your sysdig-team object there."
-  when: (ansible_operator_meta.namespace | lower) is match(".*-tools")
+  when: '"-tools" in (ansible_operator_meta.namespace | lower)'
 
 # Set facts for team namespaces
 - include_tasks: set_facts.yml
