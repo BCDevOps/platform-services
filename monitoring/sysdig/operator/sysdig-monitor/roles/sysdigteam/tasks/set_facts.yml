@@ -3,7 +3,7 @@
 # for each team
 - name: Set prefix
   set_fact: 
-    ns_prefix: "{{ ansible_operator_meta.namespace.split('-')[0] | lower }}"
+    ns_prefix: "{{ ansible_operator_meta.namespace.split('-tools')[0] | lower }}"
 - name: Create additional variables
   set_fact: 
     namespaces: ["{{ ns_prefix}}-tools", "{{ ns_prefix}}-dev","{{ ns_prefix }}-test", "{{ ns_prefix }}-prod"]
