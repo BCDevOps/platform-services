@@ -1,6 +1,7 @@
 import logging
 import subprocess
 import httplib2
+import json
 import cerberus.invoke.command as runcommand
 
 # placeholder for global var
@@ -38,6 +39,24 @@ def check_image_registry_and_routing():
 
   return resp.status == 200
 
+def check_storage():
+  logging.info("Check if netapp storages are all available.")
+
+  trident_backend_list = runcommand.invoke("oc -n openshift-bcgov-trident get TridentBackends -o json")
+  trident_backends = json.loads(trident_backend_list)['items']
+
+  for storage in trident_backends:
+    storage_name = storage['metadata']['name']
+    logging.info("-> TridentBackends "+ storage_name)
+
+    status_output = runcommand.invoke("oc -n openshift-bcgov-trident get TridentBackends " + storage_name + " -o json")
+    status = json.loads(status_output)['state']
+
+    if (status != "online"):
+      return False
+
+  return True
+
 def main():
   logging.info("------------------- Start Custom Checks -------------------")
 
@@ -52,6 +71,7 @@ def main():
   check1 = check_nodes()
   check2 = check_cluster_readyz()
   check3 = check_image_registry_and_routing()
+  check4 = check_storage()
   logging.info("------------------- Finished Custom Checks -------------------")
 
-  return check1 & check2 & check3
+  return check1 & check2 & check3 & check4
