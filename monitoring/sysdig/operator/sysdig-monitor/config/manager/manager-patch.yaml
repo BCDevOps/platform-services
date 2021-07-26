@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: controller-manager
+  namespace: system
+  labels:
+    control-plane: controller-manager
+spec:
+  template:
+    spec:
+      # permission issue:
+      securityContext:
+        runAsNonRoot: false
+      containers:
+      - name: manager
+        image: 'docker.io/bcdevopscluster/sysdig-teams-operator:lab'
+        imagePullPolicy: "Always"
+        env:
+        - name: SYSDIG_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: sysdig-api-token
+              key: token

@@ -1,10 +1,11 @@
 ---
+# Use the 'create api' subcommand to add watches to this file.
 - version: v1alpha1
   group: ops.gov.bc.ca
   kind: SysdigTeam
   reconcilePeriod: 24h
-  playbook: /opt/ansible/configure_teams.yml
+  playbook: playbooks/sysdigteam.yml
   finalizer:
     name: finalizer.ops.gov.bc.ca
-    playbook: /opt/ansible/delete_team.yml 
-    
+    playbook: playbooks/sysdigteam-destroy.yml
+#+kubebuilder:scaffold:watch

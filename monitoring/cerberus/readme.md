@@ -15,7 +15,7 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
   - ingress service
   - API service
   - worker nodes
-  - NetApp storage (To be added)
+  - NetApp storage (Trident backend)
 
 
 Here is an example of the monitoring output that reflects the above monitors:
@@ -40,9 +40,15 @@ Here is an example of the monitoring output that reflects the above monitors:
 2021-07-07 22:49:13,996 [INFO] Check cluster readyz endpoint.
 2021-07-07 22:49:14,015 [INFO] Check Image Registry API and test on routing layer.
 2021-07-07 22:49:14,562 [INFO] Detected Image Registry API: https://image-registry.apps.silver.devops.gov.bc.ca/healthz
-2021-07-07 22:49:14,599 [INFO] ------------------- Finished Custom Checks -------------------
+2021-07-07 22:49:15,044 [INFO] Check if netapp storages are all available.
+2021-07-07 22:49:15,322 [INFO] -> TridentBackends tbe-7pr79
+2021-07-07 22:49:15,611 [INFO] -> TridentBackends tbe-976nm
+2021-07-07 22:49:15,926 [INFO] -> TridentBackends tbe-gqf65
+2021-07-07 22:49:15,238 [INFO] -> TridentBackends tbe-mwpfn
+2021-07-07 22:49:15,517 [INFO] -> TridentBackends tbe-ncvw9
+2021-07-07 22:49:15,599 [INFO] ------------------- Finished Custom Checks -------------------
 
-2021-07-07 22:49:14,776 [INFO] Sleeping for the specified duration: 60
+2021-07-07 22:49:15,776 [INFO] Sleeping for the specified duration: 60
 ```
 
 ### TODO:
