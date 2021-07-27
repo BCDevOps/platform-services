@@ -47,7 +47,9 @@ spec:
               name: cerberus-config
             # - mountPath: "/usr/local/bin/custom_checks/custom_checks.py"
             #   subPath: custom_checks.py
-            #   name: cerberus-custom-check              
+            #   name: cerberus-custom-check
+            - mountPath: /tmp/data
+              name: cerberus-storage     
       volumes:
         - name: kubeconfig
           configMap:
@@ -59,6 +61,23 @@ spec:
         # - name: cerberus-custom-check
         #   configMap:
         #     name: cerberus-custom-check
+        - name: cerberus-storage
+          persistentVolumeClaim:
+            claimName: cerberus-storage
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cerberus-storage
+  namespace: openshift-bcgov-cerberus
+  labels:
+    app: cerberus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 ---
 apiVersion: v1
 kind: Service
