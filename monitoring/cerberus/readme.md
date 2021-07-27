@@ -52,7 +52,7 @@ Here is an example of the monitoring output that reflects the above monitors:
 ```
 
 ### TODO:
-- add PVC for monitoring history
+- build cronjob for full application life cycle monitoring
 
 ### Docker Image Build (temporary)
 ```shell
