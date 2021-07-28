@@ -3,7 +3,7 @@
     "pagination": {
         "offset": 0,
         "limit": 50,
-        "total": 20
+        "total": 21
     },
     "monitors": [
         {
@@ -138,7 +138,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
-            "status": 1,
+            "status": 2,
             "create_datetime": 1627466269
         },
         {
@@ -230,6 +230,21 @@
             "interval": 60,
             "status": 2,
             "create_datetime": 1622476342
+        },
+        {
+            "id": 788819725,
+            "friendly_name": "Registry Service",
+            "url": "https://registry.developer.gov.bc.ca/api/v1/ehlo",
+            "type": 1,
+            "sub_type": "",
+            "keyword_type": null,
+            "keyword_value": "",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1627484301
         },
         {
             "id": 788000932,
