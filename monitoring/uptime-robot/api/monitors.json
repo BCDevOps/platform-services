@@ -3,7 +3,7 @@
     "pagination": {
         "offset": 0,
         "limit": 50,
-        "total": 16
+        "total": 21
     },
     "monitors": [
         {
@@ -82,8 +82,38 @@
             "create_datetime": 1622551182
         },
         {
+            "id": 788570144,
+            "friendly_name": "Gold Cerberus",
+            "url": "https://cerberus-service-openshift-bcgov-cerberus.apps.gold.devops.gov.bc.ca/",
+            "type": 2,
+            "sub_type": "",
+            "keyword_type": 2,
+            "keyword_value": "True",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1625051299
+        },
+        {
+            "id": 788549203,
+            "friendly_name": "Gold Cluster - API",
+            "url": "https://api.gold.devops.gov.bc.ca:6443/apis/project.openshift.io/v1/projects/openshift-bcgov-cerberus",
+            "type": 2,
+            "sub_type": "",
+            "keyword_type": 2,
+            "keyword_value": "\"name\": \"openshift-bcgov-cerberus\"",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1624880954
+        },
+        {
             "id": 788298610,
-            "friendly_name": "Gold Cluster - Ready",
+            "friendly_name": "Gold Platform Service - Ready",
             "url": "https://api.gold.devops.gov.bc.ca:6443/readyz",
             "type": 2,
             "sub_type": "",
@@ -95,6 +125,21 @@
             "interval": 60,
             "status": 2,
             "create_datetime": 1622550658
+        },
+        {
+            "id": 788817875,
+            "friendly_name": "GoldDR Platform Service - Ready",
+            "url": "https://api.golddr.devops.gov.bc.ca:6443/readyz",
+            "type": 2,
+            "sub_type": "",
+            "keyword_type": 2,
+            "keyword_value": "ok",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1627466269
         },
         {
             "id": 788298590,
@@ -187,6 +232,21 @@
             "create_datetime": 1622476342
         },
         {
+            "id": 788819725,
+            "friendly_name": "Registry Service",
+            "url": "https://registry.developer.gov.bc.ca/api/v1/ehlo",
+            "type": 1,
+            "sub_type": "",
+            "keyword_type": null,
+            "keyword_value": "",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1627484301
+        },
+        {
             "id": 788000932,
             "friendly_name": "RocketChat",
             "url": "https://chat.developer.gov.bc.ca/api/info",
@@ -215,6 +275,21 @@
             "interval": 60,
             "status": 2,
             "create_datetime": 1620230058
+        },
+        {
+            "id": 788549142,
+            "friendly_name": "Silver Custer - API",
+            "url": "https://api.silver.devops.gov.bc.ca:6443/apis/project.openshift.io/v1/projects/openshift-bcgov-cerberus",
+            "type": 2,
+            "sub_type": "",
+            "keyword_type": 2,
+            "keyword_value": "\"name\": \"openshift-bcgov-cerberus\"",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1624880342
         },
         {
             "id": 787427386,
