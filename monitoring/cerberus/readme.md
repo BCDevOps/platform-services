@@ -52,7 +52,7 @@ Here is an example of the monitoring output that reflects the above monitors:
 ```
 
 ### TODO:
-- add PVC for monitoring history
+- build cronjob for full application life cycle monitoring
 
 ### Docker Image Build (temporary)
 ```shell
@@ -102,7 +102,7 @@ oc -n [namespace] get route cerberus-service
 curl -i <cerberus_url>
 
 # get monitoring statistics:
-curl -i <cerberus_url>/history
+curl -i <cerberus_url>/history # History is saved with persistent storage
 curl -i <cerberus_url>/analyze
 ```
 
