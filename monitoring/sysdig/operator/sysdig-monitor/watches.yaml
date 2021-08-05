@@ -9,3 +9,4 @@
     name: finalizer.ops.gov.bc.ca
     playbook: playbooks/sysdigteam-destroy.yml
 #+kubebuilder:scaffold:watch
+  maxRunnerArtifacts: 2 # only keep the latest and the previous artifacts
