@@ -1,4 +1,5 @@
 ---
+# ref: https://sdk.operatorframework.io/docs/building-operators/ansible/reference/watches/
 # Use the 'create api' subcommand to add watches to this file.
 - version: v1alpha1
   group: ops.gov.bc.ca
@@ -9,4 +10,4 @@
     name: finalizer.ops.gov.bc.ca
     playbook: playbooks/sysdigteam-destroy.yml
 #+kubebuilder:scaffold:watch
-  maxRunnerArtifacts: 2 # only keep the latest and the previous artifacts
+  maxRunnerArtifacts: 2 # only keep the latest and the previous artifacts to save space
