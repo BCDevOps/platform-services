@@ -35,27 +35,27 @@ The following sample custom resource can be used for reference;
 apiVersion: ops.gov.bc.ca/v1alpha1
 kind: SysdigTeam
 metadata:
-  name: c81e6h-sysdigteam
+  name: 101ed4-sysdigteam
 spec:
-  team: 
-    description: The Sysdig Team for the PMS Namespaces
+  team:
+    description: The Sysdig Team for the Platform Services Documize
     users:
-    - name: husker@arctiq.ca
-      role: ROLE_TEAM_READ 
-    - name: shea.stewart+bcgov@arctiq.ca
+    - name: shelly.han@gov.bc.ca
       role: ROLE_TEAM_MANAGER
-    - name: shea.stewart+tester@arctiq.ca
+    - name: patrick.simonian@gov.bc.ca
       role: ROLE_TEAM_EDIT
-    - name: boomer@arctiq.ca
-      role: ROLE_TEAM_READ 
+    - name: billy.li@gov.bc.ca
+      role: ROLE_TEAM_STANDARD
+    - name: olena.mitovska@gov.bc.ca
+      role: ROLE_TEAM_READ
 ```
 
 ### Available Roles
 The following roles are available for use: 
+- `ROLE_TEAM_MANAGER (Team Manager, mandatory)` - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions. ***Please note it's mandatory to have at least one team manager, otherwise the operator can't create default templates for you!***
 - `ROLE_TEAM_EDIT (Advanced User)` - Can create/edit/delete dashboards, alerts, or other content.
 - `ROLE_TEAM_STANDARD (Standard User)` - An Advanced User with no access to the Explore page (e.g. for developers who are not interested in Monitoring information).
 - `ROLE_TEAM_READ (View-only User)` - Read access to the environment within team scope, but cannot create, edit, or delete dashboards, alerts, or other content.
-- `ROLE_TEAM_MANAGER (Team Manager)` - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions.
 
 **Note** Role Updates should be applied to the CR, and **NOT** in the Sysdig Monitor UI. Reconciliation of the SysdigTeams Operator will overwrite any UI changes to the team roles. 
 
@@ -67,47 +67,40 @@ The following roles are available for use:
   ```
 - Validate the creation of the Sysdig Team using `oc describe sysdig-team`
   ```shell
-  Name:         c81e6h-sysdigteam
-  Namespace:    c81e6h-tools
-  Labels:       <none>
-  Annotations:  kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"ops.gov.bc.ca/v1alpha1","kind":"SysdigTeam","metadata":{"annotations":{},"name":"c81e6h-sysdigteam","namespace":"c81e6h-tools"},"spec":{
-  ...
-  API Version:  ops.gov.bc.ca/v1alpha1
-  Kind:         SysdigTeam
-  Metadata:
-    Creation Timestamp:  2020-01-27T05:25:55Z
-    Finalizers:
-      finalizer.ops.gov.bc.ca
-    Generation:        1
-    Resource Version:  1436022248
-    Self Link:         /apis/ops.gov.bc.ca/v1alpha1/namespaces/c81e6h-tools/sysdig-teams/c81e6h-sysdigteam
-    UID:               7e02ff08-40c5-11ea-8a92-0050568379a2
-  Spec:
-    Team:
-      Description:  The Sysdig Team for the PMS Namespaces
-      Users:
-        Name:  husker@arctiq.ca
-        Role:  ROLE_TEAM_READ
-        Name:  shea.stewart+bcgov@arctiq.ca
-        Role:  ROLE_TEAM_MANAGER
-        Name:  shea.stewart+tester@arctiq.ca
-        Role:  ROLE_TEAM_EDIT
-        Name:  boomer@arctiq.ca
-        Role:  ROLE_TEAM_READ
-  Status:
-    Conditions:
-      Ansible Result:
-        Changed:             0
-        Completion:          2020-01-27T05:30:39.422111
-        Failures:            0
-        Ok:                  33
-        Skipped:             11
-      Last Transition Time:  2020-01-27T05:29:50Z
-      Message:               Awaiting next reconciliation
-      Reason:                Successful
-      Status:                True
-      Type:                  Running
-  Events:                    <none>
+  apiVersion: ops.gov.bc.ca/v1alpha1
+  kind: SysdigTeam
+  metadata:
+    creationTimestamp: "2021-04-15T22:42:20Z"
+    finalizers:
+    - finalizer.ops.gov.bc.ca
+    generation: 1
+    name: 101ed4-sysdigteam
+    namespace: 101ed4-tools
+  spec:
+    team:
+      description: The Sysdig Team for the Platform Services Documize
+      users:
+      - name: shelly.han@gov.bc.ca
+        role: ROLE_TEAM_MANAGER
+      - name: patrick.simonian@gov.bc.ca
+        role: ROLE_TEAM_EDIT
+      - name: billy.li@gov.bc.ca
+        role: ROLE_TEAM_STANDARD
+      - name: olena.mitovska@gov.bc.ca
+        role: ROLE_TEAM_READ
+  status:
+    conditions:
+    - ansibleResult:
+        changed: 0
+        completion: 2021-08-08T20:08:03.685003
+        failures: 0
+        ok: 30
+        skipped: 13
+      lastTransitionTime: "2021-08-05T18:54:24Z"
+      message: Awaiting next reconciliation
+      reason: Successful
+      status: "True"
+      type: Running
 
   ```
   
