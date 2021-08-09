@@ -119,7 +119,7 @@ In order to access the Sysdig Monitor application and your team resources:
 ![](assets/sysdigteams_dashboard_nav.png)
 ![](assets/sysdigteams_resource_overview.png)
 
-- A simple persistent storage dashbaord has been created to provide an overview of all Persistent Volume Claim utilization. 
+- A simple persistent storage dashboard has been created to provide an overview of all Persistent Volume Claim utilization. 
 **Note: PVC's must be attached to a running pod for their metrics to be displayed on this dashboard.**
 ![](assets/sysdigteams_persistent_storage.png)
 
