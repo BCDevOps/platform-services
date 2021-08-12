@@ -28,7 +28,7 @@ First thing first, please have you and your team login to Sysdig to create the u
   - **Note** that Sysdig identifies users by the email, so it's important to use the correct email addr for yourself as well as your team members
 
 ## Step 2 - Create Sysdig Team Access
-We are running an OpenShift Operator in the background that creates Sysdig RBAC and dashboard for you. The operator is looking for a `sysdig-team` custom resource from your `*-tools` namespace. Here are what's gonna happen:
+We are running an OpenShift Operator in the background that creates Sysdig RBAC and dashboard for you. The operator is looking for a `sysdig-team` custom resource from your `*-tools` namespace. The `sysdig-team` resource will:
 
 - Create a Custom Resource in your project *Tools* namespace 
 - Create an access control list within the Custom Resource that *identifies users by the ***email address***
