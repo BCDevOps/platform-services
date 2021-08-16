@@ -113,6 +113,7 @@ The following roles are available for use:
 
   ```
 
+***NOTE*** if your project set is on Gold and GoldDR clusters, please only create the sysdig-team Custom Resource in Gold cluster. Our sysdig operator will be able to pick it up and create the dashboards for you apps across the two clusters.
 
 ## Step 3 - Logging Into Your Sysdig Team
 Now that you've created the custom resource, you can go back to Sysdig again to see the new team scope and default dashboards.
