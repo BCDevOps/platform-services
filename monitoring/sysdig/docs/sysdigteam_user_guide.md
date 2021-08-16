@@ -219,9 +219,10 @@ Sysdig scrapes Prometheus metrics, you can create custom queries using PromQL. H
 ### Creating a PromQL Based Alert
 Some of the dashboard panels may be leveraging PromQL to display the metrics. PromQL can be used in Alerts as well. The following example shows an alert for the **Persistent Volume Utilization** when hitting 80% full. 
 
+- If you'd like to get a PVC specific metrics, for example get the max percentage of a storage usage: `max(kubelet_volume_stats_used_bytes{persistentvolumeclaim="<PVC_name>"}) / max(kubelet_volume_stats_capacity_bytes{persistentvolumeclaim="<PVC_name>"}) * 100`
+
 - Sample PromQL Query: `((avg(kubelet_volume_stats_used_bytes/kubelet_volume_stats_capacity_bytes) by (persistentvolumeclaim)) * 100) >= 80`  
 ![](assets/sysdigteams_alert_promql_pvc_usage.png)
-
 
 # Additional Resources
 - [Sysdig Monitor](https://docs.sysdig.com/en/sysdig-monitor.html)
