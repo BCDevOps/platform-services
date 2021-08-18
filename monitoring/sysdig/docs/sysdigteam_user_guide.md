@@ -45,6 +45,7 @@ apiVersion: ops.gov.bc.ca/v1alpha1
 kind: SysdigTeam
 metadata:
   name: 101ed4-sysdigteam
+  namespace: 101ed4-tools
 spec:
   team:
     description: The Sysdig Team for the Platform Services Documize
@@ -74,44 +75,43 @@ The following roles are available for use:
   oc project 101ed4-tools
   oc apply -f sysdigteam-sample.yml
   ```
-- Validate the creation of the Sysdig Team using `oc describe sysdig-team`
+- Validate the creation of the Sysdig Team using `oc describe sysdig-team <your_sysdig_team_cr_name>`
   ```shell
-  apiVersion: ops.gov.bc.ca/v1alpha1
-  kind: SysdigTeam
-  metadata:
-    creationTimestamp: "2021-04-15T22:42:20Z"
-    finalizers:
-    - finalizer.ops.gov.bc.ca
-    generation: 1
-    name: 101ed4-sysdigteam
-    namespace: 101ed4-tools
-  spec:
-    team:
-      description: The Sysdig Team for the Platform Services Documize
-      users:
-      - name: shelly.han@gov.bc.ca
-        role: ROLE_TEAM_MANAGER
-      - name: patrick.simonian@gov.bc.ca
-        role: ROLE_TEAM_EDIT
-      - name: billy.li@gov.bc.ca
-        role: ROLE_TEAM_STANDARD
-      - name: olena.mitovska@gov.bc.ca
-        role: ROLE_TEAM_READ
-  status:
-    conditions:
-    - ansibleResult:
-        changed: 0
-        completion: 2021-08-08T20:08:03.685003
-        failures: 0
-        ok: 30
-        skipped: 13
-      lastTransitionTime: "2021-08-05T18:54:24Z"
-      message: Awaiting next reconciliation
-      reason: Successful
-      status: "True"
-      type: Running
+  Name:         101ed4-sysdigteam
+  Namespace:    101ed4-tools
+  Labels:       <none>
+  API Version:  ops.gov.bc.ca/v1alpha1
+  Kind:         SysdigTeam
+  Metadata:
+    Creation Timestamp:  2021-04-15T22:42:20Z
+    ...
+  Spec:
+    Team:
+      Description:  The Sysdig Team for the Platform Services Documize
+      Users:
+        Name:  shelly.han@gov.bc.ca
+        Role:  ROLE_TEAM_MANAGER
+        Name:  patricksimonian@gmail.com
+        Role:  ROLE_TEAM_EDIT
+        ...
+  Status:
+    Conditions:
+      Ansible Result:
+        Changed:             0
+        Completion:          2021-08-18T20:10:43.665524
+        Failures:            0
+        Ok:                  30
+        Skipped:             13
+      Last Transition Time:  2021-08-05T18:54:24Z
+      Message:               Awaiting next reconciliation
+      Reason:                Successful
+      Status:                True
+      Type:                  Running
+  Events:                    <none>
 
   ```
+
+> when you see `Awaiting next reconciliation` and Successful status, that means the sysdig team has been created for you all good. But if you see other status message, please contact us on RocketChat channel https://chat.developer.gov.bc.ca/channel/devops-sysdig!
 
 ***NOTE*** if your project set is on Gold and GoldDR clusters, please only create the sysdig-team Custom Resource in Gold cluster. Our sysdig operator will be able to pick it up and create the dashboards for you apps across the two clusters.
 
