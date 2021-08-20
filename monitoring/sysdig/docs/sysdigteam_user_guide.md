@@ -111,7 +111,7 @@ The following roles are available for use:
 
   ```
 
-> when you see `Awaiting next reconciliation` and Successful status, that means the sysdig team has been created for you all good. But if you see other status message, please contact us on RocketChat channel https://chat.developer.gov.bc.ca/channel/devops-sysdig!
+> when you see `Awaiting next reconciliation` and Successful status, that means the sysdig team has been created successfully. If you do not see `Awaiting next reconciliation`, please contact us on RocketChat channel https://chat.developer.gov.bc.ca/channel/devops-sysdig!
 
 ***NOTE*** if your project set is on Gold and GoldDR clusters, please only create the sysdig-team Custom Resource in Gold cluster. Our sysdig operator will be able to pick it up and create the dashboards for you apps across the two clusters.
 
