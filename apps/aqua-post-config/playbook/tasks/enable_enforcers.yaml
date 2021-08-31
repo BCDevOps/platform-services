@@ -10,8 +10,9 @@
     method: GET
     status_code: [200]
     url: "{{ aqua_url }}/api/v1/hosts"
-
-
+  until: response.json.result | length > 0
+  retries: 5
+  delay: 10
 - name: Approve Enforcer to default group
   uri:
     headers:
