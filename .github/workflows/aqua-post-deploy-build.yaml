@@ -25,4 +25,4 @@ jobs:
     - name: Build the tagged Docker image
       run: cd apps/aqua-post-config && docker build . --file Dockerfile --tag bcdevopscluster/aqua-post-config:lab
     - name: Push the tagged Docker image
-      run: docker push bcdevopscluster/aqua-post-config:lab
+      run: docker push bcdevopscluster/aqua-post-config:1.0.0-alpha
