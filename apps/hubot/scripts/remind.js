@@ -2,9 +2,12 @@
 //   Remind to someone something
 //
 // Commands:
-//   hubot remind [me|<username>] ((in <number> [m|h|d]) | (on <date> [at <time>])) to <something to remind> - remind to do something on a given date/time or in X min/hours/days.
 //   hubot show reminders - Show active reminders
-//   hubot delete reminder owner: <username> action: <action> - Remove a given reminder, queried by the reminder message.
+//   hubot delete reminder owner: (username) action: (action) - Remove a given reminder, queried by the reminder message.
+//   hubot remind me in 5 h to (reminder) - remind me to do something in 5 hours. Replace the h with an m for minutes or d for days.
+//   hubot remind me on Sept 5 at 10:00 to (reminder) - remind me to do something at a specific date and time.
+//   hubot remind (username) in 1 day to (reminder) - remind someone else to do something in 1 day. Substitute "minute(s)" or "hour(s)" as appropriate.
+//   hubot remind (username) on today at 3pm to (reminder) - remind someone else to do something at 3pm today.
 //
 //
 
@@ -204,7 +207,7 @@ module.exports = function(robot) {
     }
   });
 
-  return robot.respond(/(remind )(.*) (in|on|tomorrow) (.*)to (.*)/i, function(msg) {
+  return robot.respond(/(remind )(.*) (in|on|tomorrow|today) (.*)to (.*)/i, function(msg) {
     let due, options, reminder;
     let who = msg.match[2];
     let type = msg.match[3];
@@ -232,7 +235,12 @@ module.exports = function(robot) {
         options.due = due;
       }
     } else if (type === 'tomorrow') {
-      due = chrono.parseDate('tomorrow').getTime();
+      due = chrono.parseDate('tomorrow ' + time).getTime();
+      if (due.toString() !== 'Invalid Date') {
+        options.due = due;
+      }
+    } else if (type === 'today') {
+      due = chrono.parseDate('today ' + time).getTime();
       if (due.toString() !== 'Invalid Date') {
         options.due = due;
       }
