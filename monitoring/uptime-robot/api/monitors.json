@@ -3,7 +3,7 @@
     "pagination": {
         "offset": 0,
         "limit": 50,
-        "total": 20
+        "total": 22
     },
     "monitors": [
         {
@@ -53,6 +53,54 @@
             "interval": 60,
             "status": 2,
             "create_datetime": 1624880954
+        },
+        {
+            "id": 789139001,
+            "friendly_name": "KeyCloak SSO Dev",
+            "url": "https://dev.oidc.gov.bc.ca/auth/realms/master/protocol/openid-connect/token",
+            "type": 1,
+            "sub_type": "",
+            "keyword_type": null,
+            "keyword_case_type": null,
+            "keyword_value": "",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1631101050
+        },
+        {
+            "id": 789139171,
+            "friendly_name": "KeyCloak SSO Prod",
+            "url": "https://oidc.gov.bc.ca/auth/realms/master/protocol/openid-connect/token",
+            "type": 1,
+            "sub_type": "",
+            "keyword_type": null,
+            "keyword_case_type": null,
+            "keyword_value": "",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1631102846
+        },
+        {
+            "id": 789139167,
+            "friendly_name": "KeyCloak SSO Test",
+            "url": "https://test.oidc.gov.bc.ca/auth/realms/master/protocol/openid-connect/token",
+            "type": 1,
+            "sub_type": "",
+            "keyword_type": null,
+            "keyword_case_type": null,
+            "keyword_value": "",
+            "http_username": "",
+            "http_password": "",
+            "port": "",
+            "interval": 60,
+            "status": 2,
+            "create_datetime": 1631102786
         },
         {
             "id": 787674474,
