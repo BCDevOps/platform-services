@@ -1,0 +1,24 @@
+# permissions for end users to edit sysdig-teams.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: sysdig-team-editor-role
+rules:
+- apiGroups:
+  - ops.gov.bc.ca
+  resources:
+  - sysdig-teams
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ops.gov.bc.ca
+  resources:
+  - sysdig-teams/status
+  verbs:
+  - get

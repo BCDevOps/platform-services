@@ -1,0 +1,26 @@
+---
+- name: Get Enforcers
+  register: response
+  uri:
+    headers:
+      Authorization: "Bearer {{ auth_token }}"
+      Content-Type: application/json
+    body_format: json
+    return_content: yes
+    method: GET
+    status_code: [200]
+    url: "{{ aqua_url }}/api/v1/hosts"
+  until: response.json.result | length > 0
+  retries: 5
+  delay: 10
+- name: Approve Enforcer to default group
+  uri:
+    headers:
+      Authorization: "Bearer {{ auth_token }}"
+      Content-Type: application/json
+    body_format: json
+    method: PUT
+    status_code: [204]
+    url: "{{ aqua_url }}/api/v1/hosts/{{ item }}/approve"
+  with_items: "{{ response.json.result | json_query('[*].id') | list }}"
+

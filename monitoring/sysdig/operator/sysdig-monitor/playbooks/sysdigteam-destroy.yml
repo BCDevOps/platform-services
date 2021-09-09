@@ -1,0 +1,8 @@
+- hosts: localhost
+  gather_facts: no
+  vars_files: 
+   - ../roles/sysdigteam/vars/main.yml
+  tasks:
+    - include_tasks: ../roles/sysdigteam/tasks/set_facts.yml
+    - include_tasks: ../roles/sysdigteam/tasks/fetch_data.yml
+    - include_tasks: ../roles/sysdigteam/tasks/delete_team.yml

@@ -3,24 +3,56 @@
 Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Robot.
 
 ### Things that Cerberus monitors:
-- all nodes: master, infra, app
-- if any nodes are marked as schedulable
-- cluster Operators
-- pods from the specified namespaces
-- critical alerts from prometheus:
+- [x] cluster Operators
+- [x] critical alerts from prometheus:
   - KubeAPILatencyHigh
   - etcdHighNumberOfLeaderChanges
-- custom checks:
-  - monitoring on the 5 major cluster services identified here: https://miro.com/app/board/o9J_kgyjm_k=/
+- [ ] cluster nodes: master, infra, app (too aggressive, using custom checks instead)
+- [ ] all pods from the specified namespaces (too aggressive, using custom checks instead)
+- [x] custom checks: 
+  - monitoring on the 5 major cluster services identified in [Miro board](https://miro.com/app/board/o9J_kgyjm_k=/)
   - image registry / Artifactory
   - ingress service
   - API service
   - worker nodes
-  - NetApp storage (To be added)
+  - NetApp storage (Trident backend)
+
+
+Here is an example of the monitoring output that reflects the above monitors:
+```
+10.97.84.1 - - [07/Jul/2021 22:47:28] "GET / HTTP/1.1" 200 -
+2021-07-07 22:48:13,528 [INFO] -------------------------- Iteration Stats ---------------------------
+2021-07-07 22:48:13,528 [INFO] Time taken to run watch_nodes in iteration 5642: 20.987691402435303 seconds
+2021-07-07 22:48:13,528 [INFO] Time taken to run watch_cluster_operators in iteration 5642: 21.139723539352417 seconds
+2021-07-07 22:48:13,528 [INFO] Time taken to run watch_namespaces in iteration 5642: 19.242046356201172 seconds
+2021-07-07 22:48:13,529 [INFO] Time taken to run sleep_tracker in iteration 5642: 19.27062702178955 seconds
+2021-07-07 22:48:13,529 [INFO] Time taken to run entire_iteration in iteration 5642: 81.93008351325989 seconds
+2021-07-07 22:48:13,529 [INFO] ----------------------------------------------------------------------
+
+2021-07-07 22:48:34,290 [INFO] Iteration 5643: Node status: True
+2021-07-07 22:48:34,362 [INFO] Iteration 5643: Cluster Operator status: True
+2021-07-07 22:48:53,600 [INFO] Iteration 5643: openshift-etcd: True
+10.97.84.1 - - [07/Jul/2021 22:48:28] "GET / HTTP/1.1" 200 -
+2021-07-07 22:48:53,602 [INFO] HTTP requests served: 13152
+
+2021-07-07 22:48:53,602 [INFO] ------------------- Start Custom Checks -------------------
+2021-07-07 22:49:12,793 [INFO] Check if Ready nodes are more than 80 percent of all nodes.
+2021-07-07 22:49:13,996 [INFO] Check cluster readyz endpoint.
+2021-07-07 22:49:14,015 [INFO] Check Image Registry API and test on routing layer.
+2021-07-07 22:49:14,562 [INFO] Detected Image Registry API: https://image-registry.apps.silver.devops.gov.bc.ca/healthz
+2021-07-07 22:49:15,044 [INFO] Check if netapp storages are all available.
+2021-07-07 22:49:15,322 [INFO] -> TridentBackends tbe-7pr79
+2021-07-07 22:49:15,611 [INFO] -> TridentBackends tbe-976nm
+2021-07-07 22:49:15,926 [INFO] -> TridentBackends tbe-gqf65
+2021-07-07 22:49:15,238 [INFO] -> TridentBackends tbe-mwpfn
+2021-07-07 22:49:15,517 [INFO] -> TridentBackends tbe-ncvw9
+2021-07-07 22:49:15,599 [INFO] ------------------- Finished Custom Checks -------------------
+
+2021-07-07 22:49:15,776 [INFO] Sleeping for the specified duration: 60
+```
 
 ### TODO:
-- add more detailed custom checks for cluster reliability checks
-- add PVC for monitoring history
+- build cronjob for full application life cycle monitoring
 
 ### Docker Image Build (temporary)
 ```shell
@@ -70,7 +102,7 @@ oc -n [namespace] get route cerberus-service
 curl -i <cerberus_url>
 
 # get monitoring statistics:
-curl -i <cerberus_url>/history
+curl -i <cerberus_url>/history # History is saved with persistent storage
 curl -i <cerberus_url>/analyze
 ```
 

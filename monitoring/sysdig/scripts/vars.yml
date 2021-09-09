@@ -1,0 +1,5 @@
+---
+# env vars to run scripts
+sysdig_api_endpoint: https://app.sysdigcloud.com
+sysdig_token: <enter_your_API_token>
+sysdig_team_name: <team_name>

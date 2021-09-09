@@ -1,0 +1,52 @@
+# prep: jmespath
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files: 
+    - vars.yml
+  tasks:
+    - name: Fetch list of current teams
+      uri: 
+        url: "{{ sysdig_api_endpoint }}/api/teams"
+        method: GET
+        headers:
+            Authorization: "Bearer {{ sysdig_token }}"
+            Content-Type: "application/json"
+      register: teams_output
+
+    - name: Get team by name
+      set_fact:
+        team_match: "{{ teams_output.json | json_query(jmesquery)}}"
+      vars:
+        jmesquery: "teams[? name=='{{ sysdig_team_name }}']"
+
+    - name: Get the actual team
+      set_fact:
+        team_content: "{{ team_match[0] }}"
+      when: "{{ team_match|length == 1 }}"
+
+    # is there are more than 2 teams, something went wrong:
+    - meta: end_play
+      when: "{{ team_match|length != 1 }}"
+
+    - name: Get a backup for the team into file
+      copy: content="{{ team_content }}" dest=./results.json
+
+    - name: Update the team content to enable events
+      set_fact:
+        updated_team_content: "{{ team_match[0] | combine({ 'canUseCustomEvents': true }) }}"
+
+    - name: Enable Team to Receive Events
+      uri: 
+        url: "{{ sysdig_api_endpoint }}/api/teams/{{ team_content.id }}"
+        method: PUT
+        headers:
+            Authorization: "Bearer {{ sysdig_token }}"
+            Content-Type: "application/json"
+        body: "{{ updated_team_content }}"
+        body_format: json
+        status_code: 200
+      register: team_container_update_output
+
+    - debug: msg="{{ team_container_update_output }}"

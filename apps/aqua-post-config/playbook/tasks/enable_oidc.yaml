@@ -1,0 +1,28 @@
+---
+- name: Setting Facts
+  set_fact:
+    redirect_uri: "{{ aqua_url }}/api/v2/oidc/callback"
+    
+- name: Setup OIDC
+  uri:
+    headers:
+      Authorization: "Bearer {{ auth_token }}"
+      Content-Type: application/json
+    body_format: json
+    method: PUT
+    status_code: [200, 204]
+    url: "{{ aqua_url }}/api/v1/settings/OIDCSettings/OpenIdSettings"
+    body:
+      aqua_redirect_url: "{{ aqua_sso_url }}/protocol/openid-connect/auth?client_id={{ aqua_sso_client}}&redirect_uri={{ redirect_uri + '&response_type=code&scope=openid email groups&state=openid' | urlencode }}"
+      auth_by_role: true
+      client_id: "{{ aqua_sso_client }}"
+      enabled: true
+      idp_url: "{{ aqua_sso_url }}"
+      provider_name: "sso"
+      redirect_url: "{{ redirect_uri }}"
+      role_mapping: {Administrator: ["aqua_admins"]}
+      scopes: ["email", "groups"]
+      secret: "{{ aqua_sso_client_secret }}"
+      user: "email"
+      user_role: "groups"
+      

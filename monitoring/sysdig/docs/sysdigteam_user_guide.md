@@ -18,10 +18,20 @@ You can find the overall Sysdig monitoring service described [here](https://deve
 
 > Please note that this does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.  
 
-## The Sysdig Team Custom Resource
-In order to create a Sysdig Team; 
+## Step 1 - Login to Sysdig
+First thing first, please have you and your team login to Sysdig to create the user account. Our Sysdig uses OpenID Connect, and requires a Github account.
+
+- Navigate to the BCDevOps Sysdig Monitor URL [https://app.sysdigcloud.com/api/oauth/openid/bcdevops](https://app.sysdigcloud.com/api/oauth/openid/bcdevops)
+  - Alternatively, navigate to [https://app.sysdigcloud.com](https://app.sysdigcloud.com), select OpenID, and type in `BCDevOps` as the company
+- Upon login, you will be presented with a default page. You may be directed to the **Catchall Team** which has access to no resources at the moment (you'll see them after the team access is created in later steps!)
+- Find your name initial icon at the bottom left corner. There you can see the email address that represents your account.
+  - **Note** that Sysdig identifies users by the email, so it's important to use the correct email addr for yourself as well as your team members
+
+## Step 2 - Create Sysdig Team Access
+We are running an OpenShift Operator in the background that creates Sysdig RBAC and dashboard for you. The operator is looking for a `sysdig-team` custom resource from your `*-tools` namespace. The `sysdig-team` resource will:
+
 - Create a Custom Resource in your project *Tools* namespace 
-- Create an access control list within the Custom Resource that *identifies users by the ***email address*** *
+- Create an access control list within the Custom Resource that *identifies users by the ***email address***
   - *Note* all team members will need to login to Sysdig first, the email address can be found by each user from [Sydig User Profile](https://app.sysdigcloud.com/#/settings/user)
   - Only GitHub ID's are currently configured from SSO
 - Upon creating the CR, **TWO** teams will be created; 
@@ -29,80 +39,70 @@ In order to create a Sysdig Team;
   - **[license-plate]-team-persistent-storage** - Persistent Volume Claim utilization can be monitored here. 
   - *Note* PVC metrics are now scraped from kubelet services which is not longer available from `kubernetes.*` scope
 
-The following sample custom resource can be used for reference; 
-
+### Sample sysdig-team object
 ```yaml
 apiVersion: ops.gov.bc.ca/v1alpha1
 kind: SysdigTeam
 metadata:
-  name: c81e6h-sysdigteam
+  name: 101ed4-sysdigteam
+  namespace: 101ed4-tools
 spec:
-  team: 
-    description: The Sysdig Team for the PMS Namespaces
+  team:
+    description: The Sysdig Team for the Platform Services Documize
     users:
-    - name: husker@arctiq.ca
-      role: ROLE_TEAM_READ 
-    - name: shea.stewart+bcgov@arctiq.ca
+    - name: shelly.han@gov.bc.ca
       role: ROLE_TEAM_MANAGER
-    - name: shea.stewart+tester@arctiq.ca
+    - name: patrick.simonian@gov.bc.ca
       role: ROLE_TEAM_EDIT
-    - name: boomer@arctiq.ca
-      role: ROLE_TEAM_READ 
+    - name: billy.li@gov.bc.ca
+      role: ROLE_TEAM_STANDARD
+    - name: olena.mitovska@gov.bc.ca
+      role: ROLE_TEAM_READ
 ```
 
 ### Available Roles
 The following roles are available for use: 
+- `ROLE_TEAM_MANAGER (Team Manager, mandatory)` - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions. ***Please note it's mandatory to have at least one team manager, otherwise the operator can't create default templates for you!***
 - `ROLE_TEAM_EDIT (Advanced User)` - Can create/edit/delete dashboards, alerts, or other content.
 - `ROLE_TEAM_STANDARD (Standard User)` - An Advanced User with no access to the Explore page (e.g. for developers who are not interested in Monitoring information).
 - `ROLE_TEAM_READ (View-only User)` - Read access to the environment within team scope, but cannot create, edit, or delete dashboards, alerts, or other content.
-- `ROLE_TEAM_MANAGER (Team Manager)` - Can create/edit/delete dashboards, alerts, or other content + ability to add/delete team members or change team member permissions.
 
 **Note** Role Updates should be applied to the CR, and **NOT** in the Sysdig Monitor UI. Reconciliation of the SysdigTeams Operator will overwrite any UI changes to the team roles. 
 
 ### Creating the Sysdig Team
 - Using `oc apply` with the above example custom resource yaml in your `-tools` namespace, the Sysdig Team will be created by the operator as outlined in the below example; 
   ```shell
-  oc project c81e6h-tools
+  oc project 101ed4-tools
   oc apply -f sysdigteam-sample.yml
   ```
-- Validate the creation of the Sysdig Team using `oc describe sysdig-team`
+- Validate the creation of the Sysdig Team using `oc describe sysdig-team <your_sysdig_team_cr_name>`
   ```shell
-  Name:         c81e6h-sysdigteam
-  Namespace:    c81e6h-tools
+  Name:         101ed4-sysdigteam
+  Namespace:    101ed4-tools
   Labels:       <none>
-  Annotations:  kubectl.kubernetes.io/last-applied-configuration={"apiVersion":"ops.gov.bc.ca/v1alpha1","kind":"SysdigTeam","metadata":{"annotations":{},"name":"c81e6h-sysdigteam","namespace":"c81e6h-tools"},"spec":{
-  ...
   API Version:  ops.gov.bc.ca/v1alpha1
   Kind:         SysdigTeam
   Metadata:
-    Creation Timestamp:  2020-01-27T05:25:55Z
-    Finalizers:
-      finalizer.ops.gov.bc.ca
-    Generation:        1
-    Resource Version:  1436022248
-    Self Link:         /apis/ops.gov.bc.ca/v1alpha1/namespaces/c81e6h-tools/sysdig-teams/c81e6h-sysdigteam
-    UID:               7e02ff08-40c5-11ea-8a92-0050568379a2
+    Creation Timestamp:  2021-04-15T22:42:20Z
+    ...
   Spec:
     Team:
-      Description:  The Sysdig Team for the PMS Namespaces
+      Description:  The Sysdig Team for the Platform Services Documize
       Users:
-        Name:  husker@arctiq.ca
-        Role:  ROLE_TEAM_READ
-        Name:  shea.stewart+bcgov@arctiq.ca
+        Name:  shelly.han@gov.bc.ca
         Role:  ROLE_TEAM_MANAGER
-        Name:  shea.stewart+tester@arctiq.ca
+        Name:  patricksimonian@gmail.com
         Role:  ROLE_TEAM_EDIT
-        Name:  boomer@arctiq.ca
-        Role:  ROLE_TEAM_READ
+        ...
   Status:
     Conditions:
       Ansible Result:
         Changed:             0
-        Completion:          2020-01-27T05:30:39.422111
+        Completion:          2021-08-18T20:10:43.665524
         Failures:            0
-        Ok:                  33
-        Skipped:             11
-      Last Transition Time:  2020-01-27T05:29:50Z
+        Ok:                  30
+        Skipped:             13
+      Last Transition Time:  2021-08-05T18:54:24Z
       Message:               Awaiting next reconciliation
       Reason:                Successful
       Status:                True
@@ -110,26 +110,28 @@ The following roles are available for use:
   Events:                    <none>
 
   ```
-  
 
-## Logging Into A Sysdig Team
-In order to access the Sysdig Monitor application and your team resources: 
-- Navigate to the BCDevOps Sysdig Monitor URL [https://app.sysdigcloud.com/api/oauth/openid/bcdevops](https://app.sysdigcloud.com/api/oauth/openid/bcdevops)
-  - Alternatively, navigate to [https://app.sysdigcloud.com](https://app.sysdigcloud.com), select OpenID, and type in `BCDevOps` as the company
-- Upon login, you will be presented with a default page. You may be directed to the **Catchall Team** which has access to no resources
+> when you see `Awaiting next reconciliation` and Successful status, that means the sysdig team has been created successfully. If you do not see `Awaiting next reconciliation`, please contact us on RocketChat channel https://chat.developer.gov.bc.ca/channel/devops-sysdig!
+
+***NOTE*** if your project set is on Gold and GoldDR clusters, please only create the sysdig-team Custom Resource in Gold cluster. Our sysdig operator will be able to pick it up and create the dashboards for you apps across the two clusters.
+
+## Step 3 - Logging Into Your Sysdig Team
+Now that you've created the custom resource, you can go back to Sysdig again to see the new team scope and default dashboards.
+- login to Sysdig like how you did just now
 - Navigate to the bottom left hand of the page to switch your team
 ![](assets/sysdigteams_switch.png)
 - **You may need to wait some time between the creation of the team and resources to display** 
 
-### Dashboards
+
+## Step 4 - Monitoring Dashboards
+As promised, there are two sysdig teams created
 - A simple resource dashboard has been created to provide and overview of limits and requests across all team namespaces
 ![](assets/sysdigteams_dashboard_nav.png)
 ![](assets/sysdigteams_resource_overview.png)
 
-- A simple persistent storage dashbaord has been created to provide an overview of all Persistent Volume Claim utilization. 
+- A simple persistent storage dashboard has been created to provide an overview of all Persistent Volume Claim utilization. 
 **Note: PVC's must be attached to a running pod for their metrics to be displayed on this dashboard.**
 ![](assets/sysdigteams_persistent_storage.png)
-
 
 - A series of pre-defined dashboards exist for general usage or to assist in creating custom dashboards; with a user that has an appropriate permissions
 - Navigate to the `Dashboards` Icon, select `Add Dashboard` and select `Create from Template`
@@ -138,7 +140,7 @@ In order to access the Sysdig Monitor application and your team resources:
 
 
 
-## Alert Channels
+## Step 5 - Alert Channels
 Currently Alert Channels can be created manually through the Sysdig Monitor UI. 
 
 ### Creating a Rocket.Chat Alert Channel
@@ -207,12 +209,20 @@ class Script {
 ![](assets/sysdigteams_add_alert_to_panel.png)
 ![](assets/sysdigteams_sample_alert.png)
 
-#### Creating a PromQL Based Alert
+
+
+## Step 6 - Advanced Usage
+### Creating custom monitoring panels
+Sysdig scrapes Prometheus metrics, you can create custom queries using PromQL. Here is a great way to start exploring:
+![](assets/sysdigteams_promql_explore.png)
+
+### Creating a PromQL Based Alert
 Some of the dashboard panels may be leveraging PromQL to display the metrics. PromQL can be used in Alerts as well. The following example shows an alert for the **Persistent Volume Utilization** when hitting 80% full. 
+
+- If you'd like to get a PVC specific metrics, for example get the max percentage of a storage usage: `max(kubelet_volume_stats_used_bytes{agent_tag_cluster="gold",persistentvolumeclaim="<PVC_name>"}) / max(kubelet_volume_stats_capacity_bytes{agent_tag_cluster="gold",persistentvolumeclaim="<PVC_name>"}) * 100`
 
 - Sample PromQL Query: `((avg(kubelet_volume_stats_used_bytes/kubelet_volume_stats_capacity_bytes) by (persistentvolumeclaim)) * 100) >= 80`  
 ![](assets/sysdigteams_alert_promql_pvc_usage.png)
-
 
 # Additional Resources
 - [Sysdig Monitor](https://docs.sysdig.com/en/sysdig-monitor.html)
