@@ -10,10 +10,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && set -x \
     && echo 'APT::Install-Recommends "0";\nAPT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01norecommend \
     && apt-get update -y \
-    && apt-get install -y curl jq locales git build-essential python3 python3-dev python3-pip python3-wheel python3-setuptools python3-virtualenv \
+    && apt-cache depends patroni | sed -n -e 's/.* Depends: \(python3-.\+\)$/\1/p' \
+            | grep -Ev '^python3-(sphinx|etcd|consul|kazoo|kubernetes)' \
+            | xargs apt-get install -y vim-tiny curl jq locales git build-essential python3 python3-dev python3-pip python3-wheel python3-setuptools python3-virtualenv \
     && echo 'Make sure we have a en_US.UTF-8 locale available' \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && pip3 --isolated --no-cache-dir install setuptools \
     && pip3 --isolated --no-cache-dir install psycopg2-binary \
     && pip3 --isolated --no-cache-dir install "git+https://github.com/zalando/patroni.git#egg=patroni[kubernetes]" \
     && PGHOME=/home/postgres \
