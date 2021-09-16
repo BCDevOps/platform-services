@@ -16,7 +16,25 @@ The Sysdig Teams Operator that is running in the cluster enables a team to creat
 
 You can find the overall Sysdig monitoring service described [here](https://developer.gov.bc.ca/BC-Government-Sysdig-Monitoring-Service-Definition).
 
-> Please note that this does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.  
+> Please note that this does not provide a comprehensive overview of the Sysdig Monitor UI or service, however, the **Resources** section below contains links to the Sysdig Monitor User Documentation for more detail.
+
+## Table of Content
+* [Step 1 - Login to Sysdig](#step-1---login-to-sysdig)
+* [Step 2 - Create Sysdig Team Access](#step-2---create-sysdig-team-access)
+  * [Sample sysdig-team object](#sample-sysdig-team-object)
+  * [Available Roles](#available-roles)
+  * [Creating the Sysdig Team](#creating-the-sysdig-team)
+* [Step 3 - Logging Into Your Sysdig Team](#step-3---logging-into-your-sysdig-team)
+* [Step 4 - Monitoring Dashboards](#step-4---monitoring-dashboards)
+* [Step 5 - Alert Channels](#step-5---alert-channels)
+  * [Creating a Rocket.Chat Alert Channel](#creating-a-rocketchat-alert-channel)
+      * [Configuring Rocket.Chat](#configuring-rocketchat)
+      * [Creating the Sysdig Team Notification Channel](#creating-the-sysdig-team-notification-channel)
+* [Step 6 - Advanced Usage](#step-6---advanced-usage)
+  * [Creating custom monitoring panels](#creating-custom-monitoring-panels)
+  * [Creating a PromQL Based Alert](#creating-a-promql-based-alert)
+* [Additional Resources](#additional-resources)
+
 
 ## Step 1 - Login to Sysdig
 First thing first, please have you and your team login to Sysdig to create the user account. Our Sysdig uses OpenID Connect, and requires a Github account.
@@ -111,21 +129,22 @@ The following roles are available for use:
 
   ```
 
-> when you see `Awaiting next reconciliation` and Successful status, that means the sysdig team has been created successfully. If you do not see `Awaiting next reconciliation`, please contact us on RocketChat channel https://chat.developer.gov.bc.ca/channel/devops-sysdig!
+> When you see `Awaiting next reconciliation` and Successful status, that means the sysdig team has been created successfully. If you do not see `Awaiting next reconciliation`, please contact us on RocketChat channel https://chat.developer.gov.bc.ca/channel/devops-sysdig!
 
-***NOTE*** if your project set is on Gold and GoldDR clusters, please only create the sysdig-team Custom Resource in Gold cluster. Our sysdig operator will be able to pick it up and create the dashboards for you apps across the two clusters.
+> ***NOTE*** if your project set is on Gold and GoldDR clusters, please only create the sysdig-team Custom Resource in Gold cluster. Our sysdig operator will be able to pick it up and create the dashboards for you apps across the two clusters.
 
 ## Step 3 - Logging Into Your Sysdig Team
 Now that you've created the custom resource, you can go back to Sysdig again to see the new team scope and default dashboards.
 - login to Sysdig like how you did just now
-- Navigate to the bottom left hand of the page to switch your team
+- Navigate to the bottom left hand of the page to switch your team. **You may need to wait some time between the creation of the team and resources to display**
+
 ![](assets/sysdigteams_switch.png)
-- **You may need to wait some time between the creation of the team and resources to display** 
+
 
 
 ## Step 4 - Monitoring Dashboards
 As promised, there are two sysdig teams created
-- A simple resource dashboard has been created to provide and overview of limits and requests across all team namespaces
+- A simple resource dashboard has been created to provide an overview of limits and requests across all team namespaces
 ![](assets/sysdigteams_dashboard_nav.png)
 ![](assets/sysdigteams_resource_overview.png)
 
@@ -207,6 +226,8 @@ class Script {
 
 - Select Save and either navigate to the `Alerts` section on the left hand navigation bar, or start adding custom alerts to any of your configured dashboards. 
 ![](assets/sysdigteams_add_alert_to_panel.png)
+
+- Note that by default, the alert scope (1.b) is set to `everywhere`, which literally means all namespaces from the cluster! So as not to receive hundreds of alerts from other application, make sure you set the scope to your own namespaces. For example, you can use `kubernetes.namespace.name` and pick the ones you need.
 ![](assets/sysdigteams_sample_alert.png)
 
 
