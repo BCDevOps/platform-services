@@ -3,7 +3,7 @@
     "pagination": {
         "offset": 0,
         "limit": 50,
-        "total": 22
+        "total": 19
     },
     "monitors": [
         {
@@ -19,6 +19,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1619518902
         },
@@ -35,6 +36,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1625051299
         },
@@ -51,6 +53,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1624880954
         },
@@ -67,6 +70,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1631101050
         },
@@ -83,6 +87,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1631102846
         },
@@ -99,6 +104,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1631102786
         },
@@ -115,6 +121,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1617115961
         },
@@ -131,6 +138,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1622476342
         },
@@ -147,6 +155,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1622551182
         },
@@ -163,6 +172,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1622550658
         },
@@ -179,6 +189,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1627466269
         },
@@ -195,6 +206,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1616492226
         },
@@ -211,6 +223,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1614956490
         },
@@ -227,6 +240,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1623337751
         },
@@ -243,56 +257,9 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1622110039
-        },
-        {
-            "id": 788298590,
-            "friendly_name": "Shared services and tools - KeyCloak SSO Dev",
-            "url": "https://dev.oidc.gov.bc.ca",
-            "type": 1,
-            "sub_type": "",
-            "keyword_type": null,
-            "keyword_case_type": null,
-            "keyword_value": "",
-            "http_username": "",
-            "http_password": "",
-            "port": "",
-            "interval": 60,
-            "status": 2,
-            "create_datetime": 1622550549
-        },
-        {
-            "id": 788056757,
-            "friendly_name": "Shared services and tools - KeyCloak SSO Prod",
-            "url": "https://oidc.gov.bc.ca",
-            "type": 1,
-            "sub_type": "",
-            "keyword_type": null,
-            "keyword_case_type": null,
-            "keyword_value": "",
-            "http_username": "",
-            "http_password": "",
-            "port": "",
-            "interval": 60,
-            "status": 2,
-            "create_datetime": 1620230115
-        },
-        {
-            "id": 788298586,
-            "friendly_name": "Shared services and tools - KeyCloak SSO Test",
-            "url": "https://test.oidc.gov.bc.ca",
-            "type": 1,
-            "sub_type": "",
-            "keyword_type": null,
-            "keyword_case_type": null,
-            "keyword_value": "",
-            "http_username": "",
-            "http_password": "",
-            "port": "",
-            "interval": 60,
-            "status": 2,
-            "create_datetime": 1622550528
         },
         {
             "id": 788819725,
@@ -307,6 +274,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1627484301
         },
@@ -323,6 +291,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1619713173
         },
@@ -339,6 +308,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1620230058
         },
@@ -355,6 +325,7 @@
             "http_password": "",
             "port": "",
             "interval": 60,
+            "timeout": 30,
             "status": 2,
             "create_datetime": 1624880342
         }
