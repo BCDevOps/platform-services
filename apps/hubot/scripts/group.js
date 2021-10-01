@@ -19,15 +19,15 @@
 //     The setting defaults to 'true'.
 //
 // Commands:
-//   hubot group list - list all group names
-//   hubot group dump - list all group names and members
-//   hubot group create <group> - create a new group
-//   hubot group destroy <group> - destroy a group
-//   hubot group rename <old> <new> - rename a group
-//   hubot group add <group> <name> - add name to a group
-//   hubot group remove <group> <name> - remove name from a group
-//   hubot group info <group> - list members in group
-//   hubot group membership <name> - list groups that name is in
+//   hubot group list - list all group names.
+//   hubot group dump - list all group names and members.
+//   hubot group create (group-name) - create a new group.
+//   hubot group destroy (group-name) - destroy a group.
+//   hubot group rename (old-group-name) (new-group-name) - rename a group.
+//   hubot group add (group-name) (username) - add a user to a group.
+//   hubot group remove (group-name) (username) - remove a user from a group.
+//   hubot group info (group-name) - list members in group.
+//   hubot group membership (username) - list groups that a user belongs to.
 //
 // Author:
 //   anishathalye
@@ -291,11 +291,11 @@ module.exports = function(robot) {
       return res.send("Either group " + from + " does not exist or " + to + " already exists!");
     }
   });
-  robot.respond(RegExp("group\\s+add\\s+(" + IDENTIFIER + ")\\s+(&?" + IDENTIFIER + "(?:\\s+&?" + IDENTIFIER + ")*)"), function(res) {
+  robot.respond(RegExp("group\\s+add\\s+(" + IDENTIFIER + ")\\s+@?(" + IDENTIFIER + "(?:\\s+@?" + IDENTIFIER + ")*)"), function(res) {
     var g, name, names, response, _i, _len;
     g = res.match[1];
     names = res.match[2];
-    names = names.split(/\s+/);
+    names = names.split(/\s+@?/);
     if (!group.exists(g)) {
       res.send("Group " + g + " does not exist!");
       return;
@@ -311,11 +311,11 @@ module.exports = function(robot) {
     }
     return res.send(response.join("\n"));
   });
-  robot.respond(RegExp("group\\s+remove\\s+(" + IDENTIFIER + ")\\s+(&?" + IDENTIFIER + "(?:\\s+&?" + IDENTIFIER + ")*)"), function(res) {
+  robot.respond(RegExp("group\\s+remove\\s+(" + IDENTIFIER + ")\\s+@?(" + IDENTIFIER + "(?:\\s+@?" + IDENTIFIER + ")*)"), function(res) {
     var g, name, names, response, _i, _len;
     g = res.match[1];
     names = res.match[2];
-    names = names.split(/\s+/);
+    names = names.split(/\s+@?/);
     if (!group.exists(g)) {
       res.send("Group " + g + " does not exist!");
       return;
@@ -340,7 +340,7 @@ module.exports = function(robot) {
     }
     return res.send("*@" + name + "*: " + ((group.members(name)).join(", ")));
   });
-  return robot.respond(RegExp("group\\s+membership\\s+(&?" + IDENTIFIER + ")"), function(res) {
+  return robot.respond(RegExp("group\\s+membership\\s+@?(" + IDENTIFIER + ")"), function(res) {
     var groups, name;
     name = res.match[1];
     groups = group.membership(name);

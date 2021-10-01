@@ -27,7 +27,6 @@
     "chrono-node": "^1.4.8",
     "coffeescript": "^2.5.1",
     "hubot": "3",
-    "hubot-help": "^1.0.1",
     "hubot-mongodb-3-brain": "^0.1.2",
     "hubot-mongodb-brain": "^0.1.1",
     "hubot-redis-brain": "^1.0.0",

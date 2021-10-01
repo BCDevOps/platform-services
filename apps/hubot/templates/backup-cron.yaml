@@ -14,14 +14,16 @@ spec:
         spec:
           containers:
           - name: backup
-            image: redis:6.10
+            image: 'docker.io/bitnami/redis:6.0.10-debian-10-r1'
             command: ["/bin/bash"]
             args: ["-c", "cp /data/dump.rdb /data/dump.rdb.$(date +%F); find /data -name '*.rdb.*' -type f -mtime +30 -exec rm -f {} ';'"]
             volumeMounts:
-              - mountPath: /var/lib/redis/data
+              - mountPath: /data
                 name: redis-backup-data
+          imagePullSecrets:
+            - name: docker-pull-secret
           restartPolicy: OnFailure
           volumes:
             - name: redis-backup-data
               persistentVolumeClaim:
-                claimName: hubot-redis
+                claimName: redis-data-hubot-redis-master-0

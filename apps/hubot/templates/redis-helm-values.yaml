@@ -7,5 +7,9 @@ containerSecurityContext:
 master:
   persistence:
     size: 1Gi
+    accessModes: ['ReadWriteMany']
 configmap: |-
   appendonly no
+  save 60 1
+image:
+  pullSecrets: ['docker-pull-secret']
