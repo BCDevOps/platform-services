@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "base64-url": "^2.3.3",
-    "chrono-node": "^1.4.8",
+    "chrono-node": "^2.2.4",
     "coffeescript": "^2.5.1",
     "hubot": "3",
     "hubot-mongodb-3-brain": "^0.1.2",
