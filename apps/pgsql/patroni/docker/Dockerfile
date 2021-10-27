@@ -1,3 +1,7 @@
+# Note:
+#   This Dockerfile is no longer maintained and has been replaced with another:
+#   https://github.com/bcgov/patroni-postgres-container/blob/master/Dockerfile
+# -----------------------------------------------------------------------------
 FROM postgres:11
 ARG patroniv=1.6.5
 ENV PATRONI_VERSION=$patroniv
