@@ -1,3 +1,7 @@
+# Note:
+#   This Dockerfile is no longer maintained and has been replaced with another:
+#   https://github.com/bcgov/patroni-postgres-container/blob/master/Dockerfile
+# -----------------------------------------------------------------------------
 FROM postgres:11
 MAINTAINER Alexander Kukushkin <alexander.kukushkin@zalando.de>
 ENV PATRONI_VERSION=1.6.5
