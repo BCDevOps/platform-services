@@ -33,8 +33,8 @@ You can find the overall Sysdig monitoring service described [here](https://deve
 * [Step 6 - Advanced Usage](#step-6---advanced-usage)
   * [Creating custom monitoring panels](#creating-custom-monitoring-panels)
   * [Creating a PromQL Based Alert](#creating-a-promql-based-alert)
+  * [Leveraging Service Discovery to import Application metrics endpoint](#leveraging-service-discovery-to-import-application-metrics-endpoint)
 * [Additional Resources](#additional-resources)
-
 
 ## Step 1 - Login to Sysdig
 First thing first, please have you and your team login to Sysdig to create the user account. Our Sysdig uses OpenID Connect, and requires a Github account.
@@ -262,6 +262,7 @@ To enable Promscrape to find your application metrics, follow the steps:
   ```
   ***Do not*** add the annotations to the pods directly as they are ephemeral. Instead, this should be part of the infrastructure code and added in the templates. For example, if the app is using an OpenShift deployment, the annotation should be added at `deployment.spec.template.metadata.annotations`.
 - once the annotations is in place, sysdig will be able to scrape them. You can navigate to Sysdig Explore tab and look for the sysdig metrics there (Sysdig does relabeling of the metrics, so they will appear as native sysdig metrics now instead of coming from promQL Query)
+
 
 # Additional Resources
 - [Sysdig Monitor](https://docs.sysdig.com/en/sysdig-monitor.html)
