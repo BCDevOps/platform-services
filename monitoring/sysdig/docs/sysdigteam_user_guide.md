@@ -251,18 +251,17 @@ Some of the dashboard panels may be leveraging PromQL to display the metrics. Pr
 ### Leveraging Service Discovery to import Application metrics endpoint
 Sysdig has a lightweight Prometheus server (Promscrape) that can import your application metrics endpoint into sysdig metrics. Take a look [here](https://docs.sysdig.com/en/docs/sysdig-monitor/integrations-for-sysdig-monitor/configure-monitoring-integrations/migrating-from-promscrape-v1-to-v2/#migrate-using-default-configuration) for more information.
 
-To enable Promscrape for your application metrics, follow the steps:
+To enable Promscrape to find your application metrics, follow the steps:
 - make sure the application metrics endpoint is returning Prometheus metrics. To test so, you can expose the service and curl on the URL
 - the following annotations need to be added to the application pods
-```yaml
-prometheus.io/scrape: true
-prometheus.io/port: <metrics_port>
-prometheus.io/path: <metrics_path>
-# the path is usually at /metrics
-```
-
-***Please note*** that you should not be adding the annotations to the pod directly as they are ephemeral. Instead, this should be part of the infrastructure code and added in template. For example, if the app is using an OpenShift deployment, the annotation should be added at `deployment.spec.template.metadata.annotations`.
-
+  ```yaml
+  prometheus.io/scrape: true
+  prometheus.io/port: <metrics_port>
+  prometheus.io/path: <metrics_path>
+  # the path is usually at /metrics
+  ```
+  ***Do not*** add the annotations to the pods directly as they are ephemeral. Instead, this should be part of the infrastructure code and added in the templates. For example, if the app is using an OpenShift deployment, the annotation should be added at `deployment.spec.template.metadata.annotations`.
+- once the annotations is in place, sysdig will be able to scrape them. You can navigate to Sysdig Explore tab and look for the sysdig metrics there (Sysdig does relabeling of the metrics, so they will appear as native sysdig metrics now instead of coming from promQL Query)
 
 # Additional Resources
 - [Sysdig Monitor](https://docs.sysdig.com/en/sysdig-monitor.html)
