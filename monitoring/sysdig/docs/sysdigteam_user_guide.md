@@ -233,9 +233,11 @@ class Script {
 
 
 ## Step 6 - Advanced Usage
+
 ### Creating custom monitoring panels
 Sysdig scrapes Prometheus metrics, you can create custom queries using PromQL. Here is a great way to start exploring:
 ![](assets/sysdigteams_promql_explore.png)
+
 
 ### Creating a PromQL Based Alert
 Some of the dashboard panels may be leveraging PromQL to display the metrics. PromQL can be used in Alerts as well. The following example shows an alert for the **Persistent Volume Utilization** when hitting 80% full. 
@@ -244,6 +246,23 @@ Some of the dashboard panels may be leveraging PromQL to display the metrics. Pr
 
 - Sample PromQL Query: `((avg(kubelet_volume_stats_used_bytes/kubelet_volume_stats_capacity_bytes) by (persistentvolumeclaim)) * 100) >= 80`  
 ![](assets/sysdigteams_alert_promql_pvc_usage.png)
+
+
+### Leveraging Service Discovery to import Application metrics endpoint
+Sysdig has a lightweight Prometheus server (Promscrape) that can import your application metrics endpoint into sysdig metrics. Take a look [here](https://docs.sysdig.com/en/docs/sysdig-monitor/integrations-for-sysdig-monitor/configure-monitoring-integrations/migrating-from-promscrape-v1-to-v2/#migrate-using-default-configuration) for more information.
+
+To enable Promscrape for your application metrics, follow the steps:
+- make sure the application metrics endpoint is returning Prometheus metrics. To test so, you can expose the service and curl on the URL
+- the following annotations need to be added to the application pods
+```yaml
+prometheus.io/scrape: true
+prometheus.io/port: <metrics_port>
+prometheus.io/path: <metrics_path>
+# the path is usually at /metrics
+```
+
+***Please note*** that you should not be adding the annotations to the pod directly as they are ephemeral. Instead, this should be part of the infrastructure code and added in template. For example, if the app is using an OpenShift deployment, the annotation should be added at `deployment.spec.template.metadata.annotations`.
+
 
 # Additional Resources
 - [Sysdig Monitor](https://docs.sysdig.com/en/sysdig-monitor.html)
