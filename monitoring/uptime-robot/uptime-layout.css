@@ -1,0 +1,129 @@
+/* footer css */
+footer {
+  background-color: #036;
+  border-top: 2px solid #fcba19;
+  color: #fff;
+  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif; 
+}
+
+footer .container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 46px;
+}
+
+footer ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  color: #fff;
+  list-style: none;
+  align-items: center;
+  height: 100%;
+}
+
+footer ul li a {
+  font-size: 0.813em;
+  font-weight: normal;  /* 400 */
+  color: #fff;
+  border-right: 1px solid #4b5e7e;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+footer a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+:focus {
+  outline: 4px solid #3B99FC;
+  outline-offset: 1px;
+}
+
+/* header css */
+header {
+  background-color: #036;
+  border-bottom: 2px solid #fcba19;
+  padding: 0 65px 0 65px;
+  color: #fff;
+  display: flex;
+  height: 65px;
+  top: 0px;
+  width: 100%;
+}
+
+header h1 {
+  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif;
+  font-weight: normal;  /* 400 */
+  margin: 5px 5px 0 18px;
+  visibility: hidden;
+}
+
+header .banner {
+  flex-direction: row !important;
+  min-height: 6vh;
+  margin: 0 10px 0 0;
+}
+
+header .other {
+  display: flex;
+  flex-grow: 1;
+}
+
+/*
+  These are sample media queries only. Media queries are quite subjective
+  but, in general, should be made for the three different classes of screen
+  size: phone, tablet, full.
+*/
+@media screen and (min-width: 900px) {
+  header h1 {
+    font-size: 1.5em;
+    visibility: visible;
+    color:white;
+  }
+}
+
+
+/* button */
+.BC-Gov-PrimaryButton {
+  background-color: #fff;
+  border: none;
+  border-radius: 4px;
+  color: #313132;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 10px;
+  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+
+.BC-Gov-PrimaryButton:hover {
+  text-decoration: underline;
+  background-color: #f2f2f2
+}
+
+:focus {
+  outline: 4px solid #3B99FC;
+  outline-offset: 1px;
+}
+
+.BC-Gov-PrimaryButton:active {
+  background-color: #fff;
+}
+
+.background-colour {
+  background-color: #003366;
+  height: 100px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
