@@ -27,7 +27,7 @@ First of all, we started with a list of user requirements:
 
 ## Comparison:
 
-Following at the tools that we have tested:
+Following at the tools that we have tested: (scroll to the right to see full table!)
 
 | Tool | Saas | https and keyword monitors | alert integration | status page | refactor outages | BCGov theme | technical support | downtime details | individual maintenance window | monitors grouping | issue notes |
 |---|---|---|---|---|---|---|---|---|---|---|---|
