@@ -13,9 +13,10 @@ class Script {
    * @params {object} request
    */
   process_incoming_request({ request }) {
-    console.log(request);
+    const data = request.content.data;
+    // We are using Custom HTTP Headers to add user tagging information:
+    const contactUser = request.headers.contactusers;
 
-    let data = request.content.data;
     let attachmentColor = `#A63636`;
     let statusText = `DOWN`;
     let isUp = data.alert.is_up;
@@ -41,7 +42,7 @@ class Script {
       content:{
         alias: USERNAME,
         icon_url: AVATAR_URL,
-        text: `Monitor ${data.service.name} is ${statusText}.\n Link: ${data.account.site_url}\n`,
+        text: `${contactUser} Monitor ${data.service.name} is ${statusText}.\n Link: ${data.account.site_url}\n`,
         attachments: [{
           title: titleText,
           title_link: titleLink,
