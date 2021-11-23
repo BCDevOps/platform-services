@@ -85,7 +85,7 @@ header .other {
 
 .navigation-main {
   display: block;
-  background-color: #036;
+  background-color: #38598a;
   /* border-top: 2px solid #fcba19; */
   color: #fff;
   font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif; 
@@ -114,7 +114,7 @@ header .other {
   font-size: 0.813em;
   font-weight: normal;  /* 400 */
   color: #fff;
-  border-right: 1px solid #4b5e7e;
+  border-right: 1px solid #fff;
   padding-left: 5px;
   padding-right: 5px;
 }
