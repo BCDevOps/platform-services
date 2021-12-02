@@ -1,0 +1,1207 @@
+{
+    "count": 20,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "pk": 1045036,
+            "url": "https://uptime.com/api/v1/checks/1045036/",
+            "name": "Aqua",
+            "cached_response_time": 0.425656822222222,
+            "contact_groups": [
+                "platform-services-admins"
+            ],
+            "created_at": "2021-11-19T00:41:38.624016Z",
+            "modified_at": "2021-12-02T23:21:51.005837Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "shared-services"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:41:38.637982Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://aqua.apps.silver.devops.gov.bc.ca/api",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045036/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045036/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045036"
+        },
+        {
+            "pk": 1045039,
+            "url": "https://uptime.com/api/v1/checks/1045039/",
+            "name": "Artifactory",
+            "cached_response_time": 0.396507244444444,
+            "contact_groups": [
+                "platform-services-admins"
+            ],
+            "created_at": "2021-11-19T00:41:38.673303Z",
+            "modified_at": "2021-12-02T23:24:41.034044Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "shared-services"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:41:38.684252Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://artifacts.developer.gov.bc.ca/artifactory/api/system/ping",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "OK",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045039/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045039/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045039"
+        },
+        {
+            "pk": 1023499,
+            "url": "https://uptime.com/api/v1/checks/1023499/",
+            "name": "Devhub",
+            "cached_response_time": 0.391435755555556,
+            "contact_groups": [
+                "platform-services-admins"
+            ],
+            "created_at": "2021-10-25T21:11:20.950873Z",
+            "modified_at": "2021-12-02T23:24:52.253237Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "shared-services"
+            ],
+            "check_type": "HTTP",
+            "escalations": [
+                {
+                    "wait_time": 5,
+                    "contact_groups": [
+                        "shelly-test"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-10-25T21:11:20.962447Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://developer.gov.bc.ca/",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": 40,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "2.200",
+            "stats_url": "https://uptime.com/api/v1/checks/1023499/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1023499/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1023499"
+        },
+        {
+            "pk": 1039672,
+            "url": "https://uptime.com/api/v1/checks/1039672/",
+            "name": "KeyCloak SSO Dev and IDIR siteminder Uptime",
+            "cached_response_time": 13.7984444444444,
+            "contact_groups": [
+                "Default",
+                "SSO Team Sandbox"
+            ],
+            "created_at": "2021-11-12T19:39:43.204154Z",
+            "modified_at": "2021-12-02T22:55:19.417594Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "TRANSACTION",
+            "escalations": [
+                {
+                    "wait_time": 5,
+                    "contact_groups": [
+                        "Default",
+                        "SSO Team Sandbox"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "TRANSACTION",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-12-02T18:49:03.259996Z",
+            "msp_version": 1,
+            "msp_interval": 5,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "dev.oidc.gov.bc.ca",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "",
+            "msp_threshold": 60,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "60.000",
+            "stats_url": "https://uptime.com/api/v1/checks/1039672/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1039672/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1039672"
+        },
+        {
+            "pk": 1056328,
+            "url": "https://uptime.com/api/v1/checks/1056328/",
+            "name": "KeyCloak SSO Dev End User Access Uptime",
+            "cached_response_time": 7.67188888888889,
+            "contact_groups": [
+                "Default",
+                "SSO Team Sandbox"
+            ],
+            "created_at": "2021-12-02T18:55:23.425889Z",
+            "modified_at": "2021-12-02T22:51:57.402819Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "TRANSACTION",
+            "escalations": [
+                {
+                    "wait_time": 5,
+                    "contact_groups": [
+                        "Default",
+                        "SSO Team Sandbox"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "TRANSACTION",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-12-02T18:55:23.453277Z",
+            "msp_version": 1,
+            "msp_interval": 5,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "dev.oidc.gov.bc.ca",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "",
+            "msp_threshold": 60,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "60.000",
+            "stats_url": "https://uptime.com/api/v1/checks/1056328/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1056328/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1056328"
+        },
+        {
+            "pk": 1054582,
+            "url": "https://uptime.com/api/v1/checks/1054582/",
+            "name": "KeyCloak SSO Dev Service Uptime",
+            "cached_response_time": 0.554871527777778,
+            "contact_groups": [
+                "SSO Team Sandbox"
+            ],
+            "created_at": "2021-11-30T22:12:15.627475Z",
+            "modified_at": "2021-12-02T22:52:50.550287Z",
+            "locations": [
+                "US East",
+                "US West",
+                "US Central",
+                "United Kingdom",
+                "Austria"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-30T22:12:15.652137Z",
+            "msp_version": 2,
+            "msp_interval": 2,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://dev.oidc.gov.bc.ca/auth/realms/master/.well-known/openid-configuration",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": 40,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "2.200",
+            "stats_url": "https://uptime.com/api/v1/checks/1054582/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1054582/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1054582"
+        },
+        {
+            "pk": 1050019,
+            "url": "https://uptime.com/api/v1/checks/1050019/",
+            "name": "KeyCloak SSO Prod and IDIR siteminder Uptime",
+            "cached_response_time": 15.0064444444444,
+            "contact_groups": [
+                "Default",
+                "SSO Team"
+            ],
+            "created_at": "2021-11-24T23:24:13.852039Z",
+            "modified_at": "2021-12-02T22:55:34.949312Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "TRANSACTION",
+            "escalations": [
+                {
+                    "wait_time": 5,
+                    "contact_groups": [
+                        "Default",
+                        "SSO Team"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "TRANSACTION",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-24T23:24:13.870676Z",
+            "msp_version": 1,
+            "msp_interval": 5,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "oidc.gov.bc.ca",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "",
+            "msp_threshold": 60,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "60.000",
+            "stats_url": "https://uptime.com/api/v1/checks/1050019/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1050019/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1050019"
+        },
+        {
+            "pk": 1056403,
+            "url": "https://uptime.com/api/v1/checks/1056403/",
+            "name": "Keycloak SSO Prod End User Access Uptime",
+            "cached_response_time": 7.58066666666667,
+            "contact_groups": [
+                "Default",
+                "SSO Team"
+            ],
+            "created_at": "2021-12-02T19:06:13.033283Z",
+            "modified_at": "2021-12-02T22:51:30.590872Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "TRANSACTION",
+            "escalations": [
+                {
+                    "wait_time": 5,
+                    "contact_groups": [
+                        "Default",
+                        "SSO Team Sandbox"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "TRANSACTION",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-12-02T19:06:13.059563Z",
+            "msp_version": 1,
+            "msp_interval": 5,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "oidc.gov.bc.ca",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "",
+            "msp_threshold": 60,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "60.000",
+            "stats_url": "https://uptime.com/api/v1/checks/1056403/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1056403/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1056403"
+        },
+        {
+            "pk": 1054588,
+            "url": "https://uptime.com/api/v1/checks/1054588/",
+            "name": "KeyCloak SSO Prod Service Uptime",
+            "cached_response_time": 0.50393376,
+            "contact_groups": [
+                "SSO Team"
+            ],
+            "created_at": "2021-11-30T22:13:37.276293Z",
+            "modified_at": "2021-12-02T22:53:06.240469Z",
+            "locations": [
+                "US East",
+                "US West",
+                "US Central",
+                "United Kingdom",
+                "Austria"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-30T22:13:37.296941Z",
+            "msp_version": 2,
+            "msp_interval": 3,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://oidc.gov.bc.ca/auth/realms/master/.well-known/openid-configuration",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": 40,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "2.200",
+            "stats_url": "https://uptime.com/api/v1/checks/1054588/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1054588/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1054588"
+        },
+        {
+            "pk": 1050016,
+            "url": "https://uptime.com/api/v1/checks/1050016/",
+            "name": "KeyCloak SSO Test and IDIR siteminder Uptime",
+            "cached_response_time": 14.2082222222222,
+            "contact_groups": [
+                "Default",
+                "SSO Team Sandbox"
+            ],
+            "created_at": "2021-11-24T23:23:33.900836Z",
+            "modified_at": "2021-12-02T22:55:48.079589Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "TRANSACTION",
+            "escalations": [
+                {
+                    "wait_time": 5,
+                    "contact_groups": [
+                        "Default",
+                        "SSO Team Sandbox"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "TRANSACTION",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-12-01T01:13:53.612226Z",
+            "msp_version": 1,
+            "msp_interval": 5,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "test.oidc.gov.bc.ca",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "",
+            "msp_threshold": 60,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "60.000",
+            "stats_url": "https://uptime.com/api/v1/checks/1050016/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1050016/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1050016"
+        },
+        {
+            "pk": 1056394,
+            "url": "https://uptime.com/api/v1/checks/1056394/",
+            "name": "KeyCloak SSO Test End User Access Uptime",
+            "cached_response_time": 8.16077777777778,
+            "contact_groups": [
+                "Default",
+                "SSO Team Sandbox"
+            ],
+            "created_at": "2021-12-02T19:02:59.367160Z",
+            "modified_at": "2021-12-02T22:52:17.701664Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "TRANSACTION",
+            "escalations": [
+                {
+                    "wait_time": 5,
+                    "contact_groups": [
+                        "Default",
+                        "SSO Team Sandbox"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "TRANSACTION",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-12-02T19:02:59.384411Z",
+            "msp_version": 1,
+            "msp_interval": 5,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "test.oidc.gov.bc.ca",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "",
+            "msp_threshold": 60,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "60.000",
+            "stats_url": "https://uptime.com/api/v1/checks/1056394/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1056394/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1056394"
+        },
+        {
+            "pk": 1054585,
+            "url": "https://uptime.com/api/v1/checks/1054585/",
+            "name": "KeyCloak SSO Test Service Uptime",
+            "cached_response_time": 0.5941794,
+            "contact_groups": [
+                "SSO Team Sandbox"
+            ],
+            "created_at": "2021-11-30T22:13:02.127080Z",
+            "modified_at": "2021-12-02T22:53:33.173889Z",
+            "locations": [
+                "US East",
+                "US West",
+                "US Central",
+                "United Kingdom",
+                "Austria"
+            ],
+            "tags": [
+                "SSO"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-30T22:13:02.140378Z",
+            "msp_version": 2,
+            "msp_interval": 3,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://test.oidc.gov.bc.ca/auth/realms/master/.well-known/openid-configuration",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": 40,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "2.200",
+            "stats_url": "https://uptime.com/api/v1/checks/1054585/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1054585/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1054585"
+        },
+        {
+            "pk": 1045051,
+            "url": "https://uptime.com/api/v1/checks/1045051/",
+            "name": "OpenShift container platforms - CLAB",
+            "cached_response_time": 0.303232386363636,
+            "contact_groups": [
+                "platform-services-dxc",
+                "shelly-test"
+            ],
+            "created_at": "2021-11-19T00:43:13.248422Z",
+            "modified_at": "2021-12-02T23:24:13.166181Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "clusters"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:43:13.271630Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://api.clab.devops.gov.bc.ca:6443/readyz",
+            "msp_port": 6443,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "ok",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045051/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045051/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045051"
+        },
+        {
+            "pk": 1045057,
+            "url": "https://uptime.com/api/v1/checks/1045057/",
+            "name": "OpenShift container platforms - Gold",
+            "cached_response_time": 0.397393555555556,
+            "contact_groups": [
+                "platform-services-dxc",
+                "platform-services-product-owner",
+                "shelly-test"
+            ],
+            "created_at": "2021-11-19T00:43:13.421250Z",
+            "modified_at": "2021-12-02T23:23:42.992901Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "clusters"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:43:13.444563Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://api.gold.devops.gov.bc.ca:6443/readyz",
+            "msp_port": 6443,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "ok",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045057/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045057/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045057"
+        },
+        {
+            "pk": 1045060,
+            "url": "https://uptime.com/api/v1/checks/1045060/",
+            "name": "OpenShift container platforms - GoldDR",
+            "cached_response_time": 0.312061377777778,
+            "contact_groups": [
+                "platform-services-dxc",
+                "platform-services-product-owner",
+                "shelly-test"
+            ],
+            "created_at": "2021-11-19T00:43:13.505012Z",
+            "modified_at": "2021-12-02T23:23:49.355572Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "clusters"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:43:13.527460Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://api.golddr.devops.gov.bc.ca:6443/readyz",
+            "msp_port": 6443,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "ok",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045060/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045060/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045060"
+        },
+        {
+            "pk": 1045048,
+            "url": "https://uptime.com/api/v1/checks/1045048/",
+            "name": "OpenShift container platforms - KLAB",
+            "cached_response_time": 0.413786866666667,
+            "contact_groups": [
+                "platform-services-dxc",
+                "shelly-test"
+            ],
+            "created_at": "2021-11-19T00:43:13.161422Z",
+            "modified_at": "2021-12-02T23:24:19.564399Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "clusters"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:43:13.186640Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://api.klab.devops.gov.bc.ca:6443/readyz",
+            "msp_port": 6443,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "ok",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045048/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045048/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045048"
+        },
+        {
+            "pk": 1045054,
+            "url": "https://uptime.com/api/v1/checks/1045054/",
+            "name": "OpenShift container platforms - Silver",
+            "cached_response_time": 0.3621582,
+            "contact_groups": [
+                "platform-services-dxc",
+                "platform-services-product-owner",
+                "shelly-test"
+            ],
+            "created_at": "2021-11-19T00:43:13.336479Z",
+            "modified_at": "2021-12-02T23:23:36.571270Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "clusters"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:43:13.360048Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://api.silver.devops.gov.bc.ca:6443/readyz",
+            "msp_port": 6443,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "ok",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045054/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045054/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045054"
+        },
+        {
+            "pk": 1045042,
+            "url": "https://uptime.com/api/v1/checks/1045042/",
+            "name": "Registry",
+            "cached_response_time": 0.389412533333333,
+            "contact_groups": [
+                "platform-services-admins"
+            ],
+            "created_at": "2021-11-19T00:41:38.717957Z",
+            "modified_at": "2021-12-02T23:25:23.676771Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "shared-services"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:41:38.728880Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://registry.developer.gov.bc.ca/api/v1/ehlo",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045042/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045042/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045042"
+        },
+        {
+            "pk": 1045045,
+            "url": "https://uptime.com/api/v1/checks/1045045/",
+            "name": "RocketChat",
+            "cached_response_time": 0.354861555555556,
+            "contact_groups": [
+                "platform-services-admins"
+            ],
+            "created_at": "2021-11-19T00:41:38.759650Z",
+            "modified_at": "2021-12-02T23:25:30.749828Z",
+            "locations": [
+                "US West",
+                "US Central",
+                "Canada"
+            ],
+            "tags": [
+                "shared-services"
+            ],
+            "check_type": "HTTP",
+            "escalations": [],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-19T00:41:38.770616Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 2,
+            "msp_num_retries": 2,
+            "msp_use_ip_version": "",
+            "msp_address": "https://chat.developer.gov.bc.ca/api/info",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "\"success\":true",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": null,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": null,
+            "stats_url": "https://uptime.com/api/v1/checks/1045045/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1045045/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1045045"
+        },
+        {
+            "pk": 1023520,
+            "url": "https://uptime.com/api/v1/checks/1023520/",
+            "name": "test Rocketchat - for failure",
+            "cached_response_time": 0.2829542,
+            "contact_groups": [
+                "shelly-test"
+            ],
+            "created_at": "2021-10-25T21:43:30.422634Z",
+            "modified_at": "2021-11-18T23:24:51.017192Z",
+            "locations": [
+                "Canada"
+            ],
+            "tags": [
+                "test"
+            ],
+            "check_type": "HTTP",
+            "escalations": [
+                {
+                    "wait_time": 1,
+                    "contact_groups": [
+                        "shelly-test"
+                    ]
+                }
+            ],
+            "maintenance": {
+                "state": "ACTIVE",
+                "schedule": []
+            },
+            "monitoring_service_type": "HTTP",
+            "is_paused": false,
+            "is_under_maintenance": false,
+            "state_is_up": true,
+            "state_changed_at": "2021-11-18T23:28:56.474401Z",
+            "msp_version": 2,
+            "msp_interval": 1,
+            "msp_sensitivity": 1,
+            "msp_num_retries": 1,
+            "msp_use_ip_version": "",
+            "msp_address": "https://chat.developer.gov.bc.ca/api/info",
+            "msp_port": null,
+            "msp_protocol": "",
+            "msp_username": "",
+            "msp_proxy": "",
+            "msp_dns_server": "",
+            "msp_dns_record_type": "",
+            "msp_send_string": "",
+            "msp_expect_string": "\"success\":true",
+            "msp_expect_string_type": "STRING",
+            "msp_encryption": "SSL_TLS",
+            "msp_threshold": 40,
+            "msp_headers": "",
+            "msp_script": "",
+            "msp_notes": "",
+            "msp_include_in_global_metrics": true,
+            "msp_uptime_sla": "0.9900",
+            "msp_response_time_sla": "2.200",
+            "stats_url": "https://uptime.com/api/v1/checks/1023520/stats/",
+            "analysis_url": "https://uptime.com/api/v1/checks/1023520/analysis/",
+            "alerts_url": "https://uptime.com/api/v1/alerts/?check_pk=1023520"
+        }
+    ]
+}
