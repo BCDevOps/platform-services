@@ -1,0 +1,11 @@
+﻿type,name,interval,contacts,locations,tags,address,port,protocol,username,password,proxy,dns_server,dns_record_type,send_string,expect_string,expect_string_type,encryption,threshold,headers,script,sensitivity,num_retries,use_ip_version,uptime_sla,response_time_sla,version,notes
+HTTP,OpenShift container platforms - KLAB,1,"platform-services-dxc,shelly-test","Canada,US Central,US West",clusters,https://api.klab.devops.gov.bc.ca:6443/readyz,,,,,,,,,ok,STRING,SSL_TLS,,,,,,,,,,
+HTTP,OpenShift container platforms - CLAB,1,"platform-services-dxc,shelly-test","Canada,US Central,US West",clusters,https://api.clab.devops.gov.bc.ca:6443/readyz,,,,,,,,,ok,STRING,SSL_TLS,,,,,,,,,,
+HTTP,OpenShift container platforms - Silver,1,"platform-services-dxc,platform-services-product-owner,shelly-test","Canada,US Central,US West",clusters,https://api.silver.devops.gov.bc.ca:6443/readyz,,,,,,,,,ok,STRING,SSL_TLS,,,,,,,,,,
+HTTP,OpenShift container platforms - Gold,1,"platform-services-dxc,platform-services-product-owner,shelly-test","Canada,US Central,US West",clusters,https://api.gold.devops.gov.bc.ca:6443/readyz,,,,,,,,,ok,STRING,SSL_TLS,,,,,,,,,,
+HTTP,OpenShift container platforms - GoldDR,1,"platform-services-dxc,platform-services-product-owner,shelly-test","Canada,US Central,US West",clusters,https://api.golddr.devops.gov.bc.ca:6443/readyz,,,,,,,,,ok,STRING,SSL_TLS,,,,,,,,,,
+HTTP,Aqua,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://aqua.apps.silver.devops.gov.bc.ca/api,,,,,,,,,,,SSL_TLS,,,,,,,,,,
+HTTP,Artifactory,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://artifacts.developer.gov.bc.ca/artifactory/api/system/ping,,,,,,,,,OK,STRING,SSL_TLS,,,,,,,,,,
+HTTP,Devhub,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://developer.gov.bc.ca,,,,,,,,,,,SSL_TLS,,,,,,,,,,
+HTTP,Registry,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://registry.developer.gov.bc.ca/api/v1/ehlo,,,,,,,,,,,SSL_TLS,,,,,,,,,,
+HTTP,RocketChat,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://chat.developer.gov.bc.ca/api/info,,,,,,,,,"""success"":true",STRING,SSL_TLS,,,,,,,,,,
