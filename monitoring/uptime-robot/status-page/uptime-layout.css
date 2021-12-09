@@ -1,0 +1,137 @@
+/* footer css */
+footer {
+  background-color: #036;
+  border-top: 2px solid #fcba19;
+  color: #fff;
+  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif; 
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+footer .container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 46px;
+}
+
+footer ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  color: #fff;
+  list-style: none;
+  align-items: center;
+  height: 100%;
+}
+
+footer ul li a {
+  font-size: 0.813em;
+  font-weight: normal;  /* 400 */
+  color: #fff;
+  border-right: 1px solid #4b5e7e;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+footer a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+:focus {
+  outline: 4px solid #3B99FC;
+  outline-offset: 1px;
+}
+
+/* header css */
+header {
+  background-color: #036;
+  border-bottom: 2px solid #fcba19;
+  color: #fff;
+  display: flex;
+  height: 65px;
+  top: 0px;
+  width: 100%;
+}
+
+header h1 {
+  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif;
+  font-weight: normal;  /* 400 */
+  margin: 5px 5px 0 18px;
+  font-size: 2em;
+  visibility: visible;
+  color: white
+}
+
+header .banner {
+  flex-direction: row !important;
+  min-height: 6vh;
+  margin: 0 10px 0 0;
+}
+
+.header-container{
+  width: 100%;
+}
+
+header .other {
+  display: flex;
+  flex-grow: 1;
+}
+
+.navigation-main {
+  display: block;
+  background-color: #38598a;
+  /* border-top: 2px solid #fcba19; */
+  color: #fff;
+  font-family: ‘BCSans’, ‘Noto Sans’, Verdana, Arial, sans-serif; 
+}
+
+.navigation-main .container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  height: 46px;
+}
+
+.navigation-main ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  color: #fff;
+  list-style: none;
+  align-items: center;
+  height: 100%;
+}
+
+.navigation-main ul li a {
+  font-size: 0.813em;
+  font-weight: normal;  /* 400 */
+  color: #fff;
+  border-right: 1px solid #fff;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.navigation-main a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/*
+  These are sample media queries only. Media queries are quite subjective
+  but, in general, should be made for the three different classes of screen
+  size: phone, tablet, full.
+*/
+@media screen and (max-width: 900px) {
+  header h1 {
+    font-size:10px;
+    visibility: visible;
+  }
+}
