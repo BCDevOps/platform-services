@@ -8,8 +8,10 @@
     aqua_sso_client: "{{ lookup('env', 'AQUA_SSO_CLIENT') }}"
     aqua_scanner_username: "{{ lookup('env', 'AQUA_SCANNER_USERNAME') }}"
     aqua_scanner_password: "{{ lookup('env', 'AQUA_SCANNER_PASSWORD') }}"
+    aqua_operator_username: "{{ lookup('env', 'AQUA_OPERATOR_USERNAME') }}"
+    aqua_operator_passowrd: "{{ lookup('env', 'AQUA_OPERATOR_PASSWORD') }}"
   tasks: 
     - include_tasks: tasks/login.yaml
     - include_tasks: tasks/enable_oidc.yaml
-    - include_tasks: tasks/create_scanner_user.yaml
+    - include_tasks: tasks/create_users.yaml
     - include_tasks: tasks/enable_enforcers.yaml
