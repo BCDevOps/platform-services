@@ -1,0 +1,40 @@
+- name: Create Openshift Image Registry
+  register: response
+  uri:
+    headers:
+      Authorization: "Bearer {{ auth_token }}"
+      Content-Type: application/json
+    body_format: json
+    method: POST
+    status_code: [204]
+    url: "{{ aqua_url }}/api/v1/registries"
+    body:
+      always_pull_patterns: []
+      auto_pull: false
+      auto_pull_max: 100
+      auto_pull_rescan: false
+      auto_pull_time: "03:30"
+      description: ""
+      existsing_scanners: []
+      name: "OpenShift"
+      options: []
+      password: ""
+      prefixes: []
+      pull_image_age: "0D"
+      pull_image_tag_pattern: []
+      pull_repo_patterns_excluded: []
+      scanner_name: []
+      scanner_name_added: []
+      scanner_name_removed: []
+      scanner_type: "any"
+      type: "OPENSHIFT"
+      url: "https://image-registry.openshift-image-registry.svc:5000"
+      username: ""
+      webhook: 
+        enabled: false
+        auth_token: ""
+        un_quarantine: false
+        url: ""
+  failed_when:
+  - response.status != 204
+  
