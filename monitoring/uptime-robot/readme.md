@@ -21,10 +21,10 @@ The monitoring relies on a combination of the built-in Uptime.com monitoring fun
 
 | Monitor | Endpoint | Monitoring Interval | Alerts |
 | ------- |--------- | ------------------- | ------ |
-| Gold / GoldDR / Silver Cluster | readyz & Cerberus** | 1 min | RC / MSTeams / SMS / Email |
-| Klab / Clab / ARO Cluster | readyz & Cerberus** | 1 min | RC |
-| SSO (prod/test/dev) | service URL | 1 min | RC |
-| RocketChat | service URL | 1 min | RC / MSTeams |
+| Gold / GoldDR / Silver Cluster | readyz & Cerberus** | 1 min | RC / Email |
+| Klab / Clab / ARO Cluster | readyz & Cerberus** | 1 min | RC / Email |
+| SSO (status on a different page) | service URL | 1 min | OpsGenie |
+| RocketChat | service URL | 1 min | RC / Email |
 | Artifactory | service API ping | 1 min | RC |
 | Aqua | api URL | 1 min | RC |
 | Registry App | service ehlo | 1 min | RC |
