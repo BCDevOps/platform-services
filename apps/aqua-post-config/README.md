@@ -33,7 +33,8 @@ Locally you can run the playbook like so
 # AQUA_SSO_CLIENT_SECRET
 # AQUA_SCANNER_USERNAME
 # AQUA_SCANNER_PASSWORD
-
+# AQUA_OPERATOR_USERNAME
+# AQUA_OPERATOR_PASSWORD
 
 ansible-playbook -e aqua_url='...' post_config.yaml
 ```

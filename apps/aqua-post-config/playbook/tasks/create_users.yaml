@@ -1,0 +1,44 @@
+---
+- name: Create Scanner User
+  register: response
+  uri:
+    headers:
+      Authorization: "Bearer {{ auth_token }}"
+      Content-Type: application/json
+    body_format: json
+    method: POST
+    status_code: [204]
+    url: "{{ aqua_url }}/api/v1/users"
+    body:
+      id: "{{ aqua_scanner_username }}"
+      password: "{{ aqua_scanner_password }}"
+      passwordConfirm: "{{ aqua_scanner_password }}"
+      roles: ['Scanner']
+      first_time: false
+      name: ""
+      email: ""
+  failed_when:
+  - response.status != 204
+  - "'User with username {{ aqua_scanner_username }} already exists' not in response.json.message"
+- name: Create Aqua Scanner Operator User
+  register: response
+  uri:
+    headers:
+      Authorization: "Bearer {{ auth_token }}"
+      Content-Type: application/json
+    body_format: json
+    method: POST
+    status_code: [204]
+    url: "{{ aqua_url }}/api/v1/users"
+    body:
+      id: "{{ aqua_operator_username }}"
+      password: "{{ aqua_operator_password }}"
+      passwordConfirm: "{{ aqua_operator_password }}"
+      roles: ['Administrator']
+      first_time: false
+      name: ""
+      email: ""
+  failed_when:
+  - response.status != 204
+  - "'User with username {{ aqua_operator_username }} already exists' not in response.json.message"
+  
