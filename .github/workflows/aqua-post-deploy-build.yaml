@@ -23,6 +23,6 @@ jobs:
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     - name: Build the tagged Docker image
-      run: cd apps/aqua-post-config && docker build . --file Dockerfile --tag bcdevopscluster/aqua-post-config:lab
+        run: cd apps/aqua-post-config && docker build . --file Dockerfile --tag bcdevopscluster/aqua-post-config:1.0.1-alpha
     - name: Push the tagged Docker image
-      run: docker push bcdevopscluster/aqua-post-config:1.0.0-alpha
+      run: docker push bcdevopscluster/aqua-post-config:1.0.1-alpha
