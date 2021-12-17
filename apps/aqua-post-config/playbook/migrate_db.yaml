@@ -3,32 +3,32 @@
   connection: local
   gather_facts: no
   vars:
-    # aqua_web_name: "{{ lookup('env', 'AQUA_WEB_NAME') }}"
-    # dump_path: "{{ lookup('env', 'DUMP_PATH') }}"
-    # dump_file: dump.sql 
-    # target_db_username: "{{ lookup('env', 'TARGET_DB_USERNAME') }}"
-    # target_db_database: "{{ lookup('env', 'TARGET_DB_DATABASE') }}"
-    # target_db_host: "{{ lookup('env', 'TARGET_DB_HOST') }}"
-    # target_db_password: "{{ lookup('env', 'TARGET_DB_PASSWORD') }}"
-    # target_db_username: "{{ lookup('env', 'SOURCE_DB_USERNAME') }}"
-    # source_db_database: "{{ lookup('env', 'SOURCE_DB_DATABASE') }}"
-    # source_db_host: "{{ lookup('env', 'SOURCE_DB_HOST') }}"
-    # source_db_password: "{{ lookup('env', 'SOURCE_DB_PASSWORD') }}"
+    aqua_web_name: "{{ lookup('env', 'AQUA_WEB_NAME') }}"
+    dump_path: "{{ lookup('env', 'DUMP_PATH') }}"
+    dump_file: dump.sql 
+    target_db_username: "{{ lookup('env', 'TARGET_DB_USERNAME') }}"
+    target_db_database: "{{ lookup('env', 'TARGET_DB_DATABASE') }}"
+    target_db_host: "{{ lookup('env', 'TARGET_DB_HOST') }}"
+    target_db_password: "{{ lookup('env', 'TARGET_DB_PASSWORD') }}"
+    target_db_username: "{{ lookup('env', 'SOURCE_DB_USERNAME') }}"
+    source_db_database: "{{ lookup('env', 'SOURCE_DB_DATABASE') }}"
+    source_db_host: "{{ lookup('env', 'SOURCE_DB_HOST') }}"
+    source_db_password: "{{ lookup('env', 'SOURCE_DB_PASSWORD') }}"
     
   tasks: 
     - name: does aqua web exist?
-      run: oc get deployment/aqua-web -o json -n openshift-bcgov-aqua 
+      run: oc get deployment/{{ aqua_web_name }} -o json -n openshift-bcgov-aqua 
       register: aqua_web
 
     - name: setting fact for original desired replicas
       set_fact:
         desired_replicas: (aqua_web.stdout | from_json).spec.replicas 
     - name: setting fact for aqua_web_exists
-      set_fact: aqua_web.stdout == aqua-web
+      set_fact:
         aqua_web_exists: "Error from server (NotFound)" not in aqua_web.stdout
 
     - name: scale aqua service down to 0 to prevent new transactions to database
-      run: oc scale deployment/aqua-web --replicas=0
+      run: oc scale deployment/{{ aqua_web_name }} --replicas=0
       when: aqua_web_exists
 
     - name: perform source db dump
@@ -38,6 +38,6 @@
       run: psql --dbname={{ target_db_database }} --host={{ target_db_host }} --port=5432 < {{ dump_path }}/{{ dump_file }}
 
     - name: scale aqua backup
-      run: oc scale deployment/aqua-web --replicas={{ desired_replicas }}
+      run: oc scale deployment/{{ aqua_web_name }} --replicas={{ desired_replicas }}
       when: aqua_web_exists
 
