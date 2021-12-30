@@ -1,0 +1,72 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    aqua_web_name: aqua-web
+    source_dump_path: "{{ lookup('env', 'SOURCE_DUMP_PATH') }}"
+    target_restore_path: "{{ lookup('env', 'TARGET_RESTORE_PATH') }}"
+    dump_file: dump.sql
+    source_db_username: "{{ lookup('env', 'SOURCE_DB_USERNAME') }}"
+    source_db_database: "{{ lookup('env', 'SOURCE_DB_DATABASE') }}"
+    source_db_host: "{{ lookup('env', 'SOURCE_DB_HOST') }}"
+    source_db_password: "{{ lookup('env', 'SOURCE_DB_PASSWORD') }}"
+    source_db_pod_selector: "{{ lookup('env', 'SOURCE_DB_POD_SELECTOR') }}"
+    target_db_pod_selctor: "{{ lookup('env', 'TARGET_DB_POD_SELECTOR') }}"
+    target_db_username: mattdamon
+    target_db_database: scalock
+    target_db_host: aqua-db-patroni-master
+    target_db_password: "{{ lookup('env', 'TARGET_DB_PASSWORD') }}"
+
+  tasks: 
+    - name: does aqua web exist?
+      shell: oc get deployment/{{ aqua_web_name }} -o json -n openshift-bcgov-aqua 
+      register: aqua_web
+
+    - name: setting fact for original desired replicas
+      set_fact:
+        desired_replicas: "{{ (aqua_web.stdout | from_json).spec.replicas }}"
+
+    - name: setting fact for aqua_web_exists
+      set_fact:
+        aqua_web_exists: "{{ 'Error from server (NotFound)' not in aqua_web.stdout }}"
+
+    - name: scale aqua service down to 0 to prevent new transactions to database
+      shell: oc scale deployment/{{ aqua_web_name }} --replicas=0
+      when: aqua_web_exists
+
+    - name: get source db pod name
+      shell: oc get pod -l {{ source_db_pod_selector }} -o json | jq -r '.items[0].metadata.name'
+      register: source_pod_name
+
+    - name: get target db pod name
+      shell: oc get pod -l {{ target_db_pod_selctor }} -o json | jq -r '.items[0].metadata.name'
+      register: target_pod_name
+
+    - name: perform source db dump
+      shell: oc rsh -n openshift-bcgov-aqua {{ source_pod_name.stdout }} pg_dump -Fc {{ source_db_database }} --file={{ source_dump_path }}/{{ dump_file }}
+
+    - name: copy dump to local
+      shell: oc cp -n openshift-bcgov-aqua "{{ source_pod_name.stdout }}:{{ source_dump_path }}/{{ dump_file }}" ./temp/{{ dump_file }}
+    
+    - name: cleanup dump file at source db
+      shell: oc rsh -n openshift-bcgov-aqua {{ source_pod_name.stdout }} rm {{ source_dump_path }}/{{ dump_file }}
+    
+    - name: move dump file to target db
+      shell: oc cp -n openshift-bcgov-aqua ./temp/{{ dump_file }} "{{ target_pod_name.stdout }}:{{ target_restore_path }}/{{ dump_file }}"
+
+    - name: perform target db recovery
+      shell: oc rsh -n openshift-bcgov-aqua {{ target_pod_name.stdout }} pg_restore {{ target_restore_path }}/{{ dump_file }} --dbname={{ source_db_database }}
+
+    - name: cleanup dump file at target db
+      shell: oc rsh -n openshift-bcgov-aqua {{ target_pod_name.stdout }} rm {{ target_restore_path }}/{{ dump_file }}
+    
+    - name: cleanup dump file local
+      file:
+        state: absent
+        path: ./temp/{{ dump_file }}
+
+    - name: scale aqua back up to {{ desired_replicas }}
+      shell: oc scale deployment/{{ aqua_web_name }} --replicas={{ desired_replicas }}
+      when: aqua_web_exists
+
