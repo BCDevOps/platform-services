@@ -9,3 +9,4 @@ HTTP,Artifactory,1,platform-services-admins,"Canada,US Central,US West",shared-s
 HTTP,Devhub,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://developer.gov.bc.ca,,,,,,,,,,,SSL_TLS,,,,,,,,,,
 HTTP,Registry,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://registry.developer.gov.bc.ca/api/v1/ehlo,,,,,,,,,,,SSL_TLS,,,,,,,,,,
 HTTP,RocketChat,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://chat.developer.gov.bc.ca/api/info,,,,,,,,,"""success"":true",STRING,SSL_TLS,,,,,,,,,,
+HTTP,Vault,1,platform-services-admins,"Canada,US Central,US West",shared-services,https://vault.developer.gov.bc.ca/v1/sys/health,,,,,,,,,"""sealed"":false",STRING,SSL_TLS,,,,,,,,,,
