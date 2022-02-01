@@ -158,6 +158,7 @@ As promised, there are two sysdig teams created
 ![](assets/sysdigteams_sample_dashboard.png)
 
 
+> ***NOTE*** we highly recommend teams to use [Sysdig API](https://docs.sysdig.com/en/docs/developer-tools/sysdig-rest-api-conventions/) to keep your cool dashboards as code! Each of the dashboard is assigned to an account on Sysdig for ownership, deleting the user (doesn't matter if it's done from console or custom resource) will delete all of the dashboards. As Sysdig cloud is a Saas not something we run locally, there is no way for us to retain the deleted dashboards for you.
 
 ## Step 5 - Alert Channels
 Currently Alert Channels can be created manually through the Sysdig Monitor UI. 
@@ -262,6 +263,14 @@ To enable Promscrape to find your application metrics, follow the steps:
   ```
   ***Do not*** add the annotations to the pods directly as they are ephemeral. Instead, this should be part of the infrastructure code and added in the templates. For example, if the app is using an OpenShift deployment, the annotation should be added at `deployment.spec.template.metadata.annotations`.
 - once the annotations is in place, sysdig will be able to scrape them. You can navigate to Sysdig Explore tab and look for the sysdig metrics there (Sysdig does relabeling of the metrics, so they will appear as native sysdig metrics now instead of coming from promQL Query)
+
+
+# Trouble Shooting
+
+## I don't see any default dashboards created for my Sysdig team
+Here are some things to look into:
+1. click on the bottom left initial icon to make sure you have switched to the correct sysdig team scope. By default you'll land on `catchall` which does not contain any default dashboards
+1. check on your sysdig account profile and match it to the email address that you have provided on the `sysdig-team custom resource` in tools namespace. If the admin user's email does not match the corresponding user on sysdig, it will not be able to create the dashboards. To fix this, delete the `sysdig-team` from tools namespace, and recreate it. ***Note*** that if you have created custom dashboards already, make sure to import then as code using [Sysdig API](https://docs.sysdig.com/en/docs/developer-tools/sysdig-rest-api-conventions/) first before deleting the CR!
 
 
 # Additional Resources
