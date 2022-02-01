@@ -7,7 +7,8 @@ tags:
 - outage
 - downtime
 - maintenance
-title: Openshift 4 Platform Services Reliability Dashboard with Uptime.com
+
+title: OpenShift 4 Platform Services Reliability Dashboard with Uptime.com
 ---
 # OpenShift 4 Platform Services Reliability Dashboard with Uptime.com
 
@@ -21,14 +22,16 @@ The monitoring relies on a combination of the built-in Uptime.com monitoring fun
 
 | Monitor | Endpoint | Monitoring Interval | Alerts |
 | ------- |--------- | ------------------- | ------ |
-| Gold / GoldDR / Silver Cluster | readyz & Cerberus** | 1 min | RC / Email |
-| Klab / Clab / ARO Cluster | readyz & Cerberus** | 1 min | RC / Email |
+| Gold / GoldDR / Silver Cluster | readyz & Cerberus** | 1 min | RC / MSTeams / SMS / Email |
+| Klab / Clab / ARO Cluster | readyz & Cerberus** | 1 min | RC |
 | SSO (status on a different page) | service URL | 1 min | OpsGenie |
-| RocketChat | service URL | 1 min | RC / Email |
-| Artifactory | service API ping | 1 min | RC |
-| Aqua | api URL | 1 min | RC |
-| Registry App | service ehlo | 1 min | RC |
-| Vault | TBD | TBD | TBD |
+| RocketChat | service URL | 1 min | RC / MSTeams |
+| Artifactory | service API ping endpoint | 1 min | RC |
+| Aqua | service API ping endpoint | 1 min | RC |
+| Registry App | service API ehlo endpoint | 1 min | RC |
+| DevHan | service URL | 1 min | RC |
+| Vault | service health endpoint | 1 min | RC |
+
 
 We use 1 minute intervals (shortest available from Uptime.com) to ping availability endpoints set up for each service. Occasionally when a service is extremely busy, the response may timeout and 1 min downtime is recorded. However, we feel that this small error is better than setting the ping intervals to a lower frequency (e.g. 5 mins) and getting a 5 min outage window when the response is not returned due to the network issues between the Uptime.com and the BC Gov network.  
 
@@ -53,20 +56,20 @@ When a service is down for more than 5 minutes, the pre-configured alerts will b
 - ***Note:*** team should create a custom Uptime.com announcement after cluster issue being resolved. See next section for details.
 
 
-## Announcements
+## History & Incidents
 
-There are different types of announcements you will see from Uptime.com:
+There are different types of announcements for past and future incidents you will see from Uptime.com:
 
 **1. Automatic Announcement:**
-- whenever there is a service downtime detected by Uptime.com, it will auto generate an announcement with the timestamp and duration
+- whenever there is a service downtime detected by Uptime.com, it will auto generate an Incidents with the timestamp and duration
 - there is no much details included in this
 
 **2. Custom Announcements:**
-- Custom announcements will be posted manually by the Platform Services Team following a service outage explaining the root cause and the impact of the service disruption as well as what was done to troubleshoot and restore the service.
-- Very important announcements will be pinned to the top of the Dashboard page.
+- Custom announcements will be posted manually by the Platform Services Team following a service outage explaining the root cause and the impact of the service disruption as well as what was done to troubleshoot and restore the service
+- all the clusters and services that are impacted will be listed in the announcement
 
 **3. Maintenance Window:**
-- when there is a scheduled maintenance, details can be provided in a Maintenance Window message and the uptime statistic of the service will not be gathered during those periods.
+- when there is a scheduled maintenance, details can be provided in a Maintenance Window message and the uptime statistic of the service can be opted out during those time period, based on the nature of the maintenance
 
 
 ## Monitoring Config as Code
