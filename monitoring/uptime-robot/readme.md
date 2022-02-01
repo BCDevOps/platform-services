@@ -7,6 +7,7 @@ tags:
 - outage
 - downtime
 - maintenance
+
 title: OpenShift 4 Platform Services Reliability Dashboard with Uptime.com
 ---
 # OpenShift 4 Platform Services Reliability Dashboard with Uptime.com
@@ -30,6 +31,7 @@ The monitoring relies on a combination of the built-in Uptime.com monitoring fun
 | Registry App | service API ehlo endpoint | 1 min | RC |
 | DevHan | service URL | 1 min | RC |
 | Vault | service health endpoint | 1 min | RC |
+
 
 We use 1 minute intervals (shortest available from Uptime.com) to ping availability endpoints set up for each service. Occasionally when a service is extremely busy, the response may timeout and 1 min downtime is recorded. However, we feel that this small error is better than setting the ping intervals to a lower frequency (e.g. 5 mins) and getting a 5 min outage window when the response is not returned due to the network issues between the Uptime.com and the BC Gov network.  
 
