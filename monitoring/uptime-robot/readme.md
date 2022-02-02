@@ -8,7 +8,7 @@ tags:
 - downtime
 - maintenance
 
-title: OpenShift 4 Platform Services Reliability Dashboard with Uptime.com
+title: OpenShift 4 Platform Services Reliability Dashboard
 ---
 # OpenShift 4 Platform Services Reliability Dashboard
 
