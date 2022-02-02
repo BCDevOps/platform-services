@@ -34,6 +34,7 @@ You can find the overall Sysdig monitoring service described [here](https://deve
   * [Creating custom monitoring panels](#creating-custom-monitoring-panels)
   * [Creating a PromQL Based Alert](#creating-a-promql-based-alert)
   * [Leveraging Service Discovery to import Application metrics endpoint](#leveraging-service-discovery-to-import-application-metrics-endpoint)
+* [Trouble Shooting](#trouble-shooting)
 * [Additional Resources](#additional-resources)
 
 ## Step 1 - Login to Sysdig
