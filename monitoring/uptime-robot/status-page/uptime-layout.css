@@ -30,7 +30,7 @@ footer ul {
 }
 
 footer ul li a {
-  font-size: 0.813em;
+  font-size: 1rem;
   font-weight: normal;  /* 400 */
   color: #fff;
   border-right: 1px solid #4b5e7e;
@@ -111,7 +111,7 @@ header .other {
 }
 
 .navigation-main ul li a {
-  font-size: 0.813em;
+  font-size: 1rem;
   font-weight: normal;  /* 400 */
   color: #fff;
   border-right: 1px solid #fff;
@@ -122,6 +122,38 @@ header .other {
 .navigation-main a:hover {
   color: #fff;
   text-decoration: underline;
+}
+
+
+/*main content class overrides*/
+/*main content font size of components, primiarly everything here is increasing font size from 14px to 16px*/
+.component-list{
+  font-size:16px !important;
+}
+
+h6, .h6{
+  font-size: 1rem;
+}
+
+
+#statuspagesDisplay .component-list .component, .incident-list .incident {
+  padding:16px 2rem 9px 2rem;
+  z-index:0;
+}
+
+p, .mb-1, #statuspagesDisplay .incident-list .incident-details .update .update-heading .name,
+#statuspagesDisplay .incident-list .incident .incident-heading{
+  font-size:16px !important;
+}
+
+
+.font-14, #statuspagesListing .component-list, #statuspagesManage .component-list, #statuspagesDisplay .component-list, #statuspagesListing .incident-updates, #statuspagesListing .incident-list .incident-details, #statuspagesListing #statuspagesManage .incident-list .incident-details, #statuspagesManage .incident-list #statuspagesListing .incident-details, #statuspagesListing #statuspagesDisplay .incident-list .incident-details, #statuspagesDisplay .incident-list #statuspagesListing .incident-details, #statuspagesManage .incident-updates, #statuspagesManage #statuspagesListing .incident-list .incident-details, #statuspagesListing .incident-list #statuspagesManage .incident-details, #statuspagesManage .incident-list .incident-details, #statuspagesManage #statuspagesDisplay .incident-list .incident-details, #statuspagesDisplay .incident-list #statuspagesManage .incident-details, #statuspagesDisplay .incident-updates, #statuspagesDisplay #statuspagesListing .incident-list .incident-details, #statuspagesListing .incident-list #statuspagesDisplay .incident-details, #statuspagesDisplay #statuspagesManage .incident-list .incident-details, #statuspagesManage .incident-list #statuspagesDisplay .incident-details, #statuspagesDisplay .incident-list .incident-details, #statuspagesListing .incident-list, #statuspagesManage .incident-list, #statuspagesDisplay .incident-list, #statuspagesManage .status-select-box>a[data-toggle=dropdown], #statuspagesManage .status-select-box>.dropdown-menu, #statuspagesDisplay .header>.description, #statuspagesDisplay #section-content-tab-history .history-date-range-snake .snake-popup>.content {
+  font-size:16px;
+}
+
+
+.font-12, .graph-legend .marker, #statuspagesListing .incident-updates .update .update-heading .date, #statuspagesListing .incident-list .incident-details .update .update-heading .date, #statuspagesManage .incident-updates .update .update-heading .date, #statuspagesManage .incident-list .incident-details .update .update-heading .date, #statuspagesDisplay .incident-updates .update .update-heading .date, #statuspagesDisplay .incident-list .incident-details .update .update-heading .date, #statuspagesListing .incident-list .incident .incident-heading .date, #statuspagesManage .incident-list .incident .incident-heading .date, #statuspagesDisplay .incident-list .incident .incident-heading .date {
+  font-size:14px;
 }
 
 /*
