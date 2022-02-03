@@ -8,11 +8,11 @@ tags:
 - downtime
 - maintenance
 
-title: OpenShift 4 Platform Services Reliability Dashboard with Uptime.com
+title: OpenShift 4 Platform Services Reliability Dashboard
 ---
-# OpenShift 4 Platform Services Reliability Dashboard with Uptime.com
+# OpenShift 4 Platform Services Reliability Dashboard
 
-Monitoring status page can be found here: https://status.developer.gov.bc.ca/
+We are using Uptime.com for our service reliability dashboard. Monitoring status page can be found here: https://status.developer.gov.bc.ca/
 
 This is a high level monitoring aiming to provide the community with a sense of our service reliability. Monitored services include the DevOps OpenShift 4 Platform Clusters and the shared services (also knows as Next Gen Security tools). Uptime.com tracks the history of service uptime and outages for each of the monitored service. In the future, there will be announcements regarding each major service planned downtime and maintenance as well as updates during outages.
 
