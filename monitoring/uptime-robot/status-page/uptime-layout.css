@@ -136,7 +136,7 @@ h6, .h6{
 }
 
 
-#statuspagesDisplay .component-list .component {
+#statuspagesDisplay .component-list .component, .incident-list .incident {
   padding:16px 2rem 9px 2rem;
   z-index:0;
 }
