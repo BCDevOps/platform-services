@@ -14,7 +14,7 @@ COPY ./rhsm-conf /etc/rhsm
 COPY ./rhsm-ca /etc/rhsm/ca
 
 # Install some packages and clean up
-RUN INSTALL_PKGS="python36 python3-pip gcc zlib-devel" && \
+RUN INSTALL_PKGS="git python36 python3-pip gcc python3-devel" && \
     # Initialize /etc/yum.repos.d/redhat.repo
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
@@ -26,10 +26,15 @@ RUN INSTALL_PKGS="python36 python3-pip gcc zlib-devel" && \
     rm -rf /etc/pki/entitlement && \
     rm -rf /etc/rhsm
 
-RUN pip3 install httplib2 cerberus-client && \
-    # # to get rid of the need for privileged user:
-    mkdir /root/cerberus && \
-    touch /root/cerberus/cerberus.report && \
+RUN pip3 install httplib2
+
+# Reference: https://github.com/chaos-kubox/cerberus/blob/main/containers/Dockerfile
+RUN mkdir /root/cerberus && \
+    git clone https://github.com/openshift-scale/cerberus /root/cerberus && \
+    /root/cerberus pip3 install -r requirements.txt
+
+# to get rid of the need for privileged user:
+RUN touch /root/cerberus/cerberus.report && \
     mkdir /root/cerberus/history && \
     chmod -R 775 /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
