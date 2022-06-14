@@ -31,9 +31,11 @@ RUN pip3 install httplib2
 # Reference: https://github.com/chaos-kubox/cerberus/blob/main/containers/Dockerfile
 RUN git clone https://github.com/openshift-scale/cerberus /root/cerberus
 
+RUN ls -al
+
 # to get rid of the need for privileged user:
 RUN touch /root/cerberus/cerberus.report && \
-    mkdir /root/cerberus/history && \
+    # mkdir /root/cerberus/history && \
     chmod -R 775 /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
 
