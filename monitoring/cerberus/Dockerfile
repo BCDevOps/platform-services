@@ -1,59 +1,22 @@
-# FROM image-registry.openshift-image-registry.svc:5000/openshift/cli
-# Use this when building off cluster
-FROM registry.redhat.io/openshift4/ose-cli:v4.7.0
+# Dockerfile for cerberus
+FROM quay.io/openshift/origin-tests:latest as origintests
 
-LABEL maintainer="Shelly Han <Shelly.Han@gov.bc.ca>" \
-      io.k8s.display-name="Cerberus Monitoring" \
-      io.k8s.description="Cluster monitoring that serves a go/no-go signal for Uptime Robot."
+FROM quay.io/centos/centos:7
 
-# Copy entitlements
-COPY ./etc-pki-entitlement /etc/pki/entitlement
+MAINTAINER Red Hat OpenShift Performance and Scale
 
-# Copy subscription manager configurations
-COPY ./rhsm-conf /etc/rhsm
-COPY ./rhsm-ca /etc/rhsm/ca
+ENV KUBECONFIG /root/.kube/config
 
-# Install some packages and clean up
-RUN INSTALL_PKGS="git python36 python3-pip gcc" && \
-    # Initialize /etc/yum.repos.d/redhat.repo
-    # See https://access.redhat.com/solutions/1443553
-    rm /etc/rhsm-host && \
-    yum repolist --disablerepo='*' && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    yum -y clean all --enablerepo='*' && \
-    # Remove entitlements and Subscription Manager configs
-    rm -rf /etc/pki/entitlement && \
-    rm -rf /etc/rhsm
+# Copy OpenShift CLI, Kubernetes CLI from origin-tests image
+COPY --from=origintests /usr/bin/oc /usr/bin/oc
+COPY --from=origintests /usr/bin/kubectl /usr/bin/kubectl
 
-RUN pip3 install httplib2
-
-# Reference: https://github.com/chaos-kubox/cerberus/blob/main/containers/Dockerfile
-RUN git clone https://github.com/openshift-scale/cerberus /root/cerberus
-
-RUN ls -al
-
-# to get rid of the need for privileged user:
-RUN touch /root/cerberus/cerberus.report && \
-    # mkdir /root/cerberus/history && \
-    chmod -R 775 /root/cerberus/cerberus.report && \
-    chmod -R 775 /root/cerberus/history
-
-# Copy Cerberus custom checks
-COPY custom_checks/custom_checks.py /usr/local/bin/custom_checks/custom_checks.py
-RUN chmod 755 /usr/local/bin/custom_checks/custom_checks.py \
-    && chgrp 0 /usr/local/bin/custom_checks/custom_checks.py
-
-# Copy entrypoint command
-COPY entrypoint.sh /usr/local/bin/
-RUN chmod 755 /usr/local/bin/entrypoint.sh \
-    && chgrp 0 /usr/local/bin/entrypoint.sh
-
-RUN cd /root/cerberus && \
-    pip3 install -r requirements.txt
-
-USER 1001
+# Install dependencies
+RUN yum install -y git python36 python3-pip gcc python3-devel && \
+git clone https://github.com/openshift-scale/cerberus /root/cerberus && \
+mkdir -p /root/.kube && cd /root/cerberus && \
+pip3 install -r requirements.txt
 
 WORKDIR /root/cerberus
 
-ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+ENTRYPOINT python3 start_cerberus.py --config=config/config.yaml
