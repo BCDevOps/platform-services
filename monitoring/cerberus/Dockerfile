@@ -13,14 +13,15 @@ COPY ./etc-pki-entitlement /etc/pki/entitlement
 COPY ./rhsm-conf /etc/rhsm
 COPY ./rhsm-ca /etc/rhsm/ca
 
-RUN INSTALL_PKGS="python36 python3-pip gcc python3-devel" && \
+# Install some packages and clean up
+RUN INSTALL_PKGS="python37 python3-pip gcc python3-devel" && \
     # Initialize /etc/yum.repos.d/redhat.repo
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
     yum repolist --disablerepo='*' && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*' && \
-    rm -rf /var/cache/yum && \
     # Remove entitlements and Subscription Manager configs
     rm -rf /etc/pki/entitlement && \
     rm -rf /etc/rhsm
