@@ -29,9 +29,7 @@ RUN INSTALL_PKGS="git python36 python3-pip gcc" && \
 RUN pip3 install httplib2
 
 # Reference: https://github.com/chaos-kubox/cerberus/blob/main/containers/Dockerfile
-RUN mkdir /root/cerberus && \
-    git clone https://github.com/openshift-scale/cerberus /root/cerberus && \
-    /root/cerberus pip3 install -r requirements.txt
+RUN git clone https://github.com/openshift-scale/cerberus /root/cerberus
 
 # to get rid of the need for privileged user:
 RUN touch /root/cerberus/cerberus.report && \
@@ -48,6 +46,9 @@ RUN chmod 755 /usr/local/bin/custom_checks/custom_checks.py \
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/entrypoint.sh \
     && chgrp 0 /usr/local/bin/entrypoint.sh
+
+RUN cd /root/cerberus && \
+    pip3 install -r requirements.txt
 
 USER 1001
 
