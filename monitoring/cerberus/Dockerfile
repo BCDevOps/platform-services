@@ -14,8 +14,7 @@ COPY ./rhsm-conf /etc/rhsm
 COPY ./rhsm-ca /etc/rhsm/ca
 
 # Install some packages and clean up
-# RUN INSTALL_PKGS="git python36 python3-pip gcc python3-devel libtiff-devel libjpeg-devel openjpeg2-devel zlib-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel libxcb-devel" && \
-RUN INSTALL_PKGS="git python36 python3-pip gcc libtiff-devel openjpeg2-devel zlib-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel libxcb-devel" && \
+RUN INSTALL_PKGS="git python36 python3-pip gcc python36-devel libtiff-devel libjpeg-turbo-devel openjpeg2-devel zlib-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel libxcb-devel" && \
     # Initialize /etc/yum.repos.d/redhat.repo
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
