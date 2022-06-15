@@ -1,6 +1,6 @@
 # FROM image-registry.openshift-image-registry.svc:5000/openshift/cli
 # Use this when building off cluster
-FROM registry.redhat.io/openshift4/ose-cli:v4.7.0
+FROM registry.redhat.io/openshift4/ose-cli:v4.9
 
 LABEL maintainer="Shelly Han <Shelly.Han@gov.bc.ca>" \
       io.k8s.display-name="Cerberus Monitoring" \
@@ -14,11 +14,13 @@ COPY ./rhsm-conf /etc/rhsm
 COPY ./rhsm-ca /etc/rhsm/ca
 
 # Install some packages and clean up
-RUN INSTALL_PKGS="git python36 python3-pip gcc zlib-devel libjpeg-devel" && \
+RUN INSTALL_PKGS="git python36 python3-pip gcc python3-devel libtiff-devel libjpeg-devel openjpeg2-devel zlib-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel libxcb-devel" && \
     # Initialize /etc/yum.repos.d/redhat.repo
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
     yum repolist --disablerepo='*' && \
+    subscription-manager repos --enable "codeready-builder-for-rhel-8-x86_64-rpms" && \
+    yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*' && \
