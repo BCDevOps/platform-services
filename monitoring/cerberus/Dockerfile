@@ -14,7 +14,7 @@ COPY ./rhsm-conf /etc/rhsm
 COPY ./rhsm-ca /etc/rhsm/ca
 
 # Install some packages and clean up
-RUN INSTALL_PKGS="git python36 python3-pip gcc zlib-devel" && \
+RUN INSTALL_PKGS="git python36 python3-pip gcc zlib-devel jpeg-devel" && \
     # Initialize /etc/yum.repos.d/redhat.repo
     # See https://access.redhat.com/solutions/1443553
     rm /etc/rhsm-host && \
