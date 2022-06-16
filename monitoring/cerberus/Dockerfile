@@ -22,6 +22,7 @@ RUN INSTALL_PKGS="git python36 python3-pip gcc python36-devel libtiff-devel libj
     subscription-manager repos --enable "codeready-builder-for-rhel-8-x86_64-rpms" && \
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    # Note: use the actual name of packages in INSTALL_PKGS, otherwise it will failed the verification!
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*' && \
     # Remove entitlements and Subscription Manager configs
