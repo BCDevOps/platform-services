@@ -24,7 +24,7 @@ spec:
           # securityContext:
           #   privileged: true
           image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
-          command: ["/bin/sh"]
+          command: ["/bin/sh", "-c"]
           args: ["/usr/local/bin/entrypoint.sh"]
           ports:
             - containerPort: 8080

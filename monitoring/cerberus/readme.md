@@ -82,6 +82,9 @@ oc -n [namespace] create -f ./devops/cerberus-bc.yml
 
 # deploy cerberus:
 oc -n [namespace] create -f ./devops/cerberus.yml
+
+# take a backup of the image after testing:
+oc tag cerberus:latest cerberus:backup
 ```
 
 ### Get Cerberus Monitoring Result:
