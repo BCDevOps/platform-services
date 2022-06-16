@@ -10,4 +10,4 @@ sed "s/SA_TOKEN/${SA_TOKEN}/g" /tmp/cerberus-config-template.yaml > /tmp/cerberu
 export CA_CERT=$(cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | base64 -i - | sed -z 's/\n//g' -)
 sed "s/CA_CERT/${CA_CERT}/" /tmp/kubeconfig-tmp > /tmp/kubeconfig
 
-cerberus_client -c /tmp/cerberus-config.yaml
+python3 start_cerberus.py --config=/tmp/cerberus-config.yaml
