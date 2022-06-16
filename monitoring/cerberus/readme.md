@@ -53,6 +53,7 @@ Here is an example of the monitoring output that reflects the above monitors:
 
 ### TODO:
 - build cronjob for full application life cycle monitoring
+- switch to use Artifactory
 
 
 ### Build and Deploy Cerberus
