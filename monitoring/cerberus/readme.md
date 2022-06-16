@@ -7,7 +7,7 @@ Use Cerberus for cluster monitoring that serves a go/no-go signal for Uptime Rob
 - [x] critical alerts from prometheus:
   - KubeAPILatencyHigh
   - etcdHighNumberOfLeaderChanges
-- [ ] cluster nodes: master, infra, app (too aggressive, using custom checks instead)
+- [x] cluster nodes: master, infra, app (watching all nodes are in good status)
 - [ ] all pods from the specified namespaces (too aggressive, using custom checks instead)
 - [x] custom checks: 
   - monitoring on the 5 major cluster services identified in [Miro board](https://miro.com/app/board/o9J_kgyjm_k=/)
@@ -53,22 +53,7 @@ Here is an example of the monitoring output that reflects the above monitors:
 
 ### TODO:
 - build cronjob for full application life cycle monitoring
-
-### Docker Image Build (temporary)
-```shell
-# login:
-docker login -u [bcdevops_account]
-# make sure subscription entitlement certs exist:
-etc-pki-entitlement/
-rhsm-ca/
-rhsm-conf/
-# make sure the custom checks exist:
-custom_checks/custom_checks.py
-
-# build and push to specific tag
-docker build . --file Dockerfile --tag [bcdevops_account]/cerberus:[lab/prod] --squash
-docker push [bcdevops_account]/cerberus:[lab/prod]
-```
+- switch to use Artifactory
 
 
 ### Build and Deploy Cerberus
@@ -88,11 +73,18 @@ oc create configmap cerberus-config --from-file=./config/cerberus-config-templat
 # Optional, for local testing only (included in docker image already)
 oc create configmap cerberus-custom-check --from-file=./custom_checks/custom_checks.py
 
+# before building, make sure the RH entitlement certs are ready AND up-to-date:
+oc -n [namespace] get configmaps platform-services-controlled-rhsm-ca platform-services-controlled-rhsm-conf
+oc -n [namespace] get secret platform-services-controlled-etc-pki-entitlement
+
 # build:
 oc -n [namespace] create -f ./devops/cerberus-bc.yml
 
 # deploy cerberus:
 oc -n [namespace] create -f ./devops/cerberus.yml
+
+# take a backup of the image after testing:
+oc tag cerberus:latest cerberus:backup
 ```
 
 ### Get Cerberus Monitoring Result:
@@ -119,6 +111,7 @@ ls -al /root/cerberus/history
 ```
 
 ### References:
+- cerberus source repo: https://github.com/chaos-kubox/cerberus
 - setup: https://gexperts.com/wp/building-a-simple-up-down-status-dashboard-for-openshift/
 - deploy containerized version: https://github.com/cloud-bulldozer/cerberus/tree/master/containers
 - custom checks: https://github.com/cloud-bulldozer/cerberus#bring-your-own-checks
