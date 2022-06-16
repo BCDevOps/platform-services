@@ -23,11 +23,8 @@ spec:
           # NOTE: Dockerfile changes filesystem permission for monitoring output storage. otherwise we'll need to use privileged account
           # securityContext:
           #   privileged: true
-          # For testing:
-          image: docker.io/bcdevopscluster/cerberus:lab
-          # switch to artifactory:
-          # image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
-          command: ["/bin/sh", "-c"]
+          image: image-registry.openshift-image-registry.svc:5000/openshift-bcgov-cerberus/cerberus:latest
+          command: ["/bin/sh"]
           args: ["/usr/local/bin/entrypoint.sh"]
           ports:
             - containerPort: 8080
