@@ -43,9 +43,9 @@ RUN touch /root/cerberus/cerberus.report && \
     chmod -R 775 /root/cerberus/history
 
 # Copy Cerberus custom checks
-COPY custom_checks/custom_checks.py /usr/local/bin/custom_checks/custom_checks.py
-RUN chmod 755 /usr/local/bin/custom_checks/custom_checks.py \
-    && chgrp 0 /usr/local/bin/custom_checks/custom_checks.py
+COPY custom_checks/custom_checks.py /root/cerberus/custom_checks/custom_checks.py
+RUN chmod 755 /root/cerberus/custom_checks/custom_checks.py \
+    && chgrp 0 /root/cerberus/custom_checks/custom_checks.py
 
 # Copy entrypoint command
 COPY entrypoint.sh /usr/local/bin/
