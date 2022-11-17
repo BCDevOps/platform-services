@@ -1,4 +1,4 @@
-# Note:
+# ALERT DO NOT USE - NOT MAINTAINED
 #   This Dockerfile is no longer maintained and has been replaced with another:
 #   https://github.com/bcgov/patroni-postgres-container/blob/master/Dockerfile
 # -----------------------------------------------------------------------------
