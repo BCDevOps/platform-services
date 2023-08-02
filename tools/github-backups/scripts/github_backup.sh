@@ -92,7 +92,11 @@ for ITEM in ${USER_REPOS_TO_BACK_UP[@]}; do
 done
 
 # Make compressed archives
-# ------------------------
+# We aren't using this, because once the first round of backups is copied to the
+# S3 bucket, subsequent runs will just transfer changes, like rsync.  If we
+# create a large tar file, it will be different every time and the entire 
+# contents will have to be copied over.
+# ------------------------------------------------------------------------------
 #cd ${BASEDIR}/owners/
 #for OWNER in `ls`; do
 #  log "archiving $OWNER"
