@@ -1,0 +1,40 @@
+---
+
+- name: "Build | Project: {{ project }} | App: {{ app }} | Loop: {{ loop }}."
+  shell:  "oc start-build {{ app }} --wait -n {{ project }}"
+  ignore_errors: true
+  register: build_result
+
+- name: On failure write log as JSON. 
+  blockinfile: 
+    path: errors.log
+    marker: " "
+    block: "{{ build_result | to_nice_json }},"
+  when: build_result.failed | bool == true
+
+- name: On failure write log as CSV.  
+  lineinfile: 
+    path: errors.csv
+    line: "{{ build_result.start }} | {{ build_result.end }} | {{ build_result.delta }} | {{ build_result.cmd }} | {{ build_result.stderr }}"
+  when: build_result.failed | bool == true
+
+- pause:
+    seconds: 15
+
+- name: "Rollout deployment | Project: {{ project }} | App: {{ app }} | Loop: {{ loop }}."
+  shell:  "oc rollout latest dc/{{ app }} -n {{ project }} && oc rollout status dc/{{ app }} -n {{ project }}"
+  ignore_errors: true
+  register: deploy_result
+
+- name: On failure write log as JSON. 
+  blockinfile: 
+    path: errors.log
+    block: "{{ deploy_result | to_nice_json }}," 
+    marker: " "
+  when: deploy_result.failed | bool == true
+
+- name: On failure write log as CSV. 
+  lineinfile: 
+    path: errors.csv
+    line: "{{ deploy_result.start }} | {{ deploy_result.end }} | {{ deploy_result.delta }} | {{ deploy_result.cmd }} | {{ deploy_result.stderr }}"
+  when: deploy_result.failed | bool == true

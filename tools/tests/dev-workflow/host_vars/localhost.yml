@@ -1,0 +1,21 @@
+---
+
+rebuild_loop_count: 3
+
+project_count: 3
+project_name: workload
+project_display_name: Developer Simulation Project
+project_desctiption: This project is used for simulating developer activity.
+
+apps:
+  app-1:
+    type: repo
+    source: https://github.com/arctiqteam/weather-app.git
+  app-2:
+    type: repo
+    source: https://github.com/ArctiqTeam/random-beer-selector.git
+  app-3:
+    type: template
+    source: django+postgresql.yaml
+
+min_ansible: 2.7 

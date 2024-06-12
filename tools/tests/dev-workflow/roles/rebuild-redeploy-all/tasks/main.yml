@@ -1,0 +1,14 @@
+---
+
+- name: Call build-deploy for all projects and apps combinations.
+  include_role:
+    name: rebuild-redeploy
+  vars:
+    - project: "{{ item[2] }}"
+    - app: "{{ item[1] }}"
+    - loop: "{{ item[0] }}"
+  with_nested: 
+    - "{{ builds }}"
+    - "{{ apps }}"
+    - "{{ projects }}"
+  

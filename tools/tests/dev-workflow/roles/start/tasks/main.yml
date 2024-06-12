@@ -1,0 +1,130 @@
+---
+
+- name: Generate list for builds.
+  set_fact:
+    build_list: "{{ build_list | default([])  + [build_item | int] }}"
+  loop: "{{ range(1, number_of_projects + 1, 1) | list }}"
+  loop_control:
+    loop_var: build_item
+
+- name: Start builds ( oc start-build ).
+  shell:  oc start-build {{ app_1_name }} --wait -n {{ project_name }}-{{ start_build }}
+  loop: "{{ build_list | flatten(levels=1) }}"
+  loop_control:
+    loop_var: start_build
+  register: build_result
+  # failed_when: "'Failed' in build_result.stderr"
+  ignore_errors: true
+
+- name: Clean build output.
+  set_fact:
+    clean_out_build: "{{ clean_out_build | default([]) + [clean_build] }}"
+  # with_items:
+  #   - "{{ build_result.results }}"
+  loop: "{{ build_result.results | flatten(levels=1) }}"
+  loop_control:
+    loop_var: clean_build
+ # no_log: True
+
+- name: Print build errors to file.
+  # with_sequence: start=0 end={{ number_of_projects | int - 1 }}
+  # set_fact: "{{ arr + [clean_out[item | int].stderr] }}"
+  # debug: msg="{{ clean_out[item | int].stderr }}"
+  lineinfile: 
+    create: yes 
+    regexp: NONEXISTENTLINE
+    dest: error_report
+    line: "{{clean_out_build[build_error | int].stderr}}" 
+    state: present
+  loop: "{{ range(0, number_of_projects, 1) | list }}"
+  loop_control:
+    loop_var: build_error
+  when: clean_out_build[build_error | int].stderr != ""
+
+- name: Roll out deployments.
+  shell: oc rollout latest dc/{{ app_1_name }} -n {{ project_name }}-{{ rollout }} && oc rollout status dc/{{ app_1_name }} -n {{ project_name }}-{{ rollout }}
+  loop: "{{ build_list | flatten(levels=1) }}"
+  loop_control:
+    loop_var: rollout
+  register: deployment_result
+  ignore_errors: True
+
+- name: Clean deployment output.
+  set_fact:
+    clean_out_deployment: "{{ clean_out_deployment | default([]) + [clean_deploy] }}"
+  # with_items:
+  #   - "{{ deployment_result.results }}"
+  loop: "{{ deployment_result.results | flatten(levels=1) }}"
+  loop_control:
+    loop_var: clean_deploy
+ # no_log: True
+
+- name: Print deployment errors to file.
+  #with_sequence: start=0 end={{ number_of_projects | int - 1 }}
+  #set_fact: "{{ arr + [clean_out[item | int].stderr] }}"
+  #debug: msg="{{ clean_out[item | int].stderr }}"
+  lineinfile: 
+    create: yes 
+    regexp: NONEXISTENTLINE
+    dest: error_report
+    line: "{{clean_out_deployment[deployment_error | int].cmd}} failed"
+    state: present
+  loop: "{{ range(0, number_of_projects, 1) | list }}"
+  loop_control:
+    loop_var: deployment_error
+  when: clean_out_deployment[deployment_error | int].stderr != ""
+
+
+- name: Print separator.
+  lineinfile:
+    create: yes 
+    insertafter: "EOF"
+    dest: error_report
+    line: "^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Ended at {{ ansible_date_time.iso8601 }} ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\n\n" 
+    state: present
+
+
+
+#- name: Increment variable
+#  set_fact: failed_count={{ failed_count | int + 1 }}
+#  when: item is failed
+#  with_items: "{{ build_result.results }}"
+
+#- debug:
+#    msg: "The build failed is : {{ build_result.results }}"
+#  when: item is failed
+#  with_items: "{{ build_result.results }}"
+
+#- lineinfile:
+#    path: data.csv
+#    insertafter: EOF
+#    line: "{{ arr }}"
+
+  #tags: DEBUG
+
+#- name: grab errors
+#  set_fact: failedfs="{{ build_result | regex_search('(failed)') }}"                                        
+
+#- name: drain the array
+#  set_fact:
+#    build_list: []
+
+#- name: Generate sequence for project creation
+#  set_fact:
+#    build_list: "{{ build_list | default([]) + [item | int] }}"
+#  with_sequence: start=1 end={{ number_of_projects }}
+
+#- name: Roll out deployments 
+#  shell: oc rollout latest dc/{{ app_1_name }} -n {{ project_name }}-{{ item }} && oc rollout status dc/{{ app_1_name }} -n {{ project_name }}-{{ item }}
+#  with_items: "{{ build_list }}"
+#  ignore_errors: True
+
+#- name: Increment variable
+#  set_fact: failed_count={{ failed_count | int + 1 }}
+#  when: item is failed
+#  with_items: "{{ build_result.results }}"
+
+#- debug:
+#    msg: "Number of builds failed : {{ failed_count }}"
+#  when: item is failed
+#  with_items: "{{ build_result.results }}"

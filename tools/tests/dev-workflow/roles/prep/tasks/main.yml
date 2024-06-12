@@ -1,0 +1,42 @@
+---
+
+- name: Verify Ansible meets version requirements.
+  assert:
+    that: "ansible_version.full is version_compare('{{ min_ansible }}', '>=')"
+    msg: "You must update Ansible to at least {{ min_ansible }}."
+
+- name: Validate OpenShift login.
+  shell: oc whoami
+  register: oc_login
+  ignore_errors: true
+
+- debug: 
+    msg: "You are logged in as {{ oc_login.stdout }}."
+  when: oc_login.rc != 1
+
+- name: Validate openshift login.
+  fail:
+    msg: "There was an error validating login to OpenShift. Run `oc login` and try again."
+  when: oc_login.rc == 1
+
+- name: Generate list for builds.
+  set_fact:
+    builds: "{{ builds | default([])  + [build_item] }}"
+  loop: "{{ range(1, rebuild_loop_count + 1, 1) | list }}"
+  loop_control:
+    loop_var: build_item
+
+- name: Generate list for projects.
+  set_fact:
+    projects: "{{ projects | default([])  + [project_name + '-' + project_item|string] }}"
+  loop: "{{ range(1, rebuild_loop_count + 1, 1) | list }}"
+  loop_control:
+    loop_var: project_item
+
+- file:
+    path: errors.log
+    state: touch
+
+- file:
+    path: errors.csv
+    state: touch
